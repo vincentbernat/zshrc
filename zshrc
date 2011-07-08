@@ -1,4 +1,4 @@
-# -*- shell-mode -*-
+# -*- sh -*-
 
 # Use /bin/sh when no terminal is present
 [[ ${TERM:-dumb} != "dumb" ]] || exec /bin/sh
