@@ -18,4 +18,4 @@ zstyle ':completion::complete:*' cache-path $ZSH/run/cache/
 zstyle ':completion:*:descriptions' format '%B%d%b'
 
 # Hosts are from $ZSH/hosts.*
-zstyle -e ':completion:*' hosts 'reply=(${(f)"$(cat $ZSH/hosts.*(|2)(N) /dev/null)"})'
+zstyle -e ':completion:*' hosts 'reply=(${(f)"$(cat $ZSH/local/hosts.*(|2)(N) /dev/null)"})'
