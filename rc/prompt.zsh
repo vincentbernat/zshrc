@@ -11,7 +11,7 @@ function precmd {
     PR_FILLBAR=""
     PR_PWDLEN=""
     
-    local promptsize=${#${(%):---(%n@%m:%l)---()--}}
+    local promptsize=${#${(%):---(%n@%m)---()--}}
     local pwdsize=${#${(%):-%~}}
     
     if [[ "$promptsize + $pwdsize" -gt $TERMWIDTH ]]; then
@@ -53,7 +53,7 @@ setprompt () {
     
     PROMPT='$PR_SET_CHARSET\
 $PR_CYAN$PR_SHIFT_IN$PR_ULCORNER$PR_HBAR$PR_SHIFT_OUT$PR_GREY(\
-$PR_CYAN%(!.$PR_RED%n.%n)$PR_GREY@$PR_GREEN${SSH_TTY:+$PR_MAGENTA}%m:%l\
+$PR_CYAN%(!.$PR_RED%n.%n)$PR_GREY@$PR_GREEN${SSH_TTY:+$PR_MAGENTA}%m\
 $PR_GREY)$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_HBAR${(e)PR_FILLBAR}$PR_HBAR$PR_SHIFT_OUT$PR_GREY(\
 $PR_GREEN${SSH_TTY:+$PR_MAGENTA}%$PR_PWDLEN<...<%~%<<\
 $PR_GREY)$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_URCORNER$PR_SHIFT_OUT\
