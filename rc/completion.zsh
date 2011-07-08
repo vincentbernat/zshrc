@@ -3,7 +3,7 @@
 autoload -U zutil
 autoload -U compinit
 autoload -U complist
-compinit
+compinit -i -d $ZSH/run/zcompdump-$HOST-$UID
 
 setopt auto_menu
 setopt complete_in_word
