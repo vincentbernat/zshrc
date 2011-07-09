@@ -6,9 +6,9 @@
     local host
     hostnames=($(hostname -f)
 	$(hostname)
-	$(cat /etc/hostname)
+	$(</etc/hostname)
 	$HOST
-	$HOST.$(cat /etc/mailname)
+	$HOST.$(</etc/mailname)
 	$HOST)
     for host ($hostnames); do
 	HOSTNAME=${host%%.}
