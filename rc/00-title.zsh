@@ -11,9 +11,12 @@ function title {
     fi
 }
 
+autoload add-zsh-hook
+
 # Current running program as title
-function preexec {
+function _title_preexec {
     setopt extended_glob
     local CMD=${1[(wr)^(*=*|sudo|-*),-1]}
     title $HOST \> $CMD
 }
+add-zsh-hook preexec _title_preexec

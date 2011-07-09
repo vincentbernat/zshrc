@@ -1,7 +1,9 @@
 # -*- sh -*-
 # Mostly taken from: https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/jonathan.zsh-theme
 
-function precmd {
+autoload add-zsh-hook
+
+function _prompt_precmd {
     local TERMWIDTH
     (( TERMWIDTH = ${COLUMNS} - 1 ))
 
@@ -22,6 +24,7 @@ function precmd {
 
     title ${HOST}:${PWD}
 }
+add-zsh-hook precmd _prompt_precmd
 
 autoload colors zsh/terminfo
 if [[ "$terminfo[colors]" -ge 8 ]]; then
