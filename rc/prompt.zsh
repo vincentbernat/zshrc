@@ -64,7 +64,8 @@ $PR_GREY)$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_URCORNER$PR_SHIFT_OUT\
 $PR_CYAN$PR_SHIFT_IN$PR_LLCORNER$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(\
 $PR_YELLOW%D{%H:%M}\
 $PR_LIGHT_BLUE%{$reset_color%}$PR_BLUE)$PR_CYAN$PR_SHIFT_IN$PR_HBAR\
-$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
+%{$reset_color%}$PR_SHIFT_OUT'$(_vbe_add_prompt)'\
+$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
 %(!.${PR_RED}#.$)$PR_NO_COLOUR '
 
     # display exitcode on the right when >0
@@ -82,5 +83,12 @@ $PR_LIGHT_GREEN%_$PR_BLUE)$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
 $PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT$PR_NO_COLOUR '
 }
 
-_vbe_setprompt
+# Collect additional information from functions matching _vbe_add_prompt_*
+_vbe_add_prompt () {
+    for f in ${(k)functions}; do
+	[[ $f == _vbe_add_prompt_* ]] || continue
+	$f
+    done
+}
+
 [ -t 1 ] && print -Pn '\e]12;2\a'
