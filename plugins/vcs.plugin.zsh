@@ -10,10 +10,10 @@ zstyle ':vcs_info:*' enable git svn
     local common=$r'[${PR_LIGHT_GREEN}%b%c%u'
     local circle='o'
     [[ -o multibyte ]] && circle='●'
-    zstyle ':vcs_info:git:*' formats '${PR_BLUE} ±'$common$r']'
-    zstyle ':vcs_info:svn:*' formats '${PR_BLUE} s'$common$r']'
-    zstyle ':vcs_info:git:*' actionformats '${PR_BLUE}± '$common$r'|${PR_LIGHT_MAGENTA}%a'$r']'
-    zstyle ':vcs_info:svn:*' actionformats '${PR_BLUE}s '$common$r'|${PR_LIGHT_MAGENTA}%a'$r']'
+    zstyle ':vcs_info:git:*' formats '${PR_BLUE}±'$common$r']'
+    zstyle ':vcs_info:svn:*' formats '${PR_BLUE}s'$common$r']'
+    zstyle ':vcs_info:git:*' actionformats '${PR_BLUE}±'$common$r'|${PR_LIGHT_MAGENTA}%a'$r']'
+    zstyle ':vcs_info:svn:*' actionformats '${PR_BLUE}s'$common$r'|${PR_LIGHT_MAGENTA}%a'$r']'
     zstyle ':vcs_info:svn:*' branchformat '%b${PR_GREY}:${PR_YELLOW}%r'
     zstyle ':vcs_info:*' stagedstr     '${PR_GREEN}'$circle
     zstyle ':vcs_info:*' unstagedstr   '${PR_YELLOW}'$circle

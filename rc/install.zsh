@@ -42,7 +42,7 @@ if [[ $1 == "MAGIC" ]]; then
     # Migrate history
     print -n "$fg[green]History migration...${reset_color} "
     [[ ! -d ~/.zsh/run ]] && mkdir -p ~/.zsh/run
-    mv ~/.zsh/history-* ~/.zsh/run 2> /dev/null
+    { mv ~/.zsh/history-* ~/.zsh/run } 2> /dev/null
     print $OK
     print "$fg[green]Installation...${reset_color} "
     rsync -rlp --exclude=run/\* --exclude=local/\* --delete . ~/.zsh/.
