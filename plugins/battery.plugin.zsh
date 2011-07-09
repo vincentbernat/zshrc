@@ -17,15 +17,16 @@ _vbe_battery () {
     local cache=$ZSH/run/acpi-$HOST-$UID
     zmodload zsh/stat
     zmodload zsh/datetime
-    if [[ ! -s $cache ]] || \
-	(( $EPOCHSECONDS - $(stat +mtime $cache) > 160 )); then
-	acpi -b > $cache
+    if [[ -s $cache ]] && \
+	(( $EPOCHSECONDS - $(stat +mtime $cache) < 160 )); then
+	print -n $(<$cache)
+	return
     fi
 
     local acpi
     local percent
     local state
-    acpi=(${(f)$(<$cache)})
+    acpi=(${(f)$(acpi -b)})
     percent=${(L)${${acpi[1]}#*, }%\%, *}
     state=${(L)${${acpi[1]}#*: }%%, *}
     [[ $state == (dis|)charging ]] || return
@@ -52,6 +53,7 @@ _vbe_battery () {
     (( $full < $size )) && \
 	for j in {$size..$(( $size - $full + 1))}; do g=$g$gauge[$i]; done
     print -n $g
+    print -n $g > $cache
 }
 
 _vbe_add_prompt_battery () {
