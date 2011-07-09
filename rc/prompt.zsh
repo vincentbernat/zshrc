@@ -3,7 +3,7 @@
 
 autoload add-zsh-hook
 
-function _prompt_precmd {
+_vbe_prompt_precmd () {
     local TERMWIDTH
     (( TERMWIDTH = ${COLUMNS} - 1 ))
 
@@ -22,9 +22,9 @@ function _prompt_precmd {
 	PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize)))..${PR_HBAR}.)}"
     fi
 
-    title ${HOST}:${PWD}
+    _vbe_title ${HOST}:${PWD}
 }
-add-zsh-hook precmd _prompt_precmd
+add-zsh-hook precmd _vbe_prompt_precmd
 
 autoload colors zsh/terminfo
 if [[ "$terminfo[colors]" -ge 8 ]]; then
@@ -51,7 +51,7 @@ PR_NO_COLOUR="%{$terminfo[sgr0]%}"
     PR_URCORNER=${altchar[k]:--}
 }
     
-setprompt () {
+_vbe_setprompt () {
     setopt prompt_subst
     
     PROMPT='$PR_SET_CHARSET\
@@ -82,5 +82,5 @@ $PR_LIGHT_GREEN%_$PR_BLUE)$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
 $PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT$PR_NO_COLOUR '
 }
 
-setprompt
+_vbe_setprompt
 [ -t 1 ] && print -Pn '\e]12;2\a'

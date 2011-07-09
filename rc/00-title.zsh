@@ -1,7 +1,7 @@
 # -*- sh -*-
 
 # Alter window title
-function title {
+_vbe_title () {
     [ -t 1 ] || return
     if [[ "$TERM" == screen* ]]; then
 	print -n "\ek$@:q\e\\"
@@ -14,9 +14,9 @@ function title {
 autoload add-zsh-hook
 
 # Current running program as title
-function _title_preexec {
+_title_preexec () {
     setopt extended_glob
     local CMD=${1[(wr)^(*=*|sudo|-*),-1]}
-    title $HOST \> $CMD
+    _vbe_title $HOST \> $CMD
 }
 add-zsh-hook preexec _title_preexec

@@ -2,7 +2,7 @@
 
 # Some network related functions
 
-__add_to_bridge() {
+_vbe_add_to_bridge() {
     # Optionally, add it to given bridge
     [[ -z $2 ]] || {
 	[[ -f /sys/class/net/$2/brforward ]] || {
@@ -27,7 +27,7 @@ __add_to_bridge() {
 tun() {
     sudo tunctl -b -u $USERNAME -t $1 > /dev/null
     sudo ip link set up dev $1
-    __add_to_bridge $1 $2
+    _vbe_add_to_bridge $1 $2
 }
 
 # Same as tun but for veth (only the second end is put into the bridge)
@@ -38,5 +38,5 @@ veth() {
     sudo ip link add name $1 type veth peer name $2 2> /dev/null || true
     sudo ip link set up dev $1
     sudo ip link set up dev $2
-    __add_to_bridge $2 $3
+    _vbe_add_to_bridge $2 $3
 }

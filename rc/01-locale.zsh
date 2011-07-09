@@ -1,6 +1,6 @@
 # -*- sh -*-
 
-(( $+commands[locale] )) && function {
+(( $+commands[locale] )) && () {
     local locales
     local locale
     locales=( "LANG fr_FR.utf8 en_US.utf8 C.UTF-8 C" \
