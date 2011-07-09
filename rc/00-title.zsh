@@ -4,10 +4,10 @@
 function title {
     [ -t 1 ] || return
     if [[ "$TERM" == screen* ]]; then
-	print -Pn "\ek$@:q\e\\"
-	print -Pn "\e]2;$@:q\a"
+	print -n "\ek$@:q\e\\"
+	print -n "\e]2;$@:q\a"
     elif [[ $TERM == rxvt* ]] || [[ $TERM == xterm* ]]; then
-	print -Pn "\e]2;$@:q\a"
+	print -n "\e]2;$@:q\a"
     fi
 }
 
