@@ -18,7 +18,7 @@ _vbe_battery () {
     zmodload zsh/stat
     zmodload zsh/datetime
     if [[ -s $cache ]] && \
-	(( $EPOCHSECONDS - $(stat +mtime $cache) < 160 )); then
+	(( $EPOCHSECONDS - $(stat +mtime $cache) < 240 )); then
 	print -n $(<$cache)
 	return
     fi
