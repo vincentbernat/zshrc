@@ -2,6 +2,7 @@
 
 (( $+commands[locale] )) && function {
     local locales
+    local locale
     locales=( "LANG fr_FR.utf8 en_US.utf8 C.UTF-8 C" \
 	      "LC_MESSAGES en_US.utf8 fr_FR.utf8 C.UTF-8 C" )
     for locale in $locales; do
