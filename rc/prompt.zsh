@@ -65,7 +65,11 @@ $PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
 %(!.${PR_RED}#.$)$PR_NO_COLOUR '
 
     # display exitcode on the right when >0
-    return_code="%(?..%{$PR_RED%}%? ↵ %{$reset_color%})"
+    if [[ -o multibyte ]]; then
+	return_code="%(?..%{$PR_RED%}%? ↵ %{$reset_color%})"
+    else
+	return_code="%(?..%{$PR_RED%}<%?> %{$reset_color%})"
+    fi
     RPROMPT=' $return_code$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_BLUE$PR_HBAR$PR_SHIFT_OUT\
 ($PR_YELLOW%D{%a,%b%d}$PR_BLUE)$PR_SHIFT_IN$PR_HBAR$PR_CYAN$PR_LRCORNER$PR_SHIFT_OUT$PR_NO_COLOUR'
 

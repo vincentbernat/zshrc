@@ -12,4 +12,6 @@
 	    fi
 	done
     done
+    # Check if we support multibyte chars correctly
+    (( ${#${:-↵}} != 1 )) && unsetopt multibyte
 } 2> /dev/null
