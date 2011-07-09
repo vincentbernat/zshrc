@@ -10,7 +10,17 @@
 	"editor")	  # fallback
     for editor in $editors; do
 	(( $+commands[$editor[(w)1]] )) && {
-	    export EDITOR=$editor
+	    # Some programs may not like to have arguments
+	    if [[ $editor = *\ * ]]; then
+		export EDITOR=$ZSH/run/editor-$HOST-$UID
+		cat <<EOF > $EDITOR
+#!/bin/sh
+exec $editor "\$@"
+EOF
+		chmod +x $EDITOR
+	    else
+		export EDITOR=$editor
+	    fi
 	    break
 	}
     done
