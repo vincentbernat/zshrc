@@ -15,5 +15,5 @@ function title {
 function preexec {
     setopt extended_glob
     local CMD=${1[(wr)^(*=*|sudo|-*),-1]}
-    title $HOST … $CMD
+    title $HOST \> $CMD
 }
