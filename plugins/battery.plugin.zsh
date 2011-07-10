@@ -51,7 +51,7 @@ _vbe_battery () {
     (( $full >= 1 )) && for j in {1..$full}; do g=$g$gauge[$i]; done
     i=$(( $i + 2 ))
     (( $full < $size )) && \
-	for j in {$size..$(( $size - $full + 1))}; do g=$g$gauge[$i]; done
+	for j in {$(( $full + 1 ))..$size}; do g=$g$gauge[$i]; done
     print -n $g
     print -n $g > $cache
 }
