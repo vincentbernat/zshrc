@@ -7,10 +7,6 @@ autoload colors ; colors
 install-zsh() {
     local remote
     local work
-    if (( $# != 1 )); then
-	print "$fg_bold[red]Usage: $0 remote-host${reset_color}"
-	return 2
-    fi
     remote=$1
     work=$(mktemp -d)
     {
@@ -22,10 +18,12 @@ install-zsh() {
 	makeself --gzip $work $ZSH/run/zsh-install.sh \
 	    "$USER ZSH config files" zsh ./rc/install.zsh MAGIC
 	print $OK
-	print "$fg[green]Remote install...${reset_color} "
-	scp $ZSH/run/zsh-install.sh ${remote}:
-	ssh $remote sh ./zsh-install.sh
-	print $OK
+	[[ -z $1 ]] || {
+	    print "$fg[green]Remote install...${reset_color} "
+	    scp $ZSH/run/zsh-install.sh ${remote}:
+	    ssh $remote sh ./zsh-install.sh
+	    print $OK
+	}
     } always {
 	rm -rf $work
     }
