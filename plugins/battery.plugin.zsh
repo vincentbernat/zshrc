@@ -17,7 +17,7 @@ _vbe_battery () {
     local cache=$ZSH/run/acpi-$HOST-$UID
     zmodload zsh/stat
     zmodload zsh/datetime
-    if [[ -s $cache ]] && \
+    if [[ -f $cache ]] && \
 	(( $EPOCHSECONDS - $(stat +mtime $cache) < 240 )); then
 	print -n $(<$cache)
 	return
@@ -29,7 +29,10 @@ _vbe_battery () {
     acpi=(${(f)$(acpi -b)})
     percent=${(L)${${acpi[1]}#*, }%\%, *}
     state=${(L)${${acpi[1]}#*: }%%, *}
-    [[ $state == (dis|)charging ]] || return
+    [[ $state == (dis|)charging ]] || {
+	: > $cache
+	return
+    }
 
     local -a gauge
     local size=4
