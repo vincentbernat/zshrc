@@ -32,16 +32,16 @@ _vbe_battery () {
     [[ $state == (dis|)charging ]] || return
 
     local -a gauge
-    local size=6
+    local size=4
     local full
     local g
     local i j
     gauge=('#' '#' '-' '-')
     [[ -o multibyte ]] && gauge=(▲ ▼ △ ▽)
     full=$(( (${percent}*${size}+49)/100 ))
-    if (( $full < $size / 6 )); then
+    if (( $percent < 10 )); then
 	g=$PR_RED
-    elif (( $full < $size / 2 )); then
+    elif (( $percent < 30 )); then
 	g=$PR_YELLOW
     else
 	g=$PR_GREEN
