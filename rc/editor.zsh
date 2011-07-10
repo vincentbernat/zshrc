@@ -3,6 +3,7 @@
 # Setup EDITOR
 () {
     local -a editors
+    local editor
     editors=(
 	"emacs -Q -D -nw" # Fast emacs
 	"jove" "mg" "jed" # Emacs clone
@@ -11,7 +12,7 @@
     for editor in $editors; do
 	(( $+commands[$editor[(w)1]] )) && {
 	    # Some programs may not like to have arguments
-	    if [[ $editor = *\ * ]]; then
+	    if [[ $editor == *\ * ]]; then
 		export EDITOR=$ZSH/run/editor-$HOST-$UID
 		cat <<EOF > $EDITOR
 #!/bin/sh
