@@ -17,5 +17,9 @@ zstyle ':completion::complete:*' use-cache 1
 zstyle ':completion::complete:*' cache-path $ZSH/run/cache/
 zstyle ':completion:*:descriptions' format '%B%d%b'
 
-# Hosts are from $ZSH/hosts.*
-zstyle -e ':completion:*' hosts 'reply=(${(f)"$(cat $ZSH/local/hosts.*(|2)(N) /dev/null)"})'
+zstyle -e ':completion:*' hosts 'reply=(
+        # Take hosts from /etc/hosts
+	${(s: :)${(ps:\t:)${${(f)~~"$(</etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}
+	# And from local/hosts.*
+	$(cat $ZSH/local/hosts.*(|2)(N) /dev/null)
+    )'
