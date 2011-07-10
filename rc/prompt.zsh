@@ -63,16 +63,16 @@ $PR_GREY)$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_URCORNER$PR_SHIFT_OUT\
 
 $PR_CYAN$PR_SHIFT_IN$PR_LLCORNER$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(\
 $PR_YELLOW%D{%H:%M}\
-$PR_LIGHT_BLUE%{$reset_color%}$PR_BLUE)$PR_CYAN$PR_SHIFT_IN$PR_HBAR\
-%{$reset_color%}${PR_SHIFT_OUT}'$(_vbe_add_prompt)'\
+$PR_LIGHT_BLUE$PR_NO_COLOUR$PR_BLUE)$PR_CYAN$PR_SHIFT_IN$PR_HBAR\
+$PR_NO_COLOUR${PR_SHIFT_OUT}'$(_vbe_add_prompt)'\
 $PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
 %(!.${PR_RED}#.$)$PR_NO_COLOUR '
 
     # display exitcode on the right when >0
     if [[ -o multibyte ]]; then
-	return_code="%(?..%{$PR_RED%}%? ↵ %{$reset_color%})"
+	return_code="%(?..%{$PR_RED%}%? ↵ $PR_NO_COLOUR)"
     else
-	return_code="%(?..%{$PR_RED%}<%?> %{$reset_color%})"
+	return_code="%(?..%{$PR_RED%}<%?> $PR_NO_COLOUR)"
     fi
     RPROMPT=' $return_code$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_BLUE$PR_HBAR$PR_SHIFT_OUT\
 ($PR_YELLOW%D{%b%d}$PR_BLUE)$PR_SHIFT_IN$PR_HBAR$PR_CYAN$PR_LRCORNER$PR_SHIFT_OUT$PR_NO_COLOUR'

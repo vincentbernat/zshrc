@@ -6,7 +6,7 @@ autoload -Uz vcs_info
 
 zstyle ':vcs_info:*' enable git svn
 () {
-    local r='%{$reset_color%}'
+    local r='${PR_NO_COLOUR}'
     local common=$r'[${PR_LIGHT_GREEN}%b%c%u'
     local circle='o'
     [[ -o multibyte ]] && circle='●'

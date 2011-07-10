@@ -61,7 +61,7 @@ _vbe_add_prompt_battery () {
     output=(
 	'${PR_GREY}|$(_vbe_battery)${PR_GREY}|'
 	'$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT'
-	'%{$reset_color%}'
+	'${PR_NO_COLOUR}'
     )
     print -n ${(pj::)output}
 }
