@@ -70,8 +70,7 @@ $PR_CYAN$PR_SHIFT_IN$PR_LLCORNER$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(\
 $PR_YELLOW%D{%H:%M}\
 $PR_LIGHT_BLUE$PR_NO_COLOUR$PR_BLUE)$PR_CYAN$PR_SHIFT_IN$PR_HBAR\
 $PR_NO_COLOUR${PR_SHIFT_OUT}'$(_vbe_add_prompt)'\
-$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
-%(!.${PR_RED}#.$)$PR_NO_COLOUR '
+%(!.${PR_RED}#.${PR_CYAN}$)$PR_NO_COLOUR '
 
     # display exitcode on the right when >0
     if is-at-least 4.3.4 && [[ -o multibyte ]]; then
@@ -93,6 +92,7 @@ _vbe_add_prompt () {
     for f in ${(k)functions}; do
 	[[ $f == _vbe_add_prompt_* ]] || continue
 	$f
+	print -n '${PR_NO_COLOUR}'
     done
 }
 

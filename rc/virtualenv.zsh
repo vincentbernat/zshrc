@@ -1,4 +1,4 @@
-# -*- sh-mode -*-
+# -*- sh -*-
 
 # Virtualenv related functions
 # Simplified version of virtualenvwrapper.
@@ -53,8 +53,7 @@
     }
 
     _vbe_add_prompt_virtualenv () {
-	print -n '${VIRTUAL_ENV:+${PR_BLUE}(${PR_NO_COLOUR}${VIRTUAL_ENV##*/}${PR_BLUE})}'
-	print -n '$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT'
+	print -n '${VIRTUAL_ENV:+${PR_BLUE}(${PR_NO_COLOUR}${VIRTUAL_ENV##*/}${PR_BLUE})$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT}'
     }
 
 }
