@@ -20,7 +20,7 @@ _vbe_prompt_precmd () {
 	PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize)))..${PR_HBAR}.)}"
     fi
 
-    _vbe_title ${HOST}:${PWD}
+    _vbe_title ${HOST}:${(%):-%~}
 }
 if (( $+functions[add-zsh-hook] )); then
     add-zsh-hook precmd _vbe_prompt_precmd
