@@ -9,7 +9,7 @@ fpath=($ZSH/functions $ZSH/completions $fpath)
 
 # Autoload add-zsh-hook if available
 autoload -U is-at-least
-is-at-least 4.3.4 && autoload -U add-zsh-hook
+{ autoload -U +X add-zsh-hook || unset -f add-zsh-hook } 2> /dev/null
 
 __() {
     for config_file ($ZSH/rc/*.zsh) source $config_file
