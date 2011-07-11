@@ -40,7 +40,7 @@ _vbe_battery () {
     local g
     local i j
     gauge=('#' '#' '-' '-')
-    [[ -o multibyte ]] && gauge=(▲ ▼ △ ▽)
+    is-at-least 4.3.4 && [[ -o multibyte ]] && gauge=(▲ ▼ △ ▽)
     full=$(( (${percent}*${size}+49)/100 ))
     if (( $percent < 10 )); then
 	g=$PR_RED

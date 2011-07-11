@@ -1,8 +1,6 @@
 # -*- sh -*-
 # Mostly taken from: https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/jonathan.zsh-theme
 
-autoload add-zsh-hook
-
 _vbe_prompt_precmd () {
     local TERMWIDTH
     (( TERMWIDTH = ${COLUMNS} - 1 ))
@@ -24,9 +22,15 @@ _vbe_prompt_precmd () {
 
     _vbe_title ${HOST}:${PWD}
 }
-add-zsh-hook precmd _vbe_prompt_precmd
+if (( $+functions[add-zsh-hook] )); then
+    add-zsh-hook precmd _vbe_prompt_precmd
+else
+    precmd () {
+	_vbe_prompt_precmd
+    }
+fi
 
-autoload colors zsh/terminfo
+autoload -U colors zsh/terminfo
 if [[ "$terminfo[colors]" -ge 8 ]]; then
     colors
 fi
@@ -53,6 +57,7 @@ PR_NO_COLOUR="%{$terminfo[sgr0]%}"
     
 _vbe_setprompt () {
     setopt prompt_subst
+    local return_code
     
     PROMPT='$PR_SET_CHARSET\
 $PR_CYAN$PR_SHIFT_IN$PR_ULCORNER$PR_HBAR$PR_SHIFT_OUT$PR_GREY(\
@@ -69,7 +74,7 @@ $PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
 %(!.${PR_RED}#.$)$PR_NO_COLOUR '
 
     # display exitcode on the right when >0
-    if [[ -o multibyte ]]; then
+    if is-at-least 4.3.4 && [[ -o multibyte ]]; then
 	return_code="%(?..%{$PR_RED%}%? ↵ $PR_NO_COLOUR)"
     else
 	return_code="%(?..%{$PR_RED%}<%?> $PR_NO_COLOUR)"
