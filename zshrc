@@ -11,9 +11,9 @@ fpath=($ZSH/functions $ZSH/completions $fpath)
 autoload -U is-at-least
 is-at-least 4.3.4 && autoload -U add-zsh-hook
 
-for config_file ($ZSH/rc/*.zsh) source $config_file
-for plugin ($plugins) source $ZSH/plugins/$plugin.plugin.zsh
-unset config_file
-unset plugin
+__() {
+    for config_file ($ZSH/rc/*.zsh) source $config_file
+    for plugin ($plugins) source $ZSH/plugins/$plugin.plugin.zsh
+} && __
 
 _vbe_setprompt

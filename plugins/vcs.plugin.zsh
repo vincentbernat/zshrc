@@ -7,7 +7,7 @@
     autoload -Uz vcs_info
 
     zstyle ':vcs_info:*' enable git svn
-    () {
+    __() {
 	local r='${PR_NO_COLOUR}'
 	local common=$r'[${PR_LIGHT_GREEN}%b%c%u'
 	local circle='o'
@@ -20,7 +20,7 @@
 	zstyle ':vcs_info:*' stagedstr     '${PR_GREEN}'$circle
 	zstyle ':vcs_info:*' unstagedstr   '${PR_YELLOW}'$circle
 	zstyle ':vcs_info:*' check-for-changes true
-    }
+    } && __
 
     _vbe_vcs_precmd () {
 	vcs_info

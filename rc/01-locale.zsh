@@ -1,6 +1,6 @@
 # -*- sh -*-
 
-(( $+commands[locale] )) && () {
+(( $+commands[locale] )) && __() {
     local locales
     local locale
     locales=( "LANG fr_FR.utf8 en_US.utf8 C.UTF-8 C" \
@@ -16,4 +16,4 @@
     # Check if we support multibyte chars correctly
     is-at-least 4.3.4 && (( ${#${:-↵}} != 1 )) && unsetopt multibyte
     (( ${#${:-↵}} != 1 )) && unsetopt multibyte
-} 2> /dev/null
+} && __ 2> /dev/null

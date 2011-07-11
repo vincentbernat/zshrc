@@ -1,7 +1,7 @@
 # -*- sh -*-
 
 # Setup EDITOR
-() {
+__() {
     local -a editors
     local editor
     editors=(
@@ -26,7 +26,7 @@ EOF
 	    break
 	}
     done
-}
+} && __
 
 [[ -z $EDITOR ]] || {
     alias e=$EDITOR

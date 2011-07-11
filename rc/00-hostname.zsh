@@ -1,7 +1,7 @@
 # -*- sh -*-
 
 # Export HOSTNAME variable
-() {
+__() {
     local -a hostnames
     local host
     hostnames=($(hostname -f)
@@ -15,4 +15,4 @@
 	[[ $HOSTNAME == *.* ]] && break
     done
     export HOSTNAME
-} 2> /dev/null
+} && __ 2> /dev/null

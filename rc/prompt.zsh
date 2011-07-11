@@ -42,7 +42,7 @@ PR_NO_COLOUR="%{$terminfo[sgr0]%}"
 
 ###
 # See if we can use extended characters to look nicer.
-() {
+__() {
     local -A altchar
     set -A altchar ${(s..)terminfo[acsc]}
     PR_SET_CHARSET="%{$terminfo[enacs]%}"
@@ -53,7 +53,7 @@ PR_NO_COLOUR="%{$terminfo[sgr0]%}"
     PR_LLCORNER=${altchar[m]:--}
     PR_LRCORNER=${altchar[j]:--}
     PR_URCORNER=${altchar[k]:--}
-}
+} && __
     
 _vbe_setprompt () {
     setopt prompt_subst
