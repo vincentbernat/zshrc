@@ -1,13 +1,11 @@
 #compdef workon
 
-_workon() {
-    _arguments \
-	'1::environment:_virtualenv_environments'
-}
-
 _virtualenv_environments() {
     local -a results
     results=( ${WORKON_HOME}/*/bin/activate(.N:h:h:t) - )
     _wanted environments expl 'virtualenv environment' compadd -a \
 	results	
 }
+
+_arguments \
+    '1:::_virtualenv_environments' && return 0
