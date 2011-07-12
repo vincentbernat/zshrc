@@ -16,7 +16,7 @@ fi
 
 # Telnet through HNM
 ttelnet() {
-    title "$@"
+    _vbe_title "$@"
     case "$1" in
 	*.net.b?.p.fti.net|swbg*)
 	    host=bgadm
