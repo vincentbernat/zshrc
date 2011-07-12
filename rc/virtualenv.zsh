@@ -24,8 +24,8 @@
 	# No parameters, list available environment
 	[[ -n $env ]] || {
 	    print "INFO: List of available environments:"
-	    for f in $WORKON_HOME/*/bin/activate; do
-		print " - ${${f#${WORKON_HOME}/}%/bin/activate}"
+	    for env in $WORKON_HOME/*/bin/activate(.N:h:h:f); do
+		print " - $env"
 	    done
 	    return 0
 	}
