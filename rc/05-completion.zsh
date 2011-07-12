@@ -6,10 +6,16 @@ autoload -U complist
 compinit -i -d $ZSH/run/zcompdump-$HOST-$UID
 
 setopt auto_menu
+setopt auto_remove_slash
 setopt complete_in_word
 setopt always_to_end
+setopt glob_complete
+setopt complete_aliases
+unsetopt list_beep
 
 zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' list-prompt ''
+zstyle ':completion:*' group-name ''
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:*:*:*:processes' command "ps -eo pid,user,comm -w -w"
