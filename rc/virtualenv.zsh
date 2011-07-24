@@ -52,6 +52,8 @@
 	}
     }
 
+    export PIP_REQUIRE_VIRTUALENV=true
+
     _vbe_add_prompt_virtualenv () {
 	print -n '${VIRTUAL_ENV:+${PR_BLUE}(${PR_YELLOW}ve:${PR_NO_COLOUR}${VIRTUAL_ENV##*/}${PR_BLUE})'
 	print -n '$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT}'
