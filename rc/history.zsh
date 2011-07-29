@@ -7,3 +7,6 @@ setopt HIST_IGNORE_ALL_DUPS	# ignores duplications
 HISTFILE=$ZSH/run/history-$HOST-$UID
 HISTSIZE=20000
 SAVEHIST=20000
+
+# Ctrl-r search in the history with patterns
+bindkey '^r' history-incremental-pattern-search-backward
