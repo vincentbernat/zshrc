@@ -30,4 +30,8 @@ zstyle -e ':completion:*' hosts 'reply=(
 	$(cat $ZSH/local/hosts.*(|2)(N) /dev/null)
     )'
 
+# In menu, select items with +
+zmodload -i zsh/complist
+bindkey -M menuselect "+" accept-and-menu-complete
+
 compdef pumount=umount
