@@ -29,3 +29,5 @@ zstyle -e ':completion:*' hosts 'reply=(
 	# And from local/hosts.*
 	$(cat $ZSH/local/hosts.*(|2)(N) /dev/null)
     )'
+
+compdef pumount=umount
