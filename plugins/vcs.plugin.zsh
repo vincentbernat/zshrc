@@ -14,6 +14,7 @@
 	local circle='o'
 	is-at-least 4.3.4 && [[ -o multibyte ]] && circle='●'
 	zstyle ':vcs_info:git:*' formats '${PR_BLUE}±'$common$r']'$end
+	zstyle ':vcs_info:git-svn:*' formats '${PR_BLUE}±s'$common$r']'$end
 	zstyle ':vcs_info:svn:*' formats '${PR_BLUE}s'$common$r']'$end
 	zstyle ':vcs_info:git:*' actionformats '${PR_BLUE}±'$common$r'|${PR_LIGHT_MAGENTA}%a'$r']'$end
 	zstyle ':vcs_info:svn:*' actionformats '${PR_BLUE}s'$common$r'|${PR_LIGHT_MAGENTA}%a'$r']'$end
