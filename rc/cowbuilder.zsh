@@ -22,7 +22,7 @@
 		;;
 	esac
 	shift
-        local opts="--debootstrapopts --arch --debootstrapopts $arch"
+        local opts="--debootstrap debootstrap --debootstrapopts --arch --debootstrapopts $arch"
 
 	# Distribution
 	case $distrib in
