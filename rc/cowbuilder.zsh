@@ -1,23 +1,37 @@
 # -*- sh -*-
 
+# Cowbuilder + multistrap
 (( $+commands[cowbuilder] )) && {
-    _vbe_cowbuilder() { 
+    _vbe_cowbuilder() {
+	# Distribution. Something like debian/squeeze
         local distrib=$1
-        shift
-        local opts=""
-        local target=$distrib
-        [[ -n $ARCH ]] && {
-            target=$distrib-$ARCH
-            opts="--debootstrapopts --arch --debootstrapopts $ARCH"
-            export DEBIAN_BUILDARCH="$ARCH"
-        }
+	# Architecture (optional)
+	local arch=${2:-$(dpkg --print-architecture)}
+	shift 2
+
+        local opts="--debootstrapopts --arch --debootstrapopts $arch"
+	case $distrib in
+	    debian/*)
+		opts="$opts --mirror http://ftp.fr.debian.org/debian"
+		opts="$opts --debootstrapopts --keyring --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg"
+		;;
+	    ubuntu/*)
+		opts="$opts --mirror http://wwwftp.ciril.fr/pub/linux/ubuntu/archives/"
+		opts="$opts --debootstrapopts --keyring --debootstrapopts /usr/share/keyrings/ubuntu-archive-keyring.gpg"
+		;;
+	esac
+        local target=$distrib.$arch
 	_vbe_title "cowbuilder-$distrib: $@"
-        sudo cowbuilder "$@" --distribution $distrib  \
-            --basepath /var/cache/pbuilder/base.$target.cow \
-            --buildresult /var/cache/pbuilder/result-$target \
+        sudo env DEBIAN_BUILDARCH="$arch" cowbuilder "$@" \
+	    --distribution ${distrib##*/}  \
+            --basepath /var/cache/pbuilder/bases/$target.cow \
+            --buildresult /var/cache/pbuilder/results/$target \
             ${=opts}
     }
-    alias cowbuilder-squeeze='_vbe_cowbuilder squeeze'
-    alias cowbuilder-lenny='_vbe_cowbuilder lenny'
-    alias cowbuilder-etch='_vbe_cowbuilder etch'
+    alias cowbuilder-sid='_vbe_cowbuilder debian/sid ""'
+    alias cowbuilder-squeeze='_vbe_cowbuilder debian/squeeze ""'
+    alias cowbuilder-lenny='_vbe_cowbuilder debian/lenny ""'
+    alias cowbuilder-maverick-i386='_vbe_cowbuilder ubuntu/maverick i386'
+    alias cowbuilder-oneiric-i386='_vbe_cowbuilder ubuntu/oneiric i386'
+    alias cowbuilder-precise-i386='_vbe_cowbuilder ubuntu/precise i386'
 }
