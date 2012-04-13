@@ -33,6 +33,7 @@
 	    ubuntu/*)
 		opts="$opts --mirror http://wwwftp.ciril.fr/pub/linux/ubuntu/archives/"
 		opts="$opts --debootstrapopts --keyring --debootstrapopts /usr/share/keyrings/ubuntu-archive-keyring.gpg"
+		opts="$opts --components 'main universe'"
 		;;
 	esac
 	distrib=${distrib##*/}
@@ -40,10 +41,9 @@
         local target=$distrib.$arch
 	distrib=${distrib%.*}
 	_vbe_title "cowbuilder $target: $@"
-        sudo env DEBIAN_BUILDARCH="$arch" cowbuilder "$@" \
+        echo ${=opts} | xargs sudo env DEBIAN_BUILDARCH="$arch" cowbuilder "$@" \
 	    --distribution ${distrib}  \
             --basepath /var/cache/pbuilder/bases/$target.cow \
-            --buildresult /var/cache/pbuilder/results/$target \
-            ${=opts}
+            --buildresult /var/cache/pbuilder/results/$target
     }
 }
