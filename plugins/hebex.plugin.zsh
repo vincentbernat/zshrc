@@ -15,7 +15,7 @@ if [[ $HOSTNAME == *.fti.net ]] && [[ -n $SSH_AUTH_SOCK ]]; then
 fi
 
 # Telnet through HNM
-ttelnet() {
+telnet() {
     _vbe_title "$@"
     case "$1" in
 	*.net.b?.p.fti.net|swbg*)
@@ -28,12 +28,11 @@ ttelnet() {
 	    host=mtadm
 	    ;;
 	*)
-	    echo "Dunno which proxy to use..."
+	    # Don't know how to handle, let's just use normal telnet
+	    command telnet "$@"
 	    return
 	    ;;
     esac
-    LANG=C LC_MESSAGES=C command ssh -t root@$host \
-	su - network -c "sh -c 'cd hnm ; ./network.pl --verbose 6 --login --host '"$1
+    LANG=C LC_MESSAGES=C command ssh -t $host \
+	telnet $1
 }
-
-compdef ttelnet=telnet
