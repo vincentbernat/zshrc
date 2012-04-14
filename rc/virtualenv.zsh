@@ -50,6 +50,7 @@
 	    local VIRTUAL_ENV_DISABLE_PROMPT=1
 	    source $activate
 	}
+	rehash
     }
 
     export PIP_REQUIRE_VIRTUALENV=true
