@@ -21,6 +21,9 @@ _1st_arguments=(
 local expl
 local -a pkgs installed_pkgs
 
+local context state state_descr line
+typeset -A opt_args
+
 _arguments \
   '(--version)--version[Show version number of program and exit]' \
   '(-v --verbose)'{-v,--verbose}'[Give more output]' \

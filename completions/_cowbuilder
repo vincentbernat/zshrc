@@ -1,0 +1,40 @@
+#compdef cowbuilder
+
+_cowbuilder_environments() {
+    local bases=/var/cache/pbuilder/bases
+    local -a results
+    for cow in ${bases}/*.cow(N); do
+	results=($results ${${(@)$(<${cow}/etc/issue)}[1]:l}/${${${cow%.cow}:t}%.*}/${${${cow%.cow}:t}##*.})
+    done
+    _wanted base expl 'base path' compadd -a \
+	results	
+}
+
+local context state state_descr line expl
+typeset -A opt_args
+
+_arguments \
+    '1:::_cowbuilder_environments' \
+    '2:action:((--create\:"create new environment"
+                --build\:"build a package"
+                --update\:"update environment"
+                --login\:"login into environment"
+                --execute\:"execute a command"))' \
+    '*:: :->subcmds' \
+    && return 0
+
+case "$words[2]" in
+    --build)
+	if (( CURRENT == 3 )); then
+	    _wanted dsc expl "dsc file" _files -g "*.dsc"
+	fi
+	;;
+    --execute)
+	precommands+=($words[2])
+	shift 2 words
+	(( CURRENT -= 2 ))
+	_normal
+	;;
+esac
+
+return 0
