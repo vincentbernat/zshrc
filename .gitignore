@@ -1,0 +1,5 @@
+*~
+*.zwc
+/local
+/run
+/oldzsh.tar.gz
