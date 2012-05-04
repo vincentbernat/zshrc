@@ -42,10 +42,10 @@
         local target=$distrib.$arch
 	distrib=${distrib%.*}
 	_vbe_title "cowbuilder $target: $@"
-        sudo env DEBIAN_BUILDARCH="$arch" cowbuilder "$@" \
+        sudo env DEBIAN_BUILDARCH="$arch" cowbuilder $1 \
 	    --distribution ${distrib}  \
             --basepath /var/cache/pbuilder/bases/$target.cow \
             --buildresult /var/cache/pbuilder/results/$target \
-	    $opts
+	    $opts $*[2,$#]
     }
 }
