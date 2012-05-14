@@ -1,0 +1,111 @@
+#compdef snmpwalk=snmpcmd snmpget=snmpcmd snmpbulkwalk=snmpcmd snmpbulkget=snmpcmd
+#
+# Completion for snmp* cmd. Stolen from:
+#    2006 Andrew J Cosgriff
+#    http://polydistortion.net/
+#    http://polydistortion.net/sw/zsh/_snmpcmd
+#    http://polydistortion.net/monkey/archives/2006/07/16/003735.html
+#
+# With some other modifications
+
+_snmp_get_mibs () {
+    local -a mibs
+    local -a mib
+    local mibdirs
+    local dir
+
+    mibdirs=$(snmptranslate -Dinit_mib 2>&1 | \
+	sed -n "s/^init_mib: Seen MIBDIRS: Looking in '\(.*\)' for mib dirs ...$/\1/p")
+    for dir in ${(ws+:+)mibdirs}; do
+	mibs=($mibs $dir/*(.))
+    done
+	
+    compadd "$@" -- ${mibs[@]:t:r}
+}
+
+_snmpcmd () {
+    local context state line
+    typeset -A opt_args
+	
+    _arguments -A \
+	{-h,--help}'[show help]' \
+	'-H[display configuration file directives understood]' \
+	'-v[SNMP version to use]:version:(1 2c 3)' \
+	{-V,--version}'[display package version number]' \
+	'-c[set the community string]:community string: ' \
+	'-a[set authentcation protocol]:protocol:(MD5 SHA)' \
+	'-A[set authentication protocol pass phrase]:passphrase: ' \
+	'-e[set security engine ID]:engine-id: ' \
+	'-E[set context engine ID]:engine-id: ' \
+	'-l[set security level]:security level:(noAuthNoPriv authNoPriv authPriv)' \
+	'-n[set context name]:context: ' \
+	'-u[set security name]:user:_users' \
+	'-x[set privacy protocol]:protocol:(DES AES)' \
+	'-X[set privacy protocol pass phrase]:passphrase: ' \
+	'-Z[set destination engine boots/time]:boots,time: ' \
+	'-r[set the number of retries]:retries: ' \
+	'-t[set the request timeout (in seconds)]:timeout: ' \
+	'-d[dump input/output packets in hexadecimal]' \
+	'-D[turn on debugging output for the specified tokens]:token: ' \
+	'-m[MIB file to use]:mib:->mib' \
+	'-M[directory to search for MIBs]:directory:_files -/' \
+ 	'-Pu[allow the use of underlines in MIB symbols]' \
+	'-Pc[disallow the use of "--" to terminate comments in MIBs]' \
+	'-Pd[save the DESCRIPTIONs of the MIB objects]' \
+	'-Pe[disable errors when MIB symbols conflict]' \
+	'-Pw[enable warnings when MIB symbols conflict]' \
+	'-PW[enable detailed warnings when MIB symbols conflict]' \
+	'-PR[replace MIB symbols from latest module]' \
+	'-O0[print leading 0 for single-digit hex characters]' \
+	'-Oa[print all strings in ascii format]' \
+	'-Ob[do not break OID indexes down]' \
+	'-Oe[print enums numerically]' \
+	'-OE[escape quotes in string indices]' \
+	'-Of[print full OIDs on output]' \
+	'-On[print OIDs numerically]' \
+	'-Oq[quick print for easier parsing]' \
+	'-OQ[quick print with equal-signs]' \
+	'-Os[print only last symbolic element of OID]' \
+	'-OS[print MIB module-id plus last element]' \
+	'-Ot[print timeticks unparsed as numeric integers]' \
+	'-OT[print human-readable text along with hex strings]' \
+	'-Ou[print OIDs using UCD-style prefix suppression]' \
+	"-OU[don't print units]" \
+	'-Ov[print values only (not OID = value)]' \
+	'-Ox[print all strings in hex format]' \
+	'-OX[extended index format]' \
+	'-Ib[do best/regex matching to find a MIB node]' \
+	"-Ih[don't apply DISPLAY-HINTs]" \
+	'-Ir[do not check values for range/type legality]' \
+	'-IR[do random access to OID labels]' \
+	'-Iu[top-level OIDs must have '.' prefix (UCD-style)]' \
+	'-Is[Append all textual OIDs with suffix before parsing]:suffix: ' \
+	'-IS[Append all textual OIDs with prefix before parsing]:prefix: ' \
+	'-Le[log to standard error]' \
+	'-Lo[log to standard output]' \
+	"-Ln[don't log at all]" \
+	'-Lf[log to the specified file]:file:_files' \
+	'-Ls[log to the syslog (via the specified facility)]:facility: ' \
+	'-Cp[print the number of variables found]' \
+	'-Ci[include given OID in the search range]' \
+	"-CI[don't include the given OID, even if no results are returned]" \
+	'-Ic[do not check returned OIDs are increasing]' \
+	'-It[Display wall-clock time to complete the request]' \
+	':hosts:_hosts'
+		
+    while [[ -n "$state" ]]; do
+	lstate="$state"
+	state=''
+	
+	case "$lstate" in
+	    mib)
+		if compset -P '*+'; then
+		    _snmp_get_mibs
+		elif compset -P '*:'; then
+		    _snmp_get_mibs
+		else
+		    _snmp_get_mibs
+		fi
+	esac
+    done
+}
