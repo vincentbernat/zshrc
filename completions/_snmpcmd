@@ -23,6 +23,37 @@ _snmp_get_mibs () {
     compadd "$@" -- ${mibs[@]:t:r}
 }
 
+_snmp_get_object() {
+    local obj
+    local arg
+    local next
+    local -a additional
+    next=0
+    for arg in $words; do
+	case $arg in
+	    "-m")
+		next=1
+		additional=($additional "-m")
+		;;
+	    *)
+		if (( next == 1 )); then
+		    additional=($additional $arg)
+		    next=0
+		fi
+		;;
+	esac
+    done
+    for obj in ${(@f)"$(snmptranslate $additional -Ta 2> /dev/null)"}; do
+	case ${${(s: :)obj}[2]} in
+	    OBJECT)
+		;;
+	    *) continue
+		;;
+	esac
+	compadd "$@" -- ${${(s: :)obj}[1]}
+    done
+}
+
 _snmpcmd () {
     local context state line
     typeset -A opt_args
@@ -91,7 +122,8 @@ _snmpcmd () {
 	"-CI[don't include the given OID, even if no results are returned]" \
 	'-Ic[do not check returned OIDs are increasing]' \
 	'-It[Display wall-clock time to complete the request]' \
-	':hosts:_hosts'
+	':hosts:_hosts' \
+	':object:->object'
 		
     while [[ -n "$state" ]]; do
 	lstate="$state"
@@ -106,6 +138,10 @@ _snmpcmd () {
 		else
 		    _snmp_get_mibs
 		fi
+		;;
+	    object)
+		_snmp_get_object
+		;;
 	esac
     done
 }
