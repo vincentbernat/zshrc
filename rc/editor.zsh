@@ -8,6 +8,7 @@ __() {
 	"emacs -Q -D -nw" # Fast emacs
 	"emacs23 -Q -D -nw" # Fast emacs
 	"emacs22 -Q -D -nw" # Fast emacs
+	"zile"		  # Emacs clone
 	"jove" "mg" "jed" # Emacs clone
 	"vim" "vi"	  # vi
 	"editor")	  # fallback
