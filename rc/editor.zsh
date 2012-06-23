@@ -5,7 +5,8 @@ __() {
     local -a editors
     local editor
     editors=(
-	"emacs -Q -D -nw" # Fast emacs
+	"emacs-snapshot -Q -D -nw" # Fast emacs
+	"emacs24 -Q -D -nw" # Fast emacs
 	"emacs23 -Q -D -nw" # Fast emacs
 	"emacs22 -Q -D -nw" # Fast emacs
 	"zile"		  # Emacs clone
