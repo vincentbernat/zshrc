@@ -8,7 +8,6 @@ _vbe_prompt_precmd () {
     ###
     # Truncate the path if it's too long.
     
-    PR_FILLBAR=""
     PR_PWDLEN=""
     
     local promptsize=${#${(%):---(%n@%m)---()--}}
@@ -16,8 +15,6 @@ _vbe_prompt_precmd () {
     
     if [[ "$promptsize + $pwdsize" -gt $TERMWIDTH ]]; then
 	((PR_PWDLEN=$TERMWIDTH - $promptsize))
-    else
-	PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize)))..${PR_HBAR}.)}"
     fi
 
     _vbe_title ${HOST}:${(%):-%~}
@@ -55,25 +52,23 @@ _vbe_setprompt () {
     setopt prompt_subst
     local return_code
     
-    PROMPT='$PR_SET_CHARSET\
-$PR_CYAN$PR_SHIFT_IN$PR_ULCORNER$PR_HBAR$PR_SHIFT_OUT$PR_GREY(\
-%(!.$PR_RED%n.$PR_GREEN${SSH_TTY:+$PR_MAGENTA}%n)$PR_GREY@$PR_GREEN${SSH_TTY:+$PR_MAGENTA}%m\
-$PR_GREY)$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_HBAR${(e)PR_FILLBAR}$PR_HBAR$PR_SHIFT_OUT$PR_GREY(\
-$PR_GREEN${SSH_TTY:+$PR_MAGENTA}%$PR_PWDLEN<...<%~%<<\
-$PR_GREY)$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_URCORNER$PR_SHIFT_OUT\
-
-$PR_CYAN$PR_SHIFT_IN$PR_LLCORNER$PR_CYAN$PR_HBAR$PR_SHIFT_OUT\
-$PR_NO_COLOUR'$(_vbe_add_prompt)'\
-%(!.${PR_RED}#.${PR_CYAN}$)$PR_NO_COLOUR '
-
     # display exitcode on the right when >0
     if is-at-least 4.3.4 && [[ -o multibyte ]]; then
 	return_code="%(?..%{$PR_RED%}%? ↵ $PR_NO_COLOUR)"
     else
 	return_code="%(?..%{$PR_RED%}<%?> $PR_NO_COLOUR)"
     fi
-    RPROMPT=' '$return_code'$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_BLUE$PR_HBAR$PR_SHIFT_OUT\
-($PR_YELLOW%D{%H:%M}$PR_BLUE)$PR_SHIFT_IN$PR_HBAR$PR_CYAN$PR_LRCORNER$PR_SHIFT_OUT$PR_NO_COLOUR'
+
+    PROMPT='$PR_SET_CHARSET\
+$PR_CYAN$PR_SHIFT_IN$PR_ULCORNER$PR_HBAR$PR_SHIFT_OUT$PR_GREY(\
+%(!.$PR_RED%n.$PR_GREEN${SSH_TTY:+$PR_MAGENTA}%n)$PR_GREY@$PR_GREEN${SSH_TTY:+$PR_MAGENTA}%m\
+$PR_GREY)$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_HBAR$PR_SHIFT_OUT${PR_GREY}[\
+$PR_GREEN${SSH_TTY:+$PR_MAGENTA}%$PR_PWDLEN<...<%~%<<\
+${PR_GREY}]$PR_SHIFT_OUT\
+
+$PR_CYAN$PR_SHIFT_IN$PR_LLCORNER$PR_CYAN$PR_HBAR$PR_SHIFT_OUT\
+$PR_NO_COLOUR'$(_vbe_add_prompt)'\
+%(!.${PR_RED}#.${PR_CYAN}$)$PR_NO_COLOUR '$return_code
 
     PS2='$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
 $PR_BLUE$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT(\
