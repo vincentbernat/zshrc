@@ -4,10 +4,10 @@
 _vbe_title () {
     [ -t 1 ] || return
     if [[ "$TERM" == screen* ]]; then
-	print -n "\ek$@:q\e\\"
-	print -n "\e]2;$@:q\a"
+	print -n "\ek${(fV)@}\e\\"
+	print -n "\e]2;${(fV)@}\a"
     elif [[ $TERM == rxvt* ]] || [[ $TERM == xterm* ]]; then
-	print -n "\e]2;$@:q\a"
+	print -n "\e]2;${(fV)@}\a"
     fi
 }
 
