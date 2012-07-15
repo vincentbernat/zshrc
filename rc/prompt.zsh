@@ -84,5 +84,3 @@ _vbe_add_prompt () {
 	print -n '${PR_NO_COLOUR}'
     done
 }
-
-[ -t 1 ] && print -Pn '\e]12;2\a'
