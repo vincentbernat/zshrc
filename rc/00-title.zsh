@@ -3,16 +3,23 @@
 # Alter window title
 _vbe_title () {
     [ -t 1 ] || return
-    if [[ "$TERM" == screen* ]]; then
-	print -n "\ek${(fV)@}\e\\"
-	print -n "\e]2;${(fV)@}\a"
-    elif [[ $TERM == rxvt* ]] || [[ $TERM == xterm* ]]; then
-	print -n "\e]2;${(fV)@}\a"
-    fi
+    emulate -L zsh
+    local title
+    title=${@//[^[:alnum:]\/>< ._]/ }
+    case $TERM in
+	screen*)
+	    print -n "\ek$title\e\\"
+	    print -n "\e]2;$title\a"
+	    ;;
+	rxvt*|xterm*)
+	    print -n "\e]2;$title\a"
+	    ;;
+    esac
 }
 
 # Current running program as title
 _title_preexec () {
+    emulate -L zsh
     setopt extended_glob
     local CMD=${1[(wr)^(*=*|sudo|-*),-1]}
     _vbe_title $HOST \> $CMD
