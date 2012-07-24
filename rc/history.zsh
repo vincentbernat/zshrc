@@ -9,4 +9,5 @@ HISTSIZE=20000
 SAVEHIST=20000
 
 # Ctrl-r search in the history with patterns
-bindkey '^r' history-incremental-pattern-search-backward
+(( $+widgets[history-incremental-pattern-search-backward] )) &&	\
+    bindkey '^r' history-incremental-pattern-search-backward
