@@ -12,3 +12,6 @@ autoload run-help
 
 # No timeout
 unset TMOUT
+
+# Remove / from WORDCHARS (more like bash)
+WORDCHARS=${WORDCHARS:s#/#}
