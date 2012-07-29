@@ -54,9 +54,9 @@ _vbe_setprompt () {
     
     # display exitcode on the right when >0
     if is-at-least 4.3.4 && [[ -o multibyte ]]; then
-	return_code="%(?..%{$PR_RED%}%? ↵ $PR_NO_COLOUR)"
+	return_code="%(?..$PR_RED%? ↵ $PR_NO_COLOUR)"
     else
-	return_code="%(?..%{$PR_RED%}<%?> $PR_NO_COLOUR)"
+	return_code="%(?..$PR_RED<%?> $PR_NO_COLOUR)"
     fi
 
     PROMPT='$PR_SET_CHARSET\
