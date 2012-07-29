@@ -5,7 +5,7 @@ _vbe_title () {
     [ -t 1 ] || return
     emulate -L zsh
     local title
-    title=${@//[^[:alnum:]\/>< ._]/ }
+    title=${@//[^[:alnum:]\/>< ._~]/ }
     case $TERM in
 	screen*)
 	    print -n "\ek$title\e\\"
