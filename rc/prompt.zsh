@@ -17,7 +17,7 @@ _vbe_prompt_precmd () {
 	((PR_PWDLEN=$TERMWIDTH - $promptsize))
     fi
 
-    _vbe_title ${HOST}:${(%):-%~}
+    _vbe_title ${SSH_TTY+${HOST}:}${(%):-%~}
 }
 if (( $+functions[add-zsh-hook] )); then
     add-zsh-hook precmd _vbe_prompt_precmd

@@ -22,7 +22,7 @@ _title_preexec () {
     emulate -L zsh
     setopt extended_glob
     local CMD=${1[(wr)^(*=*|sudo|-*),-1]}
-    _vbe_title $HOST \> $CMD
+    _vbe_title ${SSH_TTY+$HOST }\> $CMD
 }
 if (( $+functions[add-zsh-hook] )); then
     add-zsh-hook preexec _title_preexec
