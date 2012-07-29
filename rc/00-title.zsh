@@ -9,9 +9,11 @@ _vbe_title () {
     case $TERM in
 	screen*)
 	    print -n "\ek$title\e\\"
+	    print -n "\e]1;$title\a"
 	    print -n "\e]2;$title\a"
 	    ;;
 	rxvt*|xterm*)
+	    print -n "\e]1;$title\a"
 	    print -n "\e]2;$title\a"
 	    ;;
     esac
