@@ -1,20 +1,27 @@
 # -*- sh -*-
 
 # Virtualenv related functions
-# Simplified version of virtualenvwrapper.
+# Simplified version of virtualenvwrapper. Also works with nodeenv.
 #  1. virtualenv works inside WORKON_HOME
 #  2. workon allows to :
 #       - switch to another environment
 #       - deactivate an environment
 #       - list available environments
 
-(( $+commands[virtualenv] )) && {
+(( $+commands[virtualenv] )) || (( $+commands[nodeenv] )) && {
     WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
     [[ -d $WORKON_HOME ]] || mkdir -p $WORKON_HOME
 
-    virtualenv () {
+    (( $+commands[virtualenv] )) && virtualenv () {
 	pushd $WORKON_HOME > /dev/null && {
 	    command virtualenv "$@"
+	    popd > /dev/null
+	}
+    }
+
+    (( $+commands[nodeenv] )) && nodeenv () {
+	pushd $WORKON_HOME > /dev/null && {
+	    command nodeenv "$@"
 	    popd > /dev/null
 	}
     }
@@ -46,8 +53,12 @@
 	(( $+functions[deactivate] )) && {
 	    deactivate
 	}
+	(( $+functions[deactivate_node] )) && {
+	    deactivate_node
+	}
 	[[ $env == "-" ]] || {
 	    local VIRTUAL_ENV_DISABLE_PROMPT=1
+	    local NODE_VIRTUAL_ENV_DISABLE_PROMPT=1
 	    source $activate
 	}
 	rehash
@@ -56,8 +67,12 @@
     export PIP_REQUIRE_VIRTUALENV=true
 
     _vbe_add_prompt_virtualenv () {
-	print -n '${VIRTUAL_ENV:+${PR_BLUE}(${PR_YELLOW}ve:${PR_NO_COLOUR}${VIRTUAL_ENV##*/}${PR_BLUE})'
-	print -n '$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT}'
+	local -a p1
+	p1=('${VIRTUAL_ENV:+${PR_BLUE}'
+	    '(${PR_YELLOW}ve:${PR_NO_COLOUR}${VIRTUAL_ENV##*/}${PR_BLUE})'
+	    '$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT}')
+	print -n ${(j::)p1}
+	print -n ${(j::)${${p1:gs/VIRTUAL_ENV/NODE_VIRTUAL_ENV}:s/ve:/nve:}}
     }
 
 }
