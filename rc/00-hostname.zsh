@@ -8,8 +8,7 @@ __() {
 	$(hostname)
 	$(</etc/hostname)
 	$HOST
-	$HOST.$(</etc/mailname)
-	$HOST)
+	$HOST.$(</etc/mailname))
     for host ($hostnames); do
 	HOSTNAME=${host%%.}
 	[[ $HOSTNAME == *.* ]] && break
