@@ -13,16 +13,16 @@ __() {
     done
 } && __
 
-# Update TERM if we have ORIGINALTERM variable
+# Update TERM if we have LC__ORIGINALTERM variable
 __() {
-    [[ -z $ORIGINALTERM ]] || [[ $ORIGINALTERM = $TERM ]] || {
+    [[ -z $LC__ORIGINALTERM ]] || [[ $LC__ORIGINALTERM = $TERM ]] || {
         local -a terms
         local term
         terms=( ${(f)"$(toe -a)}"} )
         for term in $terms; do
-            [[ ${term%%[[:blank:]]*} = $ORIGINALTERM ]] || continue
-            export TERM=$ORIGINALTERM
-            unset ORIGINALTERM
+            [[ ${term%%[[:blank:]]*} = $LC__ORIGINALTERM ]] || continue
+            export TERM=$LC__ORIGINALTERM
+            unset LC__ORIGINALTERM
             break
         done
     }
