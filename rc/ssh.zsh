@@ -18,6 +18,10 @@ ssh() {
     # or use commands like this:
     #     ssh -t XXXXX env TERM=$TERM emacsclient -t -c
     #
+    # If the remote host uses the same zshrc than this one, there is
+    # something in `$ZSH/rc/00-terminfo.zsh` to restore the
+    # appropriate terminal (saved in `ORIGINALTERM`).
+    #
     # The problem is quite similar for LANG and LC_MESSAGES. We reset
     # them to C to avoid any problem with hosts not having your
     # locally installed locales. See this post for more details on
@@ -29,7 +33,7 @@ ssh() {
     # `$ZSH/rc/01-locale.zsh`.
     case "$TERM" in
 	rxvt-256color|rxvt-unicode*)
-	    TERM=xterm LANG=C LC_MESSAGES=C command ssh "$@"
+	    ORIGINALTERM=$TERM TERM=xterm LANG=C LC_MESSAGES=C command ssh "$@"
 	    ;;
 	*)
 	    LANG=C LC_MESSAGES=C command ssh "$@"
