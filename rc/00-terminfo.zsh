@@ -16,11 +16,10 @@ __() {
 # Update TERM if we have LC__ORIGINALTERM variable
 __() {
     [[ -z $LC__ORIGINALTERM ]] || [[ $LC__ORIGINALTERM = $TERM ]] || {
-        local -a terms
-        local term
-        terms=( ${(f)"$(toe -a)}"} )
-        for term in $terms; do
-            [[ ${term%%[[:blank:]]*} = $LC__ORIGINALTERM ]] || continue
+        local locs loc
+        locs=( $TERMINFO ~/.terminfo $TERMINFO_DIRS /usr/{,share/}{,lib/}terminfo )
+        for loc in $locs; do
+            [[ -e $loc/${(@)${LC__ORIGINALTERM}[1]}/${LC__ORIGINALTERM} ]] || continue
             export TERM=$LC__ORIGINALTERM
             unset LC__ORIGINALTERM
             break
