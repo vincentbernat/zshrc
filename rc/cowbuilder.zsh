@@ -9,6 +9,12 @@
 	#   ubuntu/oneiric.custom
 	# Remaining arguments are those for cowbuilder
 
+        # Usage
+        (( $# > 0 )) || {
+            print "$0 distrib/flavor[/arch] ..." >&2
+            return 1
+        }
+
 	# Architecture
 	local arch
 	case $1 in
