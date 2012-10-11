@@ -1,5 +1,14 @@
 # -*- sh -*-
 
+# It is expected you have :
+#  - /var/cache/pbuilder/results
+#  - /var/cache/pbuilder/bases
+#
+# You may keep /var/cache/pbuilder/base.cow for other "frontends". Put
+# a symbolic link. For example:
+#  cd /var/cache/pbuilder/bases
+#  ln -s ../base.cow sid.amd64.cow
+
 (( $+commands[cowbuilder] )) && {
     cowbuilder() {
 	# First argument is something like this:
