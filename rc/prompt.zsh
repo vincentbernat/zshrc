@@ -11,8 +11,9 @@ _vbe_prompt_precmd () {
 
     local promptsize=${#${(%):---(%n@%m)---()--}}
     local pwdsize=${#${(%):-%~}}
-    [[ $TERM != "screen" ]] || [[ -z $WINDOW ]] || \
+    if [[ $TERM =~ screen* ]] && [[ -n $WINDOW ]]; then
         (( promptsize=$promptsize - ${#${:-S.$WINDOW}} ))
+    fi
 
     if [[ "$promptsize + $pwdsize" -gt $TERMWIDTH ]]; then
 	((PR_PWDLEN=$TERMWIDTH - $promptsize))
@@ -63,7 +64,7 @@ _vbe_setprompt () {
     PROMPT='$PR_SET_CHARSET\
 $PR_CYAN$PR_SHIFT_IN$PR_ULCORNER$PR_HBAR$PR_SHIFT_OUT$PR_GREY(\
 %(!.$PR_RED%n.$PR_GREEN${SSH_TTY:+$PR_MAGENTA}%n)$PR_GREY@$PR_GREEN${SSH_TTY:+$PR_MAGENTA}%m\
-${${${TERM:#screen}:-${WINDOW+$PR_GREY:$PR_GREEN${SSH_TTY:+$PR_MAGENTA}S.$WINDOW}}#$TERM}\
+${${${TERM:#screen*}:-${WINDOW+$PR_GREY:$PR_GREEN${SSH_TTY:+$PR_MAGENTA}S.$WINDOW}}#$TERM}\
 $PR_GREY)$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_HBAR$PR_SHIFT_OUT${PR_GREY}[\
 $PR_GREEN${SSH_TTY:+$PR_MAGENTA}%$PR_PWDLEN<...<%~%<<\
 ${PR_GREY}]$PR_SHIFT_OUT\
