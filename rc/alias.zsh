@@ -12,3 +12,14 @@ alias susu='sudo env HISTFILE=$HISTFILE-root HOME=$HOME DISPLAY=$DISPLAY SSH_AUT
 
 # Open anything (needs gvfs-open from `gvfs-bin` package)
 (( $+commands[gvfs-open] )) && alias o='gvfs-open'
+
+# Automatically append sudo before some commands
+__() {
+    local -a autosudo
+    local cmd
+    autosudo=(apt-get aptitude)
+    for cmd in $autosudo; do
+	(( $+commands[$cmd] )) && \
+            alias $cmd="sudo $cmd"
+    done
+} && __
