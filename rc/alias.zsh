@@ -9,6 +9,3 @@ alias ip6='ip -6'
 
 # Less generic aliases
 alias susu='sudo env HISTFILE=$HISTFILE-root HOME=$HOME DISPLAY=$DISPLAY SSH_AUTH_SOCK=$SSH_AUTH_SOCK zsh'
-
-# Open anything (needs gvfs-open from `gvfs-bin` package)
-(( $+commands[gvfs-open] )) && alias o='gvfs-open'
