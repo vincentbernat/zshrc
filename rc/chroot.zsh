@@ -1,5 +1,17 @@
 # -*- sh -*-
 
+_vbe_prompt_env () {
+    local kind=$1
+    local name=$2
+    local -a p1
+    p1=( '${' ${name} ':+'
+        '${PR_BLUE}'
+	'(${PR_YELLOW}' ${kind} ':${PR_NO_COLOUR}' ${name} '${PR_BLUE})'
+	'$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT'
+        '}' )
+    print -n ${(j::)p1}
+}
+
 # Are we running inside lxc? lxc sets `container` environment variable
 # for PID 1 but this seems difficult to get as a simple
 # user. Therefore, we will look at /proc/self/cgroup.
@@ -12,8 +24,7 @@
 }
 [[ -z $LXC_CHROOT_NAME ]] || {
     _vbe_add_prompt_lxc () {
-	print -n '${PR_BLUE}(${PR_YELLOW}lxc:${PR_NO_COLOUR}${LXC_CHROOT_NAME}${PR_BLUE})'
-	print -n '$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT'
+        _vbe_prompt_env 'lxc' '${LXC_CHROOT_NAME}'
     }
 }
 
@@ -22,8 +33,7 @@
     SCHROOT_CHROOT_NAME=$(</etc/debian_chroot)
 [[ -z $SCHROOT_CHROOT_NAME ]] || {
     _vbe_add_prompt_schroot () {
-	print -n '${PR_BLUE}(${PR_YELLOW}sch:${PR_NO_COLOUR}${SCHROOT_CHROOT_NAME}${PR_BLUE})'
-	print -n '$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT'
+        _vbe_prompt_env 'sch' '${SCHROOT_CHROOT_NAME}'
     }
 }
 
@@ -31,8 +41,7 @@
 #   export PBUILDERPID=$$
 [[ -z $PBUILDERPID ]] || {
     _vbe_add_prompt_pbuilder () {
-	print -n '${PR_BLUE}(${PR_YELLOW}pb:${PR_NO_COLOUR}${PBUILDERPID}${PR_BLUE})'
-	print -n '$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT'
+        _vbe_prompt_env 'pb' '${PBUILDERPID}'
     }
 }
 

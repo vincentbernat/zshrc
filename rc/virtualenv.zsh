@@ -67,12 +67,8 @@
     export PIP_REQUIRE_VIRTUALENV=true
 
     _vbe_add_prompt_virtualenv () {
-	local -a p1
-	p1=('${VIRTUAL_ENV:+${PR_BLUE}'
-	    '(${PR_YELLOW}ve:${PR_NO_COLOUR}${VIRTUAL_ENV##*/}${PR_BLUE})'
-	    '$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT}')
-	print -n ${(j::)p1}
-	print -n ${(j::)${${p1:gs/VIRTUAL_ENV/NODE_VIRTUAL_ENV}:s/ve:/nve:}}
+        _vbe_prompt_env 've' '${VIRTUAL_ENV##*/}'
+        _vbe_prompt_env 'nve' '${NODE_VIRTUAL_ENV##*/}'
     }
 
 }
