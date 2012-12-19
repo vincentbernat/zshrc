@@ -1,0 +1,16 @@
+#compdef dm
+
+if [ "${#words}" -eq 2 ]; then
+    local cmds
+    local -a commands
+    cmds=$(dm commands)
+    commands=(${(ps:\n:)cmds})
+    _wanted command expl "dm command" compadd -a commands
+else
+    local cmd subcmds
+    local -a commands
+    cmd=${words[2]}
+    subcmds=$(dm completions $cmd)
+    commands=(${(ps:\n:)subcmds})
+    _wanted subcommand expl "dm $cmd subcommand" compadd -a commands
+fi
