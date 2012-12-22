@@ -11,7 +11,7 @@ _vbe_prompt_precmd () {
 
     local promptsize=${#${(%):---(%n@%m)---()--}}
     local pwdsize=${#${(%):-%~}}
-    if [[ $TERM =~ screen* ]] && [[ -n $WINDOW ]]; then
+    if [[ -n ${${TERM:#screen*}:-${WINDOW+hello}} ]]; then
         (( promptsize=$promptsize - ${#${:-S.$WINDOW}} ))
     fi
 
