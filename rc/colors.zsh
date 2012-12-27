@@ -3,7 +3,9 @@
 [[ "$terminfo[colors]" -ge 8 ]] && {
     # ls colors
     export LSCOLORS="Gxfxcxdxbxegedabagacad"
-    ls --color -d . &>/dev/null && alias ls='ls --color=tty' || alias ls='ls -G'
+    ls --color -d . &>/dev/null && alias ls='ls --color=tty' || {
+        ls -G &> /dev/null && alias ls='ls -G'
+    }
 
     # grep colors
     export GREP_OPTIONS='--color=auto'
