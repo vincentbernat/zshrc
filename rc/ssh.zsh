@@ -1,5 +1,12 @@
 # -*- sh -*-
 
+_vbe_first_non_optional_arg() {
+    local args
+    args=( "$@" )
+    args=( ${(R)args:#-*} )
+    print -- $args[1]
+}
+
 _vbe_ssh() {
     # TERM is one of the variables that is usually allowed to be
     # transmitted to the remote session. The remote host should have
@@ -41,7 +48,7 @@ _vbe_ssh() {
 }
 
 ssh() {
-    _vbe_title "$@"
+    _vbe_title $(_vbe_first_non_optional_arg "$@")
     _vbe_ssh "$@"
 }
 
@@ -59,7 +66,7 @@ rssh() {
     port=$((21422 + $RANDOM % 1000))
 
     print "On remote host, use \`socat TCP:10.0.2.2:$port TCP:127.0.0.1:22\` to allow SSH access... "
-    _vbe_title "$@"
+    _vbe_title $(_vbe_first_non_optional_arg "$@")
     _vbe_ssh -o \
         ProxyCommand="socat TCP-LISTEN:$port,bind=127.0.0.1,reuseaddr STDIO" \
         "$@"
