@@ -8,12 +8,15 @@ case $CURRENT in
         commands=(${(ps:\n:)cmds})
         _wanted command expl "dm command" compadd -a commands
         ;;
-    *)
+    3)
         local cmd subcmds
         local -a commands
         cmd=${words[2]}
-        subcmds=$(dm completions ${words[2,$(($CURRENT - 1))]})
+        subcmds=$(dm completions $cmd)
         commands=(${(ps:\n:)subcmds})
         _wanted subcommand expl "dm $cmd subcommand" compadd -a commands
+        ;;
+    *)
+        _files
         ;;
 esac
