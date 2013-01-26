@@ -60,13 +60,14 @@ _vbe_prompt () {
     local retval=$?
 
     # user@host
-    _vbe_prompt_segment ${(%):-%(!.red.${${SSH_TTY:+magenta}:-blue})} black \
-        %n%F{cyan}@%F{black}%m
+    _vbe_prompt_segment black ${(%):-%(!.red.${${SSH_TTY:+magenta}:-green})} \
+        %B%n%b%F{cyan}@%B%K{black}%F{green}%m
 
     # Directory
     local -a segs
     local len=$(($COLUMNS - ${#${(%):-%n@%m}} - 6 - ${#${${(%):-%~}//[^\/]/}} * 2))
     segs=(${(s./.)${(%):-%${len}<${PRCH[ellipsis]}<%~}})
+    [[ ${#segs} == 0 ]] && segs=(/)
     for seg in ${segs[1,-2]}; do
         _vbe_prompt_segment cyan default $seg
     done
