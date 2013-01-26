@@ -5,11 +5,8 @@ _vbe_prompt_env () {
     local name=$2
     local -a p1
     p1=( '${' ${name} ':+'
-        '${PR_BLUE}'
-	'(${PR_YELLOW}' ${kind} ':${PR_NO_COLOUR}' ${name} '${PR_BLUE})'
-	'$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT'
-        '}' )
-    print -n ${(j::)p1}
+	${kind} '|' ${name} '}')
+    _vbe_prompt_segment blue black ${(e)${(j::)p1}}
 }
 
 # Are we running inside lxc? lxc sets `container` environment variable

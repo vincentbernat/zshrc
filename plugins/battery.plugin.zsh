@@ -43,23 +43,27 @@ _vbe_battery () {
     is-at-least 4.3.4 && [[ -o multibyte ]] && gauge=(▲ ▼ △ ▽)
     full=$(( (${percent}*${size}+49)/100 ))
     if (( $percent < 10 )); then
-	g=$PR_RED
+	g=red
     elif (( $percent < 30 )); then
-	g=$PR_YELLOW
+	g=yellow
     else
-	g=$PR_GREEN
+	g=green
     fi
     i=1
     [[ $state == "discharging" ]] && i=2
-    (( $full >= 1 )) && for j in {1..$full}; do g=$g$gauge[$i]; done
+    local gg
+    (( $full >= 1 )) && for j in {1..$full}; do gg=$gg$gauge[$i]; done
     i=$(( $i + 2 ))
     (( $full < $size )) && \
-	for j in {$(( $full + 1 ))..$size}; do g=$g$gauge[$i]; done
-    print -n $g
-    print -n $g > $cache
+	for j in {$(( $full + 1 ))..$size}; do gg=$gg$gauge[$i]; done
+    print -n $g $gg > $cache
+    print $g $gg
 }
 
 _vbe_add_prompt_battery () {
-    print -n '${PR_GREY}|$(_vbe_battery)${PR_GREY}|'
-    print -n '$PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT'
+    local v="$(_vbe_battery)"
+    local color=${v% *}
+    local gauge="${v#* }"
+    
+    _vbe_prompt_segment $color black %B$gauge
 }
