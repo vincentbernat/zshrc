@@ -60,8 +60,9 @@ _vbe_prompt () {
     local retval=$?
 
     # user@host
-    _vbe_prompt_segment black ${(%):-%(!.red.${${SSH_TTY:+magenta}:-green})} \
-        %B%n%b%F{cyan}@%B%K{black}%F{green}%m
+    local fg=${(%):-%(!.red.${${SSH_TTY:+magenta}:-green})}
+    _vbe_prompt_segment black $fg \
+        %B%n%b%F{cyan}@%B%K{black}%F{$fg}%m
 
     # Directory
     local -a segs
