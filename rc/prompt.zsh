@@ -60,10 +60,14 @@ _vbe_prompt () {
     # user@host
     _vbe_prompt_segment ${(%):-%(!.red.${${SSH_TTY:+magenta}:-blue})} black \
         %n%F{cyan}@%F{black}%m
+
     # Directory
-    for seg in ${(s./.)${(%):-%~}}; do
-        _vbe_prompt_segment 6 default $seg
+    local -a segs
+    segs=(${(s./.)${(%):-%~}})
+    for seg in ${segs[1,-2]}; do
+        _vbe_prompt_segment cyan default $seg
     done
+    _vbe_prompt_segment cyan default %B${segs[-1]}
     _vbe_prompt_end
 
     # New line
