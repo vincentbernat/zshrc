@@ -20,14 +20,14 @@ if is-at-least 4.3.4 && [[ -o multibyte ]]; then
         sep "\uE0B1" end "\uE0B0"
         retb "" reta " ↵"
         circle "●" branch "\uE0A0"
-        ok "✓"
+        ok "✓" ellipsis "…"
     )
 else
     PRCH=(
         sep "/" end ""
         retb "<" reta ">"
         circle "*" branch "±"
-        ok ">"
+        ok ">" ellipsis ".."
     )
 fi
 CURRENT_BG=NONE
@@ -65,7 +65,8 @@ _vbe_prompt () {
 
     # Directory
     local -a segs
-    segs=(${(s./.)${(%):-%~}})
+    local len=$(($COLUMNS - ${#${(%):-%n@%m}} - 6 - ${#${${(%):-%~}//[^\/]/}} * 2))
+    segs=(${(s./.)${(%):-%${len}<${PRCH[ellipsis]}<%~}})
     for seg in ${segs[1,-2]}; do
         _vbe_prompt_segment cyan default $seg
     done
