@@ -13,7 +13,4 @@
 	    fi
 	done
     done
-    # Check if we support multibyte chars correctly
-    is-at-least 4.3.4 && (( ${#${:-↵}} != 1 )) && unsetopt multibyte
-    (( ${#${:-↵}} != 1 )) && unsetopt multibyte
 } && __ 2> /dev/null
