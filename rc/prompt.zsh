@@ -14,8 +14,21 @@ else
     }
 fi
 
+_vbe_can_do_unicode () {
+    if is-at-least 4.3.4 && [[ -o multibyte ]]; then
+        case $TERM in
+            screen*) ;;
+            xterm*) ;;
+            rxvt*) ;;
+            *) return 1 ;;
+        esac
+        return 0
+    fi
+    return 1
+}
+
 typeset -gA PRCH
-if is-at-least 4.3.4 && [[ -o multibyte ]]; then
+if _vbe_can_do_unicode; then
     PRCH=(
         sep "\uE0B1" end "\uE0B0"
         retb "" reta " ↵"
