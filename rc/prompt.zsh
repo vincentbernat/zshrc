@@ -95,9 +95,15 @@ _vbe_add_prompt () {
 	$f
     done
 }
+_vbe_prompt_ps2 () {
+    for seg in ${${(s. .)${1}}[1,-2]}; do
+        _vbe_prompt_segment cyan default $seg
+    done
+    _vbe_prompt_end
+}
 _vbe_setprompt () {
     setopt prompt_subst
     PROMPT='$(_vbe_prompt) '
-    PS2='$(_vbe_prompt_segment cyan default %_ ; _vbe_prompt_end)'
+    PS2='$(_vbe_prompt_ps2 ${(%):-%_}) '
     unset RPROMPT
 }
