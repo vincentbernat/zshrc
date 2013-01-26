@@ -20,12 +20,14 @@ if is-at-least 4.3.4 && [[ -o multibyte ]]; then
         sep "\uE0B1" end "\uE0B0"
         retb "" reta " ↵"
         circle "●" branch "\uE0A0"
+        ok "✓"
     )
 else
     PRCH=(
         sep "/" end ""
         retb "<" reta ">"
         circle "*" branch "±"
+        ok ">"
     )
 fi
 CURRENT_BG=NONE
@@ -78,7 +80,8 @@ _vbe_prompt () {
     _vbe_add_prompt
     # Error code
     (( $retval )) && \
-        _vbe_prompt_segment red default %B${PRCH[retb]}'%?'${PRCH[reta]}
+        _vbe_prompt_segment red default %B${PRCH[retb]}'%?'${PRCH[reta]} || \
+        _vbe_prompt_segment green white %B${PRCH[ok]}
 
     _vbe_prompt_end
 }
