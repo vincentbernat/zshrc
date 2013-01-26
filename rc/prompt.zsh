@@ -20,7 +20,7 @@ if is-at-least 4.3.4 && [[ -o multibyte ]]; then
         sep "\uE0B1" end "\uE0B0"
         retb "" reta " ↵"
         circle "●" branch "\uE0A0"
-        ok "✓" ellipsis "…"
+        ok "✔" ellipsis "…"
     )
 else
     PRCH=(
