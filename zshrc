@@ -4,6 +4,11 @@
 [[ ${TERM:-dumb} != "dumb" ]] || exec /bin/sh
 [ -t 1 ] || exec /bin/sh
 
+# Execute tmux if available and if we have some configuration for it
+(( $+commands[tmux] )) && \
+    [[ $TERM != screen* && -f ~/.tmux.conf ]] && \
+    exec tmux
+
 ZSH=${ZDOTDIR:-$HOME}/.zsh
 fpath=($ZSH/functions $ZSH/completions $fpath)
 
