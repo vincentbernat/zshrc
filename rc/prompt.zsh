@@ -15,7 +15,7 @@ else
 fi
 
 _vbe_can_do_unicode () {
-    if is-at-least 4.3.4 && [[ -o multibyte ]]; then
+    if is-at-least 4.3.4 && [[ -o multibyte ]] && (( ${#${:-↵}} == 1 )); then
         case $TERM in
             screen*) ;;
             xterm*) ;;
