@@ -6,20 +6,15 @@
 
     autoload -Uz vcs_info
 
-    zstyle ':vcs_info:*' enable git svn
+    zstyle ':vcs_info:*' enable git svn hg
     __() {
         local common='${PRCH[branch]} %b%c%u'
-	zstyle ':vcs_info:git:*' formats $common
-	zstyle ':vcs_info:git-svn:*' formats $common
-	zstyle ':vcs_info:svn:*' formats $common
-	zstyle ':vcs_info:git:*' actionformats \
-            $common'${PRCHR[sep]}'%a
-	zstyle ':vcs_info:svn:*' actionformats \
-            $common'${PRCHR[sep]}'%a
+	zstyle ':vcs_info:*:*'   formats $common
+	zstyle ':vcs_info:*:*'   actionformats $common'${PRCHR[sep]}'%a
 	zstyle ':vcs_info:svn:*' branchformat '%b:%r'
-	zstyle ':vcs_info:*' stagedstr     %F{green}${PRCH[circle]}
-	zstyle ':vcs_info:*' unstagedstr   %F{yellow}${PRCH[circle]}
-	zstyle ':vcs_info:*' check-for-changes true
+	zstyle ':vcs_info:*:*'   stagedstr     %F{green}${PRCH[circle]}
+	zstyle ':vcs_info:*:*'   unstagedstr   %F{yellow}${PRCH[circle]}
+	zstyle ':vcs_info:*:*'   check-for-changes true
     } && __
 
     _vbe_vcs_precmd () {
