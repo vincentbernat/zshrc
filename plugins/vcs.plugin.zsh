@@ -12,9 +12,11 @@
 	zstyle ':vcs_info:*:*'   formats $common
 	zstyle ':vcs_info:*:*'   actionformats $common'${PRCHR[sep]}'%a
 	zstyle ':vcs_info:svn:*' branchformat '%b:%r'
+	zstyle ':vcs_info:hg*:*' hgrevformat '%r'
 	zstyle ':vcs_info:*:*'   stagedstr     %F{green}${PRCH[circle]}
 	zstyle ':vcs_info:*:*'   unstagedstr   %F{yellow}${PRCH[circle]}
 	zstyle ':vcs_info:*:*'   check-for-changes true
+        zstyle ':vcs_info:hg*:*' get-revision true
 
         zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 
