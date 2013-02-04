@@ -10,7 +10,7 @@
     __() {
         local common='${PRCH[branch]} %b%c%u'
 	zstyle ':vcs_info:*:*'   formats $common
-	zstyle ':vcs_info:*:*'   actionformats $common'${PRCHR[sep]}'%a
+	zstyle ':vcs_info:*:*'   actionformats ${common}'%F{default} ${PRCH[sep]} %F{green}'%a
 	zstyle ':vcs_info:svn:*' branchformat '%b:%r'
 	zstyle ':vcs_info:hg*:*' hgrevformat '%r'
 	zstyle ':vcs_info:*:*'   stagedstr     %F{green}${PRCH[circle]}
