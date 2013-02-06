@@ -14,18 +14,17 @@ __() {
 } && __
 
 # Update TERM if we have LC__ORIGINALTERM variable
-__() {
-    [[ -z $LC__ORIGINALTERM ]] || [[ $LC__ORIGINALTERM = $TERM ]] || {
-        local locs loc
-        locs=( $TERMINFO ~/.terminfo $TERMINFO_DIRS /usr/{,share/}{,lib/}terminfo )
-        for loc in $locs; do
-            [[ -e $loc/${(@)${LC__ORIGINALTERM}[1]}/${LC__ORIGINALTERM} ]] || continue
-            export TERM=$LC__ORIGINALTERM
-            unset LC__ORIGINALTERM
-            break
-        done
-    }
-} && __
-
+# Also, try a sensible term where we have terminfo stuff
 autoload -U colors zsh/terminfo
-[[ "$terminfo[colors]" -ge 8 ]] && colors
+__() {
+    local term
+    for term in $LC__ORIGINALTERM $TERM ${TERM/-256color} xterm-256color xterm; do
+        TERM=$term 2> /dev/null
+        [[ "$terminfo[colors]" -ge 8 ]] && {
+            colors
+            break
+        }
+    done
+    unset LC__ORIGINALTERM
+    export TERM
+} && __
