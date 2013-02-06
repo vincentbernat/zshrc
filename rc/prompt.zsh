@@ -114,9 +114,23 @@ _vbe_prompt_ps2 () {
     done
     _vbe_prompt_end
 }
+_vbe_strip_colors() {
+    local a=$1
+    local b=$a
+    while (( 1 )); do
+        a=${(S)${(S)a#%F{*}}#%K{*}}
+        [[ $a != $b ]] || break
+        b=$a
+    done
+    echo $a
+}
 _vbe_setprompt () {
     setopt prompt_subst
     PROMPT='$(_vbe_prompt) '
     PS2='$(_vbe_prompt_ps2 ${(%):-%_}) '
+    if ! is-at-least 4.3.7; then
+        PROMPT="\$(_vbe_strip_colors \"$PROMPT\")"
+        PS2="\$(_vbe_strip_colors \"$PS2\")"
+    fi
     unset RPROMPT
 }
