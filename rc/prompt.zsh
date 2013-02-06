@@ -104,8 +104,7 @@ _vbe_prompt () {
 
 # Collect additional information from functions matching _vbe_add_prompt_*
 _vbe_add_prompt () {
-    for f in ${(k)functions}; do
-	[[ $f == _vbe_add_prompt_* ]] || continue
+    for f in ${(M)${(k)functions}:#_vbe_add_prompt_*}; do
 	$f
     done
 }
