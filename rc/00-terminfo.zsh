@@ -18,12 +18,15 @@ __() {
 autoload -U colors zsh/terminfo zsh/termcap
 __() {
     local term
+    local colors
     for term in $LC__ORIGINALTERM $TERM ${TERM/-256color} xterm-256color xterm; do
         TERM=$term 2> /dev/null
-        if (( ${terminfo[colors]:-${termcap[Co]:-0}} >= 8  )) && {
+        if (( ${terminfo[colors]:-0} >= 8 )) || \
+            (zmodload zsh/termcap 2> /dev/null) && \
+            (( ${termcap[Co]:-0} >= 8)); then
             colors
             break
-        }
+        fi
     done
     unset LC__ORIGINALTERM
     export TERM
