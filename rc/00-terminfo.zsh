@@ -15,12 +15,12 @@ __() {
 
 # Update TERM if we have LC__ORIGINALTERM variable
 # Also, try a sensible term where we have terminfo stuff
-autoload -U colors zsh/terminfo
+autoload -U colors zsh/terminfo zsh/termcap
 __() {
     local term
     for term in $LC__ORIGINALTERM $TERM ${TERM/-256color} xterm-256color xterm; do
         TERM=$term 2> /dev/null
-        [[ "$terminfo[colors]" -ge 8 ]] && {
+        if (( ${terminfo[colors]:-${termcap[Co]:-0}} >= 8  )) && {
             colors
             break
         }
