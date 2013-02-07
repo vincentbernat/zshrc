@@ -45,27 +45,27 @@ else
 fi
 CURRENT_BG=NONE
 _vbe_prompt_segment() {
-  local bg fg
-  [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
-  [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
+  local b f
+  [[ -n $1 ]] && b="$bg[$1]" || b="$bg[default]"
+  [[ -n $2 ]] && f="$fg[$2]" || f="$fg[default]"
   [[ -n $3 ]] || return
   if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-      print -n " %b$bg%F{$CURRENT_BG}${PRCH[end]}$fg "
+      print -n " %{%b$b$fg[$CURRENT_BG]%}${PRCH[end]}%{$f%} "
   elif [[ $1 == $CURRENT_BG ]]; then
-      print -n " %b$bg$fg${PRCH[sep]} "
+      print -n " %{%b$b$f%}${PRCH[sep]} "
   else
-      print -n "%b$bg$fg "
+      print -n "%{%b$b$f%} "
   fi
   CURRENT_BG=$1
   print -n $3
 }
 _vbe_prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
-    print -n " %b%k%F{$CURRENT_BG}${PRCH[end]}"
+    print -n " %{%b$fg[$CURRENT_BG]%}${PRCH[end]}"
   else
-    print -n "%b%k"
+    print -n "%{%b%}"
   fi
-  print -n "%f"
+  print -n "%{${reset_color}%}"
   CURRENT_BG=''
 }
 
@@ -73,9 +73,9 @@ _vbe_prompt () {
     local retval=$?
 
     # user@host
-    local fg=${(%):-%(!.red.${${SSH_TTY:+magenta}:-green})}
-    _vbe_prompt_segment black $fg \
-        %B%n%b%F{cyan}@%B%K{black}%F{$fg}%m
+    local f=${(%):-%(!.red.${${SSH_TTY:+magenta}:-green})}
+    _vbe_prompt_segment black $f \
+        %B%n%b${fg[cyan]}@%B${bg[black]}${fg[$f]}%m
 
     # Directory
     local -a segs
@@ -114,23 +114,9 @@ _vbe_prompt_ps2 () {
     done
     _vbe_prompt_end
 }
-_vbe_strip_colors() {
-    local a=$1
-    local b=$a
-    while (( 1 )); do
-        a=${(S)${(S)a#%F{*}}#%K{*}}
-        [[ $a != $b ]] || break
-        b=$a
-    done
-    echo $a
-}
 _vbe_setprompt () {
     setopt prompt_subst
     PROMPT='$(_vbe_prompt) '
     PS2='$(_vbe_prompt_ps2 ${(%):-%_}) '
-    if ! is-at-least 4.3.7; then
-        PROMPT="\$(_vbe_strip_colors \"$PROMPT\")"
-        PS2="\$(_vbe_strip_colors \"$PS2\")"
-    fi
     unset RPROMPT
 }
