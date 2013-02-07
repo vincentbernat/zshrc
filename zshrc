@@ -6,7 +6,7 @@
 
 # Execute tmux if available and if we have some configuration for it
 (( $+commands[tmux] )) && \
-    [[ -z $TMUX && -f ~/.tmux.conf ]] && \
+    [[ -z $TMUX && -f ~/.tmux.conf && $TERM != linux ]] && \
     exec tmux
 
 ZSH=${ZDOTDIR:-$HOME}/.zsh
