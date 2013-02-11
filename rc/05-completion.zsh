@@ -27,7 +27,7 @@ zstyle ':completion:*:descriptions' format '%B%d%b'
 _custom_hosts() {
     # Complete ~/.zsh/local/hosts.*
     local host
-    for host in $ZSH/local/hosts.*(N); do
+    for host in $ZSH/local/hosts.*(N-.); do
 	_wanted hosts expl host compadd "$@" $(<$host)
     done
 
