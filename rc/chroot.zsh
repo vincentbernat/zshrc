@@ -2,11 +2,11 @@
 
 _vbe_prompt_env () {
     local kind=$1
-    local name=$2
-    local -a p1
-    p1=( '${' ${name} ':+'
-	${kind} '|' ${name} '}')
-    _vbe_prompt_segment blue black ${(e)${(j::)p1}}
+    local name=${(e)${2}}
+    [[ -z $name ]] || {
+        _vbe_prompt_segment blue black $kind
+        _vbe_prompt_segment blue black $name
+    }
 }
 
 # Are we running inside lxc? lxc sets `container` environment variable
