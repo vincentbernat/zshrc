@@ -5,10 +5,11 @@ _vbe_title () {
     [ -t 1 ] || return
     emulate -L zsh
     local title
-    title=${@//[^[:alnum:]\/>< ._~:=?@-]/ }
+    title=${1//[^[:alnum:]\/>< ._~:=?@-]/ }
+    shorttitle=${2:-$1}
     case $TERM in
 	screen*)
-	    print -n "\ek$title\e\\"
+	    print -n "\ek$shorttitle\e\\"
 	    print -n "\e]1;$title\a"
 	    print -n "\e]2;$title\a"
 	    ;;
@@ -24,7 +25,7 @@ _title_preexec () {
     emulate -L zsh
     setopt extended_glob
     local CMD=${1[(wr)^(*=*|sudo|-*),-1]}
-    _vbe_title ${SSH_TTY+$HOST }\> $CMD
+    _vbe_title "${SSH_TTY+$HOST }\> $CMD"
 }
 if (( $+functions[add-zsh-hook] )); then
     add-zsh-hook preexec _title_preexec

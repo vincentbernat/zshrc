@@ -56,7 +56,7 @@
 
         local target=$distrib.$arch
 	distrib=${distrib%.*}
-	_vbe_title "cowbuilder $target: $@"
+	_vbe_title "cowbuilder $target: $*"
         sudo env DEBIAN_BUILDARCH="$arch" cowbuilder $1 \
 	    --distribution ${distrib}  \
             --basepath /var/cache/pbuilder/bases/$target.cow \

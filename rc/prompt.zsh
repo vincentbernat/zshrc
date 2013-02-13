@@ -4,7 +4,7 @@
 #  - https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/agnoster.zsh-theme
 
 _vbe_prompt_precmd () {
-    _vbe_title ${SSH_TTY+${HOST}:}${(%):-%~}
+    _vbe_title "${SSH_TTY+${HOST}:}${(%):-%50<..<%~}" "${SSH_TTY+${HOST}:}${(%):-%20<..<%~}"
 }
 if (( $+functions[add-zsh-hook] )); then
     add-zsh-hook precmd _vbe_prompt_precmd
