@@ -79,7 +79,7 @@ _vbe_prompt () {
 
     # Directory
     local -a segs
-    local len=$(($COLUMNS - ${#${(%):-%n@%m}} - 6 - ${#${${(%):-%~}//[^\/]/}} * 2))
+    local len=$(($COLUMNS - ${#${(%):-%n@%m}} - 7 - ${#${${(%):-%~}//[^\/]/}} * 2))
     segs=(${(s./.)${(%):-%${len}<${PRCH[ellipsis]}<%~}})
     [[ ${#segs} == 0 ]] && segs=(/)
     for seg in ${segs[1,-2]}; do
