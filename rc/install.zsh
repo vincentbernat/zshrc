@@ -3,48 +3,39 @@
 autoload colors ; colors
 
 # Install or update ZSH on a remote host.
-# Needs Git
 install-zsh() {
-    local remote
-    local work
-    remote=$1
-    work=$(mktemp -d)
+    local remote=$1
+    local version=$(cd $ZSH ; git rev-parse HEAD)
+    __() {
+        # Check version
+        ZSH="${ZSH:-$HOME/.zsh}"
+        [ -d "$ZSH/run" ] || mkdir -p "$ZSH/run"
+        if [ -f "$ZSH/run/version" ] && [ "$version" = "$(cat "$ZSH/run/version")" ]; then
+            # Already up-to-date
+            exit 0
+        fi
+        echo "$version" > "$ZSH/run/version"
+
+        # Move history
+        { mv "$ZSH"/history-* "$ZSH"/run || true } 2> /dev/null
+
+        # Setup zshrc
+        [[ ! -f $HOME/.zshrc ]] || mv $HOME/.zshrc $HOME/.zshrc.old
+        ln -s "$ZSH"/zshrc $HOME/.zshrc
+
+    }
+
     {
-	local OK="$fg_bold[green]OK.${reset_color}"
-	print -n "$fg[green]Building archive...${reset_color} "
-	(cd $ZSH ; git archive HEAD) | tar -C $work -xf -
-	print $OK
-	print -n "$fg[green]Building installer...${reset_color} "
-	makeself --gzip $work $ZSH/run/zsh-install.sh \
-	    "$USER ZSH config files" zsh ./rc/install.zsh MAGIC
-	print $OK
-	[[ -z $1 ]] || {
-	    print "$fg[green]Remote install...${reset_color} "
-	    scp $ZSH/run/zsh-install.sh ${remote}:
-	    ssh $remote sh ./zsh-install.sh
-	    print $OK
-	}
-    } always {
-	rm -rf $work
-    }
+        echo 'set -e'
+        echo "version=$version"
+
+        # Hard work is done in __
+        which __ | awk '{print a} (NR > 1) {a=$0}'
+
+        # Uncompress the archive
+        echo 'cat <<EOA | base64 -d | gzip -dc | tar -C $ZSH -xf -'
+	(cd $ZSH ; git archive HEAD) | gzip -c | base64
+        echo 'EOA'
+    } > $ZSH/run/zsh-install.sh
+    [[ -z $remote ]] || ssh $remote sh -s < $ZSH/run/zsh-install.sh
 }
-
-# We can be executed to install ourself to the final destination
-if [[ $1 == "MAGIC" ]]; then
-    (( $+commands[rsync] )) || {
-	print "$fg_bold[red]rsync not found, install it${reset_color}"
-	exit 2
-    }
-    local OK="$fg[green]OK.${reset_color}"
-
-    # Migrate history
-    print -n "$fg[green]History migration...${reset_color} "
-    [[ ! -d ~/.zsh/run ]] && mkdir -p ~/.zsh/run
-    { mv ~/.zsh/history-* ~/.zsh/run } 2> /dev/null
-    print $OK
-    print "$fg[green]Installation...${reset_color} "
-    rsync -rlp --exclude=run/\* --exclude=local/\* --delete . ~/.zsh/.
-    [[ -f ~/.zshrc ]] && mv ~/.zshrc ~/.zshrc.old
-    ln -s .zsh/zshrc ~/.zshrc
-    print $OK
-fi
