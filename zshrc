@@ -9,7 +9,7 @@
     [[ -z $TMUX && -f ~/.tmux.conf && $TERM != linux ]] && \
     exec tmux
 
-ZSH=${ZDOTDIR:-$HOME}/.zsh
+ZSH=${ZSH:-${ZDOTDIR:-$HOME}/.zsh}
 fpath=($ZSH/functions $ZSH/completions $fpath)
 
 # Autoload add-zsh-hook if available
