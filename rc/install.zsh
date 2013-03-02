@@ -10,6 +10,8 @@ install-zsh() {
         # Find a base64 implementation
         if which base64 > /dev/null 2> /dev/null; then
             BASE64="base64 -d"
+        elif which python > /dev/null 2> /dev/null; then
+            BASE64="python -m base64 -d"
         elif which openssl > /dev/null 2> /dev/null; then
             BASE64="openssl base64 -d"
         else
