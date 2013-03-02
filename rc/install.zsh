@@ -16,7 +16,7 @@ install-zsh() {
             BASE64="openssl base64 -d"
         else
             echo "Cannot find a base64 decoder" >&2
-            exit 1
+            return 1
         fi
 
         # Check version
@@ -24,7 +24,7 @@ install-zsh() {
         [ -d "$ZSH/run" ] || mkdir -p "$ZSH/run"
         if [ -f "$ZSH/run/version" ] && [ "$version" = "$(cat "$ZSH/run/version")" ]; then
             # Already up-to-date
-            exit 0
+            return 0
         fi
         echo "$version" > "$ZSH/run/version"
 
