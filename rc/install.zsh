@@ -32,7 +32,7 @@ install-zsh() {
         { mv "$ZSH"/history-* "$ZSH"/run || true } 2> /dev/null
 
         # Setup zshrc
-        [[ ! -f $HOME/.zshrc ]] || mv $HOME/.zshrc $HOME/.zshrc.old
+        [ ! -f $HOME/.zshrc ] || mv $HOME/.zshrc $HOME/.zshrc.old
         ln -s "$ZSH"/zshrc $HOME/.zshrc
 
     }
