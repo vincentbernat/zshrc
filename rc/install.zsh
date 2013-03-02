@@ -7,6 +7,16 @@ install-zsh() {
     local remote=$1
     local version=$(cd $ZSH ; git rev-parse HEAD)
     __() {
+        # Find a base64 implementation
+        if which base64 > /dev/null 2> /dev/null; then
+            BASE64="base64 -d"
+        elif which openssl > /dev/null 2> /dev/null; then
+            BASE64="openssl base64 -d"
+        else
+            echo "Cannot find a base64 decoder" >&2
+            exit 1
+        fi
+
         # Check version
         ZSH="${ZSH:-$HOME/.zsh}"
         [ -d "$ZSH/run" ] || mkdir -p "$ZSH/run"
@@ -33,7 +43,7 @@ install-zsh() {
         which __ | awk '{print a} (NR > 1) {a=$0}'
 
         # Uncompress the archive
-        echo 'cat <<EOA | base64 -d | gzip -dc | tar -C $ZSH -xf -'
+        echo 'cat <<EOA | $BASE64 | gzip -dc | tar -C $ZSH -xf -'
 	(cd $ZSH ; git archive HEAD) | gzip -c | base64
         echo 'EOA'
     } > $ZSH/run/zsh-install.sh
