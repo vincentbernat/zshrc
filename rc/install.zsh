@@ -51,3 +51,14 @@ install-zsh() {
     } > $ZSH/run/zsh-install.sh
     [[ -z $remote ]] || ssh $remote sh -s < $ZSH/run/zsh-install.sh
 }
+
+# The resulting file can also be sourced in bashrc. For example:
+#
+#   . zsh-install && exec zsh -d
+#
+# Or:
+#
+#   export ZSH=~/.zsh.me
+#   export ZDOTDIR=~/.zsh.me
+#   . zsh-install && exec zsh -d
+#
