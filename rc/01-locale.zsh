@@ -13,4 +13,5 @@
 	    fi
 	done
     done
+    unset LC_ALL
 } && __ 2> /dev/null
