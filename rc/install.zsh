@@ -38,6 +38,7 @@ install-zsh() {
     }
 
     {
+        echo 'upgrade() {'
         echo 'set -e'
         echo "version=$version"
 
@@ -48,6 +49,8 @@ install-zsh() {
         echo 'cat <<EOA | $BASE64 | gzip -dc | tar -C $ZSH -xf -'
 	(cd $ZSH ; git archive HEAD) | gzip -c | base64
         echo 'EOA'
+        echo '}'
+        echo 'upgrade'
     } > $ZSH/run/zsh-install.sh
     [[ -z $remote ]] || ssh $remote sh -s < $ZSH/run/zsh-install.sh
 }
