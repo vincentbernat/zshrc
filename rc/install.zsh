@@ -8,12 +8,12 @@ install-zsh() {
     local version=$(cd $ZSH ; git rev-parse HEAD)
     __() {
         # Find a base64 implementation
-        if which base64 > /dev/null 2> /dev/null; then
-            BASE64="base64 -d"
-        elif which python > /dev/null 2> /dev/null; then
+        if which python > /dev/null 2> /dev/null; then
             BASE64="python -m base64 -d"
         elif which openssl > /dev/null 2> /dev/null; then
             BASE64="openssl base64 -d"
+        elif which base64 > /dev/null 2> /dev/null; then
+            BASE64="base64 -d"
         else
             echo "Cannot find a base64 decoder" >&2
             return 1
