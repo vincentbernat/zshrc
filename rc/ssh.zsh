@@ -39,7 +39,7 @@ _vbe_ssh() {
     # `$ZSH/rc/01-locale.zsh`.
     case "$TERM" in
 	rxvt-256color|rxvt-unicode*)
-	    LC__ORIGINALTERM=$TERM TERM=xterm LANG=C LC_MESSAGES=C command ssh "$@"
+	    LC__ORIGINALTERM=$TERM TERM=rxvt LANG=C LC_MESSAGES=C command ssh "$@"
 	    ;;
 	*)
 	    LANG=C LC_MESSAGES=C command ssh "$@"
