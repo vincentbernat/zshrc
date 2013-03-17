@@ -41,6 +41,9 @@ _vbe_ssh() {
 	rxvt-256color|rxvt-unicode*)
 	    LC__ORIGINALTERM=$TERM TERM=rxvt LANG=C LC_MESSAGES=C command ssh "$@"
 	    ;;
+	screen-256color)
+	    LC__ORIGINALTERM=$TERM TERM=screen LANG=C LC_MESSAGES=C command ssh "$@"
+	    ;;
 	*)
 	    LANG=C LC_MESSAGES=C command ssh "$@"
 	    ;;
