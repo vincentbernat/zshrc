@@ -23,6 +23,9 @@ zstyle ':completion::complete:*' use-cache 1
 zstyle ':completion::complete:*' cache-path $ZSH/run/cache/
 zstyle ':completion:*:descriptions' format '%B%d%b'
 zstyle ':completion:*:functions' ignored-patterns '_*'
+zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*:match:*' original only
+zstyle ':completion:*:approximate:*' max-errors 2 numeric
 
 # Host completion
 _custom_hosts() {
