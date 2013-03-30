@@ -22,6 +22,7 @@ zstyle ':completion:*:*:*:*:processes' command "ps -eo pid,user,comm -w -w"
 zstyle ':completion::complete:*' use-cache 1
 zstyle ':completion::complete:*' cache-path $ZSH/run/cache/
 zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion:*:functions' ignored-patterns '_*'
 
 # Host completion
 _custom_hosts() {
