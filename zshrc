@@ -22,3 +22,4 @@ __() {
 } && __
 
 _vbe_setprompt
+unset __
