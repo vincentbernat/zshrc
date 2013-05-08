@@ -1,8 +1,5 @@
 # -*- sh -*-
 
-# Use emacs keybindings
-bindkey -e
-
 setopt rmstarsilent             # Don't ask for confirmation on rm *
 setopt interactivecomments	# Allow comments inside commands
 setopt autopushd		# Maintain directories in a heap
