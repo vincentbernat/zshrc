@@ -15,13 +15,23 @@ _vbe_prompt_env () {
 [[ ! -f /proc/self/cgroup ]] || {
     case $(</proc/self/cgroup) in
         *:/lxc/*)
-            LXC_CHROOT_NAME=${$(</proc/self/cgroup)##*:/lxc/}
-                ;;
+            LXC_CHROOT_NAME=${${(s:/:)${(M)${(s: :)$(</proc/self/cgroup)}:#*:/lxc/*}[1]}[-1]}
+            # Maybe, it's a docker container, keep only 12 characters in this case
+            if [[ $LXC_CHROOT_NAME =~ [0-9a-f]{64} ]]; then
+                DOCKER_CHROOT_NAME=${LXC_CHROOT_NAME[1,12]}
+                unset LXC_CHROOT_NAME
+            fi
+            ;;
     esac
 }
 [[ -z $LXC_CHROOT_NAME ]] || {
     _vbe_add_prompt_lxc () {
         _vbe_prompt_env 'lxc' '${LXC_CHROOT_NAME}'
+    }
+}
+[[ -z $DOCKER_CHROOT_NAME ]] || {
+    _vbe_add_prompt_docker () {
+        _vbe_prompt_env 'docker' '${DOCKER_CHROOT_NAME}'
     }
 }
 
