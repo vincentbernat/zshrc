@@ -68,6 +68,11 @@ __docker_subcommand () {
         (attach|wait)
             _arguments ':containers:__docker_runningcontainers'
             ;;
+        (build)
+            _arguments \
+                '-t=-:repository:__docker_repositories' \
+                ':path or URL:_directories'
+            ;;
         (commit)
             _arguments \
                 ':container:__docker_containers' \
@@ -107,6 +112,9 @@ __docker_subcommand () {
             _arguments '-v[Remove the volumes associated to the container]' \
                 '*:images:__docker_images'
             ;;
+        (search)
+            _arguments '*:search term: '
+            ;;
         (top)
             _arguments '1:containers:__docker_runningcontainers'
             ;;
@@ -134,7 +142,7 @@ __docker_subcommand () {
             _arguments \
                 '-a=-[Attach to stdin, stdout or stderr]:toggle:(true false)' \
                 '-c=-[CPU shares (relative weight)]:CPU shares: ' \
-                '-d [Detached mode: leave the container running in the background]' \
+                '-d[Detached mode: leave the container running in the background]' \
                 '*-dns=[Set custom dns servers]:dns server: ' \
                 '*-e=[Set environment variables]:environment variable: ' \
                 '-entrypoint=-[Overwrite the default entrypoint of the image]:entry point: ' \
