@@ -1,0 +1,69 @@
+#compdef rfkill
+# -*- sh -*-
+#
+# zsh completion for rfkill
+
+__rfkill_types() {
+    declare -a devicetypes
+    devicetypes=(all
+        "wifi:Wireless LAN" "wlan:Wireless LAN"
+        "bluetooth:Bluetooth"
+        "uwb:Ultrawide Band"
+        "ultrawideband:Ultrawide Band"
+        "wimax:Wimax"
+        "wwan:3G"
+        "gps:GPS"
+        "fm:FM Radio")
+    _describe -t device-types "device types" devicetypes
+}
+
+__rfkill_devices() {
+    declare -a devices
+    devices=(${(M)${(f)"$(rfkill list)"}:#[0-9]*})
+    __rfkill_types
+    _describe -t devices "devices" devices
+}
+
+__rfkill_commands () {
+        declare -a subcommands
+        subcommands=(help event list block unblock)
+        _describe -t rfkill-commands "rfkill command" subcommands
+}
+
+__rfkill_subcommand () {
+    case "$words[1]" in
+        (help|event)
+            ;;
+        (list)
+            _arguments ':types:__rfkill_types'
+            ;;
+        (block|unblock)
+            _arguments ':device:__rfkill_devices'
+            ;;
+        (*)
+            _message 'Unknown subcommand'
+    esac
+
+}
+
+_rfkill () {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--version[get version]:' \
+        '(-): :->command' \
+        '(-)*:: :->arguments'
+
+    case $state in
+        (command)
+            __rfkill_commands
+            ;;
+        (arguments)
+            curcontext=${curcontext%:*:*}:rfkill-$words[1]:
+            __rfkill_subcommand
+            ;;
+    esac
+}
+
+_rfkill "$@"
