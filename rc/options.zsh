@@ -14,3 +14,6 @@ unset TMOUT
 
 # Remove / from WORDCHARS (more like bash)
 WORDCHARS=${WORDCHARS:s#/#}
+
+# Debian email address
+[[ $USER != "bernat" ]] || export DEBEMAIL=bernat@debian.org
