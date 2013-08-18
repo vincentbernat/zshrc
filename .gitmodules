@@ -1,0 +1,3 @@
+[submodule "third-party/docker-zsh-completion"]
+	path = third-party/docker-zsh-completion
+	url = git@github.com:vincentbernat/docker-zsh-completion.git
