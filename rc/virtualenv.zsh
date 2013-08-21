@@ -1,27 +1,24 @@
 # -*- sh -*-
 
 # Virtualenv related functions
-# Simplified version of virtualenvwrapper. Also works with nodeenv.
+# Simplified version of virtualenvwrapper.
 #  1. virtualenv works inside WORKON_HOME
 #  2. workon allows to :
 #       - switch to another environment
 #       - deactivate an environment
 #       - list available environments
 
-(( $+commands[virtualenv] )) || (( $+commands[nodeenv] )) && {
+# For nodeenv, use:
+#  $ pip install nodeenv
+#  $ nodeenv -p
+
+(( $+commands[virtualenv] )) && {
     WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
     [[ -d $WORKON_HOME ]] || mkdir -p $WORKON_HOME
 
     (( $+commands[virtualenv] )) && virtualenv () {
 	pushd $WORKON_HOME > /dev/null && {
 	    command virtualenv "$@"
-	    popd > /dev/null
-	}
-    }
-
-    (( $+commands[nodeenv] )) && nodeenv () {
-	pushd $WORKON_HOME > /dev/null && {
-	    command nodeenv "$@"
 	    popd > /dev/null
 	}
     }
@@ -53,9 +50,6 @@
 	(( $+functions[deactivate] )) && {
 	    deactivate
 	}
-	(( $+functions[deactivate_node] )) && {
-	    deactivate_node
-	}
 	[[ $env == "-" ]] || {
 	    local VIRTUAL_ENV_DISABLE_PROMPT=1
 	    local NODE_VIRTUAL_ENV_DISABLE_PROMPT=1
@@ -68,7 +62,6 @@
 
     _vbe_add_prompt_virtualenv () {
         _vbe_prompt_env 've' '${VIRTUAL_ENV##*/}'
-        _vbe_prompt_env 'nve' '${NODE_VIRTUAL_ENV##*/}'
     }
 
 }
