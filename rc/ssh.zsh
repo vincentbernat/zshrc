@@ -1,12 +1,5 @@
 # -*- sh -*-
 
-_vbe_first_non_optional_arg() {
-    local args
-    args=( "$@" )
-    args=( ${(R)args:#-*} )
-    print -- $args[1]
-}
-
 _vbe_ssh() {
     # TERM is one of the variables that is usually allowed to be
     # transmitted to the remote session. The remote host should have
