@@ -38,8 +38,9 @@ EOF
     (( $+commands[emacsclient] )) && {
 	export ALTERNATE_EDITOR=$EDITOR
 	export EDITOR="emacsclient"
-	alias e="emacsclient -n"
-        alias se='sudo env ALTERNATE_EDITOR=$EDITOR emacsclient -n'
+        local ecargs='${=${DISPLAY:+-n}:--t -c}'
+	alias e="emacsclient $ecargs"
+        alias se="sudo env ALTERNATE_EDITOR=\$EDITOR emacsclient $ecargs"
     }
 }
 
