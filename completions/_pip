@@ -1,9 +1,7 @@
 #compdef pip
 
-# pip zsh completion, based on homebrew completion
-
 _pip_installed() {
-  installed_pkgs=(`pip freeze`)
+  installed_pkgs=(${${(f)"$(pip list)"}%% *})
 }
 
 local -a _1st_arguments
@@ -25,10 +23,15 @@ local context state state_descr line
 typeset -A opt_args
 
 _arguments \
-  '(--version)--version[Show version number of program and exit]' \
-  '(-v --verbose)'{-v,--verbose}'[Give more output]' \
-  '(-q --quiet)'{-q,--quiet}'[Give less output]' \
-  '(-h --help)'{-h,--help}'[Show help]' \
+  '(--version)--version[show version number of program and exit]' \
+  '(-h --help)'{-h,--help}'[show help]' \
+  '(-E --environment)'{-E,--environment}'[virtualenv environment to run pip in]' \
+  '(-s --enable-site-packages)'{-s,--enable-site-packages}'[include site-packages in virtualenv]' \
+  '(-v --verbose)'{-v,--verbose}'[give more output]' \
+  '(-q --quiet)'{-q,--quiet}'[give less output]' \
+  '(--log)--log[log file location]' \
+  '(--proxy)--proxy[proxy in form user:passwd@proxy.server:port]' \
+  '(--timeout)--timeout[socket timeout (default 15s)]' \
   '*:: :->subcmds' && return 0
 
 if (( CURRENT == 1 )); then
@@ -37,10 +40,36 @@ if (( CURRENT == 1 )); then
 fi
 
 case "$words[1]" in
-  list)
-      if [[ "$state" == forms ]]; then
-        _pip_installed
-        _requested installed_pkgs expl 'installed packages' compadd -a installed_pkgs
+  search)
+    _arguments \
+      '(--index)--index[base URL of Python Package Index]' ;;
+  freeze)
+    _arguments \
+      '(-l --local)'{-l,--local}'[report only virtualenv packages]' ;;
+  help)
+    declare -a subcommands
+    subcommands=(${_1st_arguments%%:*})
+    _arguments '1: :->subcommands' && return 0
+    [[ $state != "subcommands" ]] || \
+      _wanted subcommands expl "available subcommands" compadd -a subcommands ;;
+  install)
+    _arguments \
+      '(-r --requirement)'{-r,--requirement}'[install from a requirement file]:file:_files' \
+      '(-U --upgrade)'{-U,--upgrade}'[upgrade all packages to the newest available version]' \
+      '(-f --find-links)'{-f,--find-links}'[URL for finding packages]' \
+      '(--no-deps --no-dependencies)'{--no-deps,--no-dependencies}'[iIgnore package dependencies]' \
+      '(--no-install)--no-install[only download packages]' \
+      '(--no-download)--no-download[only install downloaded packages]' \
+      '(--install-option)--install-option[extra arguments to be supplied to the setup.py]' \
+      '1: :->packages' &&  return 0
+
+      if [[ $state == packages ]]; then
+          declare -a packages
+          [[ -z $words[CURRENT] ]] || \
+              packages=($(pip search "$words[CURRENT]" | \
+	        grep -i "^$words[CURRENT]" | \
+	        cut -d ' ' -f 1 | tr '[A-Z]' '[a-z]' ))
+          _describe -t commands 'packages' packages
       fi ;;
   uninstall)
     _pip_installed
