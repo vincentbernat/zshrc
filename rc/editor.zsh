@@ -33,14 +33,12 @@ EOF
 
 [[ -z $EDITOR ]] || {
     alias e=$EDITOR
-    alias se='sudo $EDITOR'
     # Maybe use emacsclient?
     (( $+commands[emacsclient] )) && {
 	export ALTERNATE_EDITOR=$EDITOR
 	export EDITOR="emacsclient"
         local ecargs='${=${DISPLAY:+-n}:--t -c}'
 	alias e="emacsclient $ecargs"
-        alias se="sudo env ALTERNATE_EDITOR=\$EDITOR emacsclient $ecargs"
     }
 }
 
