@@ -19,6 +19,7 @@ autoload -U is-at-least
 __() {
     for config_file ($ZSH/rc/*.zsh) source $config_file
     for plugin ($plugins) source $ZSH/plugins/$plugin.plugin.zsh
+    [ ! -e $ZSH/env ] || . $ZSH/env
 } && __
 
 _vbe_setprompt
