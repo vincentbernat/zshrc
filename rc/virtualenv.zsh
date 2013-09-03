@@ -52,8 +52,8 @@
 	# If in another environment, call deactivate
 	(( $+functions[deactivate] )) && {
 	    deactivate
-            [[ -z $_OLD_GEM_HOME ]] || export $GEM_HOME=$_OLD_GEM_HOME
-            [[ -z $_OLD_GEM_PATH ]] || export $GEM_PATH=$_OLD_GEM_PATH
+            [[ -z $_OLD_GEM_HOME ]] || export GEM_HOME=$_OLD_GEM_HOME
+            [[ -z $_OLD_GEM_PATH ]] || export GEM_PATH=$_OLD_GEM_PATH
 	}
 	[[ $env == "-" ]] || {
 	    local VIRTUAL_ENV_DISABLE_PROMPT=1
