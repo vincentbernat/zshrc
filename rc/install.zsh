@@ -51,7 +51,7 @@ install-zsh() {
             cd $ZSH
             git ls-files
             git submodule --quiet foreach --recursive 'git ls-files --with-tree=${sha1} | sed s+^+$path/+'
-        ) | tar -zcf - -T - | base64
+        ) | tar -C $ZSH -zcf - -T - | base64
         echo 'EOA'
         echo '}'
         echo 'upgrade'
