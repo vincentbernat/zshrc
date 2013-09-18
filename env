@@ -3,3 +3,6 @@ unset TMOUT
 
 # Debian email address
 [[ $USER != "bernat" ]] || export DEBEMAIL=bernat@debian.org
+
+# Go PATH
+export GOPATH=$HOME/.gocode
