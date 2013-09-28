@@ -1,66 +1,72 @@
 # -*- sh -*-
 
-# It is expected you have :
-#  - /var/cache/pbuilder/results
-#  - /var/cache/pbuilder/bases
+# We provide an enhanced cowbuilder command.  It will mimic a bit what
+# git-pbuilder is doing. Here are the features:
 #
-# You may keep /var/cache/pbuilder/base.cow for other "frontends". Put
-# a symbolic link. For example:
-#  cd /var/cache/pbuilder/bases
-#  ln -s ../base.cow sid.amd64.cow
+#   1. It will use /var/cache/pbuilder/base-$DIST-$ARCH.cow.
+#   2. It will take as first argument something like $DIST/$ARCH.
+#   3. If $DIST contains an hyphen, some special rules may be
+#      applied. Currently, if it ends with -backports, the backports
+#      mirror will be added.
 
 (( $+commands[cowbuilder] )) && {
     cowbuilder() {
-	# First argument is something like this:
-	#   debian/squeeze
-	#   debian/squeeze/i386
-	#   ubuntu/oneiric/amd64
-	#   ubuntu/oneiric.custom
-	# Remaining arguments are those for cowbuilder
 
         # Usage
         (( $# > 0 )) || {
-            print "$0 distrib/flavor[/arch] ..." >&2
+            print "$0 distrib[/arch] ..." >&2
             return 1
         }
 
 	# Architecture
 	local arch
 	case $1 in
-	    */*/*)
-		arch=${1##*/}
+	    */*)
+		arch=${1#*/}
 		distrib=${1%/*}
 		;;
 	    *)
-		arch=$(dpkg --print-architecture)
 		distrib=$1
 		;;
 	esac
 	shift
         local -a opts
-	opts=(--debootstrap debootstrap --debootstrapopts --arch --debootstrapopts $arch)
+	opts=(--debootstrap debootstrap)
 
 	# Distribution
-	case $distrib in
-	    debian/*)
-		opts=($opts --mirror http://ftp.fr.debian.org/debian)
+	case ${distrib%-*} in
+	    squeeze|wheezy|jessy|sid)
+		opts=($opts --mirror http://cdn.debian.net/debian)
 		opts=($opts --debootstrapopts --keyring --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg)
 		;;
-	    ubuntu/*)
+	    lucid|maverick|natty|oldstable|oneiric|precise|quantal|raring|saucy)
 		opts=($opts --mirror http://wwwftp.ciril.fr/pub/linux/ubuntu/archives/)
 		opts=($opts --debootstrapopts --keyring --debootstrapopts /usr/share/keyrings/ubuntu-archive-keyring.gpg)
 		opts=($opts --components 'main universe')
 		;;
 	esac
-	distrib=${distrib##*/}
+        # Flavor
+        case ${distrib} in
+            squeeze-backports)
+                opts=($opts --othermirror "deb http://backports.debian.org/debian-backports squeeze-backports main")
+                ;;
+            wheezy-backports)
+                opts=($opts --othermirror "dev http://cdn.debian.net/debian wheezy-backports main")
+                ;;
+        esac
 
-        local target=$distrib.$arch
-	distrib=${distrib%.*}
+        local target
+        if [[ -n $arch ]]; then
+            target=$distrib-$arch
+            opts=($opts --debootstrapopts --arch --debootstrapopts $arch)
+        else
+            target=$distrib
+        fi
 	_vbe_title "cowbuilder $target: $*"
         sudo env DEBIAN_BUILDARCH="$arch" cowbuilder $1 \
-	    --distribution ${distrib}  \
-            --basepath /var/cache/pbuilder/bases/$target.cow \
-            --buildresult /var/cache/pbuilder/results/$target \
+	    --distribution ${distrib%-*}  \
+            --basepath /var/cache/pbuilder/base-${target}.cow \
+            --buildresult $PWD \
 	    $opts $*[2,$#]
     }
 }

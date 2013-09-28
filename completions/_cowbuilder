@@ -1,13 +1,16 @@
 #compdef cowbuilder
 
 _cowbuilder_environments() {
-    local bases=/var/cache/pbuilder/bases
     local -a results
-    for cow in ${bases}/*.cow(N); do
-	results=($results ${${(@)$(<${cow}/etc/issue)}[1]:l}/${${${cow%.cow}:t}%.*}/${${${cow%.cow}:t}##*.})
+    for cow in /var/cache/pbuilder/base-*.cow(N); do
+        local distrib
+        distrib=${${${cow:t}%.cow}#base-}
+        arch=${(M)${(f)"$(dpkg-architecture -L)"}:#${distrib##*-}}
+        [[ -z $arch ]] || distrib=${distrib%-*}/$arch
+        results=($results $distrib)
     done
     _wanted base expl 'base path' compadd -a \
-	results	
+	results
 }
 
 local context state state_descr line expl
