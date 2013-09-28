@@ -51,7 +51,7 @@
                 opts=($opts --othermirror "deb http://backports.debian.org/debian-backports squeeze-backports main")
                 ;;
             wheezy-backports)
-                opts=($opts --othermirror "dev http://cdn.debian.net/debian wheezy-backports main")
+                opts=($opts --othermirror "deb http://cdn.debian.net/debian wheezy-backports main")
                 ;;
         esac
 
