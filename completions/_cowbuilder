@@ -2,8 +2,8 @@
 
 _cowbuilder_environments() {
     local -a results
+    local distrib
     for cow in /var/cache/pbuilder/base-*.cow(N); do
-        local distrib
         distrib=${${${cow:t}%.cow}#base-}
         arch=${(M)${(f)"$(dpkg-architecture -L)"}:#${distrib##*-}}
         [[ -z $arch ]] || distrib=${distrib%-*}/$arch
