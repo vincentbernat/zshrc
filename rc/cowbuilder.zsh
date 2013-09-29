@@ -31,6 +31,7 @@
 	esac
 	shift
         local -a opts
+        local -a prefix
 	opts=(--debootstrap debootstrap)
 
 	# Distribution
@@ -45,6 +46,13 @@
 		opts=($opts --components 'main universe')
 		;;
 	esac
+	case ${distrib%-*} in
+            lucid)
+                # Workaround a bug in libc6 package expecting 3-digit uname -r
+                prefix=($prefix linux64 --uname-2.6)
+                ;;
+        esac
+
         # Flavor
         case ${distrib} in
             squeeze-backports)
@@ -63,7 +71,7 @@
             target=$distrib
         fi
 	_vbe_title "cowbuilder $target: $*"
-        sudo env DEBIAN_BUILDARCH="$arch" cowbuilder $1 \
+        sudo env DEBIAN_BUILDARCH="$arch" $prefix cowbuilder $1 \
 	    --distribution ${distrib%-*}  \
             --basepath /var/cache/pbuilder/base-${target}.cow \
             --buildresult $PWD \
