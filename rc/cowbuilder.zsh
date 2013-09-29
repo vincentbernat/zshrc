@@ -40,7 +40,7 @@
 		opts=($opts --mirror http://cdn.debian.net/debian)
 		opts=($opts --debootstrapopts --keyring --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg)
 		;;
-	    lucid|maverick|natty|oldstable|oneiric|precise|quantal|raring|saucy)
+	    lucid|maverick|natty|oneiric|precise|quantal|raring|saucy)
 		opts=($opts --mirror http://wwwftp.ciril.fr/pub/linux/ubuntu/archives/)
 		opts=($opts --debootstrapopts --keyring --debootstrapopts /usr/share/keyrings/ubuntu-archive-keyring.gpg)
 		opts=($opts --components 'main universe')
