@@ -59,6 +59,13 @@ else
     }
 fi
 
+vbe-insert-bookmark() {
+    emulate -L zsh
+    LBUFFER=${LBUFFER}"~[@"
+}
+zle -N vbe-insert-bookmark
+bindkey '@@' vbe-insert-bookmark
+
 # Manage bookmarks
 bookmark() {
     [[ -d $MARKPATH ]] || mkdir -p $MARKPATH
