@@ -15,7 +15,7 @@ bookmark() {
         # Display bookmarks
         for link in $MARKPATH/*(@); do
             local markname="$fg[green]${link:t}$reset_color"
-            local markpath="$fg[blue]$(readlink $link)$reset_color"
+            local markpath="$fg[blue]${link:A}$reset_color"
             printf "%20s\t-> %s\n" $markname $markpath
         done
     else
