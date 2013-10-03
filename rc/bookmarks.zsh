@@ -15,9 +15,9 @@ bookmark() {
         # Display bookmarks
         for link in $MARKPATH/*(@); do
             local markname="$fg[green]${link:t}$reset_color"
-	    local markpath="$fg[blue]$(readlink $link)$reset_color"
-	    printf "%20s\t-> %s\n" $markname $markpath
-	done
+            local markpath="$fg[blue]$(readlink $link)$reset_color"
+            printf "%20s\t-> %s\n" $markname $markpath
+        done
     else
         # Bookmark using the first argument as name
         [[ -d $MARKPATH ]] || mkdir -p $MARKPATH
@@ -29,7 +29,7 @@ _g() {
     local -a results
     results=($MARKPATH/*(@N:t))
     _wanted bookmark expl 'bookmarked directory' compadd -a \
-	results
+        results
 }
 
 compdef _g g
