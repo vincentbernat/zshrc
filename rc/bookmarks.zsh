@@ -5,15 +5,56 @@
 
 MARKPATH=$ZSH/run/marks
 
-g() {
-    # cd to the right mark. `-P` is to avoid zsh to hide the real directory.
-    cd -P $MARKPATH/$1
+_bookmark_directory_name() {
+    emulate -L zsh
+    setopt extendedglob
+    case $1 in
+        d)
+            # Turn the directory into a shortest name using bookmarks
+            for link in $MARKPATH/*(N@); do
+                if [[ $2 = (#b)(${link:A})(|/*) ]]; then
+                    typeset -ga reply
+                    reply=("@"${link:t} $(( ${#match[1]} )) )
+                    return 0
+                fi
+            done
+            return 1
+            ;;
+        n)
+            # Turn the name into a directory
+            [[ $2 != (#b)"@"(?*) ]] && return 1
+            typeset -ga reply
+            reply=(${${:-$MARKPATH/$match[1]}:A})
+            return 0
+            ;;
+        c)
+            # Completion
+            local expl
+            local -a dirs
+            dirs=($MARKPATH/*(N@:t))
+            dirs=("@"${^dirs})
+            _wanted dynamic-dirs expl 'bookmarked directory' compadd -S\] -a dirs
+            return
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+    return 0
 }
+
+if (( $+functions[add-zsh-hook] )); then
+    add-zsh-hook zsh_directory_name _bookmark_directory_name
+else
+    zsh_directory_name () {
+	_bookmark_directory_name
+    }
+fi
 
 bookmark() {
     if (( $# == 0 )); then
         # Display bookmarks
-        for link in $MARKPATH/*(@); do
+        for link in $MARKPATH/*(N@); do
             local markname="$fg[green]${link:t}$reset_color"
             local markpath="$fg[blue]${link:A}$reset_color"
             printf "%20s\t-> %s\n" $markname $markpath
@@ -24,11 +65,3 @@ bookmark() {
         ln -s $PWD $MARKPATH/$1
     fi
 }
-
-_g() {
-    local expl
-    local -a results
-    _path_files -/ -W $MARKPATH
-}
-
-compdef _g g
