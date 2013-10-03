@@ -51,7 +51,9 @@ else
     }
 fi
 
+# Manage bookmarks
 bookmark() {
+    [[ -d $MARKPATH ]] || mkdir -p $MARKPATH
     if (( $# == 0 )); then
         # Display bookmarks
         for link in $MARKPATH/*(N@); do
@@ -60,8 +62,14 @@ bookmark() {
             printf "%20s\t-> %s\n" $markname $markpath
         done
     else
-        # Bookmark using the first argument as name
-        [[ -d $MARKPATH ]] || mkdir -p $MARKPATH
-        ln -s $PWD $MARKPATH/$1
+        local -a delete
+        zparseopts -D d=delete
+        if (( $+delete[1] )); then
+            # Delete bookmark
+            command rm $MARKPATH/$1
+        else
+            # Add bookmark
+            ln -s $PWD $MARKPATH/$1
+        fi
     fi
 }
