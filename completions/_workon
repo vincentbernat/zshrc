@@ -2,6 +2,7 @@
 
 _virtualenv_environments() {
     local -a results
+    local expl
     results=( ${WORKON_HOME}/*/bin/activate(.N:h:h:t) - )
     _wanted environments expl 'virtualenv environment' compadd -a \
 	results	
