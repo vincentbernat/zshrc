@@ -28,9 +28,7 @@ bookmark() {
 _g() {
     local expl
     local -a results
-    results=($MARKPATH/*(@N:t))
-    _wanted bookmark expl 'bookmarked directory' compadd -a \
-        results
+    _path_files -/ -W $MARKPATH
 }
 
 compdef _g g
