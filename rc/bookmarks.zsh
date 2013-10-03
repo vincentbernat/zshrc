@@ -10,8 +10,16 @@ _bookmark_directory_name() {
     setopt extendedglob
     case $1 in
         d)
-            # Turn the directory into a shortest name using bookmarks
+            # Turn the directory into a shortest name using
+            # bookmarks. We need to sort them by length of solved
+            # path.
+            local link
+            local -a links
             for link in $MARKPATH/*(N@); do
+                links+=(${#link:A}$'\0'$link)
+            done
+            links=("${(@)${(@On)links}#*$'\0'}")
+            for link in $links; do
                 if [[ $2 = (#b)(${link:A})(|/*) ]]; then
                     typeset -ga reply
                     reply=("@"${link:t} $(( ${#match[1]} )) )
