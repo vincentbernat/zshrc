@@ -1,7 +1,18 @@
 # -*- sh -*-
 
-# Handle bookmarks. Similar to jump in oh-my-zsh:
-#  https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/jump/jump.plugin.zsh
+# Handle bookmarks. This uses the dynamic named directories feature of
+# zsh. When you refer to ~[...] during a file expansion, the `...` is
+# proposed to some function to be resolved. This is like tilde
+# expansion but you can plug the resolution in a function. This also
+# works to resolve a directory name to a shorten name.
+#
+# So, we can jump to a bookmark with `cd ~[@bookmark]`. Prompt
+# expansion is also aware of those bookmarks. The prompt should show
+# the bookmark name. And we get completion.
+#
+# With autocd, you can just type `~[@bookmark]`. Since this can be
+# cumbersome to type, you can also type `@@` and this will be turned
+# into `~[@` by ZLE.
 
 MARKPATH=$ZSH/run/marks
 
