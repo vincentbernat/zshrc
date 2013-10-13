@@ -48,10 +48,11 @@ install-zsh() {
         # Uncompress the archive
         echo 'cat <<EOA | $BASE64 | gzip -dc | tar -C $ZSH -xf -'
 	(
-            cd $ZSH
-            git ls-files
-            git submodule --quiet foreach --recursive 'git ls-files --with-tree=${sha1} | sed s+^+$path/+'
-        ) | tar -C $ZSH -zcf - -T - | base64
+            cd $ZSH ; for f in $(
+                git ls-files
+                git submodule --quiet foreach --recursive 'git ls-files --with-tree=${sha1} | sed s+^+${path}/+'
+            ); do [[ -d $f ]] || echo $f ; done | tar -zcf - -T - | base64
+        )
         echo 'EOA'
         echo '}'
         echo 'upgrade'
