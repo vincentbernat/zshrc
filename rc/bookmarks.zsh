@@ -14,7 +14,7 @@
 # cumbersome to type, you can also type `@@` and this will be turned
 # into `~[@` by ZLE.
 
-is-at-least 4.3.7 && __() {
+is-at-least 4.3.12 && __() {
     MARKPATH=$ZSH/run/marks
 
     _bookmark_directory_name() {
@@ -63,13 +63,7 @@ is-at-least 4.3.7 && __() {
         return 0
     }
 
-    if (( $+functions[add-zsh-hook] )); then
-        add-zsh-hook zsh_directory_name _bookmark_directory_name
-    else
-        zsh_directory_name () {
-    	_bookmark_directory_name
-        }
-    fi
+    add-zsh-hook zsh_directory_name _bookmark_directory_name
 
     vbe-insert-bookmark() {
         emulate -L zsh
