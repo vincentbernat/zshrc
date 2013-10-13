@@ -29,17 +29,18 @@ EOF
 	    break
 	}
     done
+    [[ -z $EDITOR ]] || {
+        alias e=$EDITOR
+        # Maybe use emacsclient?
+        [[ $editor == emacs* ]] && (( $+commands[emacsclient] )) && {
+	    export ALTERNATE_EDITOR=$EDITOR
+	    export EDITOR="emacsclient"
+            local ecargs='${=${DISPLAY:+-n}:--t -c}'
+	    alias e="emacsclient $ecargs"
+        }
+    }
+
 } && __
 
-[[ -z $EDITOR ]] || {
-    alias e=$EDITOR
-    # Maybe use emacsclient?
-    (( $+commands[emacsclient] )) && {
-	export ALTERNATE_EDITOR=$EDITOR
-	export EDITOR="emacsclient"
-        local ecargs='${=${DISPLAY:+-n}:--t -c}'
-	alias e="emacsclient $ecargs"
-    }
-}
 
 unset VISUAL
