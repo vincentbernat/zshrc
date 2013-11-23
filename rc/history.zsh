@@ -1,8 +1,8 @@
 # -*- sh -*-
 
-setopt EXTENDED_HISTORY	
-setopt SHARE_HISTORY # _all_ zsh sessions share the same history files
-setopt HIST_IGNORE_ALL_DUPS	# ignores duplications
+setopt extended_history	        # save timestamps
+setopt share_history            # share history accross zsh sessions
+setopt hist_ignore_all_dups	# ignores duplicates
 
 HISTFILE=$ZSH/run/history-$HOST-$UID
 HISTSIZE=20000
