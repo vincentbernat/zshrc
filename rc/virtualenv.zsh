@@ -60,11 +60,13 @@
 	    local NODE_VIRTUAL_ENV_DISABLE_PROMPT=1
 	    source $activate
 
-            # Gems
+            # Gems.
+            # GEM_HOME is where gems will be installed.
+            # GEM_PATH is where gems are searched
             _OLD_GEM_HOME=$GEM_HOME
             export GEM_HOME=$VIRTUAL_ENV/gems
             _OLD_GEM_PATH=$GEM_PATH
-            export GEM_PATH=""
+            export GEM_PATH=$GEM_HOME
             path=( $GEM_HOME/bin $path )
 	}
 	rehash
