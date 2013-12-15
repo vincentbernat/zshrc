@@ -10,7 +10,7 @@
 
 # For nodeenv, use:
 #  $ pip install nodeenv
-#  $ nodeenv -p
+#  $ nodeenv -p -n system
 
 # Also setup the environment for gems.
 
