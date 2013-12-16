@@ -1,20 +1,20 @@
-#compdef dm
+#compdef dzr
 
 case $CURRENT in
     2)
         local cmds
         local -a commands
-        cmds=$(dm commands)
+        cmds=$(dzr commands)
         commands=(${(ps:\n:)cmds})
-        _wanted command expl "dm command" compadd -a commands
+        _wanted command expl "dzr command" compadd -a commands
         ;;
     3)
         local cmd subcmds
         local -a commands
         cmd=${words[2]}
-        subcmds=$(dm completions $cmd)
+        subcmds=$(dzr completions $cmd)
         commands=(${(ps:\n:)subcmds})
-        _wanted subcommand expl "dm $cmd subcommand" compadd -a commands
+        _wanted subcommand expl "dzr $cmd subcommand" compadd -a commands
         ;;
     *)
         _files
