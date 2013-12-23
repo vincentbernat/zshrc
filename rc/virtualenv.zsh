@@ -8,11 +8,11 @@
 #       - deactivate an environment
 #       - list available environments
 
-# For nodeenv, use:
+# To reuse the environment for Node.JS, use:
 #  $ pip install nodeenv
 #  $ nodeenv -p -n system
 
-# Also setup the environment for gems.
+# Also setup the environment for Ruby gems.
 
 (( $+commands[virtualenv] )) && {
     WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
