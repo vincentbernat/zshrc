@@ -3,8 +3,7 @@
 # Sandbox with docker. This is similar to stevedore:
 #  https://github.com/jpetazzo/stevedore/blob/master/stevedore
 
-(( $+commands[docker.io] )) && alias docker=docker.io
-(( $+commands[docker.io] + $+commands[docker] )) && {
+(( $+commands[docker] )) && {
 
     docker-sandbox() {
         local -A options
