@@ -1,12 +1,19 @@
 #compdef workon
 
-_virtualenv_environments() {
-    local -a results
+_environments() {
+    local -a virtualenvs images
     local expl
-    results=( ${WORKON_HOME}/*/bin/activate(.N:h:h:t) - )
-    _wanted environments expl 'virtualenv environment' compadd -a \
-	results	
+
+    virtualenvs=( ${WORKON_HOME}/*/bin/activate(.N:h:h:t) - )
+    _wanted environments expl 'virtualenv environment' compadd \
+        -a virtualenvs
+
+    (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && {
+        images=(${(f)"$(docker images | awk '(NR > 1){printf("docker@%s:%s\n", $1,$2)}')"})
+        _wanted images expl 'docker images' compadd \
+            -a images
+    }
 }
 
 _arguments \
-    '1:::_virtualenv_environments' && return 0
+    '1:::_environments' && return 0
