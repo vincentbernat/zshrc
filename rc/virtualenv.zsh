@@ -15,7 +15,9 @@
 # Also setup the environment for Ruby gems.
 
 # The workon command can also be used to get inside a docker
-# environment.
+# environment. In this case, it will arrange for sudo to work without
+# a password, mount /home and place yourself in an appropriate
+# directory.
 
 WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
 [[ -d $WORKON_HOME ]] || mkdir -p $WORKON_HOME
