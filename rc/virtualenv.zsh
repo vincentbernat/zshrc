@@ -69,7 +69,7 @@ EOF
             -v $tmp:$tmp \
             -w $PWD \
             -u root \
-            -h ${${image##*/}:gs/:/-} \
+            -h ${${${image##*/}:gs/:/-}:gs/./-} \
             -entrypoint /bin/sh \
             $image $tmp/start
         rm -f $tmp/start && rmdir $tmp
