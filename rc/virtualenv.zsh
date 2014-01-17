@@ -40,22 +40,27 @@ WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
 
 (( $+commands[virtualenv] + $+commands[docker] )) && workon () {
     local env=$1
+    local -a venv dimages
+    venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
+    (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && {
+        dimages=( $(docker images | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
+    }
 
     # No parameters, list available environment
     [[ -n $env ]] || {
 	print "INFO: List of available environments:"
-	for env in $WORKON_HOME/*/bin/activate(.N:h:h:ft); do
+	for env in venv; do
 	    print " - [virtualenv] $env"
 	done
-        for image in $(docker images | awk '(NR > 1 && $1 !~ /^</){printf("%s\\:%s\n", $1,$2)}'); do
-            print " - [docker    ] docker@$image"
+        for image in dimages; do
+            print " - [docker    ] $image"
         done
 	return 0
     }
 
     # Docker
-    [[ $env == docker@* ]] && {
-        local image=${env#docker@}
+    [[ ${dimages[(r)$env]} == $env ]] && {
+        local image=${env}
         local tmp=$(mktemp -d)
         <<EOF > $tmp/start
 echo $(getent passwd $(id -u)) >> /etc/passwd
@@ -73,6 +78,7 @@ EOF
             -entrypoint /bin/sh \
             $image $tmp/start
         rm -f $tmp/start && rmdir $tmp
+        return
     }
 
     # If in another virtualenv, call deactivate
@@ -82,11 +88,8 @@ EOF
         [[ -z $_OLD_GEM_PATH ]] || export GEM_PATH=$_OLD_GEM_PATH
     }
 
-    # If in another dockerenv, exit
-    [[ -n $DOCKERENV ]] && exit 0
-
-    # Otherwise, switch to the environment
-    [[ $env != "-" ]] && [[ $env != docker@* ]] && {
+    # Virtualenv
+    [[ ${venv[(r)$env]} == $env ]] && {
 	local activate
 	activate="$WORKON_HOME/$env/bin/activate"
 	[[ -d $WORKON_HOME/$env ]] || {
