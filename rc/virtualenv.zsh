@@ -47,7 +47,7 @@ WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
 	for env in $WORKON_HOME/*/bin/activate(.N:h:h:ft); do
 	    print " - [virtualenv] $env"
 	done
-        for image in $(docker images | awk '(NR > 1){printf("%s\\:%s\n", $1,$2)}'); do
+        for image in $(docker images | awk '(NR > 1 && $1 !~ /^</){printf("%s\\:%s\n", $1,$2)}'); do
             print " - [docker    ] docker@$image"
         done
 	return 0

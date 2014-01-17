@@ -9,7 +9,7 @@ _environments() {
         -a virtualenvs
 
     (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && {
-        images=(${(f)"$(docker images | awk '(NR > 1){printf("docker@%s:%s\n", $1,$2)}')"})
+        images=(${(f)"$(docker images | awk '(NR > 1 && $1 !~ /^</){printf("docker@%s:%s\n", $1,$2)}')"})
         _wanted images expl 'docker images' compadd \
             -a images
     }
