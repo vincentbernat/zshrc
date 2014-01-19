@@ -74,6 +74,14 @@
         else
             target=$distrib
         fi
+
+        # Setup eatmydata. You still need to execute this command
+        # after building the environment:
+        #    echo /usr/lib/libeatmydata/libeatmydata.so | \
+        #        cowbuilder sid --execute --save-after-exec -- \
+        #        /usr/bin/tee -a /etc/ld.so.preload
+        opts=($opts --extrapackages eatmydata)
+
 	_vbe_title "cowbuilder $target: $*"
         sudo env DEBIAN_BUILDARCH="$arch" $prefix cowbuilder $1 \
 	    --distribution ${distrib%-*}  \
