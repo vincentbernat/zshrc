@@ -86,6 +86,7 @@ EOF
 	deactivate
         [[ -z $_OLD_GEM_HOME ]] || export GEM_HOME=$_OLD_GEM_HOME
         [[ -z $_OLD_GEM_PATH ]] || export GEM_PATH=$_OLD_GEM_PATH
+        [[ -z $_OLD_GOPATH ]]   || export GOPATH=$_OLD_GOPATH
     }
 
     # Virtualenv
@@ -113,6 +114,11 @@ EOF
         _OLD_GEM_PATH=$GEM_PATH
         export GEM_PATH=$GEM_HOME
         path=( $GEM_HOME/bin $path )
+
+        # Go
+        _OLD_GOPATH=$GOPATH
+        export GOPATH=$VIRTUAL_ENV/go
+        path=( $GOPATH/bin $path)
     }
     rehash
 }
