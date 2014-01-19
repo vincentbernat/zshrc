@@ -2,19 +2,6 @@
 
 # See: http://golang.org/misc/zsh/go
 
-# gc
-prefixes=(5 6 8)
-for p in $prefixes; do
-	compctl -g "*.${p}" ${p}l
-	compctl -g "*.go" ${p}g
-done
-
-# standard go tools
-compctl -g "*.go" gofmt
-
-# gccgo
-compctl -g "*.go" gccgo
-
 # go tool
 __go_tool_complete() {
   typeset -a commands build_flags
