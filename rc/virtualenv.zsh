@@ -67,7 +67,7 @@ echo $(getent passwd $(id -u)) >> /etc/passwd
 echo $(getent group $(id -g)) >> /etc/group
 echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
 chmod 0440 /etc/sudoers.d/$USER
-exec sudo -u $USER env HOME=$HOME $SHELL -i -l
+exec sudo -u $USER env HOME=$HOME TERM=$TERM $SHELL -i -l
 EOF
         docker run -t -i \
             -v $HOME:$HOME \
