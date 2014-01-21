@@ -101,17 +101,7 @@ EOF
 
     # Virtualenv
     [[ ${venv[(r)$env]} == $env ]] && {
-	local activate
-	activate="$WORKON_HOME/$env/bin/activate"
-	[[ -d $WORKON_HOME/$env ]] || {
-	    print "ERROR: environment $env does not exist"
-	    return 2
-	}
-	[[ -f $activate ]] || {
-	    print "ERROR: environment $env does not have activate script"
-	    return 1
-	}
-
+	local activate="$WORKON_HOME/$env/bin/activate"
 	local VIRTUAL_ENV_DISABLE_PROMPT=1
 	local NODE_VIRTUAL_ENV_DISABLE_PROMPT=1
 	source $activate
