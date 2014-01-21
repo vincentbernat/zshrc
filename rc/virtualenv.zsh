@@ -129,6 +129,12 @@ EOF
         _OLD_GOPATH=$GOPATH
         export GOPATH=$VIRTUAL_ENV/go
         path=( $GOPATH/bin $path)
+        rehash
+        return
     }
-    rehash
+
+    [[ $env == "-" ]] || {
+        print "ERROR: environment $env does not exist"
+        return 2
+    }
 }
