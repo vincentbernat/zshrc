@@ -1,7 +1,7 @@
 #compdef workon
 
 _environments() {
-    local -a virtualenvs images
+    local -a virtualenvs images containers
     local expl
 
     virtualenvs=( ${WORKON_HOME}/*/bin/activate(.N:h:h:t) - )
@@ -12,6 +12,9 @@ _environments() {
         images=(${(f)"$(docker images | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"})
         _wanted images expl 'docker images' compadd \
             -a images
+
+        containers=(${(f)"$(docker ps | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"})
+        _describe -t containers-active "Running Containers" containers
     }
 }
 

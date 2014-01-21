@@ -40,10 +40,11 @@ WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
 
 (( $+commands[virtualenv] + $+commands[docker] )) && workon () {
     local env=$1
-    local -a venv dimages
+    local -a venv dimages dcontainers
     venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
     (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && {
         dimages=( $(docker images | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
+        dcontainers=( $(docker ps | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
     }
 
     # No parameters, list available environment
@@ -58,7 +59,7 @@ WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
 	return 0
     }
 
-    # Docker
+    # Docker images
     [[ ${dimages[(r)$env]} == $env ]] && {
         local image=${env}
         local tmp=$(mktemp -d)
@@ -78,6 +79,15 @@ EOF
             -entrypoint /bin/sh \
             $image $tmp/start
         rm -f $tmp/start && rmdir $tmp
+        return
+    }
+
+    # Docker containers
+    [[ ${dcontainers[(r)$env]} == $env ]] && {
+        local id=$(docker ps -notrunc | \
+            awk -v env=$env \
+            '(NR > 1){split($NF,names,/,/); for (i in names) if (names[i] == env) printf("%s",$1)}')
+        sudo lxc-attach -n $id -- $SHELL
         return
     }
 
