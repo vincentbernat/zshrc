@@ -83,6 +83,10 @@ EOF
     }
 
     # Docker containers
+    #
+    # It would be better to be able to mount the appropriate
+    # /home/directory. Some ideas are available here:
+    #   http://blog.dehacked.net/lxc-getting-mounts-into-a-running-container/
     [[ ${dcontainers[(r)$env]} == $env ]] && {
         local id=$(docker ps -notrunc | \
             awk -v env=$env \
