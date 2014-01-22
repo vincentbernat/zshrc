@@ -83,15 +83,39 @@ EOF
     }
 
     # Docker containers
-    #
-    # It would be better to be able to mount the appropriate
-    # /home/directory. Some ideas are available here:
-    #   http://blog.dehacked.net/lxc-getting-mounts-into-a-running-container/
     [[ ${dcontainers[(r)$env]} == $env ]] && {
         local id=$(docker ps -notrunc | \
             awk -v env=$env \
             '(NR > 1){split($NF,names,/,/); for (i in names) if (names[i] == env) printf("%s",$1)}')
-        sudo lxc-attach -n $id -- $SHELL
+
+        # We need to mount $HOME inside the container, that's quite
+        # hacky: we get the device we need to mount, we mount it
+        # somewhere, then bind mount the home directory in the right
+        # place. All this with elevated privileges. We also create our
+        # user, with sudo rights. Most inspiration comes from here:
+        #  http://blog.dehacked.net/lxc-getting-mounts-into-a-running-container/
+        local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
+        local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
+        sudo lxc-attach -s MOUNT -n $id -- /bin/sh -e <<EOF
+if ! mountpoint $HOME > /dev/null 2>/dev/null; then
+  tmp=\$(mktemp -d)
+  mkdir -p ${HOME}
+  [ -b /dev/home-directory ] || mknod /dev/home-directory b $(stat -c "0x%t 0x%T" ${homedev})
+  mount /dev/home-directory \$tmp
+  rm /dev/home-directory
+  mount --bind \$tmp/${HOME#$homemnt} $HOME
+  umount \$tmp
+  rmdir \$tmp
+fi
+
+if ! id $USER > /dev/null 2> /dev/null; then
+  echo $(getent passwd $(id -u)) >> /etc/passwd
+  echo $(getent group $(id -g)) >> /etc/group
+  echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
+  chmod 0440 /etc/sudoers.d/$USER
+fi
+EOF
+        sudo lxc-attach -n $id -- sudo -u $USER env HOME=$HOME TERM=$TERM $SHELL -i -l
         return
     }
 
