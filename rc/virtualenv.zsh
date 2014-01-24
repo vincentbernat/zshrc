@@ -78,8 +78,9 @@ EOF
             -h ${${${image##*/}:gs/:/-}:gs/./-} \
             -entrypoint /bin/sh \
             $image $tmp/start
+        local ret=$?
         rm -f $tmp/start && rmdir $tmp
-        return
+        return $ret
     }
 
     # Docker containers
@@ -115,8 +116,12 @@ if ! id $USER > /dev/null 2> /dev/null; then
   chmod 0440 /etc/sudoers.d/$USER
 fi
 EOF
-        sudo lxc-attach -n $id -- sudo -u $USER env HOME=$HOME TERM=$TERM $SHELL -i -l
-        return
+        local ret=$?
+        [[ $ret -eq 0 ]] && {
+            sudo lxc-attach -n $id -- sudo -u $USER env HOME=$HOME TERM=$TERM $SHELL -i -l
+            ret=$?
+        }
+        return $ret
     }
 
     # If in another virtualenv, call deactivate
