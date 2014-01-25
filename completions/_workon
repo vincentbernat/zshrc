@@ -9,11 +9,11 @@ _environments() {
         -a virtualenvs
 
     (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && {
-        images=(${(f)"$(docker images | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"})
+        images=(${(f)"$(docker images 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"})
         _wanted images expl 'docker images' compadd \
             -a images
 
-        containers=(${(f)"$(docker ps | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"})
+        containers=(${(f)"$(docker ps 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"})
         _describe -t containers-active "Running Containers" containers
     }
 }
