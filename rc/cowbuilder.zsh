@@ -75,10 +75,6 @@
             target=$distrib
         fi
 
-        # Setup eatmydata. You still need to add this to pbuilderrc:
-        #  export LD_PRELOAD="${LD_PRELOAD:+$LD_PRELOAD:}/usr/lib/libeatmydata/libeatmydata.so"
-        opts=($opts --extrapackages eatmydata)
-
 	_vbe_title "cowbuilder $target: $*"
         sudo env DEBIAN_BUILDARCH="$arch" $prefix cowbuilder $1 \
 	    --distribution ${distrib%-*}  \
