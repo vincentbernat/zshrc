@@ -90,7 +90,9 @@ is-at-least 4.3.12 && __() {
                 command rm $MARKPATH/$1
             else
                 # Add bookmark
-                ln -s $PWD $MARKPATH/$1
+                local name=$1
+                [[ $name == "." ]] && name=${PWD:t}
+                ln -s $PWD $MARKPATH/$name
             fi
         fi
     }
