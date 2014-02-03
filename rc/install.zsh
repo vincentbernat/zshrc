@@ -20,6 +20,7 @@ install-zsh() {
         fi
 
         # Check version
+        ZDOTDIR="${ZDOTDIR:-$HOME}"
         ZSH="${ZSH:-$HOME/.zsh}"
         [ -d "$ZSH/run" ] || mkdir -p "$ZSH/run"
         if [ -f "$ZSH/run/version" ] && [ "$version" = "$(cat "$ZSH/run/version")" ]; then
@@ -32,8 +33,8 @@ install-zsh() {
         { mv "$ZSH"/history-* "$ZSH"/run || true } 2> /dev/null
 
         # Setup zshrc
-        [ ! -f $HOME/.zshrc ] || mv $HOME/.zshrc $HOME/.zshrc.old
-        ln -s "$ZSH"/zshrc $HOME/.zshrc
+        [ ! -f $ZDOTDIR/.zshrc ] || mv $ZDOTDIR/.zshrc $ZDOTDIR/.zshrc.old
+        ln -s "$ZSH"/zshrc $ZDOTDIR/.zshrc
 
     }
 
