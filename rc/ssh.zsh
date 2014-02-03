@@ -1,5 +1,7 @@
 # -*- sh -*-
 
+unset LC__ORIGINALUSER
+
 _vbe_ssh() {
     # TERM is one of the variables that is usually allowed to be
     # transmitted to the remote session. The remote host should have
@@ -30,15 +32,18 @@ _vbe_ssh() {
     # Also, when the same ZSH configuration is used on the remote
     # host, the locale is reset with the help of
     # `$ZSH/rc/01-locale.zsh`.
+    #
+    # We also encode our username into LC__ORIGINALUSER. Useful when
+    # you want to do something special on a shared account.
     case "$TERM" in
 	rxvt-256color|rxvt-unicode*)
-	    LC__ORIGINALTERM=$TERM TERM=rxvt LANG=C LC_MESSAGES=C command ssh "$@"
+	    LC__ORIGINALUSER=$USER LC__ORIGINALTERM=$TERM TERM=rxvt LANG=C LC_MESSAGES=C command ssh "$@"
 	    ;;
 	screen-256color)
-	    LC__ORIGINALTERM=$TERM TERM=screen LANG=C LC_MESSAGES=C command ssh "$@"
+	    LC__ORIGINALUSER=$USER LC__ORIGINALTERM=$TERM TERM=screen LANG=C LC_MESSAGES=C command ssh "$@"
 	    ;;
 	*)
-	    LANG=C LC_MESSAGES=C command ssh "$@"
+	    LC__ORIGINALUSER=$USER LANG=C LC_MESSAGES=C command ssh "$@"
 	    ;;
     esac
 }
