@@ -57,7 +57,16 @@ install-zsh() {
         echo '}'
         echo 'upgrade'
     } > $ZSH/run/zsh-install.sh
-    (( $# == 0 )) || for h in $@; do ssh $h sh -s < $ZSH/run/zsh-install.sh; done
+
+    # When invoked with -b, replace .bashrc
+    local -a bash
+    zparseopts -D b=bash
+    (( $# == 0 )) || for h in $@; do
+        {
+            cat $ZSH/run/zsh-install.sh
+            (( $+bash[1] )) && echo 'echo '"'"'[ -z "$PS1" ] || exec zsh -d'"'"' > ~/.bashrc'
+        } | ssh $h sh -s
+    done
 }
 
 # The resulting file can also be sourced in bashrc. For example:
