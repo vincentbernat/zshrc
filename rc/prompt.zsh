@@ -4,7 +4,7 @@
 #  - https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/agnoster.zsh-theme
 
 _vbe_prompt_precmd () {
-    _vbe_title "${SSH_TTY+${HOST}:}${(%):-%50<..<%~}" "${SSH_TTY+${HOST}:}${(%):-%20<..<%~}"
+    _vbe_title "${SSH_TTY+${(%):-%M}:}${(%):-%50<..<%~}" "${SSH_TTY+${(%):-%M}:}${(%):-%20<..<%~}"
 }
 if (( $+functions[add-zsh-hook] )); then
     add-zsh-hook precmd _vbe_prompt_precmd
@@ -75,11 +75,11 @@ _vbe_prompt () {
     # user@host
     local f=${(%):-%(!.red.${${SSH_TTY:+magenta}:-green})}
     _vbe_prompt_segment black $f \
-        %B%n%b%{${fg[cyan]}%}@%B%{${bg[black]}${fg[$f]}%}%m
+        %B%n%b%{${fg[cyan]}%}@%B%{${bg[black]}${fg[$f]}%}%M
 
     # Directory
     local -a segs
-    local len=$(($COLUMNS - ${#${(%):-%n@%m}} - 7 - ${#${${(%):-%~}//[^\/]/}} * 2))
+    local len=$(($COLUMNS - ${#${(%):-%n@%M}} - 7 - ${#${${(%):-%~}//[^\/]/}} * 2))
     segs=(${(s./.)${(%):-%${len}<${PRCH[ellipsis]}<%~}})
     [[ ${#segs} == 0 ]] && segs=(/)
     for seg in ${segs[1,-2]}; do

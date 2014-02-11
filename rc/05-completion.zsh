@@ -3,7 +3,7 @@
 autoload -U zutil
 autoload -U compinit
 autoload -U complist
-compinit -i -d $ZSH/run/zcompdump-$HOST-$UID
+compinit -i -d $ZSH/run/zcompdump-${(%):-%m}-$UID
 
 setopt auto_menu
 setopt auto_remove_slash

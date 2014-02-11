@@ -4,7 +4,7 @@ setopt extended_history	        # save timestamps
 setopt share_history            # share history accross zsh sessions
 setopt hist_ignore_all_dups	# ignores duplicates
 
-HISTFILE=$ZSH/run/history-$HOST-$UID
+HISTFILE=$ZSH/run/history-${(%):-%m}-$UID
 HISTSIZE=20000
 SAVEHIST=20000
 
