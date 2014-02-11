@@ -4,7 +4,6 @@ autoload colors ; colors
 
 # Install or update ZSH on a remote host.
 install-zsh() {
-    local remote=$1
     local version=$(cd $ZSH ; git rev-parse HEAD)
     __() {
         # Find a base64 implementation
@@ -58,7 +57,7 @@ install-zsh() {
         echo '}'
         echo 'upgrade'
     } > $ZSH/run/zsh-install.sh
-    [[ -z $remote ]] || ssh $remote sh -s < $ZSH/run/zsh-install.sh
+    (( $# == 0 )) || for h in $@; do ssh $h sh -s < $ZSH/run/zsh-install.sh; done
 }
 
 # The resulting file can also be sourced in bashrc. For example:
