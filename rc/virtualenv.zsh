@@ -8,10 +8,6 @@
 #       - deactivate an environment
 #       - list available environments
 
-# To reuse the environment for Node.JS, use:
-#  $ pip install nodeenv
-#  $ nodeenv -p -n system
-
 # Also setup the environment for Ruby gems.
 
 # The workon command can also be used to get inside a docker
@@ -24,7 +20,14 @@ WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
 
 (( $+commands[virtualenv] )) && virtualenv () {
     pushd $WORKON_HOME > /dev/null && {
-	command virtualenv "$@"
+	command virtualenv "$@" && \
+            cat <<EOF >&2
+${fg[white]}
+# To reuse the environment for Node.JS, use:
+#  \$ pip install nodeenv
+#  \$ nodeenv -p -n system
+
+EOF
 	popd > /dev/null
     }
     workon $(_vbe_first_non_optional_arg "$@")
