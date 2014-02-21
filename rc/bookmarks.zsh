@@ -26,18 +26,27 @@ is-at-least 4.3.12 && __() {
                 # bookmarks. We need to sort them by length of solved
                 # path.
                 local link
-                local -a links
-                for link in $MARKPATH/*(N@); do
-                    links+=(${#link:A}$'\0'$link)
-                done
-                links=("${(@)${(@On)links}#*$'\0'}")
-                for link in $links; do
-                    if [[ $2 = (#b)(${link:A})(|/*) ]]; then
+                local -A links
+                local cache=$ZSH/run/bookmarks-$HOST-$UID
+                if [[ -f $cache ]] && [[ $MARKPATH -ot $cache ]]; then
+                    . $cache
+                else
+                    local -a ls
+                    # Get list of links in sorted order of the paths they point to
+                    for link ($MARKPATH/*(N@)) {
+                        ls+=(${#link:A}$'\0'$link)
+                    }
+                    ls=("${(@)${(@On)ls}#*$'\0'}")
+                    for link ($ls) links[${link:A}]=${link:t}
+                    print -r "links=( ${(kv@qq)^^links} )" > $cache
+                fi
+                for link (${(k)links}) {
+                    if [[ $2 = (#b)(${link})(|/*) ]]; then
                         typeset -ga reply
-                        reply=("@"${link:t} $(( ${#match[1]} )) )
+                        reply=("@"${links[$link]} $(( ${#match[1]} )) )
                         return 0
                     fi
-                done
+                }
                 return 1
                 ;;
             n)
