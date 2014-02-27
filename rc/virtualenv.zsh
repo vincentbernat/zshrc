@@ -78,6 +78,7 @@ EOF
             -v $tmp:$tmp \
             -w $PWD \
             -u root \
+            -rm \
             -h ${${${image##*/}:gs/:/-}:gs/./-} \
             -entrypoint /bin/sh \
             $image $tmp/start
