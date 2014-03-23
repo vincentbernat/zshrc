@@ -24,7 +24,7 @@ _vbe_title () {
 _title_preexec () {
     emulate -L zsh
     setopt extended_glob
-    local t
+    local t tt
     local -a cmd
     cmd=(${(z)1})
     case $cmd[1] in
@@ -49,9 +49,10 @@ _title_preexec () {
 	    ;&
 	*)
 	    t=$cmd[*]
+            tt=$cmd[1]:t
 	    ;;
     esac
-    _vbe_title "${SSH_TTY+${(%):-%M} }\> $t"
+    _vbe_title "${SSH_TTY+${(%):-%M} }\> $t" "${SSH_TTY+${(%):-%M} }\> ${tt:-${t%% *}}"
 }
 if (( $+functions[add-zsh-hook] )); then
     add-zsh-hook preexec _title_preexec
