@@ -31,18 +31,15 @@ _title_preexec () {
         fg)
             case $#cmd in
                 1)
-                    t=${jobtexts[${(k)jobstates[(R)*+*]}]%% *}
-                    ;;
-                2)
-                    t=${jobtexts[${cmd[2]#%}]%% *}
+                    t=${jobtexts[${(k)jobstates[(R)*+*]}]}
                     ;;
                 *)
-                    t=${cmd[2,-1]#%}
+                    t=${jobtexts[${cmd[2]#%}]}
                     ;;
             esac
             ;;
         %*)
-	    t=${jobtexts[${cmd[1]#%}]% *}
+	    t=${jobtexts[${cmd[1]#%}]}
 	    ;;
 	*=*)
 	    shift cmd
@@ -51,7 +48,7 @@ _title_preexec () {
 	    shift cmd
 	    ;&
 	*)
-	    t=$cmd[1]:t
+	    t=$cmd[*]
 	    ;;
     esac
     _vbe_title "${SSH_TTY+${(%):-%M} }\> $t"
