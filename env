@@ -1,8 +1,9 @@
+# -*- sh -*-
 # No timeout
 unset TMOUT
 
 # Debian email address
 [[ $USER != "bernat" ]] || export DEBEMAIL=bernat@debian.org
 
-# Go PATH
-export GOPATH=$HOME/src/gocode
+# Go PATH in the current shell directory
+export GOPATH=/proc/$$cwd
