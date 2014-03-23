@@ -24,8 +24,37 @@ _vbe_title () {
 _title_preexec () {
     emulate -L zsh
     setopt extended_glob
-    local CMD=${1[(wr)^(*=*|sudo|-*),-1]}
-    _vbe_title "${SSH_TTY+${(%):-%M} }\> $CMD"
+    local t
+    local -a cmd
+    cmd=(${(z)1})
+    case $cmd[1] in
+        fg)
+            case $#cmd in
+                1)
+                    t=${jobtexts[${(k)jobstates[(R)*+*]}]%% *}
+                    ;;
+                2)
+                    t=${jobtexts[${cmd[2]#%}]%% *}
+                    ;;
+                *)
+                    t=${cmd[2,-1]#%}
+                    ;;
+            esac
+            ;;
+        %*)
+	    t=${jobtexts[${cmd[1]#%}]% *}
+	    ;;
+	*=*)
+	    shift cmd
+	    ;&
+	exec|sudo)
+	    shift cmd
+	    ;&
+	*)
+	    t=$cmd[1]:t
+	    ;;
+    esac
+    _vbe_title "${SSH_TTY+${(%):-%M} }\> $t"
 }
 if (( $+functions[add-zsh-hook] )); then
     add-zsh-hook preexec _title_preexec
