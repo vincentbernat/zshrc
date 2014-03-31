@@ -53,10 +53,10 @@ EOF
     # No parameters, list available environment
     [[ -n $env ]] || {
 	print "INFO: List of available environments:"
-	for env in venv; do
+	for env in $venv; do
 	    print " - [virtualenv] $env"
 	done
-        for image in dimages; do
+        for image in $dimages; do
             print " - [docker    ] $image"
         done
 	return 0
