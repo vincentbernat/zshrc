@@ -62,6 +62,8 @@ EOF
 	return 0
     }
 
+    [[ $env == "." ]] && env=${PWD:t}
+
     # Docker images
     [[ ${dimages[(r)$env]} == $env ]] && {
         local image=${env}
