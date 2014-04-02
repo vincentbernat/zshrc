@@ -42,10 +42,10 @@ _title_preexec () {
 	    t=${jobtexts[${cmd[1]#%}]}
 	    ;;
 	*=*)
-	    shift cmd
+	    (( ${#cmd} > 1 )) && shift cmd
 	    ;&
 	exec|sudo)
-	    shift cmd
+	    (( ${#cmd} > 1 )) && shift cmd
 	    ;&
 	*)
 	    t=$cmd[*]
