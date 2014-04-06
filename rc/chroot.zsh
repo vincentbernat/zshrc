@@ -13,11 +13,12 @@ _vbe_prompt_env () {
 # for PID 1 but this seems difficult to get as a simple
 # user. Therefore, we will look at /proc/self/cgroup.
 [[ -f /proc/self/cgroup ]] && {
+    autoload -U zsh/regex
     case $(</proc/self/cgroup) in
         *:/lxc/*)
             LXC_CHROOT_NAME=${${(s:/:)${${(s: :)$(</proc/self/cgroup)}[(rw)*:/lxc/*]}}[-1]}
             # Maybe, it's a docker container, keep only 12 characters in this case
-            if [[ $LXC_CHROOT_NAME =~ [0-9a-f]{64} ]]; then
+            if [[ $LXC_CHROOT_NAME -regex-match [0-9a-f]{64} ]]; then
                 DOCKER_CHROOT_NAME=${LXC_CHROOT_NAME[1,12]}
                 unset LXC_CHROOT_NAME
             fi
