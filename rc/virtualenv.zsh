@@ -80,9 +80,9 @@ EOF
             -v $tmp:$tmp \
             -w $PWD \
             -u root \
-            -rm \
+            --rm \
             -h ${${${image##*/}:gs/:/-}:gs/./-} \
-            -entrypoint /bin/sh \
+            --entrypoint /bin/sh \
             $image $tmp/start
         local ret=$?
         rm -f $tmp/start && rmdir $tmp
@@ -91,7 +91,7 @@ EOF
 
     # Docker containers
     [[ ${dcontainers[(r)$env]} == $env ]] && {
-        local id=$(docker ps -notrunc | \
+        local id=$(docker ps --no-trunc | \
             awk -v env=$env \
             '(NR > 1){split($NF,names,/,/); for (i in names) if (names[i] == env) printf("%s",$1)}')
 
