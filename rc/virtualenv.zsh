@@ -101,6 +101,9 @@ EOF
         # place. All this with elevated privileges. We also create our
         # user, with sudo rights. Most inspiration comes from here:
         #  http://blog.dehacked.net/lxc-getting-mounts-into-a-running-container/
+        #
+        # Also, from Docker 0.9, see:
+        #  http://bindable.fr/make-lxc-attach-work-again-docker-09
         local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
         local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
         sudo lxc-attach -s MOUNT -n $id -- /bin/sh -e <<EOF
