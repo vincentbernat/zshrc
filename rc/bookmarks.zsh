@@ -25,25 +25,20 @@ is-at-least 4.3.12 && __() {
                 # Turn the directory into a shortest name using
                 # bookmarks. We need to sort them by length of solved
                 # path.
-                local link
+                local link slink
                 local -A links
                 local cache=$ZSH/run/bookmarks-$HOST-$UID
                 if [[ -f $cache ]] && [[ $MARKPATH -ot $cache ]]; then
                     . $cache
                 else
-                    local -a ls
-                    # Get list of links in sorted order of the paths they point to
-                    for link ($MARKPATH/*(N@)) {
-                        ls+=(${#link:A}$'\0'$link)
-                    }
-                    ls=("${(@)${(@On)ls}#*$'\0'}")
-                    for link ($ls) links[${link:A}]=${link:t}
-                    print -r "links=( ${(kv@qq)^^links} )" > $cache
+                    for link ($MARKPATH/*(N@)) links[${#link:A}$'\0'${link:A}]=${link:t}
+                    print -r "links=( ${(kv@)^^links} )" > $cache
                 fi
-                for link (${(k)links}) {
+                for slink (${(@On)${(k)links}}) {
+                    link=${slink#*$'\0'}
                     if [[ $2 = (#b)(${link})(|/*) ]]; then
                         typeset -ga reply
-                        reply=("@"${links[$link]} $(( ${#match[1]} )) )
+                        reply=("@"${links[$slink]} $(( ${#match[1]} )) )
                         return 0
                     fi
                 }
