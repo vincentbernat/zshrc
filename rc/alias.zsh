@@ -19,6 +19,7 @@ alias -g ...='../..'
 
 # Aliases as a function
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
+md() { command mkdir -p $1 && cd $1 }
 
 # Lots of command examples (especially heroku) lead command docs with '$' which
 # make it kind of annoying to copy/paste, especially when there's multiple
