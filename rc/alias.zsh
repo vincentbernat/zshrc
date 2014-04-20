@@ -20,6 +20,13 @@ alias -g ...='../..'
 # Aliases as a function
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
 md() { command mkdir -p $1 && cd $1 }
+(( $+commands[pygmentize] )) && json() {
+  if (( $# > 0 )); then
+    cat "$@" | python -mjson.tool | pygmentize -l javascript
+  else
+    python -mjson.tool | pygmentize -l javascript
+  fi
+}
 
 # Lots of command examples (especially heroku) lead command docs with '$' which
 # make it kind of annoying to copy/paste, especially when there's multiple
