@@ -43,6 +43,21 @@ else
   }
 fi
 
+screenrecord() {
+  (
+    eval $(xdotool selectwindow getwindowgeometry --shell) &&
+    command avconv -f x11grab \
+      -r 25 \
+      -s ${WIDTH}x${HEIGHT} \
+      -i ${DISPLAY}.${SCREEN:-0}+${X:-0},${Y:-0} \
+      -dcodec copy \
+      -pix_fmt yuv420p \
+      -c:v libx264 \
+      -preset ultrafast \
+      $@
+  )
+}
+
 # Lots of command examples (especially heroku) lead command docs with '$' which
 # make it kind of annoying to copy/paste, especially when there's multiple
 # commands to copy.
