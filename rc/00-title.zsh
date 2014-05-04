@@ -48,9 +48,18 @@ _title_preexec () {
 	    (( ${#cmd} > 1 )) && shift cmd
 	    ;&
 	*)
-	    t=$cmd[*]
-            tt=$cmd[1]:t
-	    ;;
+            case $cmd[1] in
+                less|more|pretty|e|vi|vim|emacs)
+                    # Display filename
+                    t=$cmd[*]
+                    tt=$cmd[2]:t
+                    ;;
+                *)
+	            t=$cmd[*]
+                    tt=$cmd[1]:t
+	            ;;
+            esac
+            ;;
     esac
     _vbe_title "${SSH_TTY+${(%):-%M} }\> $t" "${SSH_TTY+${(%):-%M} }\> ${tt:-${t%% *}}"
 }
