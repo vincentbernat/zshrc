@@ -104,6 +104,10 @@ EOF
         #
         # Also, from Docker 0.9, see:
         #  http://bindable.fr/make-lxc-attach-work-again-docker-09
+        #
+        # More up-to-date solution, but we don't have a recent enough
+        # nsenter in Debian and no libcontainer...
+        #  http://jpetazzo.github.io/2014/03/23/lxc-attach-nsinit-nsenter-docker-0-9/
         local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
         local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
         sudo lxc-attach -s MOUNT -n $id -- /bin/sh -e <<EOF
