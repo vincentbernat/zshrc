@@ -164,12 +164,12 @@ EOF
         export GOPATH=$VIRTUAL_ENV/go
         path=( $GOPATH/bin $path)
 
-        # C (install with ./configure --prefix=$VIRTUAL_ENV/usr)
+        # C (install with ./configure --prefix=$VIRTUAL_ENV)
         _OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
         _OLD_PKG_CONFIG_PATH=$PKG_CONFIG_PATH
-        export LD_LIBRARY_PATH=$VIRTUAL_ENV/usr/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-        export PKG_CONFIG_PATH=$VIRTUAL_ENV/usr/lib/pkgconfig
-        path=( $VIRTUAL_ENV/usr/bin $VIRTUAL_ENV/usr/sbin $path )
+        export LD_LIBRARY_PATH=$VIRTUAL_ENV/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+        export PKG_CONFIG_PATH=$VIRTUAL_ENV/lib/pkgconfig
+        path=( $VIRTUAL_ENV/sbin $path )
 
         rehash
         return
