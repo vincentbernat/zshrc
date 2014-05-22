@@ -139,6 +139,8 @@ EOF
         [[ -z $_OLD_GEM_HOME ]] || export GEM_HOME=$_OLD_GEM_HOME
         [[ -z $_OLD_GEM_PATH ]] || export GEM_PATH=$_OLD_GEM_PATH
         [[ -z $_OLD_GOPATH ]]   || export GOPATH=$_OLD_GOPATH
+        [[ -z $_OLD_LD_LIBRARY_PATH ]] || export LD_LIBRARY_PATH=$_OLD_LD_LIBRARY_PATH
+        [[ -z $_OLD_PKG_CONFIG_PATH ]] || export PKG_CONFIG_PATH=$_OLD_PKG_CONFIG_PATH
     }
 
     # Virtualenv
@@ -161,6 +163,14 @@ EOF
         _OLD_GOPATH=$GOPATH
         export GOPATH=$VIRTUAL_ENV/go
         path=( $GOPATH/bin $path)
+
+        # C (install with ./configure --prefix=$VIRTUAL_ENV/usr)
+        _OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+        _OLD_PKG_CONFIG_PATH=$PKG_CONFIG_PATH
+        export LD_LIBRARY_PATH=$VIRTUAL_ENV/usr/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+        export PKG_CONFIG_PATH=$VIRTUAL_ENV/usr/lib/pkgconfig
+        path=( $VIRTUAL_ENV/usr/bin $VIRTUAL_ENV/usr/sbin $path )
+
         rehash
         return
     }
