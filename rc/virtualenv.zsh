@@ -145,6 +145,7 @@ EOF
         [[ -z $_OLD_GOPATH ]]   || export GOPATH=$_OLD_GOPATH
         [[ -z $_OLD_LD_LIBRARY_PATH ]] || export LD_LIBRARY_PATH=$_OLD_LD_LIBRARY_PATH
         [[ -z $_OLD_PKG_CONFIG_PATH ]] || export PKG_CONFIG_PATH=$_OLD_PKG_CONFIG_PATH
+        [[ -z $_OLD_MANPATH ]] || export MANPATH=$_OLD_MANPATH
     }
 
     # Virtualenv
@@ -171,8 +172,10 @@ EOF
         # C (install with ./configure --prefix=$VIRTUAL_ENV)
         _OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
         _OLD_PKG_CONFIG_PATH=$PKG_CONFIG_PATH
+        _OLD_MANPATH=$MANPATH
         export LD_LIBRARY_PATH=$VIRTUAL_ENV/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
         export PKG_CONFIG_PATH=$VIRTUAL_ENV/lib/pkgconfig
+        export MANPATH=$VIRTUAL_ENV/share/man
         path=( $VIRTUAL_ENV/sbin $path )
 
         rehash
