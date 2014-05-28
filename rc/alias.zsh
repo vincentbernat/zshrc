@@ -33,6 +33,8 @@ if (( $+commands[pygmentize] )); then
   pretty() {
     pygmentize -g "$@" | less -RFX
   }
+
+  alias v=pretty
 else
   json() {
     if (( $# > 0 )); then
