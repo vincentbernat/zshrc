@@ -43,6 +43,8 @@ else
       python -mjson.tool
     fi
   }
+
+  alias v=zless -FX
 fi
 
 screenrecord() {
