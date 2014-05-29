@@ -31,7 +31,7 @@ if (( $+commands[pygmentize] )); then
   }
 
   pretty() {
-    pygmentize -g "$@" | less -RFX
+    zcat -f "$@" | pygmentize -g | less -RFX
   }
 
   alias v=pretty
