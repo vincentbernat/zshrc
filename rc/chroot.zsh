@@ -23,6 +23,9 @@ _vbe_prompt_env () {
                 unset LXC_CHROOT_NAME
             fi
             ;;
+        *:/docker/*)
+            DOCKER_CHROOT_NAME=${${${(s:/:)${${(s: :)$(</proc/self/cgroup)}[(rw)*:/docker/*]}}[-1]}[1,12]}
+            ;;
     esac
 }
 [[ -z $LXC_CHROOT_NAME ]] || {
