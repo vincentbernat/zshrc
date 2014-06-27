@@ -91,9 +91,7 @@ EOF
 
     # Docker containers
     [[ ${dcontainers[(r)$env]} == $env ]] && {
-        local id=$(docker ps --no-trunc | \
-            awk -v env=$env \
-            '(NR > 1){split($NF,names,/,/); for (i in names) if (names[i] == env) printf("%s",$1)}')
+        local id=$(docker inspect --format '{{.State.Pid}}' $env)
 
         # We need to mount $HOME inside the container, that's quite
         # hacky: we get the device we need to mount, we mount it
@@ -103,14 +101,13 @@ EOF
         #  http://blog.dehacked.net/lxc-getting-mounts-into-a-running-container/
         #
         # Also, from Docker 0.9, see:
-        #  http://bindable.fr/make-lxc-attach-work-again-docker-09
-        #
-        # More up-to-date solution, but we don't have a recent enough
-        # nsenter in Debian and no libcontainer...
         #  http://jpetazzo.github.io/2014/03/23/lxc-attach-nsinit-nsenter-docker-0-9/
+        #  http://www.sebastien-han.fr/blog/2014/01/27/access-a-container-without-ssh/
+        #
+        # So, this needs nsenter which is not in Debian currently.
         local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
         local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
-        sudo lxc-attach -s MOUNT -n $id -- /bin/sh -e <<EOF
+        sudo =nsenter -m -t $id -- /bin/sh -e <<EOF
 if ! mountpoint $HOME > /dev/null 2>/dev/null; then
   tmp=\$(mktemp -d)
   mkdir -p ${HOME}
@@ -131,7 +128,7 @@ fi
 EOF
         local ret=$?
         [[ $ret -eq 0 ]] && {
-            sudo lxc-attach -n $id -- sudo -u $USER env HOME=$HOME TERM=$TERM $SHELL -i -l
+            sudo =nsenter -m -u -i -n -p -t $id -- sudo -u $USER env HOME=$HOME TERM=$TERM $SHELL -i -l
             ret=$?
         }
         return $ret
