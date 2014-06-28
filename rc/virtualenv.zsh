@@ -114,7 +114,7 @@ if ! mountpoint $HOME > /dev/null 2>/dev/null; then
   [ -b /dev/home-directory ] || mknod /dev/home-directory b $(stat -c "0x%t 0x%T" ${homedev})
   mount /dev/home-directory \$tmp
   rm /dev/home-directory
-  mount --bind \$tmp/${HOME#$homemnt} $HOME
+  mount -n --bind \$tmp/${HOME#$homemnt} $HOME
   umount \$tmp
   rmdir \$tmp
 fi
