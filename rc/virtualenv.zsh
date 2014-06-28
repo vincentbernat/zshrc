@@ -128,7 +128,7 @@ fi
 EOF
         local ret=$?
         [[ $ret -eq 0 ]] && {
-            sudo =nsenter -m -u -i -n -p -t $id -- sudo -u $USER env HOME=$HOME TERM=$TERM $SHELL -i -l
+            sudo =nsenter -m -u -i -n -p -w$HOME -t $id -- sudo -u $USER env HOME=$HOME TERM=$TERM $SHELL -i -l
             ret=$?
         }
         return $ret
