@@ -1,7 +1,7 @@
 # -*- sh -*-
 
 # Remove old run files
-rm -f $ZSH/run/{history,editor,zcompdump,editor,bookmarks}-*(NU.mw+10)
+rm -f $ZSH/run/{history,editor,zcompdump,editor,bookmarks}-*(NU.aw+10)
 
 # Clean files in tmp
 [ -d ~/tmp ] && {
