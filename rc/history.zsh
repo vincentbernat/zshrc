@@ -11,6 +11,3 @@ SAVEHIST=20000
 # Ctrl-r search in the history with patterns
 (( $+widgets[history-incremental-pattern-search-backward] )) &&	\
     bindkey '^r' history-incremental-pattern-search-backward
-
-# Remove old history files
-rm -f $ZSH/run/history-*(NU.mw+10)
