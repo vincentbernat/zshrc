@@ -135,14 +135,25 @@ EOF
         return $ret
     }
 
+    function save() {
+        local v
+        for v ($@) {
+            eval ${${(e)v:+\$$v}:+_OLD_$v=\$$v}
+        }
+    }
+
+    function restore() {
+        local v
+        for v ($@) {
+            [[ -z ${(e):-\$_OLD_$v} ]] || export $v=${(e):-\$_OLD_$v}
+            unset _OLD_$v
+        }
+    }
+
     # If in another virtualenv, call deactivate
     (( $+functions[deactivate] )) && {
 	deactivate
-        [[ -z $_OLD_GEM_HOME ]] || export GEM_HOME=$_OLD_GEM_HOME
-        [[ -z $_OLD_GEM_PATH ]] || export GEM_PATH=$_OLD_GEM_PATH
-        [[ -z $_OLD_GOPATH ]]   || export GOPATH=$_OLD_GOPATH
-        [[ -z $_OLD_LD_LIBRARY_PATH ]] || export LD_LIBRARY_PATH=$_OLD_LD_LIBRARY_PATH
-        [[ -z $_OLD_PKG_CONFIG_PATH ]] || export PKG_CONFIG_PATH=$_OLD_PKG_CONFIG_PATH
+        restore GEM_HOME GEM_PATH GO_PATH LD_LIBRARY_PATH PKG_CONFIG_PATH
     }
 
     # Virtualenv
@@ -155,20 +166,18 @@ EOF
         # Gems.
         # GEM_HOME is where gems will be installed.
         # GEM_PATH is where gems are searched
-        _OLD_GEM_HOME=$GEM_HOME
+        save GEM_HOME GEM_PATH
         export GEM_HOME=$VIRTUAL_ENV/gems
-        _OLD_GEM_PATH=$GEM_PATH
         export GEM_PATH=$GEM_HOME
         path=( $GEM_HOME/bin $path )
 
         # Go
-        _OLD_GOPATH=$GOPATH
+        save GO_PATH
         export GOPATH=$VIRTUAL_ENV/go
         path=( $GOPATH/bin $path)
 
         # C (install with ./configure --prefix=$VIRTUAL_ENV)
-        _OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
-        _OLD_PKG_CONFIG_PATH=$PKG_CONFIG_PATH
+        save LD_LIBRARY_PATH PKG_CONFIG_PATH
         export LD_LIBRARY_PATH=$VIRTUAL_ENV/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
         export PKG_CONFIG_PATH=$VIRTUAL_ENV/lib/pkgconfig
         path=( $VIRTUAL_ENV/sbin $path )
