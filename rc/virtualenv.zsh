@@ -151,6 +151,7 @@ EOF
     }
 
     # If in another virtualenv, call deactivate
+    (( $+functions[deactivate_node] )) && deactivate_node
     (( $+functions[deactivate] )) && {
 	deactivate
         restore GEM_HOME GEM_PATH GO_PATH LD_LIBRARY_PATH PKG_CONFIG_PATH
