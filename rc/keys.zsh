@@ -14,3 +14,7 @@ zle -N insert-last-word smart-insert-last-word
 autoload -U copy-earlier-word
 zle -N copy-earlier-word
 bindkey "\e," copy-earlier-word
+
+# Enable magic quoting of URL
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
