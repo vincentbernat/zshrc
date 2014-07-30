@@ -154,7 +154,7 @@ EOF
     (( $+functions[deactivate_node] )) && deactivate_node
     (( $+functions[deactivate] )) && {
 	deactivate
-        restore GEM_HOME GEM_PATH GO_PATH LD_LIBRARY_PATH PKG_CONFIG_PATH
+        restore GEM_HOME GEM_PATH GO_PATH LD_LIBRARY_PATH PKG_CONFIG_PATH OPAMROOT
     }
 
     # Virtualenv
@@ -182,6 +182,10 @@ EOF
         export LD_LIBRARY_PATH=$VIRTUAL_ENV/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
         export PKG_CONFIG_PATH=$VIRTUAL_ENV/lib/pkgconfig
         path=( $VIRTUAL_ENV/sbin $path )
+
+        # OCaml (through OPAM)
+        save OPAMROOT
+        export OPAMROOT=$VIRTUAL_ENV/opam
 
         rehash
         return
