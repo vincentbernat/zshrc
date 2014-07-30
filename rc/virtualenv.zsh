@@ -138,15 +138,15 @@ EOF
     function save() {
         local v
         for v ($@) {
-            eval ${${(e)v:+\$$v}:+_OLD_$v=\$$v}
+            _saved_environment[$v]=${${(e):-\$$v}}
         }
     }
 
     function restore() {
         local v
-        for v ($@) {
-            [[ -z ${(e):-\$_OLD_$v} ]] || export $v=${(e):-\$_OLD_$v}
-            unset _OLD_$v
+        for v (${(k)_saved_environment}) {
+            unset $v
+            [[ -z ${_saved_environment[$v]} ]] || export $v=${_saved_environment[$v]}
         }
     }
 
@@ -154,7 +154,7 @@ EOF
     (( $+functions[deactivate_node] )) && deactivate_node
     (( $+functions[deactivate] )) && {
 	deactivate
-        restore GEM_HOME GEM_PATH GO_PATH LD_LIBRARY_PATH PKG_CONFIG_PATH OPAMROOT MANPATH PERL5LIB
+        restore
     }
 
     # Virtualenv
@@ -163,6 +163,8 @@ EOF
 	local VIRTUAL_ENV_DISABLE_PROMPT=1
 	local NODE_VIRTUAL_ENV_DISABLE_PROMPT=1
 	source $activate
+
+        typeset -Ag _saved_environment
 
         # Gems.
         # GEM_HOME is where gems will be installed.
