@@ -173,7 +173,7 @@ EOF
         path=( $GEM_HOME/bin $path )
 
         # Go
-        save GO_PATH
+        save GOPATH
         export GOPATH=$VIRTUAL_ENV/go
         path=( $GOPATH/bin $path)
 
