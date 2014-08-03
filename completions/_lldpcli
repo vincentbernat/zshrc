@@ -1,0 +1,26 @@
+#compdef lldpcli
+#
+# zsh completion for lldpcli
+
+__lldpcli_command () {
+    local -a completions
+    completions=(${(f)"$(_call_program commands lldpcli complete ${words[1,$(($CURRENT-1))]})"})
+    completions=(${completions:s/ /:/})
+    _describe -t lldpcli-command "lldpcli completion" completions "$@"
+}
+
+_lldpcli () {
+    local curcontext="$curcontext" state line
+
+    _arguments -C \
+        '*-d[print more debugging information]' \
+        '(- *)-v[print version number and exit]' \
+        '-u[use an alternate socket with lldpd]:UNIX socket:_files' \
+        '-f[output format]:format:(plain xml json keyvalue)' \
+        '*-c[read a configuration file]:configuration file:_files' \
+        '(-)*::lldpcli command:__lldpcli_command'
+}
+
+
+_lldpcli "$@"
+
