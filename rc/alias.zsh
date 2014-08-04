@@ -27,7 +27,9 @@ if (( $+commands[pygmentize] )); then
   }
 
   pretty() {
-    zcat -f "$@" | pygmentize -l $(pygmentize -N "${1%.gz}") | less -RFX
+    zcat -f "$@" | \
+      pygmentize -l $(pygmentize -N "${1%.gz}") -P style=monokai -f console256 | \
+      less -RFX
   }
 
   alias v=pretty
