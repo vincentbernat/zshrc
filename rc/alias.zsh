@@ -23,11 +23,7 @@ md() { command mkdir -p $1 && cd $1 }
 
 if (( $+commands[pygmentize] )); then
   json() {
-    if (( $# > 0 )); then
-      cat "$@" | python -mjson.tool | pygmentize -l javascript
-    else
-      python -mjson.tool | pygmentize -l javascript
-    fi
+    cat "$@" | python -mjson.tool | pygmentize -l javascript
   }
 
   pretty() {
@@ -37,11 +33,7 @@ if (( $+commands[pygmentize] )); then
   alias v=pretty
 else
   json() {
-    if (( $# > 0 )); then
-      cat "$@" | python -mjson.tool
-    else
-      python -mjson.tool
-    fi
+    cat "$@" | python -mjson.tool
   }
 
   alias v=zless -FX
