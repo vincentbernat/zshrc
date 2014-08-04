@@ -27,8 +27,14 @@ if (( $+commands[pygmentize] )); then
   }
 
   pretty() {
+    local formatter
+    if (( ${terminfo[colors]:-0} >= 256 )); then
+      formatter=console256
+    else
+      formatter=terminal
+    fi
     zcat -f "$@" | \
-      pygmentize -l $(pygmentize -N "${1%.gz}") -P style=monokai -f console256 | \
+      pygmentize -l $(pygmentize -N "${1%.gz}") -P style=monokai -f $formatter | \
       less -RFX
   }
 

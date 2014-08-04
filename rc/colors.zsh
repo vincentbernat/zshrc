@@ -1,6 +1,6 @@
 # -*- sh -*-
 
-[[ "$terminfo[colors]" -ge 8 ]] && {
+(( ${terminfo[colors]:-0} >= 8 )) && {
     # ls colors
     export LSCOLORS="Gxfxcxdxbxegedabagacad"
     ls --color -d . &>/dev/null && alias ls='ls --color=tty' || {
