@@ -33,9 +33,22 @@ if (( $+commands[pygmentize] )); then
     else
       formatter=terminal
     fi
-    zcat -f "$@" | \
-      pygmentize -l $(pygmentize -N "${1%.gz}") -P style=monokai -f $formatter | \
-      less -RFX
+
+    local lexer
+    lexer=$(pygmentize -N "${1%.gz}")
+
+    local -a args
+    args=(-P style=monokai -f $formatter)
+    case $lexer in
+      text)
+        args=(-g $args)
+        ;;
+      *)
+        args=(-l $lexer)
+        ;;
+    esac
+
+    zcat -f "$@" | pygmentize $args | less -RFX
   }
 
   alias v=pretty
