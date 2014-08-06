@@ -10,7 +10,6 @@ setopt auto_remove_slash
 setopt complete_in_word
 setopt always_to_end
 setopt glob_complete
-setopt complete_aliases
 unsetopt list_beep
 
 zstyle ':completion:*' list-colors ''
