@@ -2,23 +2,23 @@
 
 # System init-related aliases
 __() {
+    local -a cmds
+    cmds=(start stop reload restart status)
     local sudo
     (( $UID == 0 )) || sudo=sudo
 
     if [ -d /run/systemd/system ]; then
         # systemd
-        alias   start="$sudo systemctl start"
-        alias    stop="$sudo systemctl stop"
-        alias  reload="$sudo systemctl reload"
-        alias restart="$sudo systemctl restart"
-        alias  status="$sudo systemctl status"
+        for cmd ($cmds) {
+            compdef -d $cmd
+            alias   $cmd="$sudo systemctl $cmd"
+        }
     elif [ -f /run/upstart-socket-bridge.pid ]; then
         # upstart
-        alias   start="$sudo initctl start"
-        alias    stop="$sudo initctl stop"
-        alias  reload="$sudo initctl reload"
-        alias restart="$sudo initctl restart"
-        alias  status="$sudo initctl status"
+        for cmd ($cmds) {
+            compdef -d $cmd
+            alias   $cmd="$sudo initctl $cmd"
+        }
     else
         # generic service
         function  start() {
@@ -41,11 +41,9 @@ __() {
             name=$1 ; shift
             ${(%):-%(#..sudo)} service $name status "$@"
         }
-        compdef _services start
-        compdef _services stop
-        compdef _services reload
-        compdef _services restart
-        compdef _services status
+        for cmd ($cmds) {
+            compdef _services $cmd
+        }
     fi
 
 } && __
