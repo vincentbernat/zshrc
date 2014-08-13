@@ -59,13 +59,14 @@ install-zsh() {
     } > $ZSH/run/zsh-install.sh
 
     # When invoked with -b, replace .bashrc
-    local -a bash
-    zparseopts -D b=bash
+    # Can use an identity file with -i
+    local -a bash identity
+    zparseopts -D b=bash i:=identity
     (( $# == 0 )) || for h in $@; do
         {
             cat $ZSH/run/zsh-install.sh
             (( $+bash[1] )) && echo 'echo '"'"'[ -z "$PS1" ] || exec zsh -d'"'"' > ~/.bashrc'
-        } | ssh $h sh -s
+        } | ssh ${identity[2]+-i} ${identity[2]} $h sh -s
     done
 }
 
