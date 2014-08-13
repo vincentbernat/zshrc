@@ -1,12 +1,8 @@
 # -*- sh -*-
 # Could be sourced by simple POSIX shell
 
-# No timeout, except for root
-if [ x"$USER" = x"root" ]; then
-    TMOUT=300
-else
-    unset TMOUT
-fi
+# No timeout
+unset TMOUT
 
 # Debian email address
 [ x"$USER" != x"bernat" ] || export DEBEMAIL=$USER@debian.org
