@@ -1,9 +1,11 @@
 # -*- sh -*-
+# Could be sourced by simple POSIX shell
+
 # No timeout
 unset TMOUT
 
 # Debian email address
-[[ $USER != "bernat" ]] || export DEBEMAIL=$USER@debian.org
+[ x"$USER" != x"bernat" ] || export DEBEMAIL=$USER@debian.org
 
 # Go PATH in the current shell directory
 export GOPATH=/proc/$$/cwd
