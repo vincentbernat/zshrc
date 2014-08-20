@@ -193,6 +193,12 @@ EOF
                 eval $(opam config env)
         }
 
+        # node.js workaround
+        [[ -z $NPM_CONFIG_PREFIX ]] || {
+            save npm_config_prefix
+            export npm_config_prefix=$NPM_CONFIG_PREFIX
+        }
+
         rehash
         return
     }
