@@ -20,3 +20,10 @@ _environments() {
 
 _arguments \
     '1:::_environments' && return 0
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 4
+# indent-tabs-mode: nil
+# sh-basic-offset: 4
+# End:

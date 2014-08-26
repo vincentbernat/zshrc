@@ -41,3 +41,10 @@ case "$words[2]" in
 esac
 
 return 0
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 4
+# indent-tabs-mode: nil
+# sh-basic-offset: 4
+# End:

@@ -38,3 +38,10 @@ _lldpcli () {
 
 
 _lldpcli "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 4
+# indent-tabs-mode: nil
+# sh-basic-offset: 4
+# End:

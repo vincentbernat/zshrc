@@ -147,3 +147,10 @@ __go_tool_complete() {
 }
 
 __go_tool_complete "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:

@@ -19,7 +19,7 @@ _snmp_get_mibs () {
     for dir in ${(ws+:+)mibdirs}; do
 	mibs=($mibs $dir/*(.))
     done
-	
+
     compadd "$@" -- ${mibs[@]:t:r}
 }
 
@@ -57,7 +57,7 @@ _snmp_get_object() {
 _snmpcmd () {
     local context state line
     typeset -A opt_args
-	
+
     _arguments -A \
 	{-h,--help}'[show help]' \
 	'-H[display configuration file directives understood]' \
@@ -80,7 +80,7 @@ _snmpcmd () {
 	'-D[turn on debugging output for the specified tokens]:token: ' \
 	'-m[MIB file to use]:mib:->mib' \
 	'-M[directory to search for MIBs]:directory:_files -/' \
- 	'-Pu[allow the use of underlines in MIB symbols]' \
+	'-Pu[allow the use of underlines in MIB symbols]' \
 	'-Pc[disallow the use of "--" to terminate comments in MIBs]' \
 	'-Pd[save the DESCRIPTIONs of the MIB objects]' \
 	'-Pe[disable errors when MIB symbols conflict]' \
@@ -124,11 +124,11 @@ _snmpcmd () {
 	'-It[Display wall-clock time to complete the request]' \
 	':hosts:_hosts' \
 	':object:->object'
-		
+
     while [[ -n "$state" ]]; do
 	lstate="$state"
 	state=''
-	
+
 	case "$lstate" in
 	    mib)
 		if compset -P '*+'; then
@@ -145,3 +145,10 @@ _snmpcmd () {
 	esac
     done
 }
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 4
+# indent-tabs-mode: t
+# sh-basic-offset: 4
+# End:
