@@ -14,7 +14,7 @@ _environments() {
             -a images
 
         containers=(${(f)"$(docker ps 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"})
-        _describe -t containers-active "Running Containers" containers
+        _describe -t containers-active "running containers" containers
     }
 }
 
