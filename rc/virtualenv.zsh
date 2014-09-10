@@ -112,10 +112,10 @@ if ! mountpoint $HOME > /dev/null 2>/dev/null; then
   tmp=\$(mktemp -d)
   mkdir -p ${HOME}
   [ -b /dev/home-directory ] || mknod /dev/home-directory b $(stat -c "0x%t 0x%T" ${homedev})
-  mount /dev/home-directory \$tmp
+  mount -n /dev/home-directory \$tmp
   rm /dev/home-directory
   mount -n --bind \$tmp/${HOME#$homemnt} $HOME
-  umount \$tmp
+  umount -n \$tmp
   rmdir \$tmp
 fi
 
