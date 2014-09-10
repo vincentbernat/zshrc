@@ -115,7 +115,7 @@ if ! mountpoint $HOME > /dev/null 2>/dev/null; then
   mount -n /dev/home-directory \$tmp
   rm /dev/home-directory
   mount -n --bind \$tmp/${HOME#$homemnt} $HOME
-  umount -n \$tmp
+  umount -n \$tmp 2> /dev/null
   rmdir \$tmp
 fi
 
