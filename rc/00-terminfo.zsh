@@ -36,5 +36,6 @@ __() {
         fi
     done
     unset LC__ORIGINALTERM
+    unset COLORTERM
     export TERM
 } && __
