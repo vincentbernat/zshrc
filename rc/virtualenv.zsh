@@ -30,7 +30,7 @@ ${fg[white]}
 EOF
 	popd > /dev/null
     }
-    workon $(_vbe_first_non_optional_arg "$@")
+    workon ${@[-1]}
 }
 
 (( $+commands[virtualenv] )) && {
