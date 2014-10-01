@@ -1,1 +1,20 @@
-../third-party/zsh-completions/src/_pip
+#compdef pip
+
+function _pip {
+    local -a reply
+    reply=( $( COMP_WORDS="$words[*]" \
+        COMP_CWORD=$CURRENT \
+        PIP_AUTO_COMPLETE=1 _call_program commands pip ) )
+    _describe "pip completion" reply
+}
+
+_pip "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 4
+# indent-tabs-mode: nil
+# sh-basic-offset: 4
+# End:
+# vim: ft=zsh sw=4 ts=4 et
+
