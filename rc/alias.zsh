@@ -25,6 +25,9 @@ if (( $+commands[pygmentize] )); then
   json() {
     cat "$@" | python -mjson.tool | pygmentize -l javascript
   }
+  xml() {
+    cat "$@" | xmllint --format - | pygmentize -l xml
+  }
 
   pretty() {
     local formatter
@@ -55,6 +58,9 @@ if (( $+commands[pygmentize] )); then
 else
   json() {
     cat "$@" | python -mjson.tool
+  }
+  xml() {
+    cat "$@" | xmllint --format -
   }
 
   alias v=zless -FX
