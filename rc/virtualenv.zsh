@@ -71,6 +71,7 @@ EOF
         <<EOF > $tmp/start
 echo $(getent passwd $(id -u)) >> /etc/passwd
 echo $(getent group $(id -g)) >> /etc/group
+[ -d /etc/sudoers.d ] || mkdir /etc/sudoers.d
 echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
 chmod 0440 /etc/sudoers.d/$USER
 exec sudo -u $USER env HOME=$HOME TERM=$TERM $SHELL -i -l
