@@ -23,7 +23,11 @@ md() { command mkdir -p $1 && cd $1 }
 
 if (( $+commands[pygmentize] )); then
   json() {
-    cat "$@" | python -mjson.tool | pygmentize -l javascript
+    if (( $# == 0 )); then
+      while read line; do echo $line | python -mjson.tool | pygmentize -l javascript ; done
+    else
+      cat "$@" | python -mjson.tool | pygmentize -l javascript
+    fi
   }
   xml() {
     cat "$@" | xmllint --format - | pygmentize -l xml
@@ -57,7 +61,11 @@ if (( $+commands[pygmentize] )); then
   alias v=pretty
 else
   json() {
-    cat "$@" | python -mjson.tool
+    if (( $# == 0 )); then
+      while read line; do echo $line | python -mjson.tool ; done
+    else
+      cat "$@" | python -mjson.tool
+    fi
   }
   xml() {
     cat "$@" | xmllint --format -
