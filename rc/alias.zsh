@@ -21,14 +21,47 @@ alias -g ...='../..'
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
 md() { command mkdir -p $1 && cd $1 }
 
+json() {
+  python -u -c '#!/usr/bin/env python
+
+# Pretty-print files containing JSON lines. Reads from stdin when no
+# argument is provided, otherwise pretty print each argument. This
+# script should be invoked with "-u" to disable buffering. The shebang
+# above is just for syntax highlighting to work correctly.
+
+import sys
+import json
+try:
+    import pygments
+    from pygments.lexers import JavascriptLexer
+    from pygments.formatters import TerminalFormatter
+except ImportError:
+    pygments = None
+
+if len(sys.argv) == 1:
+    files = [sys.stdin]
+else:
+    files = [file(f) for f in sys.argv[1:]]
+
+for f in files:
+    while True:
+        line = f.readline()
+        if line == "":
+            break
+        try:
+            j = json.loads(line)
+            pretty = json.dumps(j, indent=2)
+            if pygments:
+                pretty = pygments.highlight(pretty,
+                                            JavascriptLexer(),
+                                            TerminalFormatter())
+            sys.stdout.write(pretty)
+        except:
+            sys.stdout.write(line)
+' "$@"
+}
+
 if (( $+commands[pygmentize] )); then
-  json() {
-    if (( $# == 0 )); then
-      while read line; do echo $line | python -mjson.tool | pygmentize -l javascript ; done
-    else
-      cat "$@" | python -mjson.tool | pygmentize -l javascript
-    fi
-  }
   xml() {
     cat "$@" | xmllint --format - | pygmentize -l xml
   }
@@ -60,13 +93,6 @@ if (( $+commands[pygmentize] )); then
 
   alias v=pretty
 else
-  json() {
-    if (( $# == 0 )); then
-      while read line; do echo $line | python -mjson.tool ; done
-    else
-      cat "$@" | python -mjson.tool
-    fi
-  }
   xml() {
     cat "$@" | xmllint --format -
   }
