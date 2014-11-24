@@ -55,7 +55,7 @@ for f in files:
                 pretty = pygments.highlight(pretty,
                                             JavascriptLexer(),
                                             TerminalFormatter())
-            sys.stdout.write(pretty)
+            sys.stdout.write(pretty.strip() + "\n")
         except:
             sys.stdout.write(line)
 ' "$@"
