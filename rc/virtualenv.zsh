@@ -131,13 +131,13 @@ if ! id $USER > /dev/null 2> /dev/null; then
 fi
 
 # Setup a command to enter this environment
-[ -x $SHELL ] || SHELL=/bin/bash
-if [ -x /usr/bin/sudo ]; then
-  SUDO="/usr/bin/sudo -u $USER"
-elif [ -x /sbin/runuser ]; then
-  SUDO="/sbin/runuser -u $USER"
-fi
-echo exec \$SUDO env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l > $enter
+for SHELL in $SHELL /bin/bash /bin/sh; do
+  [ ! -x \$SHELL ] || break
+done
+for SUDO in /usr/bin/sudo /sbin/runuser; do
+  [ ! -x \$SUDO ] || break
+done
+echo exec \$SUDO -u $USER env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l > $enter
 EOF
         local ret=$?
         [[ $ret -eq 0 ]] && {
