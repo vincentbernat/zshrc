@@ -105,6 +105,8 @@ EOF
         #  http://jpetazzo.github.io/2014/03/23/lxc-attach-nsinit-nsenter-docker-0-9/
         #  http://www.sebastien-han.fr/blog/2014/01/27/access-a-container-without-ssh/
         #
+        # From Docker 1.3, see `docker enter'.
+        #
         # So, this needs nsenter which needs a recent util-linux. A
         # recent util-linux inside the container is also needed for
         # runuser if sudo is not installed.
