@@ -108,6 +108,7 @@ EOF
         # So, this needs nsenter which is not in Debian currently.
         local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
         local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
+        local enter=/tmp/nsenter-$RANDOM-$$-$UID
         sudo =nsenter -m -t $id -- /bin/sh -e <<EOF
 if ! mountpoint $HOME > /dev/null 2>/dev/null; then
   tmp=\$(mktemp -d)
@@ -123,14 +124,24 @@ fi
 if ! id $USER > /dev/null 2> /dev/null; then
   echo $(getent passwd $(id -u)) >> /etc/passwd
   echo $(getent group $(id -g)) >> /etc/group
-  echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
-  chmod 0440 /etc/sudoers.d/$USER
+  [ ! -x /usr/bin/sudo ] || {
+    echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
+    chmod 0440 /etc/sudoers.d/$USER
+  }
 fi
+
+# Setup a command to enter this environment
+[ -x $SHELL ] || SHELL=/bin/bash
+if [ -x /usr/bin/sudo ]; then
+  SUDO="/usr/bin/sudo -u $USER"
+elif [ -x /sbin/runuser ]; then
+  SUDO="/sbin/runuser -u $USER"
+fi
+echo exec \$SUDO env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l > $enter
 EOF
         local ret=$?
         [[ $ret -eq 0 ]] && {
-            sudo =nsenter -m -u -i -n -p -w$HOME -t $id -- sudo -u $USER \
-                env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env $SHELL -i -l
+            sudo =nsenter -m -u -i -n -p -w$HOME -t $id -- /bin/sh $enter
             ret=$?
         }
         return $ret
