@@ -51,7 +51,7 @@ for f in files:
         try:
             j = json.loads(line)
             pretty = json.dumps(j, indent=2)
-            if pygments:
+            if pygments and sys.stdout.isatty():
                 pretty = pygments.highlight(pretty,
                                             JavascriptLexer(),
                                             TerminalFormatter())
