@@ -38,12 +38,8 @@ try:
 except ImportError:
     pygments = None
 
-if len(sys.argv) == 1:
-    files = [sys.stdin]
-else:
-    files = [file(f) for f in sys.argv[1:]]
 
-for f in files:
+def display(f):
     while True:
         line = f.readline()
         if line == "":
@@ -58,6 +54,18 @@ for f in files:
             sys.stdout.write(pretty.strip() + "\n")
         except:
             sys.stdout.write(line)
+
+if len(sys.argv) == 1:
+    files = [sys.stdin]
+else:
+    files = sys.argv[1:]
+
+for f in files:
+    if type(f) != file:
+        with file(f) as f:
+            display(f)
+    else:
+        display(f)
 ' "$@"
 }
 
