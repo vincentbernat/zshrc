@@ -162,6 +162,10 @@ resize() {
   (( $state == 2 )) && stty columns $width
 }
 
+function c() {
+  echo $(($@))
+}
+
 # Lots of command examples (especially heroku) lead command docs with '$' which
 # make it kind of annoying to copy/paste, especially when there's multiple
 # commands to copy.
