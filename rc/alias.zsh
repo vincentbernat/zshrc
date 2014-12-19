@@ -165,6 +165,7 @@ resize() {
 function c() {
   echo $(($@))
 }
+alias c='noglob c'
 
 # Lots of command examples (especially heroku) lead command docs with '$' which
 # make it kind of annoying to copy/paste, especially when there's multiple
