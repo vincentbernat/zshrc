@@ -111,7 +111,7 @@ fi
 screenrecord() {
   (
     eval $(xdotool selectwindow getwindowgeometry --shell) &&
-    command avconv -f x11grab \
+    command ffmpeg -f x11grab \
       -r 25 \
       -s ${WIDTH}x${HEIGHT} \
       -i ${DISPLAY}.${SCREEN:-0}+${X:-0},${Y:-0} \
