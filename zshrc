@@ -6,7 +6,11 @@
 
 # Execute tmux if available and if we have some configuration for it
 (( $+commands[tmux] )) && \
-    [[ -f ~/.tmux.conf && $TERM != linux && $TERM != screen* && -z $TMUX ]] && \
+    [[ -f ~/.tmux.conf && \
+             $PPID != 1 && \
+             $$ != 1 && \
+             $TERM != linux && $TERM != screen* && \
+             -z $TMUX ]] && \
     exec tmux
 
 ZSH=${ZSH:-${ZDOTDIR:-$HOME}/.zsh}
