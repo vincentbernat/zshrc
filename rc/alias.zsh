@@ -21,6 +21,7 @@ alias -g ...='../..'
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
 md() { command mkdir -p $1 && cd $1 }
 
+# JSON pretty-printing
 json() {
   python -u -c '#!/usr/bin/env python
 
@@ -69,6 +70,7 @@ for f in files:
 ' "$@"
 }
 
+# Other pretty-printing functions
 if (( $+commands[pygmentize] )); then
   xml() {
     cat "$@" | xmllint --format - | pygmentize -l xml
@@ -108,6 +110,7 @@ else
   alias v=zless -FX
 fi
 
+# Record a video
 screenrecord() {
   (
     eval $(xdotool selectwindow getwindowgeometry --shell) &&
@@ -163,11 +166,13 @@ resize() {
   (( $state == 2 )) && stty columns $width
 }
 
+# Simple calculator
 function c() {
   echo $(($@))
 }
 alias c='noglob c'
 
+# Currency conversion (with Google)
 function currency() {
   local -a amounts
   local -a currencies
@@ -190,14 +195,7 @@ function currency() {
   done
 }
 
-# Lots of command examples (especially heroku) lead command docs with '$' which
-# make it kind of annoying to copy/paste, especially when there's multiple
-# commands to copy.
-#
-# This hacks around the problem by making a '$' command that simply runs
-# whatever arguments are passed to it. So you can copy
-#   '$ echo hello world'
-# and it will run 'echo hello world'
+# Allow to prefix commands with `$` to help copy/paste operations.
 function \$() {
   "$@"
 }
