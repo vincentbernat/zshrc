@@ -169,13 +169,24 @@ function c() {
 alias c='noglob c'
 
 function currency() {
-  amount=$1 ; shift
-  from=$1 ; shift
-  tos=(${=${@:-eur chf usd}})
-  for to in $tos; do
-    [[ ${to:u} != ${from:u} ]] || continue
-    curl -s "http://www.google.com/finance/converter?a=$amount&from=$from&to=$to" | \
-        sed '/res/!d;s/<[^>]*>//g'
+  local -a amounts
+  local -a currencies
+  for ((i=1; i<=$#; i++)); do
+    if [[ ${@[i]} = <-> ]]; then
+      amounts=($amounts ${@[i]})
+    else
+      currencies=($currencies ${@[i]})
+    fi
+  done
+  (( $#currencies > 1 )) || currencies=($currencies chf eur usd)
+  local from=${currencies[1]}
+  for amount in $amounts; do
+    for to in $currencies; do
+      [[ ${to:u} != ${from:u} ]] || continue
+      #echo "Convert $amount ${from:u} to ${to:u}"
+      curl -s "http://www.google.com/finance/converter?a=$amount&from=$from&to=$to" | \
+          sed '/res/!d;s/<[^>]*>//g'
+    done
   done
 }
 
