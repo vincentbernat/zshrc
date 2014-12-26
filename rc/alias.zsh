@@ -168,6 +168,16 @@ function c() {
 }
 alias c='noglob c'
 
+function currency() {
+  amount=$1 ; shift
+  from=$1 ; shift
+  to=$1 ; shift                 # Just for error check
+  for to in $to $@; do
+    curl -s "http://www.google.com/finance/converter?a=$amount&from=$from&to=$to" | \
+        sed '/res/!d;s/<[^>]*>//g'
+  done
+}
+
 # Lots of command examples (especially heroku) lead command docs with '$' which
 # make it kind of annoying to copy/paste, especially when there's multiple
 # commands to copy.
