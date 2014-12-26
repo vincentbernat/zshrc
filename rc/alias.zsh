@@ -171,10 +171,10 @@ alias c='noglob c'
 function currency() {
   local -a amounts
   local -a currencies
-  for ((i=0; i<=$#; i++)); do
+  for ((i=1; i<=$#; i++)); do
     if [[ ${@[i]} = <-> ]]; then
       amounts=($amounts ${@[i]})
-    elif [[ ${@[i]} = ??? ]]; then
+    else
       currencies=($currencies ${@[i]})
     fi
   done
@@ -183,15 +183,12 @@ function currency() {
   for amount in $amounts; do
     for to in $currencies; do
       [[ ${to:u} != ${from:u} ]] || continue
-      echo "Convert $amount ${from:u} to ${to:u}"
-      #curl -s "http://www.google.com/finance/converter?a=$amount&from=$from&to=$to" | \
-      #    sed '/res/!d;s/<[^>]*>//g'
+      #echo "Convert $amount ${from:u} to ${to:u}"
+      curl -s "http://www.google.com/finance/converter?a=$amount&from=$from&to=$to" | \
+          sed '/res/!d;s/<[^>]*>//g'
     done
   done
 }
-alias chf=currency
-alias eur=currency
-alias usd=currency
 
 # Lots of command examples (especially heroku) lead command docs with '$' which
 # make it kind of annoying to copy/paste, especially when there's multiple
