@@ -171,8 +171,9 @@ alias c='noglob c'
 function currency() {
   amount=$1 ; shift
   from=$1 ; shift
-  to=$1 ; shift                 # Just for error check
-  for to in $to $@; do
+  tos=(${=${@:-eur chf usd}})
+  for to in $tos; do
+    [[ ${to:u} != ${from:u} ]] || continue
     curl -s "http://www.google.com/finance/converter?a=$amount&from=$from&to=$to" | \
         sed '/res/!d;s/<[^>]*>//g'
   done
