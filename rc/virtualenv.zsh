@@ -35,7 +35,7 @@ EOF
 
 (( $+commands[virtualenv] )) && {
     export PIP_REQUIRE_VIRTUALENV=true
-    export VIRTUAL_ENV_DISABLE_PROMPT=1
+    VIRTUAL_ENV_DISABLE_PROMPT=1
 
     _vbe_add_prompt_virtualenv () {
         _vbe_prompt_env 've' '${VIRTUAL_ENV##*/}'
