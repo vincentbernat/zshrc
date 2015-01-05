@@ -75,7 +75,10 @@ echo $(getent group $(id -g)) >> /etc/group
 [ -d /etc/sudoers.d ] || mkdir /etc/sudoers.d
 echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
 chmod 0440 /etc/sudoers.d/$USER
-exec sudo -u $USER env HOME=$HOME TERM=$TERM $SHELL -i -l
+for SUDO in /usr/bin/sudo /sbin/runuser; do
+  [ ! -x \$SUDO ] || break
+done
+exec \$SUDO -u $USER env HOME=$HOME TERM=$TERM $SHELL -i -l
 EOF
         docker run -t -i \
             -v $HOME:$HOME \
