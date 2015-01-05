@@ -76,6 +76,9 @@ echo $(getent group $(id -g)) >> /etc/group
   echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
   chmod 0440 /etc/sudoers.d/$USER
 }
+for SHELL in $SHELL /bin/bash /bin/sh; do
+  [ ! -x \$SHELL ] || break
+done
 for SUDO in /usr/bin/sudo /sbin/runuser; do
   [ ! -x \$SUDO ] || break
 done
