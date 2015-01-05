@@ -79,10 +79,15 @@ echo $(getent group $(id -g)) >> /etc/group
 for SHELL in $SHELL /bin/bash /bin/sh; do
   [ ! -x \$SHELL ] || break
 done
-for SUDO in /usr/bin/sudo /sbin/runuser; do
+for SUDO in /usr/bin/sudo /sbin/runuser ""; do
   [ ! -x \$SUDO ] || break
 done
-exec \$SUDO -u $USER env HOME=$HOME TERM=$TERM $SHELL -i -l
+CMD="env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l"
+if [ -n "\$SUDO" ]; then
+  exec \$SUDO -u $USER \$CMD
+else
+  exec su -s /bin/sh $USER -- -c "exec \$CMD"
+fi
 EOF
         docker run -t -i \
             -v $HOME:$HOME \
@@ -146,10 +151,16 @@ fi
 for SHELL in $SHELL /bin/bash /bin/sh; do
   [ ! -x \$SHELL ] || break
 done
-for SUDO in /usr/bin/sudo /sbin/runuser; do
+for SUDO in /usr/bin/sudo /sbin/runuser ""; do
   [ ! -x \$SUDO ] || break
 done
-echo exec \$SUDO -u $USER env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l > $enter
+CMD="env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l"
+if [ -n "\$SUDO" ]; then
+  echo exec \$SUDO -u $USER \$CMD  > $enter
+else
+  echo exec su -s /bin/sh $USER -- -c exec \"\$CMD\" > $enter
+fi
+
 EOF
         local ret=$?
         [[ $ret -eq 0 ]] && {
