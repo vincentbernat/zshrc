@@ -84,7 +84,7 @@ for SUDO in /usr/bin/sudo /sbin/runuser ""; do
 done
 CMD="env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l"
 if [ -n "\$SUDO" ]; then
-  exec \$SUDO -u $USER \$CMD
+  exec \$SUDO -u $USER -- \$CMD
 else
   exec su -s /bin/sh $USER -- -c "exec \$CMD"
 fi
@@ -156,7 +156,7 @@ for SUDO in /usr/bin/sudo /sbin/runuser ""; do
 done
 CMD="env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l"
 if [ -n "\$SUDO" ]; then
-  echo exec \$SUDO -u $USER \$CMD  > $enter
+  echo exec \$SUDO -u $USER -- \$CMD  > $enter
 else
   echo exec su -s /bin/sh $USER -- -c exec \"\$CMD\" > $enter
 fi
