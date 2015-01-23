@@ -19,9 +19,6 @@ alias susu='sudo env HISTFILE=$HISTFILE-root \
                      ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
           zsh -i -l'
 
-# Global aliases (expanded even when not in a command position)
-alias -g ...='../..'
-
 # Aliases as a function
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
 md() { command mkdir -p $1 && cd $1 }
