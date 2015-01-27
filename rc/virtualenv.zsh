@@ -120,9 +120,7 @@ EOF
         #
         # From Docker 1.3, see `docker enter'.
         #
-        # So, this needs nsenter which needs a recent util-linux. A
-        # recent util-linux inside the container is also needed for
-        # runuser if sudo is not installed.
+        # So, this needs nsenter which needs a recent util-linux.
         local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
         local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
         local enter=/tmp/nsenter-$RANDOM-$$-$UID
