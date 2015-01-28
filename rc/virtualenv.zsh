@@ -86,7 +86,7 @@ CMD="env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l"
 if [ -n "\$SUDO" ]; then
   exec \$SUDO -u $USER -- \$CMD
 else
-  exec su -s /bin/sh $USER -- -c "exec \$CMD"
+  exec chroot --userspec=$USER / \$CMD
 fi
 EOF
         docker run -t -i \
@@ -156,7 +156,7 @@ CMD="env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l"
 if [ -n "\$SUDO" ]; then
   echo exec \$SUDO -u $USER -- \$CMD  > $enter
 else
-  echo exec su -s /bin/sh $USER -- -c exec \"\$CMD\" > $enter
+  echo exec chroot --userspec=$USER / \$CMD > $enter
 fi
 
 EOF
