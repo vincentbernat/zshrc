@@ -79,15 +79,8 @@ echo $(getent group $(id -g)) >> /etc/group
 for SHELL in $SHELL /bin/bash /bin/sh; do
   [ ! -x \$SHELL ] || break
 done
-for SUDO in /usr/bin/sudo /sbin/runuser ""; do
-  [ ! -x \$SUDO ] || break
-done
 CMD="env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l"
-if [ -n "\$SUDO" ]; then
-  exec \$SUDO -u $USER -- \$CMD
-else
-  exec chroot --userspec=$USER / \$CMD
-fi
+exec chroot --userspec=$USER / \$CMD
 EOF
         docker run -t -i \
             -v $HOME:$HOME \
@@ -149,15 +142,8 @@ fi
 for SHELL in $SHELL /bin/bash /bin/sh; do
   [ ! -x \$SHELL ] || break
 done
-for SUDO in /usr/bin/sudo /sbin/runuser ""; do
-  [ ! -x \$SUDO ] || break
-done
 CMD="env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l"
-if [ -n "\$SUDO" ]; then
-  echo exec \$SUDO -u $USER -- \$CMD  > $enter
-else
-  echo exec chroot --userspec=$USER / \$CMD > $enter
-fi
+echo exec chroot --userspec=$USER / \$CMD > $enter
 
 EOF
         local ret=$?
