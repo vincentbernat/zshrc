@@ -18,6 +18,7 @@ alias susu='sudo env HISTFILE=$HISTFILE-root \
                      ${SSH_TTY+SSH_TTY=$SSH_TTY} \
                      ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
           zsh -i -l'
+alias please='sudo $(fc -ln -1)'
 
 # Aliases as a function
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
