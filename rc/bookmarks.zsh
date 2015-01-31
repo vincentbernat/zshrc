@@ -80,24 +80,31 @@ is-at-least 4.3.12 && __() {
     bookmark() {
         [[ -d $MARKPATH ]] || mkdir -p $MARKPATH
         if (( $# == 0 )); then
-            # Display bookmarks
+            # When no arguments are provided, just display existing
+            # bookmarks
             for link in $MARKPATH/*(N@); do
                 local markname="$fg[green]${link:t}$reset_color"
                 local markpath="$fg[blue]${link:A}$reset_color"
                 printf "%-30s -> %s\n" $markname $markpath
             done
         else
+            # Otherwise, we may want to add a bookmark or delete an
+            # existing one.
             local -a delete
             zparseopts -D d=delete
             if (( $+delete[1] )); then
-                # Delete bookmark
+                # With `-d`, we delete an existing bookmark
                 command rm $MARKPATH/$1
             else
-                # Add bookmark
+                # Otherwise, add a bookmark to the current
+                # directory. The first argument is the bookmark
+                # name. `.` is special and means the bookmark should
+                # be named after the current directory.
                 local name=$1
                 [[ $name == "." ]] && name=${PWD:t}
                 ln -s $PWD $MARKPATH/$name
             fi
+            # Clean up the cache
             command rm $ZSH/run/bookmarks-$HOST-$UID
         fi
     }
