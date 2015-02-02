@@ -57,7 +57,7 @@ is-at-least 4.3.12 && __() {
                 local -a dirs
                 dirs=($MARKPATH/*(N@:t))
                 dirs=("@"${^dirs})
-                _wanted dynamic-dirs expl 'bookmarked directory' compadd -I/ -S\] -q -a dirs
+                _wanted dynamic-dirs expl 'bookmarked directory' compadd -S\]/ -a dirs
                 return
                 ;;
             *)
