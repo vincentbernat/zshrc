@@ -57,7 +57,14 @@ is-at-least 4.3.12 && __() {
                 local -a dirs
                 dirs=($MARKPATH/*(N@:t))
                 dirs=("@"${^dirs})
-                _wanted dynamic-dirs expl 'bookmarked directory' compadd -S\]/ -a dirs
+                vbe-remove-slash-after-bookmark () {
+                    case $KEYS in
+                        '/'|' '|$'\n'|$'\r')
+                            LBUFFER="${LBUFFER[0,-2]}"
+                            ;;
+                    esac
+                }
+                _wanted dynamic-dirs expl 'bookmarked directory' compadd -S\]/ -R vbe-remove-slash-after-bookmark -a dirs
                 return
                 ;;
             *)
