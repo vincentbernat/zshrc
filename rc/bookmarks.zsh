@@ -1,84 +1,25 @@
 # -*- sh -*-
 
-# Handle bookmarks. This uses the dynamic named directories feature of
-# zsh. When you refer to ~[...] during a file expansion, the `...` is
-# proposed to some function to be resolved. This is like tilde
-# expansion but you can plug the resolution in a function. This also
-# works to resolve a directory name to a shorten name.
+# Handle bookmarks. This uses the static named directories feature of
+# zsh. Such directories are declared with `hash -d
+# name=directory`. Both prompt expansion and completion know how to
+# handle them. We populate the hash with directories.
 #
-# So, we can jump to a bookmark with `cd ~[@bookmark]`. Prompt
-# expansion is also aware of those bookmarks. The prompt should show
-# the bookmark name. And we get completion.
-#
-# With autocd, you can just type `~[@bookmark]`. Since this can be
+# With autocd, you can just type `~-bookmark`. Since this can be
 # cumbersome to type, you can also type `@@` and this will be turned
-# into `~[@` by ZLE.
+# into `~-` by ZLE.
 
 is-at-least 4.3.12 && __() {
     MARKPATH=$ZSH/run/marks
 
-    _bookmark_directory_name() {
-        emulate -L zsh
-        setopt extendedglob
-        case $1 in
-            d)
-                # Turn the directory into a shortest name using
-                # bookmarks. We need to sort them by length of solved
-                # path.
-                local link slink
-                local -A links
-                local cache=$ZSH/run/bookmarks-$HOST-$UID
-                if [[ -f $cache ]] && [[ $MARKPATH -ot $cache ]]; then
-                    . $cache
-                else
-                    for link ($MARKPATH/*(N@)) links[${#link:A}$'\0'${link:A}]=${link:t}
-                    print -r "links=( ${(kv@)^^links} )" > $cache
-                fi
-                for slink (${(@On)${(k)links}}) {
-                    link=${slink#*$'\0'}
-                    if [[ $2 = (#b)(${link})(|/*) ]]; then
-                        typeset -ga reply
-                        reply=("@"${links[$slink]} $(( ${#match[1]} )) )
-                        return 0
-                    fi
-                }
-                return 1
-                ;;
-            n)
-                # Turn the name into a directory
-                [[ $2 != (#b)"@"(?*) ]] && return 1
-                typeset -ga reply
-                reply=(${${:-$MARKPATH/$match[1]}:A})
-                return 0
-                ;;
-            c)
-                # Completion
-                local expl
-                local -a dirs
-                dirs=($MARKPATH/*(N@:t))
-                dirs=("@"${^dirs})
-                vbe-remove-slash-after-bookmark () {
-                    case $KEYS in
-                        '/'|' '|$'\n'|$'\r')
-                            LBUFFER="${LBUFFER[0,-2]}"
-                            ;;
-                    esac
-                }
-                _wanted dynamic-dirs expl 'bookmarked directory' compadd -S\]/ -R vbe-remove-slash-after-bookmark -a dirs
-                return
-                ;;
-            *)
-                return 1
-                ;;
-        esac
-        return 0
+    # Populate the hash
+    for link ($MARKPATH/*(N@)) {
+        hash -d -- -${link:t}=${link:A}
     }
-
-    add-zsh-hook zsh_directory_name _bookmark_directory_name
 
     vbe-insert-bookmark() {
         emulate -L zsh
-        LBUFFER=${LBUFFER}"~[@"
+        LBUFFER=${LBUFFER}"~-"
     }
     zle -N vbe-insert-bookmark
     bindkey '@@' vbe-insert-bookmark
