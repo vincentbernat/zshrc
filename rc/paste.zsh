@@ -5,6 +5,7 @@
 # paste mode as documented: http://www.xfree86.org/current/ctlseqs.html
 
 [[  $TERM == rxvt-unicode || \
+    $TERM == rxvt-unicode-256color || \
     $TERM == xterm || \
     $TERM == xterm-256color || \
     $TERM == screen-256color ]] && __() {
