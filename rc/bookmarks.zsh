@@ -56,7 +56,8 @@ is-at-least 4.3.12 && __() {
                 ln -s $PWD $MARKPATH/$name
             fi
             # Clean up the cache
-            command rm $ZSH/run/bookmarks-$HOST-$UID
+            [[ ! -f $ZSH/run/bookmarks-$HOST-$UID ]] || \
+                command rm $ZSH/run/bookmarks-$HOST-$UID
         fi
     }
 } && __
