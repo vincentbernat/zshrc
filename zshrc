@@ -9,7 +9,8 @@
     [[ -f ~/.tmux.conf && \
              $PPID != 1 && \
              $$ != 1 && \
-             $TERM != linux && $TERM != screen* && \
+             $TERM != linux && \
+             $TERM != screen* && \
              -z $TMUX ]] && \
     exec tmux
 
