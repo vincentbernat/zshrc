@@ -15,6 +15,7 @@ is-at-least 4.3.12 && __() {
     # Add some static entries
     hash -d log=/var/log
     hash -d doc=/usr/share/doc
+
     # Populate the hash
     for link ($MARKPATH/*(N@)) {
         hash -d -- -${link:t}=${link:A}

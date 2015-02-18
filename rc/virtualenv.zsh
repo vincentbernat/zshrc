@@ -36,6 +36,7 @@ EOF
 (( $+commands[virtualenv] )) && {
     export PIP_REQUIRE_VIRTUALENV=true
     VIRTUAL_ENV_DISABLE_PROMPT=1
+    hash -d venvs=$WORKON_HOME
 
     _vbe_add_prompt_virtualenv () {
         _vbe_prompt_env 've' '${VIRTUAL_ENV##*/}'
