@@ -34,6 +34,7 @@ json() {
 # above is just for syntax highlighting to work correctly.
 
 import sys
+import re
 import json
 try:
     import pygments
@@ -44,18 +45,22 @@ except ImportError:
 
 
 def display(f):
+    jsonre = re.compile(r"(?P<prefix>.*?)(?P<json>\{.*\})(?P<suffix>.*)")
     while True:
         line = f.readline()
         if line == "":
             break
         try:
-            j = json.loads(line)
+            mo = jsonre.match(line)
+            if not mo:
+                raise ValueError("No JSON string found")
+            j = json.loads(mo.group("json"))
             pretty = json.dumps(j, indent=2)
             if pygments and sys.stdout.isatty():
                 pretty = pygments.highlight(pretty,
                                             JavascriptLexer(),
                                             TerminalFormatter())
-            sys.stdout.write(pretty.strip() + "\n")
+            sys.stdout.write(mo.group("prefix") + pretty.strip() + mo.group("suffix") + "\n")
         except:
             sys.stdout.write(line)
 
