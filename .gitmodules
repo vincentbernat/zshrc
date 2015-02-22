@@ -1,9 +1,6 @@
 [submodule "third-party/docker-zsh-completion"]
 	path = third-party/docker-zsh-completion
 	url = git@github.com:felixr/docker-zsh-completion.git
-[submodule "third-party/grunt-zsh-completion"]
-	path = third-party/grunt-zsh-completion
-	url = git@github.com:yonchu/grunt-zsh-completion.git
 [submodule "third-party/zsh-syntax-highlighting"]
 	path = third-party/zsh-syntax-highlighting
 	url = git@github.com:zsh-users/zsh-syntax-highlighting.git
