@@ -7,7 +7,7 @@ install:
   - git submodule update --init --recursive
   - sudo apt-get install zsh
 script:
-  - ZSH=$PWD zsh -c ". rc/install.zsh"
+  - ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh"
 addons:
   artifacts:
     paths:
