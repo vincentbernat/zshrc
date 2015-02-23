@@ -5,9 +5,12 @@ git:
 install:
   - sed -i 's+git@github.com:+https://github.com/+' .gitmodules
   - git submodule update --init --recursive
-  - sudo apt-get install zsh
+  - sudo apt-get install zsh s3cmd
+env:
+  - BUCKET=$ARTIFACTS_BUCKET AWS_ACCESS_KEY_ID=$ARTIFACTS_KEY
 script:
   - ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh"
+  - s3cmd put run/zsh-install.sh s3://$BUCKET
 addons:
   artifacts:
     paths:
