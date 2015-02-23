@@ -1,0 +1,10 @@
+language: python
+os: linux
+install:
+  - sudo apt-get install zsh
+script:
+  - ZSH=$PWD zsh -c ". rc/install.zsh"
+addons:
+  artifacts:
+    paths:
+      - run/zsh-install.sh
