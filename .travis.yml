@@ -1,4 +1,4 @@
-language: python
+language: c
 os: linux
 install:
   - sudo apt-get install zsh
