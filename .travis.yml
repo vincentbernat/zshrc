@@ -1,6 +1,10 @@
 language: c
 os: linux
+git:
+  submodules: false
 install:
+  - sed -i 's+git@github.com:+https://github.com/+' .gitmodules
+  - git submodule update --init --recursive
   - sudo apt-get install zsh
 script:
   - ZSH=$PWD zsh -c ". rc/install.zsh"
