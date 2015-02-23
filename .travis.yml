@@ -2,16 +2,12 @@ language: c
 os: linux
 git:
   submodules: false
+env:
+  - secure: "j/S2ivhXm79a/I4dsZ5GXaiknvm4sBcDh5vojQjjlvq5FB4wSwMWm+Dgek/eseINnIdQpXcesP3sAV8ayzpthBfo9ziw7l5Y9RcAWoYPGpQZQUNxwCV6l3x4Vq9TPrxhrCQTCFTEeCz26f2xLlyUTr7woLc2u6kg54lLAlrqb4Y="
 install:
   - sed -i 's+git@github.com:+https://github.com/+' .gitmodules
   - git submodule update --init --recursive
   - sudo apt-get install zsh s3cmd
-env:
-  - BUCKET=$ARTIFACTS_BUCKET AWS_ACCESS_KEY_ID=$ARTIFACTS_KEY
 script:
   - ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh"
-  - s3cmd put run/zsh-install.sh s3://$BUCKET
-addons:
-  artifacts:
-    paths:
-      - run/zsh-install.sh
+  - AWS_ACCESS_KEY_ID=AKIAI4PXERRUTQIVZ52A s3cmd put -P run/zsh-install.sh s3://vincentbernat-zshrc
