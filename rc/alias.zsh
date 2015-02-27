@@ -74,11 +74,14 @@ else:
     files = sys.argv[1:]
 
 for f in files:
-    if type(f) != file:
-        with file(f) as f:
+    try:
+        if type(f) != file:
+            with file(f) as f:
+                display(f)
+        else:
             display(f)
-    else:
-        display(f)
+    except KeyboardInterrupt:
+        sys.exit(1)
 ' "$@"
 }
 
