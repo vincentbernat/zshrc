@@ -24,7 +24,11 @@ alias please='sudo $(fc -ln -1)'
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
 md() { command mkdir -p $1 && cd $1 }
 
-# JSON pretty-printing
+# JSON pretty-printing.
+#
+# Many programs have a flag to enable unbuffered output. For example,
+# `curl -N`. Most programs can be forced to use unbuffered output with
+# `stdbuf -o L`.
 json() {
   python -u -c '#!/usr/bin/env python
 
