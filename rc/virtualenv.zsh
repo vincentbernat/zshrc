@@ -73,10 +73,9 @@ EOF
         <<EOF > $tmp/start
 echo $(getent passwd $(id -u)) >> /etc/passwd
 echo $(getent group $(id -g)) >> /etc/group
-[ ! -x /usr/bin/sudo ] || {
-  echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
-  chmod 0440 /etc/sudoers.d/$USER
-}
+mkdir -p /etc/sudoers.d
+echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
+chmod 0440 /etc/sudoers.d/$USER
 for SHELL in $SHELL /bin/bash /bin/sh; do
   [ ! -x \$SHELL ] || break
 done
@@ -133,10 +132,9 @@ fi
 if ! id $USER > /dev/null 2> /dev/null; then
   echo $(getent passwd $(id -u)) >> /etc/passwd
   echo $(getent group $(id -g)) >> /etc/group
-  [ ! -x /usr/bin/sudo ] || {
-    echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
-    chmod 0440 /etc/sudoers.d/$USER
-  }
+  mkdir -p /etc/sudoers.d
+  echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
+  chmod 0440 /etc/sudoers.d/$USER
 fi
 
 # Setup a command to enter this environment
