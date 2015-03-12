@@ -34,6 +34,7 @@ if _vbe_can_do_unicode; then
         retb "" reta " ↵"
         circle "●" branch "\uE0A0"
         ok "✔" ellipsis "…"
+        eol "⏎"
     )
 else
     PRCH=(
@@ -41,6 +42,7 @@ else
         retb "<" reta ">"
         circle "*" branch "±"
         ok ">" ellipsis ".."
+        eol "~~"
     )
 fi
 CURRENT_BG=NONE
@@ -118,5 +120,6 @@ _vbe_setprompt () {
     setopt prompt_subst
     PROMPT='$(_vbe_prompt) '
     PS2='$(_vbe_prompt_ps2 ${(%):-%_}) '
+    PROMPT_EOL_MARK='%B${PRCH[eol]}%b'
     unset RPROMPT
 }
