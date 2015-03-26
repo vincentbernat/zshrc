@@ -22,6 +22,6 @@ __() {
     local remain=${HOSTNAME#*.}
     [[ $remain == *.*.* ]] && {
         local next=${remain%%.*}
-        (( ${#next} == 2 )) && HOST=$HOST.$next
+        (( ${#next} >= 2 && ${#next} <= 4 )) && HOST=$HOST.$next
     }
 } && __ 2> /dev/null
