@@ -5,7 +5,12 @@ alias df='df -h'
 alias du='du -h'
 alias rm='rm -i'
 alias ll='ls -l'
+
+# ip aliases
 alias ip6='ip -6'
+alias ipr='ip -r'
+alias ip6r='ip -6 -r'
+alias ipm='ip -r monitor'
 
 # smv like scp
 alias smv='rsync -P --remove-source-files'
