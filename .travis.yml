@@ -7,8 +7,8 @@ env:
 install:
   - sed -i 's+git@github.com:+https://github.com/+' .gitmodules
   - git submodule update --init --recursive
-  - sudo apt-get install zsh
-  - sudo apt-get install s3cmd -t backports
+  - sudo apt-get install -y -qq zsh
+  - sudo apt-get install -y -qq s3cmd -t precise-backports
   - touch ~/.s3cfg
 script:
   - ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh"
