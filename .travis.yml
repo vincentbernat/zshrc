@@ -3,7 +3,7 @@ os: linux
 git:
   submodules: false
 env:
-  - secure: sVDBx7O9frCOSyDCyBUHcAFSj1EVfsmVENj+IPyAcjvpzJS8mO2fNJZfj8BoryslJsOUQOjdeWRm+Aykxd9jrcpQEVEAIJtghAmTrhOXKHpYbdmDXy3UhtNOpUuCJ3Vxsaa8izlGt2q29hfGH6eoDKHudB8o9tHQX7X3VHmPB9s=
+  - secure: "Ibxhlc+6A5+oGX+W2Dchbp485hsgVnmCfTBUKEVFpMd+FD9Uf2Y0d3op02YsXRYQpll2HHiIzzepB7Ozr0Ap2z8DsIC0eo8tg893OUZZ0eu6+BB9dvJYG8Oku7DHgY/hgVPn80a3BtFBkcteIJd3/ZHTln163M0sEHGRjwM1z+c="
 install:
   - sed -i 's+git@github.com:+https://github.com/+' .gitmodules
   - git submodule update --init --recursive
@@ -12,4 +12,4 @@ install:
   - touch ~/.s3cfg
 script:
   - ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh"
-  - env AWS_ACCESS_KEY_ID=AKIAI4PXERRUTQIVZ52A s3cmd put -P run/zsh-install.sh s3://vincentbernat-zshrc
+  - AWS_ACCESS_KEY_ID=AKIAIS4LB5N47NGSQKXA s3cmd put -P run/zsh-install.sh s3://vincentbernat-zshrc
