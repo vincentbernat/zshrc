@@ -81,7 +81,7 @@ if ! id $USER > /dev/null 2> /dev/null; then
     cat <<'EOF' > /usr/bin/sudo
 #!/bin/sh
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
-exec /usr/bin/_root -c \"/usr/sbin/chroot --userspec=root / sh -c 'cd \$PWD ; \$*'\"
+exec /usr/bin/_root -c \"/usr/sbin/chroot --userspec=root / sh -c 'cd \"\$PWD\" ; \$*'\"
 EOF
     chmod +x /usr/bin/sudo
   }
@@ -97,8 +97,9 @@ for SHELL in $SHELL /bin/bash /bin/sh; do
   [ ! -x \$SHELL ] || break
 done
 $setupuser
-CMD="env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l"
-exec chroot --userspec=$USER / \$CMD
+exec chroot --userspec=$USER / \
+     env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
+     sh -c "[ -d '\$PWD' ] && cd '\$PWD' ; exec \$SHELL -i -l"
 EOF
         docker run -t -i \
             -v $HOME:$HOME \
