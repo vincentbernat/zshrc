@@ -75,10 +75,14 @@ if ! id $USER > /dev/null 2> /dev/null; then
   echo \"$USER ALL=(ALL) NOPASSWD: ALL\" > /etc/sudoers.d/$USER
   chmod 0440 /etc/sudoers.d/$USER
   [ -x /usr/bin/sudo ] || {
-    cp \$SHELL /usr/bin/root
-    chmod 4700 /usr/bin/root
-    setfacl -m u:${USER}:rx /usr/bin/root
-    # use \"root -p\"
+    cp /bin/sh /usr/bin/_root
+    chmod 4700 /usr/bin/_root
+    setfacl -m u:${USER}:rx /usr/bin/_root
+    cat <<'EOF' > /usr/bin/sudo
+#!/bin/sh
+exec /usr/bin/_root -c \"/usr/sbin/chroot --userspec=root / \$*\"
+EOF
+    chmod +x /usr/bin/sudo
   }
 fi
 "
