@@ -74,6 +74,12 @@ if ! id $USER > /dev/null 2> /dev/null; then
   mkdir -p /etc/sudoers.d
   echo \"$USER ALL=(ALL) NOPASSWD: ALL\" > /etc/sudoers.d/$USER
   chmod 0440 /etc/sudoers.d/$USER
+  [ -x /usr/bin/sudo ] || {
+    cp \$SHELL /usr/bin/root
+    chmod 4700 /usr/bin/root
+    setfacl -m u:${USER}:rx /usr/bin/root
+    # use \"root -p\"
+  }
 fi
 "
 
@@ -82,10 +88,10 @@ fi
         local image=${env}
         local tmp=$(mktemp -d)
         <<EOF > $tmp/start
-$setupuser
 for SHELL in $SHELL /bin/bash /bin/sh; do
   [ ! -x \$SHELL ] || break
 done
+$setupuser
 CMD="env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l"
 exec chroot --userspec=$USER / \$CMD
 EOF
@@ -136,12 +142,14 @@ if ! mountpoint $HOME > /dev/null 2>/dev/null; then
   rmdir \$tmp
 fi
 
-$setupuser
-
-# Setup a command to enter this environment
+# Shell to use
 for SHELL in $SHELL /bin/bash /bin/sh; do
   [ ! -x \$SHELL ] || break
 done
+
+$setupuser
+
+# Setup a command to enter this environment
 CMD="env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \$SHELL -i -l"
 echo exec chroot --userspec=$USER / \$CMD > $enter
 
