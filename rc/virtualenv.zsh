@@ -76,8 +76,8 @@ if ! id $USER > /dev/null 2> /dev/null; then
   chmod 0440 /etc/sudoers.d/$USER
   [ -x /usr/bin/sudo ] || {
     cp /bin/sh /usr/bin/_root
-    chmod 4700 /usr/bin/_root
-    setfacl -m u:${USER}:rx /usr/bin/_root
+    chown root:root /usr/bin/_root
+    chmod 4750 /usr/bin/_root
     cat <<'EOF' > /usr/bin/sudo
 #!/bin/sh
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
