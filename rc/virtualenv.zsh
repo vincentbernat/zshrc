@@ -66,16 +66,23 @@ EOF
 
     [[ $env == "." ]] && env=${PWD:t}
 
+    # Docker stuff
+    local setupuser="
+if ! id $USER > /dev/null 2> /dev/null; then
+  echo $(getent passwd $(id -u)) >> /etc/passwd
+  echo $(getent group $(id -g)) >> /etc/group
+  mkdir -p /etc/sudoers.d
+  echo \"$USER ALL=(ALL) NOPASSWD: ALL\" > /etc/sudoers.d/$USER
+  chmod 0440 /etc/sudoers.d/$USER
+fi
+"
+
     # Docker images
     [[ ${dimages[(r)$env]} == $env ]] && {
         local image=${env}
         local tmp=$(mktemp -d)
         <<EOF > $tmp/start
-echo $(getent passwd $(id -u)) >> /etc/passwd
-echo $(getent group $(id -g)) >> /etc/group
-mkdir -p /etc/sudoers.d
-echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
-chmod 0440 /etc/sudoers.d/$USER
+$setupuser
 for SHELL in $SHELL /bin/bash /bin/sh; do
   [ ! -x \$SHELL ] || break
 done
@@ -129,13 +136,7 @@ if ! mountpoint $HOME > /dev/null 2>/dev/null; then
   rmdir \$tmp
 fi
 
-if ! id $USER > /dev/null 2> /dev/null; then
-  echo $(getent passwd $(id -u)) >> /etc/passwd
-  echo $(getent group $(id -g)) >> /etc/group
-  mkdir -p /etc/sudoers.d
-  echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
-  chmod 0440 /etc/sudoers.d/$USER
-fi
+$setupuser
 
 # Setup a command to enter this environment
 for SHELL in $SHELL /bin/bash /bin/sh; do
