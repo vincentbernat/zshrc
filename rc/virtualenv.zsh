@@ -80,6 +80,7 @@ if ! id $USER > /dev/null 2> /dev/null; then
     setfacl -m u:${USER}:rx /usr/bin/_root
     cat <<'EOF' > /usr/bin/sudo
 #!/bin/sh
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
 exec /usr/bin/_root -c \"/usr/sbin/chroot --userspec=root / \$*\"
 EOF
     chmod +x /usr/bin/sudo
