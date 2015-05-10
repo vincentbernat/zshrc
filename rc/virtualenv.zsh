@@ -130,7 +130,7 @@ EOF
         #  http://jpetazzo.github.io/2014/03/23/lxc-attach-nsinit-nsenter-docker-0-9/
         #  http://www.sebastien-han.fr/blog/2014/01/27/access-a-container-without-ssh/
         #
-        # From Docker 1.3, see `docker enter'.
+        # From Docker 1.3, see `docker exec'.
         #
         # So, this needs nsenter which needs a recent util-linux.
         local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
