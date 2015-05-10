@@ -76,7 +76,7 @@ if ! id $USER > /dev/null 2> /dev/null; then
   chmod 0440 /etc/sudoers.d/$USER
   [ -x /usr/bin/sudo ] || {
     cp /bin/sh /usr/bin/_root
-    chown root:root /usr/bin/_root
+    chown root:$(id -gn) /usr/bin/_root
     chmod 4750 /usr/bin/_root
     cat <<'EOF' > /usr/bin/sudo
 #!/bin/sh
