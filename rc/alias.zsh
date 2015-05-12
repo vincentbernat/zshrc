@@ -219,3 +219,11 @@ function currency() {
 function \$() {
   "$@"
 }
+
+function myip() {
+  false || \
+      curl -s ip.appspot.com || \
+      curl -s eth0.me || \
+      curl -s ipecho.net/plain ||
+      dig +short myip.opendns.com @resolver1.opendns.com
+}
