@@ -42,7 +42,7 @@
                     --debootstrapopts --keyring
                     --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg)
 		;;
-	    lucid|maverick|natty|oneiric|precise|quantal|raring|saucy|trusty)
+	    lucid|maverick|natty|oneiric|precise|quantal|raring|saucy|trusty|utopic|vivid)
                 local mirror=http://wwwftp.ciril.fr/pub/linux/ubuntu/archives/
 		opts=($opts --mirror $mirror)
 		opts=($opts
