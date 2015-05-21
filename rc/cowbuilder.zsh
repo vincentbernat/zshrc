@@ -36,7 +36,7 @@
 
 	# Distribution
 	case ${distrib%-*} in
-	    squeeze|wheezy|jessy|sid)
+	    squeeze|wheezy|jessie|sid)
 		opts=($opts --mirror http://cdn.debian.net/debian)
 		opts=($opts
                     --debootstrapopts --keyring
