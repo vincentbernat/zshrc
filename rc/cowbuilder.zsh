@@ -49,7 +49,7 @@
                     --debootstrapopts --keyring
                     --debootstrapopts /usr/share/keyrings/ubuntu-archive-keyring.gpg)
 		opts=($opts --components 'main universe')
-                opts=($opts --othermirror "deb ${mirror} ${distrib%-*} precise-updates main universe")
+                opts=($opts --othermirror "deb ${mirror} ${distrib%-*}-updates main universe")
 		;;
 	esac
 	case ${distrib%-*} in
