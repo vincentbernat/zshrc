@@ -43,11 +43,13 @@
                     --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg)
 		;;
 	    lucid|maverick|natty|oneiric|precise|quantal|raring|saucy|trusty)
-		opts=($opts --mirror http://wwwftp.ciril.fr/pub/linux/ubuntu/archives/)
+                local mirror=http://wwwftp.ciril.fr/pub/linux/ubuntu/archives/
+		opts=($opts --mirror $mirror)
 		opts=($opts
                     --debootstrapopts --keyring
                     --debootstrapopts /usr/share/keyrings/ubuntu-archive-keyring.gpg)
 		opts=($opts --components 'main universe')
+                opts=($opts --othermirror "deb ${mirror} ${distrib%-*} precise-updates main universe")
 		;;
 	esac
 	case ${distrib%-*} in
