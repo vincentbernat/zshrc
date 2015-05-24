@@ -26,9 +26,9 @@ _vbe_human_time () {
     local hours=$(( tmp / 60 / 60 % 24 ))
     local minutes=$(( tmp / 60 % 60 ))
     local seconds=$(( tmp % 60 ))
-    (( $days > 0 )) && print "${days}d "
-    (( $hours > 0 )) && print "${hours}h "
-    (( $minutes > 0 )) && print "${minutes}m "
+    (( $days > 0 )) && print "${days}d"
+    (( $hours > 0 )) && print "${hours}h"
+    (( $minutes > 0 )) && print "${minutes}m"
     print "${seconds}s"
 }
 
@@ -119,7 +119,7 @@ _vbe_prompt () {
     local now=$EPOCHSECONDS
     local elapsed=$(($now - ${_vbe_cmd_timestamp:-$now}))
     (($elapsed >= 5)) && \
-        _vbe_prompt_segment white black $(_vbe_human_time $elapsed)
+        _vbe_prompt_segment white black "$(_vbe_human_time $elapsed)"
 
     # Error code
     (( $retval )) && \
