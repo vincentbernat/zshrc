@@ -3,16 +3,34 @@
 #  - https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/jonathan.zsh-theme
 #  - https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/agnoster.zsh-theme
 
+zmodload zsh/datetime
 _vbe_prompt_precmd () {
     _vbe_title "${SSH_TTY+${(%):-%M}:}${(%):-%50<..<%~}" "${SSH_TTY+${(%):-%M}:}${(%):-%20<..<%~}"
 }
+_vbe_prompt_preexec () {
+    _vbe_cmd_timestamp=$EPOCHSECONDS
+}
 if (( $+functions[add-zsh-hook] )); then
     add-zsh-hook precmd _vbe_prompt_precmd
+    add-zsh-hook preexec _vbe_prompt_preexec
 else
     precmd () {
 	_vbe_prompt_precmd
     }
 fi
+
+# Stolen from https://github.com/sindresorhus/pure/blob/master/pure.zsh
+_vbe_human_time () {
+    local tmp=$1
+    local days=$(( tmp / 60 / 60 / 24 ))
+    local hours=$(( tmp / 60 / 60 % 24 ))
+    local minutes=$(( tmp / 60 % 60 ))
+    local seconds=$(( tmp % 60 ))
+    (( $days > 0 )) && print "${days}d "
+    (( $hours > 0 )) && print "${hours}h "
+    (( $minutes > 0 )) && print "${minutes}m "
+    print "${seconds}s"
+}
 
 _vbe_can_do_unicode () {
     if is-at-least 4.3.4 && [[ -o multibyte ]] && (( ${#${:-↵}} == 1 )); then
@@ -96,6 +114,13 @@ _vbe_prompt () {
 
     # Additional info
     _vbe_add_prompt
+
+    # Time elapsed
+    local now=$EPOCHSECONDS
+    local elapsed=$(($now - ${_vbe_cmd_timestamp:-$now}))
+    (($elapsed >= 5)) && \
+        _vbe_prompt_segment white black $(_vbe_human_time $elapsed)
+
     # Error code
     (( $retval )) && \
         _vbe_prompt_segment red default %B${PRCH[retb]}'%?'${PRCH[reta]} || \
