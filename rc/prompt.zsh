@@ -26,10 +26,12 @@ _vbe_human_time () {
     local hours=$(( tmp / 60 / 60 % 24 ))
     local minutes=$(( tmp / 60 % 60 ))
     local seconds=$(( tmp % 60 ))
-    (( $days > 0 )) && print "${days}d"
-    (( $hours > 0 )) && print "${hours}h"
-    (( $minutes > 0 )) && print "${minutes}m"
-    print "${seconds}s"
+    local -a result
+    (( $days > 0 )) && result=( "${days}d" )
+    (( $hours > 0 )) && result=( $result "${hours}h" )
+    (( $minutes > 0 )) && result=( $result "${minutes}m" )
+    result=( $result "${seconds}s" )
+    print -n "${result[1,2]}"
 }
 
 _vbe_can_do_unicode () {
