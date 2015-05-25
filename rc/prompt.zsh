@@ -27,10 +27,10 @@ _vbe_human_time () {
     local minutes=$(( tmp / 60 % 60 ))
     local seconds=$(( tmp % 60 ))
     local -a result
-    (( $days > 0 )) && result=( "${days}d" )
-    (( $hours > 0 )) && result=( $result "${hours}h" )
+    (( $days    > 0 )) && result=( "${days}d" )
+    (( $hours   > 0 )) && result=( $result "${hours}h" )
     (( $minutes > 0 )) && result=( $result "${minutes}m" )
-    result=( $result "${seconds}s" )
+    (( $seconds > 0 )) && result=( $result "${seconds}s" )
     print -n "${result[1,2]}"
 }
 
