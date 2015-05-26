@@ -63,4 +63,17 @@ expand-or-complete-with-dots() {
 zle -N expand-or-complete-with-dots
 bindkey "^I" expand-or-complete-with-dots
 
+# Dynamic abbrevation complete using tmux
+dabbrev-complete () {
+    local -aU reply
+    reply=($(tmux capture-pane -p -S -20))
+    reply=(${(@)reply:#$PREFIX})
+    # reply=(${(Oa)reply})
+    compadd "$@" "$reply[@]"
+}
+zle -C dabbrev-complete complete-word dabbrev-complete
+(( $+commands[tmux] )) && [[ -n $TMUX ]] && {
+    bindkey "\e/" dabbrev-complete
+}
+
 compdef pumount=umount
