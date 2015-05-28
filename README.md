@@ -18,3 +18,9 @@ function.
 
 `~/.zsh/run` contains runtime files, like history. `~/.zsh/local`
 contains local files that should not be copied to a remote host.
+
+License
+-------
+
+All the code is licensed as
+[CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/legalcode).
