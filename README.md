@@ -18,8 +18,3 @@ function.
 
 `~/.zsh/run` contains runtime files, like history. `~/.zsh/local`
 contains local files that should not be copied to a remote host.
-
-`ln -s /nonexistent ~/tmp` and `exec zsh` will create `~/tmp` as a
-symlink to a temporary directory. If the directory is destroyed, it
-will be recreated. Don't do that if the home is shared across several
-hosts.
