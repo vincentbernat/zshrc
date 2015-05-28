@@ -4,9 +4,7 @@ My `.zshrc`
 My `.zshrc` may not suit your needs. Feel free to read and
 understand. Steal anything. My opinion is that you can't have an
 universal `.zshrc`. If you don't agree, take a look at
-[oh-my-zsh][ohmyzsh].
-
-[ohmyzsh]: https://github.com/robbyrussell/oh-my-zsh
+[Prezto](https://github.com/sorin-ionescu/prezto).
 
 You need to create your own `.zshrc`. First solution is to symlink
 `~/.zsh/zshrc`. The other solution is to source `~/.zsh/zshrc` from
