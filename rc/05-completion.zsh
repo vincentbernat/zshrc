@@ -66,12 +66,16 @@ bindkey "^I" expand-or-complete-with-dots
 # Dynamic abbrevation complete using tmux
 dabbrev-complete () {
     local -aU reply
-    reply=($(tmux capture-pane -p -S -20))
+    local expl
+    reply=($(tmux capture-pane -p -J -S -50))
     reply=(${(@)reply:#$PREFIX})
     # reply=(${(Oa)reply})
-    compadd "$@" "$reply[@]"
+    _wanted values expl 'tmux words' compadd -a reply
 }
-zle -C dabbrev-complete complete-word dabbrev-complete
+zle -C dabbrev-complete complete-word _generic
+zstyle ':completion:dabbrev-complete:*' completer dabbrev-complete
+zstyle ':completion:dabbrev-complete:*' ignore-line current
+zstyle ':completion:dabbrev-complete:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}'
 (( $+commands[tmux] )) && [[ -n $TMUX ]] && {
     bindkey "\e/" dabbrev-complete
 }
