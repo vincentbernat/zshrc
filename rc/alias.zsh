@@ -45,6 +45,8 @@ json() {
 import sys
 import re
 import json
+import subprocess
+import errno
 try:
     import pygments
     from pygments.lexers import JavascriptLexer
@@ -52,13 +54,20 @@ try:
 except ImportError:
     pygments = None
 
+jsonre = re.compile(r"(?P<prefix>.*?)(?P<json>\{.*\})(?P<suffix>.*)")
+
 
 def display(f):
-    jsonre = re.compile(r"(?P<prefix>.*?)(?P<json>\{.*\})(?P<suffix>.*)")
+    pager = None
+    out = sys.stdout
+    if out.isatty():
+        pager = subprocess.Popen(["less", "-RFX"], stdin=subprocess.PIPE)
+        out = pager.stdin
     while True:
         line = f.readline()
         if line == "":
             break
+        mo = None
         try:
             mo = jsonre.match(line)
             if not mo:
@@ -69,9 +78,19 @@ def display(f):
                 pretty = pygments.highlight(pretty,
                                             JavascriptLexer(),
                                             TerminalFormatter())
-            sys.stdout.write(mo.group("prefix") + pretty.strip() + mo.group("suffix") + "\n")
+            output = (mo.group("prefix") + pretty.strip() +
+                      mo.group("suffix") + "\n")
         except:
-            sys.stdout.write(line)
+            output = line
+        try:
+            out.write(output)
+        except IOError as e:
+            if e.errno == errno.EPIPE or e.errno == errno.EINVAL:
+                break
+            raise
+    if pager is not None:
+        pager.stdin.close()
+        pager.wait()
 
 if len(sys.argv) == 1:
     files = [sys.stdin]
