@@ -111,8 +111,24 @@ for f in files:
 
 # Other pretty-printing functions
 if (( $+commands[pygmentize] )); then
+  __pygmentize() {
+    python -u -c "#!/usr/bin/env python
+import sys
+import errno
+import pygments.cmdline
+try:
+    sys.exit(pygments.cmdline.main(sys.argv))
+except KeyboardInterrupt:
+    sys.exit(1)
+except IOError as e:
+    if e.errno == errno.EPIPE:
+        sys.exit(1)
+    raise
+" "$@"
+  }
+
   xml() {
-    cat "$@" | xmllint --format - | pygmentize -l xml
+    cat "$@" | xmllint --format - | __pygmentize -l xml
   }
 
   pretty() {
@@ -124,7 +140,7 @@ if (( $+commands[pygmentize] )); then
     fi
 
     local lexer
-    lexer=$(pygmentize -N "${1%.gz}")
+    lexer=$(__pygmentize -N "${1%.gz}")
 
     local -a args
     args=(-P style=monokai -f $formatter)
@@ -137,7 +153,7 @@ if (( $+commands[pygmentize] )); then
         ;;
     esac
 
-    zcat -f "$@" | pygmentize $args | less -RFX
+    zcat -f "$@" | __pygmentize $args | less -RFX
   }
 
   alias v=pretty
