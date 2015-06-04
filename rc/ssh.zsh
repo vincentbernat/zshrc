@@ -1,8 +1,5 @@
 # -*- sh -*-
 
-(( $+commands[ssh-askpass] )) && \
-    export SSH_ASKPASS==ssh-askpass
-
 _vbe_ssh() {
     # TERM is one of the variables that is usually allowed to be
     # transmitted to the remote session. The remote host should have
