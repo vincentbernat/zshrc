@@ -35,7 +35,7 @@ md() { command mkdir -p $1 && cd $1 }
 # `curl -N`. Most programs can be forced to use unbuffered output with
 # `stdbuf -o L`.
 json() {
-  python -u -c '#!/usr/bin/env python
+  PATH=/usr/bin:$PATH python -u -c '#!/usr/bin/env python
 
 # Pretty-print files containing JSON lines. Reads from stdin when no
 # argument is provided, otherwise pretty print each argument. This
@@ -112,7 +112,7 @@ for f in files:
 # Other pretty-printing functions
 if (( $+commands[pygmentize] )); then
   __pygmentize() {
-    python -u -c "#!/usr/bin/env python
+    PATH=/usr/bin:$PATH python -u -c "#!/usr/bin/env python
 import sys
 import errno
 import pygments.cmdline
