@@ -158,7 +158,7 @@ $setupuser
 # Setup a command to enter this environment
 > $enter echo exec 'chroot --userspec=$USER / \
               env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
-              sh -c "[ -d '"'"'$PWD'"'"' ] && cd '"'"'$PWD'"'"' ; exec \$SHELL -i -l"'
+              sh -c "[ -d '"'"'$PWD'"'"' ] && cd '"'"'$PWD'"'"' ; exec '\$SHELL' -i -l"'
 
 EOF
         local ret=$?
