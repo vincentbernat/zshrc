@@ -232,11 +232,14 @@ function currency() {
   local -a amounts
   local -a currencies
   for ((i=1; i<=$#; i++)); do
-    if [[ ${@[i]} = <-> ]]; then
-      amounts=($amounts ${@[i]})
-    else
-      currencies=($currencies ${@[i]})
-    fi
+    case ${@[i]} in
+      [0-9.]*)
+        amounts=($amounts ${@[i]})
+        ;;
+      *)
+        currencies=($currencies ${@[i]})
+        ;;
+    esac
   done
   (( $#currencies > 1 )) || currencies=($currencies chf eur usd)
   local from=${currencies[1]}
