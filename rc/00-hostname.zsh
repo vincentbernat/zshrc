@@ -21,7 +21,8 @@ __() {
     # only one dot in HOSTNAME, we assume this is already a short
     # name.
     case ${#${HOSTNAME//[^.]/}} in
-        0|1) HOST=$HOSTNAME ;;
+        0) HOST=$HOSTNAME ;;
+        1) HOST=${${HOSTNAME%.local}%.localdomain} ;;
         2) HOST=${HOSTNAME%%.*} ;;
         3)
             local next=${${HOSTNAME#*.}%%.*}
