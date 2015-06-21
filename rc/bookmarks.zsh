@@ -56,9 +56,6 @@ is-at-least 4.3.12 && __() {
                 [[ $name == "." ]] && name=${PWD:t}
                 ln -s $PWD $MARKPATH/$name
             fi
-            # Clean up the cache
-            [[ ! -f $ZSH/run/u/$UID/bookmarks-$HOST ]] || \
-                command rm $ZSH/run/u/$UID/bookmarks-$HOST
         fi
     }
 } && __
