@@ -17,8 +17,7 @@ alias smv='rsync -P --remove-source-files'
 compdef _ssh smv=scp
 
 # Less generic aliases
-alias susu='sudo env HISTFILE=$HISTFILE-root \
-                     ZDOTDIR=${ZDOTDIR:-$HOME} \
+alias susu='sudo env ZDOTDIR=${ZDOTDIR:-$HOME} \
                      ZSH=$ZSH ${DISPLAY+DISPLAY=$DISPLAY} \
                      ${SSH_TTY+SSH_TTY=$SSH_TTY} \
                      ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
