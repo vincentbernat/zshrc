@@ -17,11 +17,14 @@ alias smv='rsync -P --remove-source-files'
 compdef _ssh smv=scp
 
 # Less generic aliases
-alias susu='sudo env ZDOTDIR=${ZDOTDIR:-$HOME} \
-                     ZSH=$ZSH ${DISPLAY+DISPLAY=$DISPLAY} \
-                     ${SSH_TTY+SSH_TTY=$SSH_TTY} \
-                     ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
-          zsh -i -l'
+susu() {
+  command sudo -H -u ${1:-root} \
+          env ZDOTDIR=${ZDOTDIR:-$HOME} \
+              ZSH=$ZSH ${DISPLAY+DISPLAY=$DISPLAY} \
+              ${SSH_TTY+SSH_TTY=$SSH_TTY} \
+              ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
+          zsh -i -l
+}
 alias please='sudo $(fc -ln -1)'
 
 # Aliases as a function
