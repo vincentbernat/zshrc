@@ -5,9 +5,11 @@
     mkdir -p $ZSH/run/u
     chmod 1777 $ZSH/run/u
 }
-[[ -d $ZSH/run/u/$UID ]] || mkdir -p $ZSH/run/u/$UID
 
-# Migration of existing files in $ZSH/run
-for f in $ZSH/run/{history,editor,zcompdump,bookmarks}-${(%):-%m}-$UID(N); do
-    mv $f $ZSH/run/u/$UID/${${f##*/}%-$UID}
-done
+# Create per-UID directory and do migration
+[[ -d $ZSH/run/u/$UID ]] || {
+    mkdir -p $ZSH/run/u/$UID
+    for f in $ZSH/run/{history,editor,zcompdump,bookmarks}-${(%):-%m}-$UID(N); do
+        mv $f $ZSH/run/u/$UID/${${f##*/}%-$UID}
+    done
+}
