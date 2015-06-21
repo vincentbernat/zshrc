@@ -14,7 +14,7 @@
 
 _vbe_battery () {
     (( $+commands[acpi] )) || return
-    local cache=$ZSH/run/acpi-$HOST-$UID
+    local cache=$ZSH/run/u/$UID/acpi-$HOST
     zmodload zsh/stat
     zmodload zsh/datetime
     if [[ -f $cache ]] && \
