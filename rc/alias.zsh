@@ -62,7 +62,7 @@ jsonre = re.compile(r"(?P<prefix>.*?)(?P<json>\{.*\})(?P<suffix>.*)")
 def display(f):
     pager = None
     out = sys.stdout
-    if out.isatty():
+    if out.isatty() and f != sys.stdin:
         pager = subprocess.Popen(["less", "-RFX"], stdin=subprocess.PIPE)
         out = pager.stdin
     while True:
