@@ -7,9 +7,7 @@
         ls -G &> /dev/null && alias ls='ls -G'
     }
 
-    # grep colors
-    export GREP_OPTIONS='--color=auto'
-    export GREP_COLOR='1;32'
+    alias grep='grep --color=auto'
 }
 
 # From: http://tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html
