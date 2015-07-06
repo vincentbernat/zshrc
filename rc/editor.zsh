@@ -17,7 +17,7 @@ __() {
 	(( $+commands[$editor[(w)1]] )) && {
 	    # Some programs may not like to have arguments
 	    if [[ $editor == *\ * ]]; then
-		export EDITOR=$ZSH/run/u/$UID/editor-${(%):-%m}
+		export EDITOR=$ZSH/run/u/$HOST/$UID/editor
 		cat <<EOF > $EDITOR
 #!/bin/sh
 exec $editor "\$@"
