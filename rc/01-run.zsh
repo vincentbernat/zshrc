@@ -7,13 +7,13 @@
 }
 
 # Create per-UID directory and do migration
-[[ -d $ZSH/run/u/$HOST/$UID ]] || {
-    mkdir -p $ZSH/run/u/$HOST/$UID
+[[ -d $ZSH/run/u/$HOST-$UID ]] || {
+    mkdir -p $ZSH/run/u/$HOST-$UID
     for f in $ZSH/run/{acpi,history,editor,zcompdump,bookmarks}-$HOST-$UID(N); do
-        mv $f $ZSH/run/u/$HOST/$UID/${${f##*/}%-$HOST-$UID}
+        mv $f $ZSH/run/u/$HOST-$UID/${${f##*/}%-$HOST-$UID}
     done
     for f in $ZSH/run/u/$UID/{acpi,history,editor,zcompdump,bookmarks}-$HOST(N); do
-        mv $f $ZSH/run/u/$HOST/$UID/${${f##*/}%-$HOST}
+        mv $f $ZSH/run/u/$HOST-$UID/${${f##*/}%-$HOST}
     done
     rmdir $ZSH/run/u/$UID 2> /dev/null
 }

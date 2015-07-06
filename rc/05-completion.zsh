@@ -3,7 +3,7 @@
 autoload -U zutil
 autoload -U compinit
 autoload -U complist
-compinit -i -d $ZSH/run/u/$HOST/$UID/zcompdump
+compinit -i -d $ZSH/run/u/$HOST-$UID/zcompdump
 
 setopt auto_menu
 setopt auto_remove_slash
@@ -20,7 +20,7 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-
 zstyle ':completion:*:kill:*' force-list always
 zstyle ':completion:*:*:*:*:processes' command "ps -eo pid,user,comm -w -w"
 zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path $ZSH/run/u/$HOST/$UID/cache/
+zstyle ':completion::complete:*' cache-path $ZSH/run/u/$HOST-$UID/cache/
 zstyle ':completion:*:descriptions' format '%B%d%b'
 zstyle ':completion:*:functions' ignored-patterns '_*'
 zstyle ':completion:*' completer _complete _match _approximate
