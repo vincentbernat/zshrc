@@ -61,6 +61,9 @@ EOF
         for image in $dimages; do
             print " - [docker    ] $image"
         done
+        for container in $dcontainers; do
+            print " - [docker    ] $container"
+        done
 	return 0
     }
 
