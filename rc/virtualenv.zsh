@@ -139,7 +139,7 @@ EOF
         local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
         local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
         local enter=/tmp/nsenter-$RANDOM-$$-$UID
-        sudo =nsenter -m -t $id -- /bin/sh -e <<EOF
+        ${(%):-%(!..sudo)} =nsenter -m -t $id -- /bin/sh -e <<EOF
 if ! mountpoint $HOME > /dev/null 2>/dev/null; then
   tmp=\$(mktemp -d)
   mkdir -p ${HOME}
@@ -166,7 +166,7 @@ $setupuser
 EOF
         local ret=$?
         [[ $ret -eq 0 ]] && {
-            sudo =nsenter -m -u -i -n -p -w$HOME -t $id -- /bin/sh $enter
+            ${(%):-%(!..sudo)} =nsenter -m -u -i -n -p -w$HOME -t $id -- /bin/sh $enter
             ret=$?
         }
         return $ret
