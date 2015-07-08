@@ -17,6 +17,14 @@ function.
 `~/.zsh/run` contains runtime files, like history. `~/.zsh/local`
 contains local files that should not be copied to a remote host.
 
+Installation
+------------
+
+So, if you are one of those young generation not concerned about
+arbitrary code execution, you can do:
+
+    curl -s https://vincentbernat-zshrc.s3.amazonaws.com/zsh-install.sh | sh
+
 License
 -------
 
