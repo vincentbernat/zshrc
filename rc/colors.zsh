@@ -6,8 +6,6 @@
     ls --color -d . &>/dev/null && alias ls='ls --color=tty' || {
         ls -G &> /dev/null && alias ls='ls -G'
     }
-
-    alias grep='grep --color=auto'
 }
 
 # From: http://tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html

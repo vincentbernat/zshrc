@@ -12,6 +12,18 @@ alias ipr='ip -r'
 alias ip6r='ip -6 -r'
 alias ipm='ip -r monitor'
 
+# grep
+alias grep='grep --color=auto'
+(( $+commands[rgrep] )) && \
+    alias rgrep='rgrep --color=auto' || \
+        alias rgrep='command grep -r --color=auto'
+(( $+commands[egrep] )) && \
+    alias egrep='egrep --color=auto' || \
+        alias egrep='command grep -E --color=auto'
+(( $+commands[fgrep] )) && \
+    alias fgrep='fgrep --color=auto' || \
+        alias fgrep='command grep -F --color=auto'
+
 # smv like scp
 alias smv='rsync -P --remove-source-files'
 compdef _ssh smv=scp
