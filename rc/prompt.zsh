@@ -34,37 +34,6 @@ _vbe_human_time () {
     print -n "${result[1,2]}"
 }
 
-_vbe_can_do_unicode () {
-    if is-at-least 4.3.4 && [[ -o multibyte ]] && (( ${#${:-↵}} == 1 )); then
-        case $TERM in
-            screen*) ;;
-            xterm*) ;;
-            rxvt*) ;;
-            *) return 1 ;;
-        esac
-        return 0
-    fi
-    return 1
-}
-
-typeset -gA PRCH
-if _vbe_can_do_unicode; then
-    PRCH=(
-        sep "\uE0B1" end "\uE0B0"
-        retb "" reta " ↵"
-        circle "●" branch "\uE0A0"
-        ok "✔" ellipsis "…"
-        eol "⏎"
-    )
-else
-    PRCH=(
-        sep "/" end ""
-        retb "<" reta ">"
-        circle "*" branch "±"
-        ok ">" ellipsis ".."
-        eol "~~"
-    )
-fi
 CURRENT_BG=NONE
 _vbe_prompt_segment() {
   local b f

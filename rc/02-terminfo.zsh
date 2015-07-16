@@ -39,3 +39,23 @@ __() {
     unset COLORTERM
     export TERM
 } && __
+
+
+typeset -gA PRCH
+if _vbe_can_do_unicode; then
+    PRCH=(
+        sep "\uE0B1" end "\uE0B0"
+        retb "" reta " ↵"
+        circle "●" branch "\uE0A0"
+        ok "✔" ellipsis "…"
+        eol "⏎" running "↻"
+    )
+else
+    PRCH=(
+        sep "/" end ""
+        retb "<" reta ">"
+        circle "*" branch "±"
+        ok ">" ellipsis ".."
+        eol "~~" running "> "
+    )
+fi
