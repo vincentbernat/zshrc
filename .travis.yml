@@ -2,10 +2,14 @@ language: c
 os: linux
 git:
   submodules: false
+sudo: false
+addons:
+  apt:
+    packages:
+      - zsh
 install:
   - sed -i 's+git@github.com:+https://github.com/+' .gitmodules
   - git submodule update --init --recursive
-  - sudo apt-get install -y -qq zsh
 script:
   - ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh && mkdir artifacts && cp run/zsh-install.sh artifacts"
 deploy:
