@@ -12,8 +12,7 @@ install:
   - git submodule update --init --recursive
 script:
   - ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh"
-  - mkdir artifacts && cp run/zsh-install.sh artifacts
-  - git reset --hard
+  - mkdir artifacts && cp run/zsh-install.sh artifacts && git reset --hard
 deploy:
   provider: s3
   access_key_id: AKIAJWSE4LXWA33RNIYA
@@ -22,3 +21,4 @@ deploy:
   bucket: vincentbernat-zshrc
   acl: public_read
   local_dir: artifacts
+  skip_cleanup: true
