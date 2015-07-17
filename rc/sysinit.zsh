@@ -4,14 +4,13 @@
 __() {
     local -a cmds
     cmds=(start stop reload restart status)
-    local sudo cmd
-    (( $UID == 0 )) || sudo=sudo
+    local cmd
 
     if [ -d /run/systemd/system ]; then
         # systemd
         for cmd ($cmds) {
             compdef -d $cmd
-            alias   $cmd="$sudo systemctl $cmd"
+            alias   $cmd="${(%):-%(#..sudo)} systemctl $cmd"
         }
     else
         # generic service
