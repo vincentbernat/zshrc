@@ -7,4 +7,12 @@ install:
   - git submodule update --init --recursive
   - sudo apt-get install -y -qq zsh
 script:
-  - ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh"
+  - ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh && mkdir artifacts && cp run/zsh-install.sh artifacts"
+deploy:
+  provider: s3
+  access_key_id: AKIAJWSE4LXWA33RNIYA
+  secret_access_key:
+    secure: fNGzrG9db2dgOin9A9pP1Giqjl2u44l6cOh0E9/cnjpg/0aC53fmhJ5u4MZVb05ZwgnJ56I1tc1GLNbAnTOqY+5dzm4zQ2VDpj3gzD+WPtdfaW+jkTh8cNanzWcZm3wZgmSeIzWpadfqsFZM9mPB1Ntw2CFvmrRFJpi3lb+PmTI=
+  bucket: vincentbernat-zshrc
+  acl: public_read
+  local_dir: artifacts
