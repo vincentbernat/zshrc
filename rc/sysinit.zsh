@@ -13,12 +13,6 @@ __() {
             compdef -d $cmd
             alias   $cmd="$sudo systemctl $cmd"
         }
-    elif [ -f /run/upstart-socket-bridge.pid ]; then
-        # upstart
-        for cmd ($cmds) {
-            compdef -d $cmd
-            alias   $cmd="$sudo initctl $cmd"
-        }
     else
         # generic service
         function  start() {
