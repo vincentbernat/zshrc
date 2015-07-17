@@ -4,7 +4,7 @@
 __() {
     local -a cmds
     cmds=(start stop reload restart status)
-    local sudo
+    local sudo cmd
     (( $UID == 0 )) || sudo=sudo
 
     if [ -d /run/systemd/system ]; then
@@ -15,27 +15,11 @@ __() {
         }
     else
         # generic service
-        function  start() {
-            name=$1 ; shift
-            ${(%):-%(#..sudo)} service $name start "$@"
-        }
-        function  stop() {
-            name=$1 ; shift
-            ${(%):-%(#..sudo)} service $name stop "$@"
-        }
-        function  reload() {
-            name=$1 ; shift
-            ${(%):-%(#..sudo)} service $name reload "$@"
-        }
-        function  restart() {
-            name=$1 ; shift
-            ${(%):-%(#..sudo)} service $name restart "$@"
-        }
-        function  status() {
-            name=$1 ; shift
-            ${(%):-%(#..sudo)} service $name status "$@"
-        }
         for cmd ($cmds) {
+            function  $cmd() {
+                name=$1 ; shift
+                ${(%):-%(#..sudo)} service $name $0 "$@"
+            }
             compdef _services $cmd
         }
     fi
