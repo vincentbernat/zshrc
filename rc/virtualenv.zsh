@@ -100,7 +100,7 @@ for SHELL in $SHELL /bin/bash /bin/sh; do
   [ ! -x \$SHELL ] || break
 done
 $setupuser
-exec chroot --userspec=$USER / \
+exec chroot --userspec=$(id -u):$(id -g) / \
      env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
      sh -c "[ -d '\$PWD' ] && cd '\$PWD' ; exec \$SHELL -i -l"
 EOF
@@ -159,7 +159,7 @@ done
 $setupuser
 
 # Setup a command to enter this environment
-> $enter echo exec 'chroot --userspec=$USER / \
+> $enter echo exec 'chroot --userspec=$(id -u):$(id -g) / \
               env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
               sh -c "[ -d '"'"'$PWD'"'"' ] && cd '"'"'$PWD'"'"' ; exec '\$SHELL' -i -l"'
 
