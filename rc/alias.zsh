@@ -13,16 +13,23 @@ alias ip6r='ip -6 -r'
 alias ipm='ip -r monitor'
 
 # grep
-alias grep='grep --color=auto'
-(( $+commands[rgrep] )) && \
-    alias rgrep='rgrep --color=auto' || \
-        alias rgrep='command grep -r --color=auto'
-(( $+commands[egrep] )) && \
-    alias egrep='egrep --color=auto' || \
-        alias egrep='command grep -E --color=auto'
-(( $+commands[fgrep] )) && \
-    alias fgrep='fgrep --color=auto' || \
-        alias fgrep='command grep -F --color=auto'
+__() {
+  local cmd
+  local -A greps
+  greps=(grep ""
+         rgrep r
+         egrep E
+         fgrep F
+         zgrep "")
+  for cmd in ${(k)greps}; do
+    if (( $+commands[$cmd] )); then
+        alias $cmd="$cmd --color=auto"
+    else
+      [[ -n ${greps[$cmd]} ]] &&
+          alias $cmd='command grep -${greps[$cmd]} --color=auto'
+    fi
+  done
+} && __
 
 # smv like scp
 alias smv='rsync -P --remove-source-files'
