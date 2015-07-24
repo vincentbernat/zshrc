@@ -12,7 +12,7 @@ _vbe_prompt_env () {
 # Are we running inside lxc? lxc sets `container` environment variable
 # for PID 1 but this seems difficult to get as a simple
 # user. Therefore, we will look at /proc/self/cgroup.
-[[ -f /proc/self/cgroup ]] && {
+[[ -z $DOCKER_CHROOT_NAME ]] && [[ -f /proc/self/cgroup ]] && {
     autoload -U zsh/regex
     case $(</proc/self/cgroup) in
         *:/lxc/*)
