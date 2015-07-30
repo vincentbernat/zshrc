@@ -96,15 +96,21 @@ fi
         local image=${env}
         local tmp=$(mktemp -d)
         <<EOF > $tmp/start
-for SHELL in $SHELL /bin/bash /bin/sh; do
+for SHELL in $SHELL ${SHELL}-static /bin/bash /bin/sh; do
   [ ! -x \$SHELL ] || break
 done
+[ -d /usr/share/zsh/functions ] || {
+  rm -rf /usr/share/zsh
+  ln -s /usr/share/zsh-static /usr/share/zsh
+}
 $setupuser
 exec chroot --userspec=$(id -u):$(id -g) / \
      env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
      sh -c "[ -d '\$PWD' ] && cd '\$PWD' ; exec \$SHELL -i -l"
 EOF
         docker run -t -i \
+            -v /usr/share/zsh:/usr/share/zsh-static \
+            -v ${SHELL}-static:${SHELL}-static \
             -v $HOME:$HOME \
             -v $tmp:$tmp \
             -w $PWD \
