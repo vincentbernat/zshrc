@@ -1,9 +1,11 @@
 # -*- sh -*-
 
 autoload -U zutil
-autoload -U compinit
-autoload -U complist
-compinit -i -d $ZSH/run/u/$HOST-$UID/zcompdump
+
+_vbe_autoload compinit && {
+    autoload -U complist
+    compinit -i -d $ZSH/run/u/$HOST-$UID/zcompdump
+}
 
 setopt auto_menu
 setopt auto_remove_slash

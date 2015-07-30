@@ -8,9 +8,21 @@ _vbe_first_non_optional_arg() {
     print -- $args[1]
 }
 
+_vbe_autoload () {
+    # Like autoload but actually load and fail silently if not able to load
+    autoload +X $1 2> /dev/null || {
+        unset -f $1
+        return 1
+    }
+    return 0
+}
+
+_vbe_autoload is-at-least || is-at-least() { return 0 }
+
 # Test for unicode support
 _vbe_can_do_unicode () {
-    if is-at-least 4.3.4 && [[ -o multibyte ]] && (( ${#${:-↵}} == 1 )); then
+    if is-at-least 4.3.4 && \
+           [[ -o multibyte ]] && (( ${#${:-↵}} == 1 )); then
         case $TERM in
             screen*) ;;
             xterm*) ;;
@@ -19,5 +31,5 @@ _vbe_can_do_unicode () {
         esac
         return 0
     fi
-    return 1
+    return 0
 }

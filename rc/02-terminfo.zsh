@@ -31,7 +31,7 @@ __() {
         if (( ${terminfo[colors]:-0} >= 8 )) || \
             (zmodload zsh/termcap 2> /dev/null) && \
             (( ${termcap[Co]:-0} >= 8)); then
-            colors
+            _vbe_autoload colors && colors
             break
         fi
     done

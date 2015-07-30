@@ -1,7 +1,5 @@
 # -*- sh -*-
 
-autoload colors ; colors
-
 # Install or update ZSH on a remote host.
 install-zsh() {
     local version=$(cd $ZSH ; git rev-parse HEAD)

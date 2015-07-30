@@ -33,7 +33,7 @@ __() {
 
 # smv like scp
 alias smv='rsync -P --remove-source-files'
-compdef _ssh smv=scp
+(( $+functions[compdef] )) && compdef _ssh smv=scp
 
 # Less generic aliases
 susu() {

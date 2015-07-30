@@ -9,7 +9,7 @@ __() {
     if [ -d /run/systemd/system ]; then
         # systemd
         for cmd ($cmds) {
-            compdef -d $cmd
+            (( $+functions[compdef] )) && compdef -d $cmd
             alias   $cmd="${(%):-%(#..sudo)} systemctl $cmd"
         }
     else
@@ -19,7 +19,7 @@ __() {
                 name=$1 ; shift
                 ${(%):-%(#..sudo)} service $name $0 "$@"
             }
-            compdef _services $cmd
+            (( $+functions[compdef] )) && compdef _services $cmd
         }
     fi
 
