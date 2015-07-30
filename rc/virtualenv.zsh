@@ -99,7 +99,7 @@ fi
 for SHELL in $SHELL ${SHELL}-static /bin/bash /bin/sh; do
   [ ! -x \$SHELL ] || break
 done
-[ -d /usr/share/zsh/functions ] || {
+[ \$SHELL = ${SHELL}-static -a -d /usr/share/zsh/functions ] || {
   rm -rf /usr/share/zsh
   ln -s /usr/share/zsh-static /usr/share/zsh
 }
