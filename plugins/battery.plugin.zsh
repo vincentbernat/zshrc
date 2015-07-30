@@ -63,6 +63,7 @@ _vbe_add_prompt_battery () {
     local v="$(_vbe_battery)"
     local color=${v% *}
     local gauge="${v#* }"
-    
-    _vbe_prompt_segment $color black %B$gauge
+
+    [[ -n $gauge ]] && \
+        _vbe_prompt_segment $color black %B$gauge
 }
