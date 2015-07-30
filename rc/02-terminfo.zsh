@@ -31,7 +31,35 @@ __() {
         if (( ${terminfo[colors]:-0} >= 8 )) || \
             (zmodload zsh/termcap 2> /dev/null) && \
             (( ${termcap[Co]:-0} >= 8)); then
-            _vbe_autoload colors && colors
+            if _vbe_autoload colors; then
+                colors
+            else
+                # Minimal version with what we need
+                local -A color
+                color=(none 00
+                       fg-black 30 bg-black 40
+                       fg-red 31 bg-red 41
+                       fg-green 32 bg-green 42
+                       fg-yellow 33 bg-yellow 43
+                       fg-blue 34 bg-blue 44
+                       fg-magenta 35 bg-magenta 45
+                       fg-cyan 36 bg-cyan 46
+                       fg-white 37 bg-white 47
+                       fg-default 39 bg-default 49)
+                local lc=$'\e[' rc=m
+                local k
+                typeset -AHg fg bg
+                for k in ${(k)color[(I)fg-*]}; do
+                    fg[${k#fg-}]="$lc${color[$k]}$rc"
+                done
+                print -l ${fg}
+                print -l ${(k)fg}
+                for k in ${(k)color[(I)bg-*]}; do
+                    bg[${k#bg-}]="$lc${color[$k]}$rc"
+                done
+                typeset -Hg reset_color
+                reset_color="$lc${color[none]}$rc"
+            fi
             break
         fi
     done
