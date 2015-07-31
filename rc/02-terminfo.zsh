@@ -15,10 +15,9 @@ __() {
 
 # Update TERM if we have LC__ORIGINALTERM variable
 # Also, try a sensible term where we have terminfo stuff
-autoload -U colors zsh/terminfo zsh/termcap
+autoload -U zsh/terminfo zsh/termcap
 __() {
     local term
-    local colors
 
     case $COLORTERM,$TERM in
         vbeterm,xterm | xfce4-terminal,xterm )
