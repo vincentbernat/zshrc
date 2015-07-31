@@ -52,8 +52,6 @@ __() {
                 for k in ${(k)color[(I)fg-*]}; do
                     fg[${k#fg-}]="$lc${color[$k]}$rc"
                 done
-                print -l ${fg}
-                print -l ${(k)fg}
                 for k in ${(k)color[(I)bg-*]}; do
                     bg[${k#bg-}]="$lc${color[$k]}$rc"
                 done
