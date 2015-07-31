@@ -10,6 +10,7 @@ _vbe_first_non_optional_arg() {
 
 _vbe_autoload () {
     # Like autoload but actually load and fail silently if not able to load
+    (( $+functions[$1] )) && return 0
     autoload +X $1 2> /dev/null || {
         unset -f $1
         return 1
