@@ -6,7 +6,7 @@ alias du='du -h'
 alias rm='rm -i'
 alias ll='ls -l'
 if is-at-least 2.23 ${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}; then
-  alias dmesg='dmesg -H'
+  alias dmesg='dmesg -H -P'
 else
   alias dmesg='dmesg -T'
 fi
