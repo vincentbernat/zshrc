@@ -6,9 +6,9 @@ __() {
     local editor
     editors=(
 	"emacs-snapshot -nw" # emacs
-	"emacs24 -nw"     # emacs
-	"emacs23 -nw"     # emacs
-	"emacs22 -nw"     # emacs
+	"emacs24 -nw ${(%):-%(!.-q.)}"     # emacs
+	"emacs23 -nw ${(%):-%(!.-q.)}"     # emacs
+	"emacs22 -nw ${(%):-%(!.-q.)}"     # emacs
 	"zile"		  # Emacs clone
 	"jove" "mg" "jed" # Emacs clone
 	"vim" "vi"	  # vi
