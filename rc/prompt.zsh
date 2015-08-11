@@ -66,7 +66,7 @@ _vbe_prompt () {
     # user@host
     local f=${(%):-%(!.red.${${SSH_TTY:+magenta}:-green})}
     _vbe_prompt_segment black $f \
-        %B%n%b%{${fg[cyan]}%}@%B%{${bg[black]}${fg[$f]}%}%M
+        %B%n%b%{${fg[cyan]}%}${${(%):-%n}:+@}%B%{${bg[black]}${fg[$f]}%}%M
 
     # Directory
     local -a segs
