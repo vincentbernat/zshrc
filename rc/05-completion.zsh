@@ -18,7 +18,7 @@ zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt ''
 zstyle ':completion:*' group-name ''
-zstyle ':completion:*:' menu select
+zstyle ':completion:*' menu select
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:kill:*' force-list always
 zstyle ':completion:*:processes' command "ps -eo pid,user,comm,cmd -w -w"
