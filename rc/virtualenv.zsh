@@ -16,9 +16,9 @@
 # directory.
 
 WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
-[[ -d $WORKON_HOME ]] || mkdir -p $WORKON_HOME
 
 (( $+commands[virtualenv] )) && virtualenv () {
+    [[ -d $WORKON_HOME ]] || mkdir -p $WORKON_HOME
     pushd $WORKON_HOME > /dev/null && {
 	command virtualenv "$@" && \
             cat <<EOF >&2
