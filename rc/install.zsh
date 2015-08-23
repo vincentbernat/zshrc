@@ -33,6 +33,15 @@ install-zsh() {
         [ ! -f $ZDOTDIR/.zshrc ] || mv $ZDOTDIR/.zshrc $ZDOTDIR/.zshrc.old
         ln -s "$ZSH"/zshrc $ZDOTDIR/.zshrc
 
+        # Remove old files
+        for f in $ZSH/*; do
+            case ${f##*/} in
+                local|run) ;;
+                *)
+                    rm -rf "$f"
+            esac
+        done
+
     }
 
     {
