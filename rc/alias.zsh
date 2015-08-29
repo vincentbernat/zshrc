@@ -308,7 +308,7 @@ colortest() {
 
     local fg
     local bg
-    printf "\n%12s" ""
+    printf "%12s" ""
     for fg in {40..47}; do
 	printf "%7sm" ${fg}
     done
@@ -321,4 +321,25 @@ colortest() {
 	printf "\n"
     done
     printf "\n"
+
+    printf "Color cube: 6x6x6:\n"
+    local red
+    local green
+    local blue
+    for red in {0..5}; do
+        for green in {0..5}; do
+            for blue in {0..5}; do
+                bg=$((16 + red * 36 + green * 6 + blue))
+                printf "\e[48;5;%dm  " bg
+            done
+            printf "\e[0m "
+        done
+        printf "\n"
+    done
+
+    printf "\nGrayscale ramp:\n"
+    for bg in {232..255}; do
+      printf "\e[48;5;%dm  " bg
+    done
+    printf "\e[0m\n"
 }
