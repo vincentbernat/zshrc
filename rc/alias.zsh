@@ -5,11 +5,14 @@ alias df='df -h'
 alias du='du -h'
 alias rm='rm -i'
 alias ll='ls -l'
-if is-at-least 2.23 ${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}; then
-  alias dmesg='dmesg -H -P'
-else
-  alias dmesg='dmesg -T'
-fi
+__() {
+  local dmesg_version=${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}
+  if is-at-least 2.23 $dmesg_version; then
+      alias dmesg='dmesg -H -P'
+  elif is-at-least 0.1 $dmesg_version; then
+    alias dmesg='dmesg -T'
+  fi
+} && __
 
 # ls colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
