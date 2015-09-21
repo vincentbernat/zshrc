@@ -2,11 +2,10 @@
 
 __() {
     # Export HOSTNAME variable (fully qualified hostname)
-    integer step=0
+    integer step=1
     while true; do
         # Try various alternatives
         case $step in
-            0) HOSTNAME=$HOST ;;
             1) HOSTNAME=$(</etc/hostname) ;;
             2) HOSTNAME="$(hostname -f)" ;;
             3) HOSTNAME=${${(M)${${(ps: :)${:-"$(getent hosts $HOST)"}}[2,-1]}:#*.*}[1]} ;;
