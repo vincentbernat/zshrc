@@ -24,7 +24,7 @@ __() {
         0) HOST=$HOSTNAME ;;
         1) HOST=${${HOSTNAME%.local}%.localdomain} ;;
         2) HOST=${HOSTNAME%%.*} ;;
-        3)
+        *)
             local next=${${HOSTNAME#*.}%%.*}
             (( ${#next} >= 2 && ${#next} <= 4 )) && HOST=$HOST.$next
             ;;
