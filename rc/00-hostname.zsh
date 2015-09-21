@@ -2,16 +2,20 @@
 
 __() {
     # Export HOSTNAME variable (fully qualified hostname)
-    local -a hostnames
-    local host
-    hostnames=($(hostname -f)
-	$(</etc/hostname)
-	$HOST)
-    [[ -r /etc/mailname ]] && \
-        hostnames=($hostnames $HOST.$(</etc/mailname))
-    for host ($hostnames); do
-	HOSTNAME=${host%%.}
-	[[ $HOSTNAME == *.* ]] && break
+    integer step=0
+    while true; do
+        # Try various alternatives
+        case $step in
+            0) HOSTNAME=$HOST ;;
+            1) HOSTNAME=$(</etc/hostname) ;;
+            2) HOSTNAME="$(hostname -f)" ;;
+            3) HOSTNAME=${${(M)${${(ps: :)${:-"$(getent hosts $HOST)"}}[2,-1]}:#*.*}[1]} ;;
+            4) HOSTNAME=$HOST.$(</etc/mailname) ;;
+            *) HOSTNAME=$HOST ; break ;;
+        esac
+        $(( step++ ))
+        HOSTNAME=${HOSTNAME%%.}
+        [[ $HOSTNAME == *.* ]] && break
     done
     export HOSTNAME
 
