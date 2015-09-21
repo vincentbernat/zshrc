@@ -5,7 +5,6 @@ __() {
     local -a hostnames
     local host
     hostnames=($(hostname -f)
-	$(hostname)
 	$(</etc/hostname)
 	$HOST)
     [[ -r /etc/mailname ]] && \
