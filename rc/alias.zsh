@@ -177,7 +177,7 @@ except IOError as e:
     cat "$@" | xmllint --format - | __pygmentize -l xml
   }
 
-  pretty() {
+  v() {
     local formatter
     if (( ${terminfo[colors]:-0} >= 256 )); then
       formatter=console256
@@ -201,8 +201,6 @@ except IOError as e:
 
     zcat -f "$@" | __pygmentize $args | less -RFX
   }
-
-  alias v=pretty
 else
   xml() {
     cat "$@" | xmllint --format -
