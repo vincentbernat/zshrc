@@ -42,13 +42,23 @@ if ! id $USER > /dev/null 2> /dev/null; then
     echo \"$USER ALL=(ALL) NOPASSWD: ALL\" > /etc/sudoers.d/$USER
     chmod 0440 /etc/sudoers.d/$USER
     [ -x /usr/bin/sudo ] || {
-        cp /bin/sh /usr/bin/_root
+        cp /usr/sbin/chroot /usr/bin/_root
         chown root:$(id -gn) /usr/bin/_root
         chmod 4750 /usr/bin/_root
         cat <<'EOF' > /usr/bin/sudo
 #!/bin/sh
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
-exec /usr/bin/_root -c \"/usr/sbin/chroot --userspec=root / sh -c 'cd \"\$PWD\" ; \$*'\"
+
+escape() {
+  echo \"\$1\" | sed s/\\'/\\'\\\"\\'\\\"\\'/g
+}
+args=
+for arg in \"\$@\"; do
+    qarg=\$(escape \"\$arg\")
+    args=\"\$args '\$qarg'\"
+done
+
+exec /usr/bin/_root --userspec=root:root / /bin/sh -c \"cd '\$(escape \"\$PWD\")'; \$args\"
 EOF
         chmod +x /usr/bin/sudo
     }
