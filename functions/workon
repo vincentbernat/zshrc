@@ -38,6 +38,7 @@ local setupuser="
 if ! id $USER > /dev/null 2> /dev/null; then
     echo $(getent passwd $(id -u)) >> /etc/passwd
     echo $(getent group $(id -g)) >> /etc/group
+    # Put sudo configuration even when no sudo (in case it gets installed later)
     mkdir -p /etc/sudoers.d
     echo \"$USER ALL=(ALL) NOPASSWD: ALL\" > /etc/sudoers.d/$USER
     chmod 0440 /etc/sudoers.d/$USER
