@@ -53,7 +53,7 @@ install-zsh() {
         which __ | awk '{print a} (NR > 1) {a=$0}'
 
         # Uncompress the archive
-        echo 'cat <<EOA | $BASE64 | gzip -dc | tar -C $ZSH -xf -'
+        echo 'cat <<EOA | $BASE64 | gzip -dc | tar -C $ZSH --no-same-owner -xf -'
 	(
             cd $ZSH ; git ls-files | grep -vFx .gitmodules | \
                 while read f; do [[ -d $f ]] || echo $f ; done | \
