@@ -55,10 +55,9 @@ install-zsh() {
         # Uncompress the archive
         echo 'cat <<EOA | $BASE64 | gzip -dc | tar -C $ZSH -xf -'
 	(
-            cd $ZSH ; (
-                git ls-files
-                git submodule --quiet foreach --recursive 'git ls-files --with-tree=${sha1} | sed s+^+${path}/+'
-            ) | while read f; do [[ -d $f ]] || echo $f ; done | tar -zcf - -T - | base64
+            cd $ZSH ; git ls-files | grep -vFx .gitmodules | \
+                while read f; do [[ -d $f ]] || echo $f ; done | \
+                tar -zhcf - -T - | base64
         )
         echo 'EOA'
         echo '}'
