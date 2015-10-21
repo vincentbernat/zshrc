@@ -46,7 +46,7 @@ _title_preexec () {
 	    ;&
 	*)
             case $cmd[1] in
-                less|more|pretty|e|vi|vim|emacs)
+                less|more|v|e|vi|vim|emacs)
                     # Display filename
                     t=$cmd[*]
                     tt=$cmd[2]:t
