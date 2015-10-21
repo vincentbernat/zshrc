@@ -71,3 +71,6 @@ else
         eol "~~" running "> "
     )
 fi
+
+# Freeze the terminal
+ttyctl -f
