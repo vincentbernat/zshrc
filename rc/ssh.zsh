@@ -43,11 +43,6 @@ _vbe_ssh() {
     esac
 }
 
-ssh() {
-    _vbe_title "$(_vbe_first_non_optional_arg "$@")"
-    _vbe_ssh "$@"
-}
-
 # The following command implements a reverse SSH connection. This is
 # to connect to hosts behind a firewall, which can connect to your
 # machine but you cannot connect directly. The idea is that they issue
@@ -62,9 +57,7 @@ rssh() {
     port=$((21422 + $RANDOM % 1000))
 
     print "On remote host, use \`socat TCP:10.0.2.2:$port TCP:127.0.0.1:22\` to allow SSH access... "
-    _vbe_title "$(_vbe_first_non_optional_arg "$@")"
-    _vbe_ssh -o \
-        ProxyCommand="socat TCP-LISTEN:$port,bind=127.0.0.1,reuseaddr STDIO" \
+    ssh -oProxyCommand="socat TCP-LISTEN:$port,bind=127.0.0.1,reuseaddr STDIO" \
         "$@"
 }
 

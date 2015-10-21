@@ -46,10 +46,10 @@ _title_preexec () {
 	    ;&
 	*)
             case $cmd[1] in
-                less|more|v|e|vi|vim|emacs)
+                less|more|v|e|vi|vim|emacs|ssh)
                     # Display filename
                     t=$cmd[*]
-                    tt=$cmd[2]:t
+                    tt=${${${(R)cmd:#-*}[2]}:t}
                     ;;
                 *)
 	            t=$cmd[*]

@@ -1,13 +1,5 @@
 # -*- sh -*-
 
-# Get the first non optional argument
-_vbe_first_non_optional_arg() {
-    local args
-    args=( "$@" )
-    args=( ${(R)args:#-*} )
-    print -- $args[1]
-}
-
 _vbe_autoload () {
     # Like autoload but actually load and fail silently if not able to load
     (( $+functions[$1] )) && return 0
