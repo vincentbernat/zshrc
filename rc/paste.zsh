@@ -4,7 +4,7 @@
 # Requires xterm, urxvt, iTerm2 or any other terminal that supports bracketed
 # paste mode as documented: http://www.xfree86.org/current/ctlseqs.html
 
-[[  $TERM == rxvt-unicode || \
+(( $+zle_bracketed_paste == 0 )) && [[  $TERM == rxvt-unicode || \
     $TERM == rxvt-unicode-256color || \
     $TERM == xterm || \
     $TERM == xterm-256color || \
