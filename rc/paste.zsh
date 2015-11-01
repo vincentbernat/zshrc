@@ -1,8 +1,15 @@
 # -*- sh -*-
 # Code from Mikael Magnusson: http://www.zsh.org/mla/users/2011/msg00367.html
 #
-# Requires xterm, urxvt, iTerm2 or any other terminal that supports bracketed
-# paste mode as documented: http://www.xfree86.org/current/ctlseqs.html
+# Requires xterm, urxvt, iTerm2 or any other terminal that supports
+# bracketed paste mode as documented: http://www.xfree86.org/current/ctlseqs.html.
+#
+# This is enabled by default in Zsh 5.1+.
+#
+# By default, tmux doesn't paste using this mode. It's possible to
+# force it to do so:
+#
+#    bind ] paste-buffer -p
 
 (( $+zle_bracketed_paste == 0 )) && [[  $TERM == rxvt-unicode || \
     $TERM == rxvt-unicode-256color || \
