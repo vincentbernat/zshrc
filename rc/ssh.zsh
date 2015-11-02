@@ -1,6 +1,6 @@
 # -*- sh -*-
 
-_vbe_ssh() {
+ssh() {
     # TERM is one of the variables that is usually allowed to be
     # transmitted to the remote session. The remote host should have
     # the appropriate termcap or terminfo file to handle the TERM you
