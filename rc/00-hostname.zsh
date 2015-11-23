@@ -28,7 +28,7 @@ __() {
         2) HOST=${HOSTNAME%%.*} ;;
         *)
             local next=${${HOSTNAME#*.}%%.*}
-            (( ${#next} >= 2 && ${#next} <= 4 )) && HOST=$HOST.$next
+            (( ${#next} >= 2 && ${#next} <= 4 )) && HOST=${HOSTNAME%%.*}.$next
             ;;
     esac
 } && __ 2> /dev/null
