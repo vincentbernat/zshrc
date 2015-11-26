@@ -304,11 +304,13 @@ function \$() {
 
 # Get my own external IP
 function myip() {
-  false || \
-      curl -s ip.appspot.com || \
-      curl -s eth0.me || \
-      curl -s ipecho.net/plain ||
-      dig +short myip.opendns.com @resolver1.opendns.com
+  for v in 4 6 ; do
+    echo IPv$v $(false || \
+        curl -$v -s ip.appspot.com || \
+        curl -$v -s eth0.me || \
+        curl -$v -s ipecho.net/plain ||
+        dig -$v +short myip.opendns.com @resolver1.opendns.com)
+  done
 }
 
 # Display a color testcard
