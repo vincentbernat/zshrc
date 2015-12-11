@@ -309,8 +309,9 @@ function myip() {
         curl -$v -s ip.appspot.com || \
         curl -$v -s eth0.me || \
         curl -$v -s ipecho.net/plain ||
-        dig -$v +short myip.opendns.com @resolver1.opendns.com)
-  done
+        dig -$v +short myip.opendns.com @resolver1.opendns.com || \
+        echo "unknown")
+  done 2> /dev/null
 }
 
 # Display a color testcard
