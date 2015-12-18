@@ -95,7 +95,7 @@ import subprocess
 import errno
 try:
     import pygments
-    from pygments.lexers import JavascriptLexer
+    from pygments.lexers import JsonLexer
     from pygments.formatters import TerminalFormatter
 except ImportError:
     pygments = None
@@ -122,7 +122,7 @@ def display(f):
             pretty = json.dumps(j, indent=2)
             if pygments and sys.stdout.isatty():
                 pretty = pygments.highlight(pretty,
-                                            JavascriptLexer(),
+                                            JsonLexer(),
                                             TerminalFormatter())
             output = (mo.group("prefix") + pretty.strip() +
                       mo.group("suffix") + "\n")
