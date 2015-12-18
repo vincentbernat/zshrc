@@ -95,7 +95,10 @@ import subprocess
 import errno
 try:
     import pygments
-    from pygments.lexers import JsonLexer
+    try:
+        from pygments.lexers import JsonLexer
+    except ImportError:
+        from pygments.lexers import JavascriptLexer as JsonLexer
     from pygments.formatters import TerminalFormatter
 except ImportError:
     pygments = None
