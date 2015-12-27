@@ -51,7 +51,7 @@ __() {
         alias $cmd="$cmd --color=auto"
     else
       [[ -n ${greps[$cmd]} ]] &&
-          alias $cmd='command grep -${greps[$cmd]} --color=auto'
+          alias $cmd="command grep -${greps[$cmd]} --color=auto"
     fi
   done
 } && __
