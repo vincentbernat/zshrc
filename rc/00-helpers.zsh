@@ -24,14 +24,10 @@ _vbe_can_do_unicode () {
     # doesn't work.
     if is-at-least 4.3.4 && \
             [[ -o multibyte ]] && \
-            (( ${#${:-$(print -n "\u21B5" 2> /dev/null)}} == 1 )); then
+            (( ${#${:-$(print -n "\u21B5\u21B5" 2> /dev/null)}} == 2 )); then
         case $TERM in
-            screen*) ;;
-            xterm*) ;;
-            rxvt*) ;;
-            *) return 1 ;;
+            screen*|xterm*|rxvt*) return 0 ;;
         esac
-        return 0
     fi
-    return 0
+    return 1
 }
