@@ -57,10 +57,10 @@ typeset -gA PRCH
 if _vbe_can_do_unicode; then
     PRCH=(
         sep "\uE0B1" end "\uE0B0"
-        retb "" reta " ↵"
-        circle "●" branch "\uE0A0"
-        ok "✔" ellipsis "…"
-        eol "⏎" running "↻"
+        retb "" reta " \u21B5"
+        circle "\u25CF" branch "\uE0A0"
+        ok "\u2714" ellipsis "\u2026"
+        eol "\u23CE" running "\u21BB"
     )
 else
     PRCH=(
