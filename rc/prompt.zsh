@@ -116,6 +116,6 @@ _vbe_setprompt () {
     setopt prompt_subst
     PROMPT='$(_vbe_prompt) '
     PS2='$(_vbe_prompt_ps2 ${(%):-%_}) '
-    PROMPT_EOL_MARK='%B${PRCH[eol]}%b'
+    PROMPT_EOL_MARK="$(print %B${PRCH[eol]}%b)"
     unset RPROMPT
 }
