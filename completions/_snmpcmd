@@ -19,8 +19,9 @@ _snmp_get_mibs () {
     for dir in ${(ws+:+)mibdirs}; do
 	mibs=($mibs $dir/*(.))
     done
+    mibs=(${mibs[@]:t:r})
 
-    compadd "$@" -- ${mibs[@]:t:r}
+    _describe -t mibs "MIB" mibs -qS :
 }
 
 _snmp_get_object() {
@@ -28,12 +29,16 @@ _snmp_get_object() {
     local arg
     local next
     local -a additional
+    local -a objects
     next=0
     for arg in $words; do
 	case $arg in
-	    "-m")
+	    "-m"|"-M")
 		next=1
-		additional=($additional "-m")
+		additional=($additional $arg)
+		;;
+	    "-m"*|"-M"*)
+		additional=($additional $arg)
 		;;
 	    *)
 		if (( next == 1 )); then
@@ -50,8 +55,9 @@ _snmp_get_object() {
 	    *) continue
 		;;
 	esac
-	compadd "$@" -- ${${(s: :)obj}[1]}
+	objects=($objects ${${(s: :)obj}[1]})
     done
+    _describe -t objects "objects" objects
 }
 
 _snmpcmd () {
@@ -61,25 +67,25 @@ _snmpcmd () {
     _arguments -A \
 	{-h,--help}'[show help]' \
 	'-H[display configuration file directives understood]' \
-	'-v[SNMP version to use]:version:(1 2c 3)' \
+	'-v+[SNMP version to use]:version:(1 2c 3)' \
 	{-V,--version}'[display package version number]' \
-	'-c[set the community string]:community string: ' \
-	'-a[set authentcation protocol]:protocol:(MD5 SHA)' \
-	'-A[set authentication protocol pass phrase]:passphrase: ' \
-	'-e[set security engine ID]:engine-id: ' \
-	'-E[set context engine ID]:engine-id: ' \
-	'-l[set security level]:security level:(noAuthNoPriv authNoPriv authPriv)' \
-	'-n[set context name]:context: ' \
-	'-u[set security name]:user:_users' \
-	'-x[set privacy protocol]:protocol:(DES AES)' \
-	'-X[set privacy protocol pass phrase]:passphrase: ' \
-	'-Z[set destination engine boots/time]:boots,time: ' \
-	'-r[set the number of retries]:retries: ' \
-	'-t[set the request timeout (in seconds)]:timeout: ' \
+	'-c+[set the community string]:community string:(public private)' \
+	'-a+[set authentcation protocol]:protocol:(MD5 SHA)' \
+	'-A+[set authentication protocol pass phrase]:passphrase: ' \
+	'-e+[set security engine ID]:engine-id: ' \
+	'-E+[set context engine ID]:engine-id: ' \
+	'-l+[set security level]:security level:(noAuthNoPriv authNoPriv authPriv)' \
+	'-n+[set context name]:context: ' \
+	'-u+[set security name]:user:_users' \
+	'-x+[set privacy protocol]:protocol:(DES AES)' \
+	'-X+[set privacy protocol pass phrase]:passphrase: ' \
+	'-Z+[set destination engine boots/time]:boots,time: ' \
+	'-r+[set the number of retries]:retries:(0 1 2 3 5 10)' \
+	'-t+[set the request timeout (in seconds)]:timeout:(0 1 2 3 5 10)' \
 	'-d[dump input/output packets in hexadecimal]' \
-	'-D[turn on debugging output for the specified tokens]:token: ' \
-	'-m[MIB file to use]:mib:->mib' \
-	'-M[directory to search for MIBs]:directory:_files -/' \
+	'*-D+[turn on debugging output for the specified tokens]:token: ' \
+	'*-m+[MIB file to use]:mib:->mib' \
+	'*-M+[directory to search for MIBs]:directory:_files -/' \
 	'-Pu[allow the use of underlines in MIB symbols]' \
 	'-Pc[disallow the use of "--" to terminate comments in MIBs]' \
 	'-Pd[save the DESCRIPTIONs of the MIB objects]' \
@@ -109,21 +115,21 @@ _snmpcmd () {
 	"-Ih[don't apply DISPLAY-HINTs]" \
 	'-Ir[do not check values for range/type legality]' \
 	'-IR[do random access to OID labels]' \
-	'-Iu[top-level OIDs must have '.' prefix (UCD-style)]' \
-	'-Is[Append all textual OIDs with suffix before parsing]:suffix: ' \
-	'-IS[Append all textual OIDs with prefix before parsing]:prefix: ' \
+	'-Iu[top-level OIDs must have '"'.'"' prefix (UCD-style)]' \
+	'-Is+[Append all textual OIDs with suffix before parsing]:suffix: ' \
+	'-IS+[Append all textual OIDs with prefix before parsing]:prefix: ' \
 	'-Le[log to standard error]' \
 	'-Lo[log to standard output]' \
 	"-Ln[don't log at all]" \
-	'-Lf[log to the specified file]:file:_files' \
-	'-Ls[log to the syslog (via the specified facility)]:facility: ' \
+	'-Lf+[log to the specified file]:file:_files' \
+	'-Ls+[log to the syslog (via the specified facility)]:facility: ' \
 	'-Cp[print the number of variables found]' \
 	'-Ci[include given OID in the search range]' \
 	"-CI[don't include the given OID, even if no results are returned]" \
 	'-Ic[do not check returned OIDs are increasing]' \
 	'-It[Display wall-clock time to complete the request]' \
 	':hosts:_hosts' \
-	':object:->object'
+	'*:object:->object'
 
     while [[ -n "$state" ]]; do
 	lstate="$state"
@@ -131,9 +137,9 @@ _snmpcmd () {
 
 	case "$lstate" in
 	    mib)
-		if compset -P '*+'; then
+		if compset -P '*:'; then
 		    _snmp_get_mibs
-		elif compset -P '*:'; then
+		elif compset -P '+'; then
 		    _snmp_get_mibs
 		else
 		    _snmp_get_mibs
