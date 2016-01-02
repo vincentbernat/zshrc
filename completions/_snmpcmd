@@ -8,28 +8,10 @@
 #
 # With some other modifications
 
-_snmp_get_mibs () {
-    local -a mibs
-    local -a mib
-    local mibdirs
-    local dir
-
-    mibdirs=$(snmptranslate -Dinit_mib 2>&1 | \
-	sed -n "s/^init_mib: Seen MIBDIRS: Looking in '\(.*\)' for mib dirs ...$/\1/p")
-    for dir in ${(ws+:+)mibdirs}; do
-	mibs=($mibs $dir/*(.))
-    done
-    mibs=(${mibs[@]:t:r})
-
-    _describe -t mibs "MIB" mibs -qS :
-}
-
-_snmp_get_object() {
-    local obj
+_snmptranslate () {
     local arg
     local next
     local -a additional
-    local -a objects
     next=0
     for arg in $words; do
 	case $arg in
@@ -48,7 +30,30 @@ _snmp_get_object() {
 		;;
 	esac
     done
-    objects=(${${(M)${(@f)"$(snmptranslate -m +IF-MIB -Ta 2> /dev/null)"}:#* OBJECT IDENTIFIER *}%% *})
+    (( next == 0 )) || additional=("${(@)additional[1,$#additional - 1]}")
+    snmptranslate $additional "$@"
+}
+
+_snmp_get_mibs () {
+    local -a mibs
+    local -a mib
+    local mibdirs
+    local dir
+
+    mibdirs=$(_snmptranslate -Dinit_mib 2>&1 | \
+	sed -n "s/^init_mib: Seen MIBDIRS: Looking in '\(.*\)' for mib dirs ...$/\1/p")
+    for dir in ${(ws+:+)mibdirs}; do
+	mibs=($mibs $dir/*(.))
+    done
+    mibs=(${mibs[@]:t:r})
+
+    _describe -t mibs "MIB" mibs -qS :
+}
+
+_snmp_get_object() {
+    local obj
+    local -a objects
+    objects=(${${(M)${(@f)"$(_snmptranslate -m +IF-MIB -Ta 2> /dev/null)"}:#* OBJECT IDENTIFIER *}%% *})
     _describe -t objects "objects" objects
 }
 
