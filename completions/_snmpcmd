@@ -62,7 +62,36 @@ _snmp_get_object() {
 
 _snmpcmd () {
     local context state line
+    local -a specific
     typeset -A opt_args
+
+    case ${words[1]} in
+	snmpwalk)
+	    specific=(
+		'-Cc[do not check if returned OIDs are increasing]'
+		'-CE[end the walk at the specified OID]:OID:->object'
+		'-Ci[include OID in search range]'
+		'-CI[don'"'"'t retrieve OID when walk is empty]'
+		'-Cp[print the number of variables found]'
+		'-It[Display wall-clock time to complete the request]'
+	    )
+	    ;;
+	snmpbulkwalk)
+	    specific=(
+		'-Cc[do not check if returned OIDs are increasing]'
+		'-Ci[include OID in search range]'
+		'-Cp[print the number of variables found]'
+		'-Cn-[non-repeaters]:value:(0 1 2 3 5 10)'
+		'-Cr-[max repetitions]:value:(5 10 20 50 100)'
+	    )
+	    ;;
+	snmpbulkget)
+	    specific=(
+		'-Cn-[non-repeaters]:value:(0 1 2 3 5 10)'
+		'-Cr-[max repetitions]:value:(5 10 20 50 100)'
+	    )
+	    ;;
+    esac
 
     _arguments -A \
 	{-h,--help}'[show help]' \
@@ -123,11 +152,7 @@ _snmpcmd () {
 	"-Ln[don't log at all]" \
 	'-Lf+[log to the specified file]:file:_files' \
 	'-Ls+[log to the syslog (via the specified facility)]:facility: ' \
-	'-Cp[print the number of variables found]' \
-	'-Ci[include given OID in the search range]' \
-	"-CI[don't include the given OID, even if no results are returned]" \
-	'-Ic[do not check returned OIDs are increasing]' \
-	'-It[Display wall-clock time to complete the request]' \
+	$specific \
 	':hosts:_hosts' \
 	'*:object:->object'
 
