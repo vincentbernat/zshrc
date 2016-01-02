@@ -48,15 +48,7 @@ _snmp_get_object() {
 		;;
 	esac
     done
-    for obj in ${(@f)"$(snmptranslate $additional -Ta 2> /dev/null)"}; do
-	case ${${(s: :)obj}[2]} in
-	    OBJECT)
-		;;
-	    *) continue
-		;;
-	esac
-	objects=($objects ${${(s: :)obj}[1]})
-    done
+    objects=(${${(M)${(@f)"$(snmptranslate -m +IF-MIB -Ta 2> /dev/null)"}:#* OBJECT IDENTIFIER *}%% *})
     _describe -t objects "objects" objects
 }
 
