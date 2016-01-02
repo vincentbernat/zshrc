@@ -111,7 +111,7 @@ _snmpcmd () {
 	'-d[dump input/output packets in hexadecimal]' \
 	'*-D+[turn on debugging output for the specified tokens]:token: ' \
 	'*-m+[MIB file to use]:mib:->mib' \
-	'*-M+[directory to search for MIBs]:directory:_files -/' \
+	'*-M+[directory to search for MIBs]:directory:->mibdir' \
 	'-Pu[allow the use of underlines in MIB symbols]' \
 	'-Pc[disallow the use of "--" to terminate comments in MIBs]' \
 	'-Pd[save the DESCRIPTIONs of the MIB objects]' \
@@ -165,6 +165,15 @@ _snmpcmd () {
 		    _snmp_get_mibs
 		else
 		    _snmp_get_mibs
+		fi
+		;;
+	    mibdir)
+		if compset -P '*:'; then
+		    _directories
+		elif compset -P '+'; then
+		    _directories
+		else
+		    _directories
 		fi
 		;;
 	    object)
