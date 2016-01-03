@@ -161,10 +161,9 @@ for f in files:
 # Image display
 if (( $+commands[convert] )); then
     image() {
-        local cols=$COLUMNS
         local col row dummy red green blue rest
         local -a upper lower
-        convert -thumbnail ${cols}x$((LINES*2 - 4)) $1 txt:- | \
+        convert -thumbnail ${COLUMNS}x$((LINES*2 - 4)) $1 txt:- | \
             while IFS=',:() ' read col row dummy red green blue rest; do
                 [[ $col == "#" ]] && continue
                 if (( $#upper > 0 && row%2 == 0 && col == 0 )); then
