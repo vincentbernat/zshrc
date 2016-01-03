@@ -164,21 +164,21 @@ if (( $+commands[convert] )); then
         local cols=$COLUMNS
         local col row dummy red green blue rest
         local -a upper lower
-        convert -thumbnail ${cols}x $1 txt:- | \
+        convert -thumbnail ${cols}x$((LINES*2 - 4)) $1 txt:- | \
             while IFS=',:() ' read col row dummy red green blue rest; do
                 [[ $col == "#" ]] && continue
-                if [[ $((row%2)) = 0 ]]; then
-                    upper=($upper "$red;$green;$blue")
-                else
-                    lower=($lower "$red;$green;$blue")
-                fi
-                if (( row%2 == 1 && $col == cols-1 )); then
+                if (( $#upper > 0 && row%2 == 0 && col == 0 )); then
                     for i in {1..$#upper}; do
                         printf "\e[38;2;%s;48;2;%sm▀" $upper[$i] $lower[$i]
                     done
                     printf "\e[0m\e[K\n"
                     upper=()
                     lower=()
+                fi
+                if [[ $((row%2)) = 0 ]]; then
+                    upper=($upper "$red;$green;$blue")
+                else
+                    lower=($lower "$red;$green;$blue")
                 fi
             done
         (( $#upper == 0 )) || {
