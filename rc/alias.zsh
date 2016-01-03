@@ -158,6 +158,43 @@ for f in files:
 ' "$@"
 }
 
+# Image display
+if (( $+commands[convert] )); then
+    image() {
+        local cols=$COLUMNS
+        local col row dummy red green blue rest
+        local -a upper lower
+        convert -thumbnail ${cols}x $1 txt:- | \
+            while IFS=',:() ' read col row dummy red green blue rest; do
+                [[ $col == "#" ]] && continue
+                if [[ $((row%2)) = 0 ]]; then
+                    upper=($upper "$red;$green;$blue")
+                else
+                    lower=($lower "$red;$green;$blue")
+                fi
+                if (( row%2 == 1 && $col == cols-1 )); then
+                    for i in {1..$#upper}; do
+                        printf "\e[38;2;%s;48;2;%sm▀" $upper[$i] $lower[$i]
+                    done
+                    printf "\e[0m\e[K\n"
+                    upper=()
+                    lower=()
+                fi
+            done
+        (( $#upper == 0 )) || {
+            for i in {1..$#upper}; do
+                printf "\e[38;2;%sm▀" $upper[$i]
+            done
+            printf "\e[0m\e[K\n"
+        }
+    }
+else
+    image() {
+        >&2 print "ImageMagick needed to display images"
+        return 1
+    }
+fi
+
 # Other pretty-printing functions
 if (( $+commands[pygmentize] )); then
   __pygmentize() {
@@ -181,6 +218,9 @@ except IOError as e:
   }
 
   v() {
+    case $(file --brief --mime-type $1 2> /dev/null) in
+      image/*) image $1 ; return ;;
+    esac
     local formatter
     if (( ${terminfo[colors]:-0} >= 256 )); then
       formatter=console256
@@ -209,7 +249,12 @@ else
     cat "$@" | xmllint --format -
   }
 
-  alias v=zless -FX
+  v() {
+    case $(file --brief --mime-type $1 2> /dev/null) in
+      image/*) image $1 ; return ;;
+    esac
+    zless -FX "$@"
+  }
 fi
 
 # Record a video
