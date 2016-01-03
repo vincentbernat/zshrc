@@ -358,4 +358,16 @@ colortest() {
       printf "\e[48;5;%dm  " bg
     done
     printf "\e[0m\n"
+
+    # See: https://gist.github.com/XVilka/8346728
+    printf "\nTrue colors:\n"
+    local r g b colnum
+    for colnum in {0..76}; do
+        r=$((255 - colnum*255/76))
+        g=$((colnum*510/76))
+        b=$((colnum*255/76))
+        (( g <= 255 )) || g=$((510 - g))
+        printf "\e[48;2;%d;%d;%dm " r g b
+    done
+    printf "\e[0m\n"
 }
