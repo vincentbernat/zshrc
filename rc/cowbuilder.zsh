@@ -65,8 +65,8 @@
                 opts=($opts --othermirror "deb http://backports.debian.org/debian-backports squeeze-backports main")
                 ;;
             *-backports-sloppy)
-                opts=($opts --othermirror "deb http://cdn.debian.net/debian ${distrib} main")
-                ;&
+                opts=($opts --othermirror "deb http://cdn.debian.net/debian ${distrib} main|deb http://cdn.debian.net/debian ${distrib}-sloppy main")
+                ;;
             *-backports)
                 opts=($opts --othermirror "deb http://cdn.debian.net/debian ${distrib%-sloppy} main")
                 ;;
