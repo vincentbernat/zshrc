@@ -35,7 +35,7 @@
 	opts=(--debootstrap debootstrap)
 
 	# Distribution
-	case ${distrib%-*} in
+	case ${distrib%%-*} in
 	    squeeze|wheezy|jessie|sid)
 		opts=($opts --mirror http://cdn.debian.net/debian)
 		opts=($opts
@@ -49,10 +49,10 @@
                     --debootstrapopts --keyring
                     --debootstrapopts /usr/share/keyrings/ubuntu-archive-keyring.gpg)
 		opts=($opts --components 'main universe')
-                opts=($opts --othermirror "deb ${mirror} ${distrib%-*}-updates main universe")
+                opts=($opts --othermirror "deb ${mirror} ${distrib%%-*}-updates main universe")
 		;;
 	esac
-	case ${distrib%-*} in
+	case ${distrib%%-*} in
             lucid)
                 # Workaround a bug in libc6 package expecting 3-digit uname -r
                 prefix=($prefix linux64 --uname-2.6)
@@ -64,8 +64,11 @@
             squeeze-backports)
                 opts=($opts --othermirror "deb http://backports.debian.org/debian-backports squeeze-backports main")
                 ;;
-            *-backports)
+            *-backports-sloppy)
                 opts=($opts --othermirror "deb http://cdn.debian.net/debian ${distrib} main")
+                ;&
+            *-backports)
+                opts=($opts --othermirror "deb http://cdn.debian.net/debian ${distrib%-sloppy} main")
                 ;;
         esac
 
@@ -79,7 +82,7 @@
 
 	_vbe_title "cowbuilder $target: $*"
         sudo env DEBIAN_BUILDARCH="$arch" $prefix cowbuilder $1 \
-	    --distribution ${distrib%-*}  \
+	    --distribution ${distrib%%-*}  \
             --basepath /var/cache/pbuilder/base-${target}.cow \
             --buildresult $PWD \
 	    $opts $*[2,$#]
