@@ -56,11 +56,11 @@ __() {
 typeset -gA PRCH
 if _vbe_can_do_unicode; then
     PRCH=(
-        sep "$(print "\uE0B1")" end "$(print "\uE0B0")"
-        retb "" reta "$(print " \u21B5")"
-        circle "$(print "\u25CF")" branch "$(print "\uE0A0")"
-        ok "$(print "\u2714")" ellipsis "$(print "\u2026")"
-        eol "$(print "\u23CE")" running "$(print "\u21BB")"
+        sep $'\uE0B1' end $'\uE0B0'
+        retb "" reta $' \u21B5'
+        circle $'\u25CF' branch $'\uE0A0'
+        ok $'\u2714' ellipsis $'\u2026'
+        eol $'\u23CE' running $'\u21BB'
     )
 else
     PRCH=(
