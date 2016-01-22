@@ -12,6 +12,7 @@ autoload run-help
 autoload run-help-sudo
 autoload run-help-git
 autoload run-help-openssl
+autoload run-help-ip
 
 # Remove / from WORDCHARS (more like bash)
 WORDCHARS=${WORDCHARS:s#/#}
