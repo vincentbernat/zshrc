@@ -5,6 +5,7 @@ ssh() {
     # special host "load-keys" in ~/.ssh/config, use it
     [[ -z $SSH_AUTH_SOCK ]] || \
         [[ ! -r $SSH_AUTH_SOCK ]] || \
+        [[ $1 == "load-keys" ]] || \
         [[ -z ${(M)${${${(@M)${(f)"$(<${HOME}/.ssh/config)"}:#Host *}#Host }:#*[*?]*}:#load-keys} ]] || \
         ssh-add -l > /dev/null || \
         command ssh load-keys
