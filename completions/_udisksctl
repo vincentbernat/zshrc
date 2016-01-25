@@ -39,33 +39,27 @@ _udisksctl() {
             _describe -t commands 'udisksctl commands' commands
         ;;
 
-        cmd_args)
+        cmd_args) local -a commonargs
+            commonargs=($commonargs {-p,--object-path}'[Object to get information about]:object path:_paths')
+            commonargs=($commonargs {-b,--block-device}'[Block device to get information about]:block device:_paths')
             case $words[1] in
                 info)
                     _arguments \
-                        {-p,--object-path}'[Object to get information about]:object path:_paths' \
-                        {-b,--block-device}'[Block device to get information about]:block device:_paths' \
                         {-d,--drive}'[Drive to get information about]:drives:_paths' \
                 ;;
                 mount)
-                    _arguments \
-                        {-p,--object-path}'[Object to mount]:object path:_paths' \
-                        {-b,--block-device}'[Block device to mount]:block device:_paths' \
+                    _arguments $commonargs \
                         {-t,--filesystem-type}'[Filesystem type to use]:fs type:_file_systems' \
                         {-o,--options}'[Mount options]' \
                         '(--no-user-interaction)--no-user-interaction[Do not authenticate the user if needed]' \
                 ;;
                 unmount)
-                    _arguments \
-                        {-p,--object-path}'[Object to unmount]:object path:_paths' \
-                        {-b,--block-device}'[Block device to unmount]:block device:_paths' \
+                    _arguments $commonargs \
                         {-f,--force}'[Force/lazy unmount]' \
                         '(--no-user-interaction)--no-user-interaction[Do not authenticate the user if needed]' \
                 ;;
                 unlock|lock)
-                    _arguments \
-                        {-p,--object-path}'[Object to lock/unlock]:object path:_paths' \
-                        {-b,--block-device}'[Block device to lock/unlock]:block device:_paths' \
+                    _arguments $commonargs \
                         '(--no-user-interaction)--no-user-interaction[Do not authenticate the user if needed]' \
                 ;;
                 loop-setup)
@@ -77,16 +71,12 @@ _udisksctl() {
                         '(--no-user-interaction)--no-user-interaction[Do not authenticate the user if needed]' \
                 ;;
                 loop-delete)
-                    _arguments \
-                        {-p,--object-path}'[Object for loop device to delete]:object path:_paths' \
-                        {-b,--block-device}'[Loop device to delete]:block device:_paths' \
+                    _arguments $commonargs \
                         '(--no-user-interaction)--no-user-interaction[Do not authenticate the user if needed]' \
                 ;;
                 smart-simulate)
-                    _arguments \
+                    _arguments $commonargs \
                         {-f,--file}'[File with libatasmart blob]:files:_files' \
-                        {-p,--object-path}'[Object to get information about]:object path:_paths' \
-                        {-b,--block-device}'[Block device to get information about]:block device:_paths' \
                         '(--no-user-interaction)--no-user-interaction[Do not authenticate the user if needed]' \
                 ;;
             esac
