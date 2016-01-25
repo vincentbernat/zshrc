@@ -12,18 +12,6 @@ _paths() {
     _describe 'paths' _path_list
 }
 
-_filesystems() {
-    _fs_types=(
-        'adfs' 'affs' 'autofs' 'cifs' 'coda' 'coherent' 'cramfs' 'debugfs' 'devpts'
-        'efs' 'ext' 'ext2' 'ext3' 'ext4' 'hfs' 'hfsplus' 'hpfs' 'iso9660' 'jfs' 'minix'
-        'msdos' 'ncpfs' 'nfs' 'nfs4' 'ntfs' 'proc' 'qnx4' 'ramfs' 'reiserfs' 'romfs'
-        'squashfs' 'smbfs' 'sysv' 'tmpfs' 'ubifs' 'udf' 'ufs' 'umsdos' 'usbfs' 'vfat'
-        'xenix' 'xfs' 'xiafs'
-    )
-
-    _describe 'file system types' _fs_types
-}
-
 _udisksctl() {
     typeset -A opt_args
     local curcontext="$curcontext" state line
@@ -63,7 +51,7 @@ _udisksctl() {
                     _arguments \
                         {-p,--object-path}'[Object to mount]:object path:_paths' \
                         {-b,--block-device}'[Block device to mount]:block device:_paths' \
-                        {-t,--filesystem-type}'[Filesystem type to use]:fs type:_filesystems' \
+                        {-t,--filesystem-type}'[Filesystem type to use]:fs type:_file_systems' \
                         {-o,--options}'[Mount options]' \
                         '(--no-user-interaction)--no-user-interaction[Do not authenticate the user if needed]' \
                 ;;
