@@ -23,18 +23,18 @@ _udisksctl() {
     case $state in
         cmds)
             local commands; commands=(
-                'help: Show help'
-                'info: Show info about an object'
-                'dump: Show info about all object'
-                'status: Shows high-level status'
-                'monitor: Monitor changes to objects'
-                'mount: Mount a filesystem'
-                'unmount: Unmount a filesystem'
-                'unlock: Unlock an encrypted device'
-                'lock: Lock an encrypted device'
-                'loop-setup: Set-up a loop device'
-                'loop-delete: Delete a loop device'
-                'smart-simulate: Set SMART data for a drive'
+                'help:Show help'
+                'info:Show info about an object'
+                'dump:Show info about all object'
+                'status:Shows high-level status'
+                'monitor:Monitor changes to objects'
+                'mount:Mount a filesystem'
+                'unmount:Unmount a filesystem'
+                'unlock:Unlock an encrypted device'
+                'lock:Lock an encrypted device'
+                'loop-setup:Set-up a loop device'
+                'loop-delete:Delete a loop device'
+                'smart-simulate:Set SMART data for a drive'
             )
             _describe -t commands 'udisksctl commands' commands
         ;;
