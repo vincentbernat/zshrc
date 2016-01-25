@@ -1,6 +1,7 @@
 #compdef udisksctl               -*- sh -*-
 
 # Stolen from: http://lists.freedesktop.org/archives/devkit-devel/2014-February/001554.html
+# Initially from Damir Jelić
 
 _paths() {
     local -a _path_list
