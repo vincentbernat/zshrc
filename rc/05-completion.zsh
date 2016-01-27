@@ -52,6 +52,7 @@ _custom_hosts() {
 }
 
 zstyle -e ':completion:*' hosts _custom_hosts
+zstyle ":completion:*:hosts" known-hosts-files ''
 
 # In menu, select items with +
 zmodload -i zsh/complist
