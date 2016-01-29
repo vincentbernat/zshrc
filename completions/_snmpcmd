@@ -53,7 +53,7 @@ _snmp_get_mibs () {
 _snmp_get_object() {
     local obj
     local -a objects
-    objects=(${${(M)${(@f)"$(_snmptranslate -m +IF-MIB -Ta 2> /dev/null)"}:#* OBJECT IDENTIFIER *}%% *})
+    objects=(${${(M)${(@f)"$(_snmptranslate -Ta 2> /dev/null)"}:#* OBJECT IDENTIFIER *}%% *})
     _describe -t objects "objects" objects
 }
 
