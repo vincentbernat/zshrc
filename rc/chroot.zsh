@@ -59,6 +59,13 @@ _vbe_prompt_env () {
     }
 }
 
+# In netns
+(( $+commands[ip] )) && [[ x"$(ip netns identify 2> /dev/null)" != x ]] && {
+    _vbe_add_prompt_netns () {
+        _vbe_prompt_env 'netns' "$(ip netns identify)"
+    }
+}
+
 # Here is the whole snippet that I am using:
 
 # if [ "x$PBCURRENTCOMMANDLINEOPERATION" = xlogin ]; then
