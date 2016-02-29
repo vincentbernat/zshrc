@@ -7,6 +7,3 @@
 [submodule "third-party/zsh-completions"]
 	path = third-party/zsh-completions
 	url = git@github.com:vincentbernat/zsh-completions.git
-[submodule "third-party/docker-compose-zsh-completion"]
-	path = third-party/docker-compose-zsh-completion
-	url = git@github.com:sdurrheimer/docker-compose-zsh-completion.git
