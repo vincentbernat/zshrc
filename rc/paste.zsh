@@ -15,6 +15,7 @@
     $TERM == rxvt-unicode-256color || \
     $TERM == xterm || \
     $TERM == xterm-256color || \
+    $TERM == screen || \
     $TERM == screen-256color ]] && __() {
 
     # create a new keymap to use while pasting
