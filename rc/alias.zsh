@@ -28,6 +28,9 @@ alias ipr='ip -r'
 alias ip6r='ip -6 -r'
 alias ipm='ip -r monitor'
 
+# Other simple aliases
+(( $+commands[cloudstack] )) && alias cs=cloudstack
+
 # Setting up less colors
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;38;5;74m'
