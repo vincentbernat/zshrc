@@ -78,7 +78,7 @@ alias please='sudo $(fc -ln -1)'
 
 # Aliases as a function
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
-md() { command mkdir -p $1 && cd $1 }
+mkcd() { command mkdir -p $1 && cd $1 }
 
 # JSON pretty-printing.
 #
