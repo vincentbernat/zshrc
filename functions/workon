@@ -49,8 +49,8 @@ if ! id $USER > /dev/null 2> /dev/null; then
         cp /bin/sh /usr/bin/_root
         chown root:$(id -gn) /usr/bin/_root
         chmod 4750 /usr/bin/_root
-        echo '#!'\$SHELL > /usr/bin/sudo
         cat <<'EOF' >> /usr/bin/sudo
+#!/bin/sh
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
 
 escape() {
@@ -62,7 +62,7 @@ for arg in \"\$@\"; do
     args=\"\$args '\$qarg'\"
 done
 
-exec -a sh /usr/bin/_root -c \$args
+exec /usr/bin/_root -c \$args
 EOF
         chmod +x /usr/bin/sudo
     }
