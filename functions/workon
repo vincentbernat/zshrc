@@ -76,9 +76,8 @@ for SHELL in ${SHELL}-static $SHELL /bin/bash /bin/sh; do
     [ ! -x \$SHELL ] || break
 done
 $setupuser
-exec chroot --userspec=$(id -u):$(id -g) / \
-     env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
-     sh -c "[ -d '\$PWD' ] && cd '\$PWD' ; exec \$SHELL -i -l"
+exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
+     su -s /bin/sh -m -c "[ -d '\$PWD' ] && cd '\$PWD' ; exec \$SHELL -i -l" $(id -un)
 EOF
     docker run -t -i \
            $([[ -d /usr/share/zsh ]] && print -- -v /usr/share/zsh:/usr/share/zsh-static:ro) \
@@ -122,7 +121,8 @@ EOF
 if ! mountpoint $HOME > /dev/null 2>/dev/null; then
     tmp=\$(mktemp -d)
     mkdir -p ${HOME}
-    [ -b /dev/home-directory ] || mknod /dev/home-directory b $(stat -c "0x%t 0x%T" ${homedev})
+    [ -b /dev/home-directory ] || \
+        mknod /dev/home-directory b $(($(stat -c "0x%t" ${homedev}))) $(($(stat -c "0x%T" ${homedev})))
     mount -n /dev/home-directory \$tmp
     rm /dev/home-directory
     mount -n --bind \$tmp/${HOME#$homemnt} $HOME
@@ -138,9 +138,8 @@ done
 $setupuser
 
 # Setup a command to enter this environment
-> $enter echo exec 'chroot --userspec=$(id -u):$(id -g) / \
-env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
-sh -c "[ -d '"'"'$PWD'"'"' ] && cd '"'"'$PWD'"'"' ; exec '\$SHELL' -i -l"'
+> $enter echo exec 'env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
+su -s /bin/sh -m -c "[ -d '"'"'$PWD'"'"' ] && cd '"'"'$PWD'"'"' ; exec '\$SHELL' -i -l"' $(id -un)
 
 EOF
     local ret=$?
