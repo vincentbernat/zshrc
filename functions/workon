@@ -35,6 +35,9 @@ venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
 
 # Docker stuff
 local setupuser="
+for SHELL in ${SHELL}-static $SHELL /bin/bash /bin/sh; do
+    [ ! -x \$SHELL ] || break
+done
 if ! id $USER > /dev/null 2> /dev/null; then
     echo $(getent passwd $(id -u)) >> /etc/passwd
     echo $(getent group $(id -g)) >> /etc/group
@@ -46,8 +49,8 @@ if ! id $USER > /dev/null 2> /dev/null; then
         cp /bin/sh /usr/bin/_root
         chown root:$(id -gn) /usr/bin/_root
         chmod 4750 /usr/bin/_root
-        cat <<'EOF' > /usr/bin/sudo
-#!/bin/sh
+        echo '#!'\$SHELL > /usr/bin/sudo
+        cat <<'EOF' >> /usr/bin/sudo
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
 
 escape() {
@@ -59,7 +62,7 @@ for arg in \"\$@\"; do
     args=\"\$args '\$qarg'\"
 done
 
-exec /usr/bin/_root -c $args
+exec -a sh /usr/bin/_root -c \$args
 EOF
         chmod +x /usr/bin/sudo
     }
@@ -72,9 +75,6 @@ fi
     local tmp=$(mktemp -d)
     <<EOF > $tmp/start
 #!/bin/sh
-for SHELL in ${SHELL}-static $SHELL /bin/bash /bin/sh; do
-    [ ! -x \$SHELL ] || break
-done
 $setupuser
 exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
      su -s /bin/sh -m -c "[ -d '\$PWD' ] && cd '\$PWD' ; exec \$SHELL -i -l" $(id -un)
@@ -129,11 +129,6 @@ if ! mountpoint $HOME > /dev/null 2>/dev/null; then
     umount -n \$tmp 2> /dev/null
     rmdir \$tmp
 fi
-
-# Shell to use
-for SHELL in $SHELL $SHELL-static /bin/bash /bin/sh; do
-    [ ! -x \$SHELL ] || break
-done
 
 $setupuser
 
