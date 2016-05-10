@@ -46,6 +46,8 @@ alias ipm='ip -r monitor'
 __() {
   local cmd
   local -A greps
+  local colors="--color=auto"
+  grep -q $colors . <<< yes 2> /dev/null || colors=""
   greps=(grep ""
          rgrep r
          egrep E
@@ -53,10 +55,10 @@ __() {
          zgrep "")
   for cmd in ${(k)greps}; do
     if (( $+commands[$cmd] )); then
-        alias $cmd="$cmd --color=auto"
+        alias $cmd="$cmd ${colors}"
     else
       [[ -n ${greps[$cmd]} ]] &&
-          alias $cmd="command grep -${greps[$cmd]} --color=auto"
+          alias $cmd="command grep -${greps[$cmd]} ${colors}"
     fi
   done
 } && __
