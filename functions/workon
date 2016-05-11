@@ -34,14 +34,16 @@ venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
 [[ $env == "." ]] && env=${PWD:t}
 
 # Compile sudo if needed
-zmodload -F zsh/stat b:zstat
-zmodload zsh/datetime
 local sudo=$ZSH/run/u/$HOST-$UID/sudo
-if [[ ! -f $sudo ]] || \
-       (( $(zstat +mtime $ZSH/misc/sudo.c) > $(zstat +mtime $sudo) )) && \
-           (( $+commands[gcc] )) ; then
-    gcc -static $ZSH/misc/sudo.c -o $sudo 2> /dev/null > /dev/null
-fi
+function compile_sudo() {
+    zmodload -F zsh/stat b:zstat
+    zmodload zsh/datetime
+    if [[ ! -f $sudo ]] || \
+           (( $(zstat +mtime $ZSH/misc/sudo.c) > $(zstat +mtime $sudo) )) && \
+               (( $+commands[gcc] )) ; then
+        gcc -Wall -static $ZSH/misc/sudo.c -o $sudo
+    fi
+}
 
 # Docker stuff
 local setupuser="
@@ -74,6 +76,7 @@ fi
 [[ ${dimages[(r)$env]} == $env ]] && {
     local image=${env}
     local tmp=$(mktemp -d)
+    compile_sudo
     <<EOF > $tmp/start
 #!/bin/sh
 $setupuser
@@ -117,6 +120,7 @@ EOF
     local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
     local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
     local enter=/tmp/nsenter-$RANDOM-$$-$UID
+    compile_sudo
     ${(%):-%(!..sudo)} =nsenter -m -t $id -- /bin/sh -e <<EOF
 #!/bin/sh
 if ! mountpoint $HOME > /dev/null 2>/dev/null; then
