@@ -33,6 +33,16 @@ venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
 
 [[ $env == "." ]] && env=${PWD:t}
 
+# Compile sudo if needed
+zmodload -F zsh/stat b:zstat
+zmodload zsh/datetime
+local sudo=$ZSH/run/u/$HOST-$UID/sudo
+if [[ ! -f $sudo ]] || \
+       (( $(zstat +mtime $ZSH/misc/sudo.c) > $(zstat +mtime $sudo) )) && \
+           (( $+commands[gcc] )) ; then
+    gcc -static $ZSH/misc/sudo.c -o $sudo 2> /dev/null > /dev/null
+fi
+
 # Docker stuff
 local setupuser="
 for SHELL in ${SHELL}-static $SHELL /bin/bash /bin/sh; do
@@ -45,24 +55,15 @@ if ! id $USER > /dev/null 2> /dev/null; then
     mkdir -p /etc/sudoers.d
     echo \"$USER ALL=(ALL) NOPASSWD: ALL\" > /etc/sudoers.d/$USER
     chmod 0440 /etc/sudoers.d/$USER
-    [ -x /usr/bin/sudo ] || {
-        cp /bin/sh /usr/bin/_root
-        chown root:$(id -gn) /usr/bin/_root
-        chmod 4750 /usr/bin/_root
-        cat <<'EOF' >> /usr/bin/sudo
+    [ -x /usr/bin/sudo ] || [ ! -x $sudo ] ||  {
+        cp $sudo /usr/bin/_sudo
+        chown root:$(id -gn) /usr/bin/_sudo
+        chmod 4750 /usr/bin/_sudo
+        cat <<'EOF' > /usr/bin/sudo
 #!/bin/sh
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
 
-escape() {
-  echo \"\$1\" | sed s/\\'/\\'\\\"\\'\\\"\\'/g
-}
-args=
-for arg in \"\$@\"; do
-    qarg=\$(escape \"\$arg\")
-    args=\"\$args '\$qarg'\"
-done
-
-exec /usr/bin/_root -c \$args
+exec /usr/bin/_sudo \"\$@\"
 EOF
         chmod +x /usr/bin/sudo
     }
@@ -77,7 +78,7 @@ fi
 #!/bin/sh
 $setupuser
 exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
-     su -s /bin/sh -m -c "[ -d '\$PWD' ] && cd '\$PWD' ; exec \$SHELL -i -l" $(id -un)
+     $sudo -u $(id -u) -g $(id -g) -c $PWD \$SHELL -i -l
 EOF
     docker run -t -i \
            $([[ -d /usr/share/zsh ]] && print -- -v /usr/share/zsh:/usr/share/zsh-static:ro) \
@@ -133,8 +134,8 @@ fi
 $setupuser
 
 # Setup a command to enter this environment
-> $enter echo exec 'env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
-su -s /bin/sh -m -c "[ -d '"'"'$PWD'"'"' ] && cd '"'"'$PWD'"'"' ; exec '\$SHELL' -i -l"' $(id -un)
+> $enter echo exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
+  $sudo -u $(id -g) -g $(id -g) -c '"'"$PWD"'"' \$SHELL -i -l
 
 EOF
     local ret=$?
