@@ -81,7 +81,7 @@ fi
 #!/bin/sh
 $setupuser
 exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
-     $sudo -u $(id -u) -g $(id -g) -c $PWD \$SHELL -i -l
+     $sudo -u $(id -u) -g $(id -g) -c '$PWD' \$SHELL -i -l
 EOF
     docker run -t -i \
            $([[ -d /usr/share/zsh ]] && print -- -v /usr/share/zsh:/usr/share/zsh-static:ro) \
