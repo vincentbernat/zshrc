@@ -1,19 +1,7 @@
 # -*- sh -*-
 
-# acpi -b output
-#
-# Battery X: YYYYYY, ZZ%
-# Battery X: YYYYYY, ZZ%, rate information unavailable
-# Battery X: YYYYYY, ZZ%, charging at zero rate
-# Battery X: YYYYYY, ZZ%, discharging at zero rate
-# Battery X: YYYYYY, ZZ%, HH:MM:SS remaining
-# Battery X: YYYYYY, ZZ%, HH:MM:SS until charged
-#
-# YYYYYY = charging
-# YYYYYY = discharging
-
 _vbe_battery () {
-    (( $+commands[acpi] )) || return
+    [[ -d /sys/class/power_supply/BAT0 ]] || return
     local cache=$ZSH/run/u/$HOST-$UID/acpi
     zmodload zsh/stat
     zmodload zsh/datetime
@@ -23,12 +11,10 @@ _vbe_battery () {
 	return
     fi
 
-    local acpi
     local percent
     local state
-    acpi=(${(f)$(acpi -b)})
-    percent=${(L)${${acpi[1]}#*, }%\%, *}
-    state=${(L)${${acpi[1]}#*: }%%, *}
+    percent=$(</sys/class/power_supply/BAT0/capacity)
+    state=${$(</sys/class/power_supply/BAT0/status):l}
     [[ $state == (dis|)charging ]] || {
 	: > $cache
 	return
