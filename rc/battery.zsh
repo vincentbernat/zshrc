@@ -45,11 +45,15 @@ _vbe_battery () {
     print $g $gg
 }
 
-_vbe_add_prompt_battery () {
-    local v="$(_vbe_battery)"
-    local color=${v% *}
-    local gauge="${v#* }"
+[[ -d /sys/class/power_supply/BAT0 ]] && {
 
-    [[ -n $gauge ]] && \
-        _vbe_prompt_segment $color black %B$gauge
+    _vbe_add_prompt_battery () {
+        local v="$(_vbe_battery)"
+        local color=${v% *}
+        local gauge="${v#* }"
+
+        [[ -n $gauge ]] && \
+            _vbe_prompt_segment $color black %B$gauge
+    }
+
 }
