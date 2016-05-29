@@ -2,7 +2,7 @@
 
 # Incorporate git and svn information into prompt
 
-(( $+functions[add-zsh-hook] )) && {
+(( $+functions[add-zsh-hook] )) && [[ $USERNAME != "root" ]] && {
 
     autoload -Uz vcs_info
 
