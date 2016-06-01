@@ -5,6 +5,7 @@ setopt interactivecomments	# Allow comments inside commands
 setopt autopushd		# Maintain directories in a heap
 setopt autocd			# Don't need to use `cd`
 setopt extendedglob             # Enable extended globbing
+setopt longlistjobs             # Display PID when using jobs
 
 # meta-h will invoke man for the current command
 autoload run-help
