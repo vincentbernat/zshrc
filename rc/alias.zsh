@@ -361,6 +361,7 @@ function myip() {
   for v in 4 6 ; do
     echo IPv$v $(false || \
         curl -$v -s ifconfig.co || \
+        curl -$v -s icanhazip.com || \
         curl -$v -s ip.appspot.com || \
         curl -$v -s eth0.me || \
         curl -$v -s ipecho.net/plain ||
