@@ -57,7 +57,7 @@ install-zsh() {
 	(
             cd $ZSH ; git ls-files | grep -vFx .gitmodules | \
                 while read f; do [[ -d $f ]] || echo $f ; done | \
-                tar -zhcf - -T - | base64
+                tar --owner=root --group=root --numeric-owner -zhcf - -T - | base64
         )
         echo 'EOA'
         echo '}'
