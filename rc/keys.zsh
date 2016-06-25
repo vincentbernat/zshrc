@@ -15,3 +15,15 @@ zstyle :insert-last-word match '(*[[:digit:]][.:][[:digit:]]*|*[[:alpha:]/\\]*)'
 autoload -U copy-earlier-word
 zle -N copy-earlier-word
 bindkey "\e," copy-earlier-word
+
+# Meta-S will toggle sudo
+function vbe-sudo-command-line() {
+    [[ -z $BUFFER ]] && zle up-history
+    if [[ $BUFFER == sudo\ * ]]; then
+        LBUFFER="${LBUFFER#sudo }"
+    else
+        LBUFFER="sudo $LBUFFER"
+    fi
+}
+zle -N vbe-sudo-command-line
+bindkey "\es" vbe-sudo-command-line

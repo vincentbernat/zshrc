@@ -76,7 +76,6 @@ susu() {
               ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
           zsh -i -l
 }
-alias please='sudo $(fc -ln -1)'
 
 # Aliases as a function
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
