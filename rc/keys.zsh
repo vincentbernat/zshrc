@@ -27,3 +27,14 @@ function vbe-sudo-command-line() {
 }
 zle -N vbe-sudo-command-line
 bindkey "\es" vbe-sudo-command-line
+
+# Expand ... to ../..
+function vbe-expand-dot-to-parent-directory-path() {
+  if [[ $LBUFFER = *.. ]]; then
+    LBUFFER+='/..'
+  else
+    LBUFFER+='.'
+  fi
+}
+zle -N vbe-expand-dot-to-parent-directory-path
+bindkey "." vbe-expand-dot-to-parent-directory-path
