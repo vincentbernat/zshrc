@@ -32,15 +32,21 @@ zstyle ':completion:history-words:*' remove-all-dups true
 
 # Host completion
 _custom_hosts() {
+    # Fix "$@"
+    case $curcontext in
+        :complete:scp:*|:complete:rsync:*)
+            set -- "$@" -r: -S:
+    esac
+
     # Complete ~/.zsh/local/hosts.*
     local host
     for host in $ZSH/local/hosts.*(N-.); do
-	_wanted hosts expl host compadd "$@" $(<$host)
+	_wanted hosts expl "remote host name" compadd "$@" $(<$host)
     done
 
     # Now, try LDAP
     [[ -z $LDAPHOST ]] || {
-	_wanted hosts expl host \
+	_wanted hosts expl "remote host name" \
 	    compadd "$@" ${$(ldapsearch -h $LDAPHOST \
 	    -b "ou=hosts,dc=fti,dc=net" -LLL -s sub -z 100 \
 	    -x "cn=${words[CURRENT]}*" cn 2> /dev/null)%* }
