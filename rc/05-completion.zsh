@@ -50,8 +50,9 @@ _custom_hosts() {
 	    -x "cn=${words[CURRENT]}*" cn 2> /dev/null)%* }
     }
 }
-
 zstyle -e ':completion:*' hosts _custom_hosts
+
+# Don't use known_hosts_file (too slow)
 zstyle ":completion:*:hosts" known-hosts-files ''
 
 # In menu, select items with +
