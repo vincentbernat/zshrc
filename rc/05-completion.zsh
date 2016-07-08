@@ -38,10 +38,6 @@ _custom_hosts() {
 	_wanted hosts expl host compadd "$@" $(<$host)
     done
 
-    # And /etc/hosts
-    _wanted hosts expl host \
-	compadd "$@" ${(s: :)${(ps:\t:)${${(f)~~"$(</etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}
-
     # Now, try LDAP
     [[ -z $LDAPHOST ]] || {
 	_wanted hosts expl host \
