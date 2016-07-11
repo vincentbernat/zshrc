@@ -38,3 +38,5 @@ function vbe-expand-dot-to-parent-directory-path() {
 }
 zle -N vbe-expand-dot-to-parent-directory-path
 bindkey "." vbe-expand-dot-to-parent-directory-path
+bindkey -M isearch "." self-insert
+
