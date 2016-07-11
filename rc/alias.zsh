@@ -164,6 +164,10 @@ for f in files:
 ' "$@"
 }
 
+jsonf() {
+  tail -f "$@" | json
+}
+
 # Image display
 if (( $+commands[convert] )); then
     image() {
