@@ -209,8 +209,11 @@ if (( $+commands[pygmentize] )); then
   __pygmentize() {
     PATH=/usr/bin:$PATH python -u -c "#!/usr/bin/env python
 import sys
+import os
 import errno
 import pygments.cmdline
+null = open(os.devnull, 'wb')
+sys.stderr = null
 try:
     sys.exit(pygments.cmdline.main(sys.argv))
 except KeyboardInterrupt:
