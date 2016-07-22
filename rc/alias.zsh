@@ -171,18 +171,25 @@ jsonf() {
 # Image display
 if (( $+commands[convert] )); then
     image() {
-        local col row dummy red green blue rest
+        local col row dummy red green blue rest previous current
         local -a upper lower
         convert -thumbnail ${COLUMNS}x$((LINES*2 - 4)) $1 txt:- | \
             while IFS=',:() ' read col row dummy red green blue rest; do
                 [[ $col == "#" ]] && continue
                 if (( $#upper > 0 && row%2 == 0 && col == 0 )); then
                     for i in {1..$#upper}; do
-                        printf "\e[38;2;%s;48;2;%sm▀" $upper[$i] $lower[$i]
+                        current=$(printf "\e[38;2;%s;48;2;%sm" $upper[$i] $lower[$i])
+                        if [[ $current == $previous ]]; then
+                            printf "▀"
+                        else
+                            printf "$current▀"
+                        fi
+                        previous=$current
                     done
                     printf "\e[0m\e[K\n"
                     upper=()
                     lower=()
+                    previous=
                 fi
                 if [[ $((row%2)) = 0 ]]; then
                     upper=($upper "$red;$green;$blue")
