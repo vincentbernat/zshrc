@@ -66,6 +66,13 @@ _vbe_prompt_env () {
     }
 }
 
+# In subshell
+if (( $SHLVL > 1 )); then
+    _vbe_add_prompt_shlvl () {
+        _vbe_prompt_env 'sh' $SHLVL
+    }
+fi
+
 # Here is the whole snippet that I am using:
 
 # if [ "x$PBCURRENTCOMMANDLINEOPERATION" = xlogin ]; then
