@@ -30,11 +30,11 @@ bindkey "\es" vbe-sudo-command-line
 
 # Expand ... to ../..
 function vbe-expand-dot-to-parent-directory-path() {
-  if [[ $LBUFFER = *.. ]]; then
-    LBUFFER+='/..'
-  else
-    LBUFFER+='.'
-  fi
+  case $LBUFFER in
+    (./..|* ./..) LBUFFER+='.' ;; # In Go: "go list ./..."
+    (..|*[/=]..) LBUFFER+='/..' ;;
+    (*) LBUFFER+='.' ;;
+  esac
 }
 zle -N vbe-expand-dot-to-parent-directory-path
 bindkey "." vbe-expand-dot-to-parent-directory-path
