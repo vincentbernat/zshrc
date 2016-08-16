@@ -33,13 +33,13 @@ alias ipm='ip -r monitor'
 
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
-  export LESS_TERMCAP_mb=$'\E[01;31m'
-  export LESS_TERMCAP_md=$'\E[01;38;5;74m'
+  export LESS_TERMCAP_mb=$'\E[1;31m'
+  export LESS_TERMCAP_md=$'\E[1;38;5;74m'
   export LESS_TERMCAP_me=$'\E[0m'
   export LESS_TERMCAP_se=$'\E[0m'
-  export LESS_TERMCAP_so=$'\E[7;32;5;246m'
+  export LESS_TERMCAP_so=$'\E[1;3;5;246m'
   export LESS_TERMCAP_ue=$'\E[0m'
-  export LESS_TERMCAP_us=$'\E[04;38;5;146m'
+  export LESS_TERMCAP_us=$'\E[1;32mm'
 }
 
 # grep
