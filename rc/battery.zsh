@@ -45,7 +45,7 @@ _vbe_battery () {
     print $g $gg
 }
 
-[[ -d /sys/class/power_supply/BAT0 ]] && {
+[[ $USERNAME != "root" ]] && [[ -d /sys/class/power_supply/BAT0 ]] && {
 
     _vbe_add_prompt_battery () {
         local v="$(_vbe_battery)"
