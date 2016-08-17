@@ -39,7 +39,7 @@ alias ipm='ip -r monitor'
   export LESS_TERMCAP_se=$'\E[0m'
   export LESS_TERMCAP_so=$'\E[1;3;5;246m'
   export LESS_TERMCAP_ue=$'\E[0m'
-  export LESS_TERMCAP_us=$'\E[1;32mm'
+  export LESS_TERMCAP_us=$'\E[1;32m'
 }
 
 # grep
