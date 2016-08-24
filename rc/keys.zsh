@@ -32,7 +32,7 @@ bindkey "\es" vbe-sudo-command-line
 function vbe-expand-dot-to-parent-directory-path() {
   case $LBUFFER in
     (./..|* ./..) LBUFFER+='.' ;; # In Go: "go list ./..."
-    (..|*[/=]..) LBUFFER+='/..' ;;
+    (..|*[ /=]..) LBUFFER+='/..' ;;
     (*) LBUFFER+='.' ;;
   esac
 }
