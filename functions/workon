@@ -70,6 +70,7 @@ EOF
         chmod +x /usr/bin/sudo
     }
 fi
+[ ! -f /etc/nsswitch.conf ] || sed -i 's/ sss//' /etc/nsswitch.conf
 "
 
 # Docker images
