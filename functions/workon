@@ -81,7 +81,7 @@ fi
     <<EOF > $tmp/start
 #!/bin/sh
 $setupuser
-exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
+exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
      $sudo -u $(id -u) -g $(id -g) -c '$PWD' \$SHELL -i -l
 EOF
     (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -
@@ -140,7 +140,7 @@ fi
 $setupuser
 
 # Setup a command to enter this environment
-> $enter echo exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env \
+> $enter echo exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
   $sudo -u $(id -g) -g $(id -g) -c '"'"$PWD"'"' \$SHELL -i -l
 
 EOF
