@@ -1,12 +1,15 @@
 # -*- sh -*-
 
 __() {
-    local wanted
+    local -a wanted savedpath
     local p
-    wanted=(/usr/local/sbin /usr/sbin /sbin /usr/local/bin /usr/bin /bin /usr/lib/ccache ~/bin)
-    for p in $wanted; do
+    wanted=(~/bin /usr/lib/ccache /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin)
+    savedpath=($path)
+    path=()
+    for p in $wanted $savedpath; do
+        p=${p:A}
 	(( ${${path[(r)$p]}:+1} )) || {
-	    [ -d $p ] && path=($p $path)
+	    [ -d $p ] && path=($path $p)
 	}
     done
 } && __
