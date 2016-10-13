@@ -1,15 +1,6 @@
 # -*- sh -*-
 
 ssh() {
-    # When there is an agent and there is no key in it and we have a
-    # special host "load-keys" in ~/.ssh/config, use it
-    [[ -z $SSH_AUTH_SOCK ]] || \
-        [[ ! -r $SSH_AUTH_SOCK ]] || \
-        [[ $1 == "load-keys" ]] || \
-        [[ -z ${(M)${${${(@M)${(f)"$(<${HOME}/.ssh/config)"}:#Host *}#Host }:#*[*?]*}:#load-keys} ]] || \
-        ssh-add -l > /dev/null || \
-        command ssh load-keys
-
     # TERM is one of the variables that is usually allowed to be
     # transmitted to the remote session. The remote host should have
     # the appropriate termcap or terminfo file to handle the TERM you
