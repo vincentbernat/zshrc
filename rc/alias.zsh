@@ -372,12 +372,13 @@ function \$() {
 # Get my own external IP
 function myip() {
   for v in 4 6 ; do
+    local curl="curl -s -$v --max-time 1"
     echo IPv$v $(false || \
-        curl -$v -s ifconfig.co || \
-        curl -$v -s icanhazip.com || \
-        curl -$v -s ip.appspot.com || \
-        curl -$v -s eth0.me || \
-        curl -$v -s ipecho.net/plain ||
+        $=curl icanhazip.com || \
+        $=curl ifconfig.co || \
+        $=curl ip.appspot.com || \
+        $=curl eth0.me || \
+        $=curl ipecho.net/plain ||
         dig -$v +short myip.opendns.com @resolver1.opendns.com || \
         echo "unknown")
   done 2> /dev/null
