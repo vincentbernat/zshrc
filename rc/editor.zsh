@@ -35,9 +35,12 @@ EOF
         # Maybe use emacsclient?
         [[ $editor == emacs* ]] && (( $+commands[emacsclient] )) && {
 	    export ALTERNATE_EDITOR=$EDITOR
-	    export EDITOR="emacsclient"
+            for EDITOR in "emacsclient.${editor[(w)1]}" "emacsclient"; do
+                (( $+commands[$EDITOR] )) && break
+            done
+	    export EDITOR
             local ecargs='${=${DISPLAY:+-n}:--t -c}'
-	    alias e="emacsclient $ecargs"
+	    alias e="$EDITOR $ecargs"
         }
     }
 
