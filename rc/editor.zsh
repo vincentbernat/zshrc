@@ -5,9 +5,10 @@ __() {
     local -a editors
     local editor
     editors=(
-	"emacs25        -nw ${(%):-%(!.-q --eval='(global-font-lock-mode 1) (setq make-backup-files nil)'.)}" # emacs
-	"emacs24        -nw ${(%):-%(!.-q --eval='(global-font-lock-mode 1) (setq make-backup-files nil)'.)}" # emacs
-	"emacs          -nw ${(%):-%(!.-q --eval='(global-font-lock-mode 1) (setq make-backup-files nil)'.)}" # emacs
+        # Don't use "emacs" as it could be an alternative to something else (like jove)
+	"emacs25 -nw ${(%):-%(!.-q --eval='(global-font-lock-mode 1) (setq make-backup-files nil)'.)}" # emacs
+	"emacs24 -nw ${(%):-%(!.-q --eval='(global-font-lock-mode 1) (setq make-backup-files nil)'.)}" # emacs
+	"emacs23 -nw ${(%):-%(!.-q --eval='(global-font-lock-mode 1) (setq make-backup-files nil)'.)}" # emacs
 	"zile"		  # Emacs clone
 	"jove" "mg" "jed" # Emacs clone
 	"vim" "vi"	  # vi
