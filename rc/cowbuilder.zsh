@@ -18,42 +18,42 @@
             return 1
         }
 
-	# Architecture
-	local arch
-	case $1 in
-	    */*)
-		arch=${1#*/}
-		distrib=${1%/*}
-		;;
-	    *)
-		distrib=$1
-		;;
-	esac
-	shift
+        # Architecture
+        local arch
+        case $1 in
+            */*)
+                arch=${1#*/}
+                distrib=${1%/*}
+                ;;
+            *)
+                distrib=$1
+                ;;
+        esac
+        shift
         local -a opts
         local -a prefix
-	opts=(--debootstrap debootstrap)
+        opts=(--debootstrap debootstrap)
 
-	# Distribution
-	case ${distrib%%-*} in
-	    wheezy|jessie|stretch|sid)
-		opts=($opts --mirror http://deb.debian.org/debian)
-		opts=($opts
+        # Distribution
+        case ${distrib%%-*} in
+            wheezy|jessie|stretch|sid)
+                opts=($opts --mirror http://deb.debian.org/debian)
+                opts=($opts
                     --debootstrapopts --keyring
                     --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg)
-		;;
-	    lucid|maverick|natty|oneiric|precise|quantal|raring|saucy|trusty|utopic|vivid|wily|xenial|yakkety)
+                ;;
+            lucid|maverick|natty|oneiric|precise|quantal|raring|saucy|trusty|utopic|vivid|wily|xenial|yakkety)
                 local mirror=http://archive.ubuntu.com/ubuntu
-		opts=($opts --mirror $mirror)
-		opts=($opts
+                opts=($opts --mirror $mirror)
+                opts=($opts
                     --debootstrapopts --keyring
                     --debootstrapopts /usr/share/keyrings/ubuntu-archive-keyring.gpg)
-		opts=($opts --components 'main universe')
+                opts=($opts --components 'main universe')
                 opts=($opts --othermirror "deb ${mirror} ${distrib%%-*}-updates main universe")
                 opts=($opts --extrapackages pkg-create-dbgsym)
-		;;
-	esac
-	case ${distrib%%-*} in
+                ;;
+        esac
+        case ${distrib%%-*} in
             lucid)
                 # Workaround a bug in libc6 package expecting 3-digit uname -r
                 prefix=($prefix linux64 --uname-2.6)
@@ -81,11 +81,11 @@
             target=$distrib
         fi
 
-	_vbe_title "cowbuilder $target: $*"
+        _vbe_title "cowbuilder $target: $*"
         sudo env DEBIAN_BUILDARCH="$arch" $prefix cowbuilder $1 \
-	    --distribution ${distrib%%-*}  \
+            --distribution ${distrib%%-*}  \
             --basepath /var/cache/pbuilder/base-${target}.cow \
             --buildresult $PWD \
-	    $opts $*[2,$#]
+            $opts $*[2,$#]
     }
 }
