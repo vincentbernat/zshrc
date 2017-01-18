@@ -9,6 +9,7 @@ WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
 
 (( $+commands[virtualenv] )) && {
     _virtualenv () {
+        set -e
         local interpreter
         case $1 in
             2) interpreter=python2 ;;
@@ -17,17 +18,16 @@ WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
         esac
         shift
         [[ -d $WORKON_HOME ]] || mkdir -p $WORKON_HOME
-        pushd $WORKON_HOME > /dev/null && {
-	    command virtualenv -p =$interpreter "$@" && \
-                cat <<EOF >&2
+        pushd $WORKON_HOME > /dev/null
+	command virtualenv -p =$interpreter "$@" && \
+            cat <<EOF >&2
 ${fg[white]}
 # To reuse the environment for Node.JS, use:
 #  \$ pip install nodeenv
 #  \$ nodeenv -p -n system
 
 EOF
-	    popd > /dev/null
-        }
+	popd > /dev/null
         workon ${@[-1]}
     }
     alias virtualenv2='_virtualenv 2'
