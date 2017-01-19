@@ -403,6 +403,14 @@ function myip() {
   done 2> /dev/null
 }
 
+# Display a man page
+function wman() {
+    case $DISPLAY in
+        "") www-browser "https://manpages.debian.org/jump?q=$1" ;;
+        *) x-www-browser "https://manpages.debian.org/jump?q=$1" ;;
+    esac
+}
+
 # Display a color testcard
 # From: http://tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html
 colortest() {
