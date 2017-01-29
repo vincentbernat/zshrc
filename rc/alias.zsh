@@ -226,6 +226,13 @@ fi
 # Other pretty-printing functions
 if (( $+commands[pygmentize] )); then
   __pygmentize() {
+    local formatter
+    if (( ${terminfo[colors]:-0} >= 256 )); then
+      formatter=console256
+    else
+      formatter=terminal
+    fi
+
     PATH=/usr/bin:$PATH python -u -c "#!/usr/bin/env python
 import sys
 import os
@@ -241,7 +248,7 @@ except IOError as e:
     if e.errno == errno.EPIPE:
         sys.exit(1)
     raise
-" "$@"
+" -f $formatter -P style=monokai "$@"
   }
 
   xml() {
@@ -252,18 +259,11 @@ except IOError as e:
     case $(file --brief --mime-type $1 2> /dev/null) in
       image/*) image $1 ; return ;;
     esac
-    local formatter
-    if (( ${terminfo[colors]:-0} >= 256 )); then
-      formatter=console256
-    else
-      formatter=terminal
-    fi
 
     local lexer
     lexer=$(__pygmentize -N "${1%.gz}")
 
     local -a args
-    args=(-P style=monokai -f $formatter)
     case $lexer in
       text)
         args=(-g $args)
