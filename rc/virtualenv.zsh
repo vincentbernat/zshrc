@@ -19,7 +19,7 @@ WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
         shift
         [[ -d $WORKON_HOME ]] || mkdir -p $WORKON_HOME
         pushd $WORKON_HOME > /dev/null
-	command virtualenv -p =$interpreter "$@" && \
+	! command virtualenv -p =$interpreter "$@" || \
             cat <<EOF >&2
 ${fg[white]}
 # To reuse the environment for Node.JS, use:
@@ -28,6 +28,7 @@ ${fg[white]}
 
 EOF
 	popd > /dev/null
+        set +e
         workon ${@[-1]}
     }
     alias virtualenv2='_virtualenv 2'
