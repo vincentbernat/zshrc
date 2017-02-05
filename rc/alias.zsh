@@ -256,12 +256,20 @@ except IOError as e:
   }
 
   v() {
+    # Display as an image
     case $(file --brief --mime-type $1 2> /dev/null) in
       image/*) image $1 ; return ;;
     esac
 
+    # Display in Emacs view-mode
+    (( $+commands[emacsclient] )) && [[ -S /tmp/emacs$UID/server ]] && [[ -O /tmp/emacs$UID/server ]] && {
+        emacsclient -t -e "(view-buffer (find-file-noselect \"$1\") 'vbe:kill-buffer-and-frame)"
+        return
+    }
+
+    # Use pygmentize
     local lexer
-    lexer=$(__pygmentize -N "${1%.gz}")
+    lexer=$(__pygmentize -N ${1%.gz})
 
     local -a args
     case $lexer in
