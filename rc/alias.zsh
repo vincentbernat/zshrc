@@ -223,78 +223,23 @@ else
     }
 fi
 
-# Other pretty-printing functions
-if (( $+commands[pygmentize] )); then
-  __pygmentize() {
-    local formatter
-    if (( ${terminfo[colors]:-0} >= 256 )); then
-      formatter=console256
-    else
-      formatter=terminal
-    fi
+xml() {
+    cat "$@" | xmllint --format -
+}
 
-    PATH=/usr/bin:$PATH python -u -c "#!/usr/bin/env python
-import sys
-import os
-import errno
-import pygments.cmdline
-null = open(os.devnull, 'wb')
-sys.stderr = null
-try:
-    sys.exit(pygments.cmdline.main(sys.argv))
-except KeyboardInterrupt:
-    sys.exit(1)
-except IOError as e:
-    if e.errno == errno.EPIPE:
-        sys.exit(1)
-    raise
-" -f $formatter -P style=monokai "$@"
-  }
-
-  xml() {
-    cat "$@" | xmllint --format - | __pygmentize -l xml
-  }
-
-  v() {
-    # Display as an image
+v() {
     case $(file --brief --mime-type $1 2> /dev/null) in
-      image/*) image $1 ; return ;;
+        image/*)
+            image $1
+            return
+            ;;
     esac
-
-    # Display in Emacs view-mode
     (( $+commands[emacsclient] )) && [[ -S /tmp/emacs$UID/server ]] && [[ -O /tmp/emacs$UID/server ]] && {
         emacsclient -t -e "(view-buffer (find-file-noselect \"$1\") 'vbe:kill-buffer-and-frame)"
         return
     }
-
-    # Use pygmentize
-    local lexer
-    lexer=$(__pygmentize -N ${1%.gz})
-
-    local -a args
-    case $lexer in
-      text)
-        args=(-g $args)
-        ;;
-      *)
-        args=(-l $lexer)
-        ;;
-    esac
-
-    zcat -f "$@" | __pygmentize $args | less -RFX
-  }
-else
-  xml() {
-    cat "$@" | xmllint --format -
-  }
-
-  v() {
-    case $(file --brief --mime-type $1 2> /dev/null) in
-      image/*) image $1 ; return ;;
-    esac
     zless -FX "$@"
-  }
-fi
+}
 
 # Record a video:
 #   screenrecord out.mkv
