@@ -7,16 +7,14 @@
 
     chpwd_profile_debian() {
         [[ ${profile} == ${CHPWD_PROFILE} ]] && return 1
-        export DEBEMAIL=$USER@debian.org
-        export GIT_AUTHOR_EMAIL=$DEBEMAIL
-        export GIT_COMMITTER_EMAIL=$DEBEMAIL
+        export GIT_AUTHOR_EMAIL=$USER@debian.org
+        export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
     }
 
     chpwd_profile_exoscale() {
         [[ ${profile} == ${CHPWD_PROFILE} ]] && return 1
-        export DEBEMAIL=Vincent.${(C)USER}@exoscale.ch
-        export GIT_AUTHOR_EMAIL=$DEBEMAIL
-        export GIT_COMMITTER_EMAIL=$DEBEMAIL
+        export GIT_AUTHOR_EMAIL=Vincent.${(C)USER}@exoscale.ch
+        export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
     }
 
     chpwd_profile_default() {
