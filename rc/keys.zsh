@@ -9,7 +9,7 @@ bindkey "\e[3~" delete-char        # Delete
 # Replace insert-last-word by a smart version
 autoload -U smart-insert-last-word
 zle -N insert-last-word smart-insert-last-word
-zstyle :insert-last-word match '(*[[:digit:]][.:][[:digit:]]*|*[[:alpha:]/\\]*)'
+zstyle :insert-last-word match '*([[:digit:]][.:][[:digit:]]|[[:digit:]][[:digit:]][[:digit:]]|[[:alpha:]/\\])*'
 
 # Also copy previous word
 autoload -U copy-earlier-word
