@@ -267,41 +267,14 @@ screenrecord() {
 
 # Reimplementation of an xterm tool
 resize() {
-  printf '\033[18t'
-
-  local width
-  local height
-  local state
-  local char
-
-  state=0
-  while read -r -s -k 1 -t 1 char; do
-    case "$state,$char" in
-      "0,;")
-        # End of CSI
-        state=1
-        ;;
-      "1,;")
-        # End of height
-        stty rows $height
-        state=2
-        ;;
-      "1,"*)
-        height="$height$char"
-        ;;
-      "2,t")
-        # End of width
-        stty columns $width
-        state=3
-        ;;
-      "2,"*)
-        width="$width$char"
-        ;;
-    esac
-    (( $state == 3 )) && break
-  done
-  # tmux <= 1.9.1 is buggy and doesn't end its answer with 't'
-  (( $state == 2 )) && stty columns $width
+  local previous=$(stty -g)
+  local rows
+  local cols
+  stty raw -echo min 0 time 1 # timeout: 1th of second
+  printf '\0337\033[r\033[999;999H\033[6n\0338'
+  IFS='[;R' read -r _ rows cols _ || true
+  stty $previous
+  stty cols $cols rows $rows
 }
 
 # Simple calculator
