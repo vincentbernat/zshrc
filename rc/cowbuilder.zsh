@@ -36,6 +36,12 @@
 
         # Distribution
         case ${distrib%%-*} in
+            lenny|squeeze)
+                opts=($opts --mirror http://snapshot.debian.org/archive/debian-archive/20160313T130328Z/debian)
+                opts=($opts
+                    --debootstrapopts --keyring
+                    --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg)
+                ;;
             wheezy|jessie|stretch|sid)
                 opts=($opts --mirror http://deb.debian.org/debian)
                 opts=($opts
@@ -64,6 +70,9 @@
         case ${distrib} in
             squeeze-backports)
                 opts=($opts --othermirror "deb http://backports.debian.org/debian-backports squeeze-backports main")
+                ;;
+            squeeze-lts)
+                opts=($options --othermirror "deb http://snapshot.debian.org/archive/debian-archive/20160313T130328Z/debian squeeze-lts main")
                 ;;
             *-backports-sloppy)
                 opts=($opts --othermirror "deb http://httpredir.debian.org/debian ${distrib%-sloppy} main|deb http://httpredir.debian.org/debian ${distrib} main")
