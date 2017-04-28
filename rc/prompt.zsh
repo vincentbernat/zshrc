@@ -64,7 +64,11 @@ _vbe_prompt () {
     local retval=$?
 
     # user@host
-    local f=${(%):-%(!.red.${${SSH_TTY:+magenta}:-green})}
+    #  - when root, red
+    #  - when sudo in action, white
+    #  - when over SSH, magenta
+    #  - otherwise, green
+    local f=${(%):-%(!.red.${${${SUDO_USER:+white}:-${SSH_TTY:+magenta}}:-green})}
     _vbe_prompt_segment black $f \
         %B%n%b%{${fg[cyan]}%}${${(%):-%n}:+@}%B%{${bg[black]}${fg[$f]}%}%M
 
