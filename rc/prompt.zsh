@@ -63,14 +63,17 @@ _vbe_prompt_end() {
 _vbe_prompt () {
     local retval=$?
 
-    # user@host
+    # user:
     #  - when root, red
     #  - when sudo in action, white
-    #  - when over SSH, magenta
     #  - otherwise, green
-    local f=${(%):-%(!.red.${${${SUDO_USER:+white}:-${SSH_TTY:+magenta}}:-green})}
-    _vbe_prompt_segment black $f \
-        %B%n%b%{${fg[cyan]}%}${${(%):-%n}:+@}%B%{${bg[black]}${fg[$f]}%}%M
+    # host:
+    #  - when remote: magenta
+    #  - when local: same as user
+    local f1=${(%):-%(!.red.${${SUDO_USER:+white}:-green})}
+    local f2=${(%):-${${SSH_TTY:+magenta}:-$f1}}
+    _vbe_prompt_segment black $f1 \
+        %B%n%b%{${fg[cyan]}%}${${(%):-%n}:+@}%B%{${bg[black]}${fg[$f2]}%}%M
 
     # Directory
     local -a segs
