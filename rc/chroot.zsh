@@ -37,6 +37,7 @@ _vbe_prompt_env () {
     }
 }
 [[ -z $DOCKER_CHROOT_NAME ]] || {
+    DOCKER_CHROOT_NAME=${DOCKER_CHROOT_NAME##*/}
     _vbe_add_prompt_docker () {
         _vbe_prompt_env 'docker' '${DOCKER_CHROOT_NAME}'
     }
