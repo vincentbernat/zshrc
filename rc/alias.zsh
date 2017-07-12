@@ -5,6 +5,7 @@ alias df='df -h'
 alias du='du -h'
 alias rm='rm -i'
 alias ll='ls -l'
+alias tailf='tail -F'           # not shipped in util-linux anymore
 __() {
   local dmesg_version=${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}
   if is-at-least 2.23 $dmesg_version; then
