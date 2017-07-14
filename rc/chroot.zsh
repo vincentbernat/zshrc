@@ -61,7 +61,7 @@ _vbe_prompt_env () {
 }
 
 # In netns
-(( $+commands[ip] )) && [[ x"$(ip netns identify 2> /dev/null)" != x ]] && {
+(( $+commands[ip] )) && [[ -n "$(ip netns identify 2> /dev/null)" ]] && {
     _vbe_add_prompt_netns () {
         _vbe_prompt_env 'netns' "$(ip netns identify)"
     }
