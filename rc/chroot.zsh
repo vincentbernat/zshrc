@@ -67,6 +67,16 @@ _vbe_prompt_env () {
     }
 }
 
+# In Cumulus VRF
+(( $+commands[vrf] )) && case $(vrf identify) in
+    default) ;;
+    *)
+        _vbe_add_prompt_netns () {
+            _vbe_prompt_env 'vrf' "$(vrf identify)"
+        }
+        ;;
+esac
+
 # Here is the whole snippet that I am using:
 
 # if [ "x$PBCURRENTCOMMANDLINEOPERATION" = xlogin ]; then
