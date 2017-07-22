@@ -9,7 +9,6 @@ WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
 
 (( $+commands[virtualenv] )) && {
     _virtualenv () {
-        set -e
         local interpreter
         case $1 in
             2) interpreter=python2 ;;
@@ -18,7 +17,7 @@ WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
         esac
         shift
         [[ -d $WORKON_HOME ]] || mkdir -p $WORKON_HOME
-        pushd $WORKON_HOME > /dev/null
+        pushd $WORKON_HOME > /dev/null || return
 	! command virtualenv -p =$interpreter "$@" || \
             cat <<EOF >&2
 ${fg[white]}
@@ -27,8 +26,7 @@ ${fg[white]}
 #  \$ nodeenv -p -n system
 
 EOF
-	popd > /dev/null
-        set +e
+	popd > /dev/null || return
         workon ${@[-1]}
     }
     alias virtualenv2='_virtualenv 2'
