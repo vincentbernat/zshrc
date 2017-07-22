@@ -6,19 +6,19 @@
     zstyle ':chpwd:profiles:/home/*/code/exoscale(|/|/*)'  profile exoscale
 
     chpwd_profile_debian() {
-        [[ ${profile} == ${CHPWD_PROFILE} ]] && return 1
+        [[ ${profile} == ${CHPWD_PROFILE} ]] && return
         export GIT_AUTHOR_EMAIL=$USER@debian.org
         export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
     }
 
     chpwd_profile_exoscale() {
-        [[ ${profile} == ${CHPWD_PROFILE} ]] && return 1
+        [[ ${profile} == ${CHPWD_PROFILE} ]] && return
         export GIT_AUTHOR_EMAIL=Vincent.${(C)USER}@exoscale.ch
         export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
     }
 
     chpwd_profile_default() {
-        [[ ${profile} == ${CHPWD_PROFILE} ]] && return 1
+        [[ ${profile} == ${CHPWD_PROFILE} ]] && return
         export DEBEMAIL=$USER@debian.org
         unset GIT_AUTHOR_EMAIL
         unset GIT_COMMITTER_EMAIL
