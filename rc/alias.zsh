@@ -32,6 +32,7 @@ alias ipm='ip -r monitor'
 # Other simple aliases
 (( $+commands[cloudstack] )) && alias cs=cloudstack
 (( $+commands[irb] )) && alias irb='irb --readline -r irb/completion'
+(( $+commands[ipython] )) && (( $+commands[ipython3] )) && alias ipython2==ipython && alias ipython=ipython3
 
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
