@@ -284,6 +284,7 @@ function c() {
   echo $(($@))
 }
 alias c='noglob c'
+(( $+commands[units] )) && alias units='noglob units'
 
 # Currency conversion (with Google)
 function currency() {
