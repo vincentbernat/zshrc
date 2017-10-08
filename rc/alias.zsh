@@ -302,7 +302,7 @@ resize() {
 function \=() {
   echo $(($@))
 }
-aliases[=]='noglob ='
+aliases[=]='noglob ='           # not really supported: http://www.zsh.org/mla/workers/2016/msg00081.html
 (( $+commands[units] )) && alias units='noglob units'
 
 # Currency conversion (with Google)
