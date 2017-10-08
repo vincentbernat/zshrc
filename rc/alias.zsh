@@ -299,10 +299,10 @@ resize() {
 }
 
 # Simple calculator
-function c() {
+function \=() {
   echo $(($@))
 }
-alias c='noglob c'
+aliases[=]='noglob ='
 (( $+commands[units] )) && alias units='noglob units'
 
 # Currency conversion (with Google)
