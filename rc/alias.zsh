@@ -353,10 +353,7 @@ function myip() {
 
 # Display a man page
 function wman() {
-    case $DISPLAY in
-        "") www-browser "https://manpages.debian.org/jump?q=$1" ;;
-        *) x-www-browser "https://manpages.debian.org/jump?q=$1" ;;
-    esac
+  python -m webbrowser -t "https://manpages.debian.org/jump?q=$1"
 }
 
 # Display a color testcard
