@@ -48,7 +48,7 @@
                     --debootstrapopts --keyring
                     --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg)
                 ;;
-            lucid|maverick|natty|oneiric|precise|quantal|raring|saucy|trusty|utopic|vivid|wily|xenial|yakkety|zesty|artful)
+            precise|quantal|raring|saucy|trusty|utopic|vivid|wily|xenial|yakkety|zesty|artful)
                 local mirror=http://archive.ubuntu.com/ubuntu
                 opts=($opts --mirror $mirror)
                 opts=($opts
@@ -57,12 +57,6 @@
                 opts=($opts --components 'main universe')
                 opts=($opts --othermirror "deb ${mirror} ${distrib%%-*}-updates main universe")
                 opts=($opts --extrapackages pkg-create-dbgsym)
-                ;;
-        esac
-        case ${distrib%%-*} in
-            lucid)
-                # Workaround a bug in libc6 package expecting 3-digit uname -r
-                prefix=($prefix linux64 --uname-2.6)
                 ;;
         esac
 
