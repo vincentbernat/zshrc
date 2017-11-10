@@ -325,7 +325,7 @@ function currency() {
     for to in $currencies; do
       [[ ${to:u} != ${from:u} ]] || continue
       #echo "Convert $amount ${from:u} to ${to:u}"
-      curl -s "http://www.google.com/finance/converter?a=$amount&from=$from&to=$to" | \
+      curl -s "https://finance.google.com/finance/converter?a=$amount&from=$from&to=$to" | \
           sed '/res/!d;s/<[^>]*>//g'
     done
   done
