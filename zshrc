@@ -26,10 +26,10 @@ fpath=($ZSH/functions $ZSH/completions $fpath)
 autoload -U is-at-least
 { autoload -U +X add-zsh-hook || unset -f add-zsh-hook } 2> /dev/null
 
-__() {
+() {
     for config_file ($ZSH/rc/*.zsh) source $config_file
     [ ! -e $ZSH/env ] || . $ZSH/env
-} && __
+}
 
 _vbe_setprompt
-unset __
+

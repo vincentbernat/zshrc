@@ -1,6 +1,6 @@
 # -*- sh -*-
 
-__() {
+() {
     # Export HOSTNAME variable (fully qualified hostname)
     integer step=1
     while true; do
@@ -31,4 +31,4 @@ __() {
             (( ${#next} >= 2 && ${#next} <= 4 )) && HOST=${HOSTNAME%%.*}.$next
             ;;
     esac
-} && __ 2> /dev/null
+} 2> /dev/null

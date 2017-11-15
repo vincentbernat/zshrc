@@ -1,6 +1,6 @@
 # -*- sh -*-
 
-(( $+commands[locale] )) && __() {
+(( $+commands[locale] )) && () {
     local available
     local locales
     local locale
@@ -17,4 +17,4 @@
 	done
     done
     unset LC_ALL
-} && __ 2> /dev/null
+} 2> /dev/null

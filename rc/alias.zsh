@@ -6,14 +6,14 @@ alias du='du -h'
 alias rm='rm -i'
 alias ll='ls -l'
 alias tailf='tail -F'           # not shipped in util-linux anymore
-__() {
+() {
   local dmesg_version=${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}
   if is-at-least 2.23 $dmesg_version; then
       alias dmesg='dmesg -H -P'
   elif is-at-least 0.1 $dmesg_version; then
     alias dmesg='dmesg -T'
   fi
-} && __
+}
 
 # ls colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
@@ -65,7 +65,7 @@ if (( $+commands[ipmitool] )); then
 fi
 
 # grep
-__() {
+() {
   local cmd
   local -A greps
   local colors="--color=auto"
@@ -83,7 +83,7 @@ __() {
           alias $cmd="command grep -${greps[$cmd]} ${colors}"
     fi
   done
-} && __
+}
 
 # smv like scp
 alias smv='rsync -P --remove-source-files'

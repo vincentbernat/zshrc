@@ -7,7 +7,7 @@
     autoload -Uz vcs_info
 
     zstyle ':vcs_info:*' enable git svn
-    __() {
+    () {
         local common="${PRCH[branch]} %b%c%u"
 	zstyle ':vcs_info:*:*'   formats $common
 	zstyle ':vcs_info:*:*'   actionformats ${common}"%{${fg[default]}%} ${PRCH[sep]} %{${fg[green]}%}"%a
@@ -27,7 +27,7 @@
             fi
         }
 
-    } && __
+    }
 
     _vbe_vcs_precmd () {
 	vcs_info

@@ -16,7 +16,7 @@
     $TERM == xterm || \
     $TERM == xterm-256color || \
     $TERM == screen || \
-    $TERM == screen-256color ]] && __() {
+    $TERM == screen-256color ]] && () {
 
     # create a new keymap to use while pasting
     bindkey -N paste
@@ -59,4 +59,4 @@
         # doesn't get the ^[[200~ codes around the pasted text.
         printf '\e[?2004l'
     }
-} && __
+}

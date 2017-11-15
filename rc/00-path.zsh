@@ -1,6 +1,6 @@
 # -*- sh -*-
 
-__() {
+() {
     local -a wanted savedpath
     local p
     wanted=(~/bin /usr/lib/ccache
@@ -20,4 +20,4 @@ __() {
 	    [ -d $p ] && path=($path $p)
 	}
     done
-} && __
+}

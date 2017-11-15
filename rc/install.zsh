@@ -3,7 +3,7 @@
 # Install or update ZSH on a remote host.
 install-zsh() {
     local version=$(cd $ZSH ; git rev-parse HEAD)
-    __() {
+    local __() {
         # Find a base64 implementation
         if which python > /dev/null 2> /dev/null; then
             BASE64="python -m base64 -d"

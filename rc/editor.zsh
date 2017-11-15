@@ -1,7 +1,7 @@
 # -*- sh -*-
 
 # Setup EDITOR
-__() {
+() {
     local -a editors
     local editor
     editors=(
@@ -44,7 +44,7 @@ EOF
         }
     }
 
-} && __
+}
 
 
 unset VISUAL

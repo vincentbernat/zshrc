@@ -1,7 +1,7 @@
 # -*- sh -*-
 
 # System init-related aliases
-__() {
+() {
     local -a cmds
     cmds=(start stop reload restart status)
     local cmd
@@ -23,4 +23,4 @@ __() {
         }
     fi
 
-} && __
+}
