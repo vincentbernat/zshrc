@@ -269,22 +269,25 @@ v() {
 #   ffmpeg -i out.mkv -c:v libx264 -qp 0 -preset veryslow out-smaller.mkv
 #
 # Remove "-qp 0" for non-lossless compression.
+#
+# To insert a line in a middle of a command, you can use C-v C-j.
 screenrecord() {
-  print -z $(
-    eval $(xdotool selectwindow getwindowgeometry --shell) &&
-        print ffmpeg \
-              -f x11grab \
-              -draw_mouse 0 \
-              -r 30 \
-              -s $((${WIDTH} / 2 * 2))x$((${HEIGHT} / 2 * 2)) \
-              -i ${DISPLAY}.${SCREEN:-0}+${X:-0},${Y:-0} \
-              -dcodec copy \
-              -pix_fmt yuv420p \
-              -c:v libx264 \
-              -qp 0 \
-              -preset ultrafast \
-              $@
-        )
+  local WINDOW X Y WIDTH HEIGHT SCREEN
+  eval $(xdotool selectwindow getwindowgeometry --shell)
+  print -z -- ffmpeg \
+        \\\\$'\n' \
+        -f x11grab \
+        -draw_mouse 0 \
+        -r 30 \
+        -s $((${WIDTH} / 2 * 2))x$((${HEIGHT} / 2 * 2)) \
+        -i ${DISPLAY}.${SCREEN:-0}+$((X+4)),$((Y+4)) \
+        \\\\$'\n' \
+        -pix_fmt yuv420p \
+        -c:v libx264 \
+        -qp 0 \
+        -preset ultrafast \
+        \\\\$'\n' \
+        $@
 }
 
 # Reimplementation of an xterm tool
