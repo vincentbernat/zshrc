@@ -262,7 +262,7 @@ v() {
     zless -FX "$@"
 }
 
-# Record a video:
+# Prepare a command to record a video:
 #   screenrecord out.mkv
 #
 # It uses lossless compression. This can be compressed again with:
@@ -270,20 +270,21 @@ v() {
 #
 # Remove "-qp 0" for non-lossless compression.
 screenrecord() {
-  (
+  print -z $(
     eval $(xdotool selectwindow getwindowgeometry --shell) &&
-    command ffmpeg -f x11grab \
-      -draw_mouse 0 \
-      -r 30 \
-      -s $((${WIDTH} / 2 * 2))x$((${HEIGHT} / 2 * 2)) \
-      -i ${DISPLAY}.${SCREEN:-0}+${X:-0},${Y:-0} \
-      -dcodec copy \
-      -pix_fmt yuv420p \
-      -c:v libx264 \
-      -qp 0 \
-      -preset ultrafast \
-      $@
-  )
+        print ffmpeg \
+              -f x11grab \
+              -draw_mouse 0 \
+              -r 30 \
+              -s $((${WIDTH} / 2 * 2))x$((${HEIGHT} / 2 * 2)) \
+              -i ${DISPLAY}.${SCREEN:-0}+${X:-0},${Y:-0} \
+              -dcodec copy \
+              -pix_fmt yuv420p \
+              -c:v libx264 \
+              -qp 0 \
+              -preset ultrafast \
+              $@
+        )
 }
 
 # Reimplementation of an xterm tool
