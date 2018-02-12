@@ -265,12 +265,15 @@ v() {
 # Prepare a command to record a video:
 #   screenrecord out.mkv
 #
+# To insert a line in a middle of a command, you can use C-v C-j. If
+# you want to grab sound, you can add "-f pulse -ac 1 -i default"
+# (replace "default" with the name of an input you can get with "pactl
+# list sources | grep Name".
+#
 # It uses lossless compression. This can be compressed again with:
 #   ffmpeg -i out.mkv -c:v libx264 -qp 0 -preset veryslow out-smaller.mkv
-#
 # Remove "-qp 0" for non-lossless compression.
 #
-# To insert a line in a middle of a command, you can use C-v C-j.
 screenrecord() {
   local X Y WIDTH HEIGHT BORDER
   eval $(xwininfo -id $(xdotool selectwindow) | \
