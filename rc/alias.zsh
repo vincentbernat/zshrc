@@ -272,15 +272,21 @@ v() {
 #
 # To insert a line in a middle of a command, you can use C-v C-j.
 screenrecord() {
-  local WINDOW X Y WIDTH HEIGHT SCREEN
-  eval $(xdotool selectwindow getwindowgeometry --shell)
+  local X Y WIDTH HEIGHT BORDER
+  eval $(xwininfo -id $(xdotool selectwindow) | \
+             sed -n \
+                 -e 's/ *Absolute upper-left X: *\([0-9]*\)/X=\1/p' \
+                 -e 's/ *Absolute upper-left Y: *\([0-9]*\)/Y=\1/p' \
+                 -e 's/ *Width: *\([0-9]*\)/WIDTH=\1/p' \
+                 -e 's/ *Height: *\([0-9]*\)/HEIGHT=\1/p' \
+                 -e 's/ *Border width: *\([0-9]*\)/BORDER=\1/p')
   print -z -- ffmpeg \
         \\\\$'\n' \
         -f x11grab \
         -draw_mouse 0 \
         -r 30 \
         -s $((${WIDTH} / 2 * 2))x$((${HEIGHT} / 2 * 2)) \
-        -i ${DISPLAY}.${SCREEN:-0}+$((X+4)),$((Y+4)) \
+        -i ${DISPLAY}+$((X+BORDER)),$((Y+BORDER)) \
         \\\\$'\n' \
         -pix_fmt yuv420p \
         -c:v libx264 \
