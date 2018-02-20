@@ -24,10 +24,14 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 }
 
 # ip aliases
-alias ip6='ip -6'
-alias ipr='ip -r'
-alias ip6r='ip -6 -r'
-alias ipm='ip -r monitor'
+(( $+commands[ip] )) && {
+  (( ${terminfo[colors]:-0} >= 8 )) && ip -color -human rule > /dev/null && \
+      alias ip='ip -color -human'
+  alias ip6='ip -6'
+  alias ipr='ip -r'
+  alias ip6r='ip -6 -r'
+  alias ipm='ip -r monitor'
+}
 
 # Other simple aliases
 (( $+commands[cloudstack] )) && alias cs=cloudstack
