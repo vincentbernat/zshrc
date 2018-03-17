@@ -25,7 +25,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 
 # ip aliases
 (( $+commands[ip] )) && {
-  (( ${terminfo[colors]:-0} >= 8 )) && ip -color -human rule > /dev/null && \
+  (( ${terminfo[colors]:-0} >= 8 )) && ip -color -human rule > /dev/null 2> /dev/null && \
       alias ip='ip -color -human'
   alias ip6='ip -6'
   alias ipr='ip -r'
