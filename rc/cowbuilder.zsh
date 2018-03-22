@@ -32,7 +32,16 @@
         shift
         local -a opts
         local -a prefix
-        opts=(--debootstrap debootstrap)
+
+        case $arch in
+            i386|)
+                opts=(--debootstrap debootstrap)
+                ;;
+            *)
+                # Needs qemu-user-static
+                opts=(--debootstrap qemu-debootstrap)
+                ;;
+        esac
 
         # Distribution
         case ${distrib%%-*} in
