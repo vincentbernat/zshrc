@@ -57,7 +57,7 @@
                     --debootstrapopts --keyring
                     --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg)
                 ;;
-            precise|quantal|raring|saucy|trusty|utopic|vivid|wily|xenial|yakkety|zesty|artful)
+            precise|quantal|raring|saucy|trusty|utopic|vivid|wily|xenial|yakkety|zesty|artful|bionic)
                 local mirror=http://archive.ubuntu.com/ubuntu
                 opts=($opts --mirror $mirror)
                 opts=($opts
