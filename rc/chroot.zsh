@@ -78,13 +78,11 @@ _vbe_prompt_env () {
 esac
 
 # In nix-shell
-case $buildInputs in
-    /nix/store/*)
-        _vbe_add_prompt_nixshell() {
-            _vbe_prompt_env 'nix' ${(j:+:)${${=buildInputs}#*-}}
-        }
-        ;;
-esac
+[[ -n $IN_NIX_SHELL ]] && {
+    _vbe_add_prompt_nixshell() {
+        _vbe_prompt_env 'nix' ${IN_WHICH_NIX_SHELL:-${(j:+:)${${=buildInputs}#*-}}}
+    }
+}
 
 # Here is the whole snippet that I am using:
 
