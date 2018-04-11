@@ -2,8 +2,10 @@
 
 # Nix stuff
 [[ -d $HOME/.nix-defexpr/channels/nixpkgs ]] && {
-    export NIX_PATH=nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
-    export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+    [[ -n $NIX_PATH ]] || \
+        export NIX_PATH=nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
+    [[ -n $NIX_SSL_CERT_FILE ]] || \
+        export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 }
 
 () {
