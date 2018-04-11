@@ -66,7 +66,7 @@ else
     PRCH=(
         sep "/" end ""
         retb "<" reta ">"
-        circle "*" branch "±"
+        circle "*" branch "\`|"
         ok ">" ellipsis ".."
         eol "~~" running "> "
     )
