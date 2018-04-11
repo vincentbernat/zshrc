@@ -1,9 +1,15 @@
 # -*- sh -*-
 
+# Nix stuff
+[[ -d $HOME/.nix-defexpr/channels/nixpkgs ]] && {
+    export NIX_PATH=nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
+    export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+}
+
 () {
     local -a wanted savedpath
     local p
-    wanted=(~/bin /usr/lib/ccache
+    wanted=(~/bin ~/.nix-profile/bin /usr/lib/ccache
             /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
             /usr/local/games /usr/games)
     savedpath=($path)
