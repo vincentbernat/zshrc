@@ -34,7 +34,7 @@
         local -a prefix
 
         case $arch in
-            i386|)
+            i386|"")
                 opts=(--debootstrap debootstrap)
                 ;;
             *)
