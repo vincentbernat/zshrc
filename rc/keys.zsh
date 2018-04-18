@@ -40,3 +40,10 @@ zle -N vbe-expand-dot-to-parent-directory-path
 bindkey "." vbe-expand-dot-to-parent-directory-path
 bindkey -M isearch "." self-insert
 
+# Don't do history completion on empty words
+function vbe-history-complete-older() {
+  [[ ${LBUFFER[-1]} == ' ' || ${LBUFFER} == '' ]] && return 1
+  zle _history-complete-older "$@"
+}
+zle -N vbe-history-complete-older
+bindkey "^[/" vbe-history-complete-older
