@@ -9,6 +9,11 @@ _vbe_title () {
     shorttitle=${2:-$1}
     case $TERM in
 	screen*)
+            # In tmux.conf:
+            #  set -g  set-titles on
+            #  set -g  set-titles-string "#T"
+            #  setw -g automatic-rename off
+            #  setw -g allow-rename on
 	    print -n "\ek$shorttitle\e\\"
 	    print -n "\e]1;$title\a"
 	    print -n "\e]2;$title\a"
