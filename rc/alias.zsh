@@ -359,6 +359,7 @@ function myip() {
     local curl="curl -s -$v --max-time 1"
     echo IPv$v $(false || \
         $=curl icanhazip.com || \
+        $=curl diagnostic.opendns.com/myip || \
         $=curl ifconfig.co || \
         $=curl ip.appspot.com || \
         $=curl eth0.me || \
