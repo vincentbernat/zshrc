@@ -365,6 +365,7 @@ function myip() {
         $=curl eth0.me || \
         $=curl ipecho.net/plain ||
         dig -$v +short myip.opendns.com @resolver1.opendns.com || \
+        dig -$v +short myip.opendns.com @resolver1.ipv6-sandbox.opendns.com || \
         echo "unknown")
   done 2> /dev/null
 }
