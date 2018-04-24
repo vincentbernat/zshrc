@@ -65,7 +65,12 @@
                     --debootstrapopts /usr/share/keyrings/ubuntu-archive-keyring.gpg)
                 opts=($opts --components 'main universe')
                 opts=($opts --othermirror "deb ${mirror} ${distrib%%-*}-updates main universe")
-                opts=($opts --extrapackages pkg-create-dbgsym)
+                case ${distrib%%-*} in
+                    bionic) ;;
+                    *)
+                        opts=($opts --extrapackages pkg-create-dbgsym)
+                        ;;
+                esac
                 ;;
         esac
 
