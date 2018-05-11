@@ -17,15 +17,13 @@
     savedpath=($path)
     path=()
     for p in $savedpath; do
-        p=${p:A}
-	(( ${${wanted[(r)$p]}:+1} )) || (( ${${path[(r)$p]}:+1} )) || {
-	    [ -d $p ] && path=($path $p)
+	(( ${${wanted[(r)$p]}:+1} )) || (( ${${path[(r)${p:A}]}:+1} )) || {
+	    [ -d ${p:A} ] && path=($path $p)
 	}
     done
     for p in $wanted; do
-        p=${p:A}
-	(( ${${path[(r)$p]}:+1} )) || {
-	    [ -d $p ] && path=($path $p)
+	(( ${${path[(r)${p:A}]}:+1} )) || {
+	    [ -d ${p:A} ] && path=($path $p)
 	}
     done
 }
