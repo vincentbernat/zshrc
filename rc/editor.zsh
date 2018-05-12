@@ -35,16 +35,19 @@ EOF
         # Maybe use emacsclient?
         [[ $editor == emacs* ]] && (( $+commands[emacsclient] )) && {
 	    export ALTERNATE_EDITOR=$EDITOR
-            for EDITOR in "emacsclient.${editor[(w)1]}" "emacsclient"; do
-                (( $+commands[$EDITOR] )) && break
+            for editor in "emacsclient.${editor[(w)1]}" "emacsclient"; do
+                (( $+commands[$editor] )) && break
             done
-	    export EDITOR
-            local ecargs='${=${DISPLAY:+-n}:--t -c}'
-	    alias e="$EDITOR $ecargs"
+            export EDITOR=$ZSH/run/u/$HOST-$UID/editor-ec
+            cat <<EOF > $EDITOR
+#!/bin/zsh
+exec $editor \${=\${DISPLAY:+-n}:--t -c} "\$@"
+EOF
+            chmod +x $EDITOR
+	    alias e=$EDITOR
         }
     }
 
 }
-
 
 unset VISUAL
