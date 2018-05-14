@@ -57,7 +57,7 @@
                     --debootstrapopts --keyring
                     --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg)
                 ;;
-            precise|quantal|raring|saucy|trusty|utopic|vivid|wily|xenial|yakkety|zesty|artful|bionic)
+            precise|quantal|raring|saucy|trusty|utopic|vivid|wily|xenial|yakkety|zesty|artful|bionic|cosmic)
                 local mirror=http://archive.ubuntu.com/ubuntu
                 opts=($opts --mirror $mirror)
                 opts=($opts
@@ -66,7 +66,7 @@
                 opts=($opts --components 'main universe')
                 opts=($opts --othermirror "deb ${mirror} ${distrib%%-*}-updates main universe")
                 case ${distrib%%-*} in
-                    bionic) ;;
+                    bionic|cosmic) ;;
                     *)
                         opts=($opts --extrapackages pkg-create-dbgsym)
                         ;;
