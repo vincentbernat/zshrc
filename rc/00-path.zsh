@@ -1,6 +1,10 @@
 # -*- sh -*-
 
-# Nix stuff
+# Nix stuff. Mostly, this is just about doing that:
+#  env > a
+#  . ~/.nix-profile/etc/profile.d/nix.sh
+#  env > b
+#  diff -u a b
 [[ -d $HOME/.nix-defexpr/channels/nixpkgs ]] && {
     [[ -n $NIX_PATH ]] || \
         export NIX_PATH=nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
