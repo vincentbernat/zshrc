@@ -41,10 +41,10 @@ EOF
             export EDITOR=$ZSH/run/u/$HOST-$UID/editor-ec
             cat <<EOF > $EDITOR
 #!/bin/zsh
-exec $editor \${=\${DISPLAY:+-n}:--t -c} "\$@"
+exec $editor \${=\${DISPLAY:+}--t -c} "\$@"
 EOF
             chmod +x $EDITOR
-	    alias e=$EDITOR
+	    alias e="$editor "'${=${DISPLAY:+-n}:--t -c}'
         }
     }
 
