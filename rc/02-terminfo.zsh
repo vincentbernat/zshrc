@@ -6,12 +6,6 @@ autoload -U zsh/terminfo zsh/termcap
 () {
     local term
 
-    case $COLORTERM,$TERM in
-        vbeterm,xterm | xfce4-terminal,xterm )
-            TERM=xterm-256color
-            ;;
-    esac
-
     for term in $LC__ORIGINALTERM $TERM ${TERM/-256color} xterm-256color xterm; do
         TERM=$term 2> /dev/null
         if (( ${terminfo[colors]:-0} >= 8 )) || \
