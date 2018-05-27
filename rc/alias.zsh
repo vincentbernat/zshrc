@@ -31,6 +31,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
   alias ipr='ip -r'
   alias ip6r='ip -6 -r'
   alias ipm='ip -r monitor'
+  alias ipb='ip --brief'
 }
 
 # Other simple aliases
