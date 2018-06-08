@@ -14,6 +14,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
     alias dmesg='dmesg -T'
   fi
 }
+(( $+commands[gdb] )) && alias gdb='gdb -q'
 
 # ls colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
