@@ -14,6 +14,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
     alias dmesg='dmesg -T'
   fi
 }
+alias p='ps -A f -o user:12,pid,priority,ni,pcpu,pmem,args'
 (( $+commands[gdb] )) && alias gdb='gdb -q'
 
 # ls colors
