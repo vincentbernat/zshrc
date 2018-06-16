@@ -6,9 +6,12 @@
 zmodload zsh/datetime
 _vbe_prompt_precmd () {
     _vbe_title "${SSH_TTY+${(%):-%M}:}${(%):-%50<..<%~}" "${SSH_TTY+${(%):-%M}:}${(%):-%20<..<%~}"
+    local now=$EPOCHSECONDS
+    _vbe_cmd_elapsed=$(($now - ${_vbe_cmd_timestamp:-$now}))
+    unset _vbe_cmd_timestamp
 }
 _vbe_prompt_preexec () {
-    _vbe_cmd_timestamp=$EPOCHSECONDS
+    _vbe_cmd_timestamp=${_vbe_cmd_timestamp:-$EPOCHSECONDS}
 }
 if (( $+functions[add-zsh-hook] )); then
     add-zsh-hook precmd _vbe_prompt_precmd
@@ -94,10 +97,8 @@ _vbe_prompt () {
     _vbe_add_prompt
 
     # Time elapsed
-    local now=$EPOCHSECONDS
-    local elapsed=$(($now - ${_vbe_cmd_timestamp:-$now}))
-    (($elapsed >= 5)) && \
-        _vbe_prompt_segment white black "$(_vbe_human_time $elapsed)"
+    (($_vbe_cmd_elapsed >= 5)) && \
+        _vbe_prompt_segment white black "$(_vbe_human_time $_vbe_cmd_elapsed)"
 
     # Error code
     (( $retval )) && \
