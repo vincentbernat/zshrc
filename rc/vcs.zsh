@@ -22,7 +22,7 @@
 
         +vi-git-untracked(){
             if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
-                git status --porcelain | grep '??' &> /dev/null ; then
+                git status --porcelain 2> /dev/null | grep -q '??' ; then
                 hook_com[staged]+="%{${fg[black]}%}${PRCH[circle]}"
             fi
         }
