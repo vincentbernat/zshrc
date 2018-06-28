@@ -1,7 +1,7 @@
 # -*- sh -*-
 
 # Create a temporary directory
-[ ! -h ~/tmp ] && [ ! -d ~/tmp ] && [ -w ~ ] && \
+[ ! -h ~/tmp ] && [ ! -d ~/tmp ] && [ -w ~ ] && [[ -z $SUDO_USER ]] && \
     mkdir ~/tmp
 
 [[ -n $IN_NIX_SHELL ]] && () {
