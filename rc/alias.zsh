@@ -40,6 +40,7 @@ alias p='ps -A f -o user:12,pid,priority,ni,pcpu,pmem,args'
 (( $+commands[cloudstack] )) && alias cs=cloudstack
 (( $+commands[irb] )) && alias irb='irb --readline -r irb/completion'
 (( $+commands[ipython] )) && (( $+commands[ipython3] )) && alias ipython2==ipython && alias ipython=ipython3
+(( $+commands[scapy3] )) && alias scapy=scapy3
 
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
