@@ -32,6 +32,7 @@ install-zsh() {
         # Setup zshrc
         [ ! -f $ZDOTDIR/.zshrc ] || mv $ZDOTDIR/.zshrc $ZDOTDIR/.zshrc.old
         ln -s "$ZSH"/zshrc $ZDOTDIR/.zshrc
+        ln -s "$ZSH"/zshenv $ZDOTDIR/.zshenv
 
         # Remove old files
         for f in $ZSH/*; do
