@@ -33,3 +33,5 @@
 
     export PATH
 }
+
+export GOPATH=$HOME/src/gocode
