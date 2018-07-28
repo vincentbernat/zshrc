@@ -30,4 +30,6 @@
 	    [ -d ${p:A} ] && path=($path $p)
 	}
     done
+
+    export PATH
 }
