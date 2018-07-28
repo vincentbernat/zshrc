@@ -1,16 +1,25 @@
 # -*- sh -*-
 
+# This file needs to be also sourceable from a POSIX shell.
+
 # Nix stuff. Mostly, this is just about doing that:
 #  env > a
 #  . ~/.nix-profile/etc/profile.d/nix.sh
 #  env > b
 #  diff -u a b
-[[ -d $HOME/.nix-defexpr/channels/nixpkgs ]] && {
-    [[ -n $NIX_PATH ]] || \
+[ -d $HOME/.nix-defexpr/channels/nixpkgs ] && {
+    [ -n "$NIX_PATH" ] || \
         export NIX_PATH=nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
-    [[ -n $NIX_SSL_CERT_FILE ]] || \
+    [ -n "$NIX_SSL_CERT_FILE" ] || \
         export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 }
+
+export GOPATH=$HOME/src/gocode
+
+if [ -z "$ZSH_VERSION" ]; then
+    eval $(zsh -c 'typeset -gpx PATH')
+    return
+fi
 
 () {
     local -a wanted savedpath
@@ -33,5 +42,3 @@
 
     export PATH
 }
-
-export GOPATH=$HOME/src/gocode
