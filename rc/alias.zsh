@@ -324,7 +324,7 @@ function \=() {
   echo $(($@))
 }
 aliases[=]='noglob ='           # not really supported: http://www.zsh.org/mla/workers/2016/msg00081.html
-(( $+commands[units] )) && alias units='noglob units'
+(( $+commands[units] )) && alias units='noglob units --terse'
 
 # Currency conversion (with Google)
 function currency() {
