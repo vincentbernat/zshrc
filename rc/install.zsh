@@ -30,9 +30,10 @@ install-zsh() {
         { mv "$ZSH"/history-* "$ZSH"/run || true } 2> /dev/null
 
         # Setup zshrc
-        [ ! -f $ZDOTDIR/.zshrc ] || mv $ZDOTDIR/.zshrc $ZDOTDIR/.zshrc.old
-        ln -s "$ZSH"/zshrc $ZDOTDIR/.zshrc
-        ln -s "$ZSH"/zshenv $ZDOTDIR/.zshenv
+        for rc in zshrc zhenv; do
+            [ ! -f $ZDOTDIR/.${rc} ] || mv $ZDOTDIR/.${rc} $ZDOTDIR/.${rc}.old
+            ln -s "$ZSH"/${rc} $ZDOTDIR/.${rc}
+        done
 
         # Remove old files
         for f in $ZSH/*; do
