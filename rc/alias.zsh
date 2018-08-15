@@ -349,8 +349,10 @@ function currency() {
     for to in $currencies; do
       [[ ${to:u} != ${from:u} ]] || continue
       #echo "Convert $amount ${from:u} to ${to:u}"
-      curl -s "https://finance.google.com/bctzjpnsun/converter?a=$amount&from=$from&to=$to" | \
-          sed '/currency_converter_result/!d;s/<[^>]*>//g'
+      curl -s "https://www.xe.com/currencyconverter/convert/?Amount=$amount&From=$from&To=$to" | \
+          sed '/uccResultAmount/!d;
+               s/.*<span class=.uccAmountWrap[^>]*>\(.*\)<span class=.resultRightArrow.*/\1/;
+               s/<[^>]*>//g;s/&nbsp\;/ /g;s/=/= /;s/\([A-Z]*\)$/ \1/'
     done
   done
 }
