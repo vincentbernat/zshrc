@@ -80,7 +80,7 @@ esac
 # In nix-shell
 [[ -n $IN_NIX_SHELL ]] && {
     _vbe_add_prompt_nixshell() {
-        _vbe_prompt_env 'nix' ${IN_WHICH_NIX_SHELL:-${(j:+:)${${=${buildInputs:-$nativeBuildInputs}}#*-}}}
+        _vbe_prompt_env 'nix' ${IN_WHICH_NIX_SHELL:-${(j:+:)${${=${buildInputs:-$nativeBuildInputs}}#*-}:#glibc*}}
     }
 }
 
