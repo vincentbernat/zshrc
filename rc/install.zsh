@@ -4,6 +4,15 @@
 install-zsh() {
     local version=$(cd $ZSH ; git rev-parse HEAD)
     local __() {
+        # Check version
+        ZDOTDIR="${ZDOTDIR:-$HOME}"
+        ZSH="${ZSH:-$HOME/.zsh}"
+        [ -d "$ZSH/run" ] || mkdir -p "$ZSH/run"
+        if [ -f "$ZSH/run/version" ] && [ "$version" = "$(cat "$ZSH/run/version")" ]; then
+            # Already up-to-date
+            return 0
+        fi
+
         # Find a base64 implementation
         if which base64 > /dev/null 2> /dev/null; then
             BASE64="base64 -d"
@@ -18,14 +27,6 @@ install-zsh() {
             return 1
         fi
 
-        # Check version
-        ZDOTDIR="${ZDOTDIR:-$HOME}"
-        ZSH="${ZSH:-$HOME/.zsh}"
-        [ -d "$ZSH/run" ] || mkdir -p "$ZSH/run"
-        if [ -f "$ZSH/run/version" ] && [ "$version" = "$(cat "$ZSH/run/version")" ]; then
-            # Already up-to-date
-            return 0
-        fi
         echo "$version" > "$ZSH/run/version"
 
         # Move history
