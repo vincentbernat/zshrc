@@ -33,7 +33,7 @@ install-zsh() {
         { mv "$ZSH"/history-* "$ZSH"/run || true } 2> /dev/null
 
         # Setup zshrc
-        for rc in zshrc zhenv; do
+        for rc in zshrc zshenv; do
             [ ! -f $ZDOTDIR/.${rc} ] || mv $ZDOTDIR/.${rc} $ZDOTDIR/.${rc}.old
             ln -s "$ZSH"/${rc} $ZDOTDIR/.${rc}
         done
