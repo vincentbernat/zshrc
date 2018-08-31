@@ -122,9 +122,9 @@ mkcd() { command mkdir -p $1 && cd $1 }
 # Many programs have a flag to enable unbuffered output. For example,
 # `curl -N`. Most programs can be forced to use unbuffered output with
 # `stdbuf -o L`.
-(( $+commands[python] )) && \
+(( $+commands[python] + $+commands[python3] )) && \
 json() {
-  PATH=/usr/bin:$PATH python -u -c '#!/usr/bin/env python
+  PATH=/usr/bin:$PATH ${commands[python3]:-$commands[python]} -u -c '#!/usr/bin/env python3
 
 # Pretty-print files containing JSON lines. Reads from stdin when no
 # argument is provided, otherwise pretty print each argument. This
@@ -203,7 +203,7 @@ for f in files:
 ' "$@"
 }
 
-(( $+commands[python] )) && \
+(( $+functions[json] )) && \
 jsonf() {
   tail -f "$@" | json
 }
