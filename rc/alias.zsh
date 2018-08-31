@@ -119,6 +119,7 @@ mkcd() { command mkdir -p $1 && cd $1 }
 # Many programs have a flag to enable unbuffered output. For example,
 # `curl -N`. Most programs can be forced to use unbuffered output with
 # `stdbuf -o L`.
+(( $+commands[python] )) && \
 json() {
   PATH=/usr/bin:$PATH python -u -c '#!/usr/bin/env python
 
@@ -197,6 +198,7 @@ for f in files:
 ' "$@"
 }
 
+(( $+commands[python] )) && \
 jsonf() {
   tail -f "$@" | json
 }
