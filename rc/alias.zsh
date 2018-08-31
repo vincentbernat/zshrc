@@ -150,7 +150,9 @@ def display(f):
     pager = None
     out = sys.stdout
     if out.isatty() and f != sys.stdin:
-        pager = subprocess.Popen(["less", "-RFX"], stdin=subprocess.PIPE)
+        pager = subprocess.Popen(["less", "-RFX"],
+                                 stdin=subprocess.PIPE,
+                                 encoding="utf-8", errors="replace")
         out = pager.stdin
     while True:
         line = f.readline()
@@ -188,8 +190,8 @@ else:
 
 for f in files:
     try:
-        if type(f) != file:
-            with file(f) as f:
+        if f != sys.stdin:
+            with open(f) as f:
                 display(f)
         else:
             display(f)
