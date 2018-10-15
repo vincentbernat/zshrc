@@ -6,6 +6,12 @@ autoload -U zsh/terminfo zsh/termcap
 () {
     local term
 
+    # Special case when running as Emacs, dumb doesn't have a terminfo
+    # entry, try dumb-emacs-ansi instead.
+    if [[ $TERM = dumb ]] && [[ -n $INSIDE_EMACS ]]; then
+        LC__ORIGINALTERM=dumb-emacs-ansi
+    fi
+
     for term in $LC__ORIGINALTERM $TERM ${TERM/-256color} xterm-256color xterm; do
         TERM=$term 2> /dev/null
         if (( ${terminfo[colors]:-0} >= 8 )) || \
