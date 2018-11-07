@@ -28,9 +28,6 @@ alias p='ps -A f -o user:12,pid,priority,ni,pcpu,pmem,args'
 # diff colors
 (( $+commands[diff] )) && alias diff='diff --color=auto'
 
-# ncdu colors
-(( $+commands[ncdu] )) && alias ncdu='ncdu --color dark'
-
 # ip aliases
 (( $+commands[ip] )) && {
   (( ${terminfo[colors]:-0} >= 8 )) && ip -color -human rule > /dev/null 2> /dev/null && \
