@@ -80,13 +80,29 @@ _vbe_prompt () {
 
     # Directory
     local -a segs
-    local len=$(($COLUMNS - ${#${(%):-%n@%M}} - 7 - ${#${${(%):-%~}//[^\/]/}} * 2))
-    segs=(${(s./.)${(%):-%${len}<${PRCH[ellipsis]}<%~}})
-    [[ ${#segs} == 0 ]] && segs=(/)
-    for seg in ${segs[1,-2]}; do
-        _vbe_prompt_segment cyan default $seg
-    done
-    _vbe_prompt_segment cyan default %B${segs[-1]}
+    local remaining=$(($COLUMNS - ${#${(%):-%n@%M}} - 7))
+    local pwd=${(%):-%~}
+    # When splitting, we will loose the leading /, keep it if needed
+    local leading=${pwd[1]}
+    [[ $leading == / ]] || leading=
+    segs=(${(s./.)pwd})
+    # We try to shorten middle segments if needed (but not the first, not the last)
+    case ${#segs} in
+        0) _vbe_prompt_segment cyan default %B/ ;;
+        1) _vbe_prompt_segment cyan default ${leading}%B${segs[1]} ;;
+        *)
+            local i=2
+            local current
+            while true; do
+                current=${leading}${(j./.)${segs[1,-2]}}/%B${segs[-1]}
+                (( i < ${#segs} )) || break
+                (( ${#current} < remaining )) && break
+                segs[i]=${segs[i][1]}
+                ((i++))
+            done
+            _vbe_prompt_segment cyan default $current
+            ;;
+    esac
     _vbe_prompt_end
 
     # New line
