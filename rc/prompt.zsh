@@ -100,7 +100,7 @@ _vbe_prompt () {
                 segs[i]=${segs[i][1]}
                 ((i++))
             done
-            _vbe_prompt_segment cyan default $current
+            _vbe_prompt_segment cyan default ${(%):-%${remaining}<${PRCH[ellipsis]}<$current}
             ;;
     esac
     _vbe_prompt_end
