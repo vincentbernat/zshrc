@@ -333,7 +333,7 @@ function \=() {
 aliases[=]='noglob ='           # not really supported: http://www.zsh.org/mla/workers/2016/msg00081.html
 (( $+commands[units] )) && alias units='noglob units --terse'
 
-# Currency conversion (with Google)
+# Currency conversion
 function currency() {
   local -a amounts
   local -a currencies
@@ -349,14 +349,16 @@ function currency() {
   done
   (( $#currencies > 1 )) || currencies=($currencies chf eur usd)
   local from=${currencies[1]}
+  local rate
   for amount in $amounts; do
     for to in $currencies; do
-      [[ ${to:u} != ${from:u} ]] || continue
+      from=${from:u}
+      to=${to:u}
+      [[ ${to} != ${from} ]] || continue
       #echo "Convert $amount ${from:u} to ${to:u}"
-      curl -s "https://www.xe.com/currencyconverter/convert/?Amount=$amount&From=$from&To=$to" | \
-          sed '/uccResultAmount/!d;
-               s/.*<span class=.uccAmountWrap[^>]*>\(.*\)<span class=.resultRightArrow.*/\1/;
-               s/<[^>]*>//g;s/&nbsp\;/ /g;s/=/= /;s/\([A-Z]*\)$/ \1/'
+      rate=$(curl -s "https://free.currencyconverterapi.com/api/v6/convert?q=${from}_${to}&compact=ultra" \
+                 | sed -n 's/{.*:\(.*\)}/\1/p')
+      printf "%.2f $from = %.2f $to\n" $amount $(( amount * rate))
     done
   done
 }
