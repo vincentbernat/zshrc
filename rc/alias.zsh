@@ -26,7 +26,10 @@ alias p='ps -A f -o user:12,pid,priority,ni,pcpu,pmem,args'
 }
 
 # diff colors
-(( $+commands[diff] )) && alias diff='diff --color=auto'
+(( $+commands[diff] )) \
+    && (( ${terminfo[colors]:-0} >= 8 )) \
+    && diff --color=auto --help &>/dev/null \
+    && alias diff='diff --color=auto'
 
 # ip aliases
 (( $+commands[ip] )) && {
