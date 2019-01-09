@@ -382,8 +382,6 @@ function myip() {
         $=curl ip.appspot.com || \
         $=curl eth0.me || \
         $=curl ipecho.net/plain ||
-        dig -$v +short myip.opendns.com @resolver1.opendns.com. || \
-        dig -$v +short whoami.akamai.net. @ns1-1.akamaitech.net. || \
         echo "unknown")
   done 2> /dev/null
 }
