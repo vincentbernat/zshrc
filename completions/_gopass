@@ -105,8 +105,8 @@ _gopass () {
           generate)
               _arguments : "--clip[Copy the generated password to the clipboard]" "--print[Print the generated password to the terminal]" "--force[Force to overwrite existing password]" "--edit[Open secret for editing after generating a password]" "--symbols[Use symbols in the password]" "--xkcd[Use multiple random english words combined to a password. By default, space is used as separator and all words are lowercase]" "--xkcdsep[Word separator for generated xkcd style password. If no separator is specified, the words are combined without spaces/separator and the first character of words is capitalised. This flag implies -xkcd]" "--xkcdlang[Language to generate password from, currently de (german) and en (english, default) are supported]"
               _describe -t commands "gopass generate" subcommands
-              _gopass_complete_passwords
               _gopass_complete_folders
+              _gopass_complete_passwords
               ;;
           git-credential)
               local -a subcommands
@@ -172,8 +172,8 @@ _gopass () {
           insert)
               _arguments : "--echo[Display secret while typing]" "--multiline[Insert using $EDITOR]" "--force[Overwrite any existing secret and do not prompt to confirm recipients]" "--append[Append to any existing data]"
               _describe -t commands "gopass insert" subcommands
-              _gopass_complete_passwords
               _gopass_complete_folders
+              _gopass_complete_passwords
               ;;
           list|ls)
               _arguments : "--limit[Max tree depth]" "--flat[Print flat list]" "--folders[Print flat list of folders]" "--strip-prefix[Strip prefix from filtered entries]"
@@ -343,7 +343,9 @@ _gopass_complete_passwords () {
 }
 
 _gopass_complete_folders () {
-    _values 'folders' ${(@f)$(gopass ls --folders --flat)/%//}
+    local -a folders
+    folders=("${(@f)$(gopass ls --folders --flat)}")
+    _describe -t folders "folders" folders -qS /
 }
 
 _gopass
