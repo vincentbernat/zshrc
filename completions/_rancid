@@ -1,0 +1,3 @@
+#compdef clogin jlogin
+
+_arguments '1: :_hosts'
