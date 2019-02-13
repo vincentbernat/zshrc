@@ -35,12 +35,6 @@ zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
 # Host completion
 _custom_hosts() {
-    # Fix "$@"
-    case $curcontext in
-        :complete:scp:*|:complete:rsync:*)
-            set -- "$@" -r: -S:
-    esac
-
     # Complete ~/.zsh/local/hosts.*
     local host
     for host in $ZSH/local/hosts.*(N-.); do
@@ -55,7 +49,7 @@ _custom_hosts() {
 	    -x "cn=${words[CURRENT]}*" cn 2> /dev/null)%* }
     }
 }
-zstyle -e ':completion:*' hosts _custom_hosts
+zstyle -e ':completion:*' hosts '_custom_hosts "$@"'
 
 # Don't use known_hosts_file (too slow)
 zstyle ":completion:*:hosts" known-hosts-files ''
