@@ -40,14 +40,6 @@ _custom_hosts() {
     for host in $ZSH/local/hosts.*(N-.); do
 	_wanted hosts expl "remote host name" compadd "$@" $(<$host)
     done
-
-    # Now, try LDAP
-    [[ -z $LDAPHOST ]] || {
-	_wanted hosts expl "remote host name" \
-	    compadd "$@" ${$(ldapsearch -h $LDAPHOST \
-	    -b "ou=hosts,dc=fti,dc=net" -LLL -s sub -z 100 \
-	    -x "cn=${words[CURRENT]}*" cn 2> /dev/null)%* }
-    }
 }
 zstyle -e ':completion:*' hosts '_custom_hosts "$@"'
 
