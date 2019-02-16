@@ -359,7 +359,7 @@ function currency() {
       to=${to:u}
       [[ ${to} != ${from} ]] || continue
       #echo "Convert $amount ${from:u} to ${to:u}"
-      rate=$(curl -s "https://free.currencyconverterapi.com/api/v6/convert?q=${from}_${to}&compact=ultra" \
+      rate=$(curl -s "https://free.currencyconverterapi.com/api/v6/convert?q=${from}_${to}&compact=ultra&apiKey=cdca335960c293ac5e8d" \
                  | sed -n 's/{.*:\(.*\)}/\1/p')
       printf "%.2f $from = %.2f $to\n" $amount $(( amount * rate))
     done
