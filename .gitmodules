@@ -7,9 +7,6 @@
 [submodule "third-party/zsh-completions"]
 	path = third-party/zsh-completions
 	url = https://github.com/zsh-users/zsh-completions.git
-[submodule "third-party/git-annex-zsh-completion"]
-	path = third-party/git-annex-zsh-completion
-	url = https://github.com/Schnouki/git-annex-zsh-completion.git
 [submodule "third-party/nix-zsh-completions"]
 	path = third-party/nix-zsh-completions
 	url = https://github.com/spwhitt/nix-zsh-completions.git
