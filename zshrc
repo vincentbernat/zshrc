@@ -12,8 +12,10 @@
       exec tmux
 
 ZSH=${ZSH:-${ZDOTDIR:-$HOME}/.zsh}
-fpath=($ZSH/functions $ZSH/completions $fpath)
 
+[[ -d ~/.nix-profile/share/zsh/site-functions ]] && \
+      fpath=(~/.nix-profile/share/zsh/site-functions $fpath)
+fpath=($ZSH/functions $ZSH/completions $fpath)
 [[ $ZSH_NAME == "zsh-static" ]] && [[ -d /usr/share/zsh-static ]] && {
     # Rewrite /usr/share/zsh to /usr/share/zsh-static
     fpath=(${fpath/\/usr\/share\/zsh\//\/usr\/share\/zsh-static\/})
