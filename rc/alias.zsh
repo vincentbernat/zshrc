@@ -59,25 +59,6 @@ alias p='ps -A f -o user:12,pid,priority,ni,pcpu,pmem,args'
   export LESS_TERMCAP_us=$'\E[1;32m'
 }
 
-# Wrapper to put password into an environment variable and reuse
-# it. Only when using "lanplus".
-if (( $+commands[ipmitool] )); then
-  ipmitool() {
-      if (( ${argv[(i)-I]} <= ${#argv} )) && (( ${argv[(i)lanplus]} <= ${#argv} )) &&
-           (( ${argv[(i)-I]} + 1 == ${argv[(i)lanplus]} )); then
-        [[ -n $IPMI_PASSWORD ]] ||
-          read -s 'IPMI_PASSWORD?IPMI password: ' < /dev/tty
-        if [[ -n $IPMI_PASSWORD ]]; then
-          export IPMI_PASSWORD
-          argv=(-E $argv)
-        else
-          unset IPMI_PASSWORD
-        fi
-      fi
-      $commands[ipmitool] "$@"
-  }
-fi
-
 # grep
 () {
   local cmd
