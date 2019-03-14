@@ -299,7 +299,7 @@ screenrecord() {
 }
 
 # Reimplementation of an xterm tool
-resize() {
+(( $+commands[resize] )) || resize() {
   local previous=$(stty -g)
   local rows
   local cols
