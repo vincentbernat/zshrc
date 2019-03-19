@@ -44,14 +44,17 @@
         esac
 
         # Distribution
-        case ${distrib%%-*} in
-            wheezy|jessie|stretch|sid)
+        local -a debians ubuntus
+        ubuntus=(/usr/share/debootstrap/scripts/*(e,'[ ${REPLY}(:A) = /usr/share/debootstrap/scripts/gutsy ]',))
+        ubuntus=(${ubuntus##*/})
+        debians=(/usr/share/debootstrap/scripts/*(e,'[ ${REPLY}(:A) = /usr/share/debootstrap/scripts/sid ]',))
+        debians=(${debians##*/})
+        if [[ ${debians[(r)${distrib%%-*}]} == ${distrib%%-*} ]]; then
                 opts=($opts --mirror http://deb.debian.org/debian)
                 opts=($opts
                     --debootstrapopts --keyring
                     --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg)
-                ;;
-            precise|trusty|xenial|bionic|cosmic|disco)
+        elif [[ ${ubuntus[(r)${distrib%%-*}]} == ${distrib%%-*} ]]; then
                 local mirror=http://archive.ubuntu.com/ubuntu
                 opts=($opts --mirror $mirror)
                 opts=($opts
@@ -65,8 +68,7 @@
                         opts=($opts --extrapackages pkg-create-dbgsym)
                         ;;
                 esac
-                ;;
-        esac
+        fi
 
         # Flavor
         case ${distrib} in
