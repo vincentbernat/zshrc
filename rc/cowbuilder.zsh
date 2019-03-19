@@ -63,8 +63,7 @@
                 opts=($opts --components 'main universe')
                 opts=($opts --othermirror "deb ${mirror} ${distrib%%-*}-updates main universe")
                 case ${distrib%%-*} in
-                    bionic|cosmic) ;;
-                    *)
+                    precise|trusty|xenial)
                         opts=($opts --extrapackages pkg-create-dbgsym)
                         ;;
                 esac
