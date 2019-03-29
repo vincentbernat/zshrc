@@ -1,6 +1,10 @@
 # -*- sh -*-
 
 ssh() {
+    # Modify the title of the current by using LocalCommand option.
+    local -a extra
+    extra=(-o PermitLocalCommand=yes -o LocalCommand="$ZSH/run/u/$HOST-$UID/title \"> ssh %h\" ${PRCH[running]}%h")
+
     # TERM is one of the variables that is usually allowed to be
     # transmitted to the remote session. The remote host should have
     # the appropriate termcap or terminfo file to handle the TERM you
@@ -32,13 +36,13 @@ ssh() {
     # `$ZSH/rc/01-locale.zsh`.
     case "$TERM" in
 	rxvt-256color|rxvt-unicode*)
-	    LC__ORIGINALTERM=$TERM TERM=rxvt LANG=C LC_MESSAGES=C command ssh "$@"
+	    LC__ORIGINALTERM=$TERM TERM=rxvt LANG=C LC_MESSAGES=C command ssh $extra "$@"
 	    ;;
 	screen-256color)
-	    LC__ORIGINALTERM=$TERM TERM=screen LANG=C LC_MESSAGES=C command ssh "$@"
+	    LC__ORIGINALTERM=$TERM TERM=screen LANG=C LC_MESSAGES=C command ssh $extra "$@"
 	    ;;
 	*)
-	    LANG=C LC_MESSAGES=C command ssh "$@"
+	    LANG=C LC_MESSAGES=C command ssh $extra "$@"
 	    ;;
     esac
 }

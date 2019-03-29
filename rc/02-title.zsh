@@ -24,6 +24,14 @@ _vbe_title () {
 	    ;;
     esac
 }
+[ -x $ZSH/run/u/$HOST-$UID/title ] || {
+    cat <<EOF > $ZSH/run/u/$HOST-$UID/title
+#!/bin/zsh
+$(which _vbe_title)
+_vbe_title "\$@"
+EOF
+    chmod +x $ZSH/run/u/$HOST-$UID/title
+}
 
 # Current running program as title
 _title_preexec () {
@@ -51,7 +59,7 @@ _title_preexec () {
 	    ;&
 	*)
             case $cmd[1] in
-                less|more|v|e|vi|vim|emacs|ssh|clogin)
+                less|more|v|e|vi|vim|emacs|clogin)
                     # Display filename
                     t=$cmd[*]
                     tt=${${${(R)cmd:#-*}[2]}:t}
