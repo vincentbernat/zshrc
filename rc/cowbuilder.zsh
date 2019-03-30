@@ -8,6 +8,8 @@
 #   3. If $DIST contains an hyphen, some special rules may be
 #      applied. Currently, if it ends with -backports, the backports
 #      mirror will be added.
+#
+# Note: have a look at cowbuilder-dist in ubuntu-dev-tools which is similar.
 
 (( $+commands[cowbuilder] )) && {
     cowbuilder() {
@@ -19,6 +21,7 @@
         }
 
         # Architecture
+        local distrib
         local arch
         case $1 in
             */*)
@@ -33,15 +36,19 @@
         local -a opts
         local -a prefix
 
-        case $arch in
-            i386|"")
+        if [[ -z $arch ]] || [[ $arch == $(dpkg-architecture -q DEB_BUILD_ARCH) ]]; then
                 opts=(--debootstrap debootstrap)
-                ;;
-            *)
-                # Needs qemu-user-static
-                opts=(--debootstrap qemu-debootstrap)
-                ;;
-        esac
+        else
+            case $arch,$(dpkg-architecture -q DEB_BUILD_ARCH) in
+                amd64,i386)
+                    opts=(--debootstrap debootstrap)
+                    ;;
+                *)
+                    # Needs qemu-user-static
+                    opts=(--debootstrap qemu-debootstrap)
+                    ;;
+            esac
+        fi
 
         # Distribution
         local -a debians ubuntus
