@@ -79,10 +79,10 @@
         # Flavor
         case ${distrib} in
             *-backports-sloppy)
-                opts=($opts --othermirror "deb http://httpredir.debian.org/debian ${distrib%-sloppy} main|deb http://httpredir.debian.org/debian ${distrib} main")
+                opts=($opts --othermirror "deb http://deb.debian.org/debian ${distrib%-sloppy} main|deb http://deb.debian.org/debian ${distrib} main")
                 ;;
             *-backports)
-                opts=($opts --othermirror "deb http://httpredir.debian.org/debian ${distrib} main")
+                opts=($opts --othermirror "deb http://deb.debian.org/debian ${distrib} main")
                 ;;
         esac
 
