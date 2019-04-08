@@ -8,6 +8,9 @@
 # image or a Docker container. Virtualenv-based environments are
 # expected to be in $WORKON_HOME.
 
+emulate -L zsh
+setopt nomonitor
+
 local env=$1
 local -a venv dimages dcontainers
 venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
@@ -119,38 +122,46 @@ EOF
     # From Docker 1.3, see `docker exec'.
     #
     # So, this needs nsenter which needs a recent util-linux.
+    #
+    # $HOME is mounted into a dedicated mount namespace. However the
+    # container is still modified for user and sudo.
     local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
     local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
-    local enter=/tmp/nsenter-$RANDOM-$$-$UID
+    local enter=$(mktemp --tmpdir nsenter-XXXXXXXXX)
     compile_sudo
-    ${(%):-%(!..sudo)} =nsenter -m -t $id -- /bin/sh -e <<EOF
+    ${=${(%):-%(!..sudo -v)}}
+    coproc ${=${(%):-%(!..sudo -n)}} =nsenter -m -t $id -- unshare --mount /bin/sh -ec "
 #!/bin/sh
-if ! mountpoint $HOME > /dev/null 2>/dev/null; then
-    tmp=\$(mktemp -d)
-    mkdir -p ${HOME}
-    [ -b /dev/home-directory ] || \
-        mknod /dev/home-directory b $(($(stat -c "0x%t" ${homedev}))) $(($(stat -c "0x%T" ${homedev})))
-    mount -n /dev/home-directory \$tmp
-    rm /dev/home-directory
-    mount -n --bind \$tmp/${HOME#$homemnt} $HOME
-    umount -n \$tmp 2> /dev/null
-    rmdir \$tmp
-fi
+tmp=\$(mktemp -d)
+mkdir -p ${HOME}
+[ -b /dev/home-directory ] || \
+    mknod /dev/home-directory b $(($(stat -c "0x%t" ${homedev}))) $(($(stat -c "0x%T" ${homedev})))
+mount -n /dev/home-directory \$tmp
+rm /dev/home-directory
+mount -n --bind \$tmp/${HOME#$homemnt} $HOME
+umount -n \$tmp 2> /dev/null
+rmdir \$tmp
 
 $setupuser
 
 # Setup a command to enter this environment
-> $enter echo exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
-  $sudo -u $(id -g) -g $(id -g) -c '"'"$PWD"'"' \$SHELL -i -l
+>  $enter cd $HOME
+>> $enter echo exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
+   $sudo -u $(id -u) -g $(id -g) -c \$PWD \$SHELL -i -l
 
-EOF
-    local ret=$?
-    [[ $ret -eq 0 ]] && {
+echo \$\$
+read nothing
+rm $enter
+"
+    read -p pid
+    if [[ -n $pid ]]; then
         (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -
-        ${(%):-%(!..sudo)} =nsenter -m -u -i -n -p -w$HOME -t $id -- /bin/sh $enter
+        ${(%):-%(!..sudo)} =nsenter --mount=/proc/$pid/ns/mnt -u -i -n -p -t $id -- /bin/sh $enter
         ret=$?
-    }
-    return $ret
+        print -p done
+        return $ret
+    fi
+    return 1
 }
 
 function save() {
