@@ -10,3 +10,6 @@
 [submodule "third-party/nix-zsh-completions"]
 	path = third-party/nix-zsh-completions
 	url = https://github.com/spwhitt/nix-zsh-completions.git
+[submodule "third-party/zsh-autosuggestions"]
+	path = third-party/zsh-autosuggestions
+	url = git@github.com:zsh-users/zsh-autosuggestions.git
