@@ -18,3 +18,6 @@ autoload run-help-ip
 
 # Remove / from WORDCHARS (more like bash)
 WORDCHARS=${WORDCHARS:s#/#}
+
+# Autosuggest for buffers smaller than that
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30

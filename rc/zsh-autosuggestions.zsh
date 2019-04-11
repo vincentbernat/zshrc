@@ -1,0 +1,1 @@
+../third-party/zsh-autosuggestions/zsh-autosuggestions.zsh
