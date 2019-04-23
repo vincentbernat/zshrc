@@ -10,7 +10,7 @@
         # systemd
         for cmd ($cmds) {
             (( $+functions[compdef] )) && compdef -d $cmd
-            alias   $cmd="${(%):-%(#..sudo)} systemctl $cmd"
+            alias   $cmd="${(%):-%(#..sudo )}systemctl $cmd"
         }
     else
         # generic service
