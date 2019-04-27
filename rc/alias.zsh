@@ -19,9 +19,12 @@ alias p='ps -A f -o user:12,pid,priority,ni,pcpu,pmem,args'
 
 # ls colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
-    ls --color -d . &>/dev/null && alias ls='ls --color=tty' || {
-        export LSCOLORS="Gxfxcxdxbxegedabagacad"
-        ls -G &> /dev/null && alias ls='ls -G'
+    ls --color -d . &>/dev/null && {
+      export LS_COLORS='ex=00:su=00:sg=00:ca=00:'
+      alias ls='ls --color=tty'
+    } || {
+      export LSCOLORS="Gxfxcxdxbxegedabagacad"
+      ls -G &> /dev/null && alias ls='ls -G'
     }
 }
 
