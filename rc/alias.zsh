@@ -14,7 +14,6 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
     alias dmesg='dmesg -T'
   fi
 }
-alias p='ps -A f -o user:12,pid,priority,ni,pcpu,pmem,args'
 (( $+commands[gdb] )) && alias gdb='gdb -q'
 
 # ls colors
@@ -46,7 +45,6 @@ alias p='ps -A f -o user:12,pid,priority,ni,pcpu,pmem,args'
 }
 
 # Other simple aliases
-(( $+commands[cloudstack] )) && alias cs=cloudstack
 (( $+commands[irb] )) && alias irb='irb --readline -r irb/completion'
 (( $+commands[ipython] )) && (( $+commands[ipython3] )) && alias ipython2==ipython && alias ipython=ipython3
 (( $+commands[scapy3] )) && alias scapy=scapy3
@@ -368,11 +366,6 @@ function myip() {
         $=curl ipecho.net/plain ||
         echo "unknown")
   done 2> /dev/null
-}
-
-# Display a man page
-function wman() {
-  python -m webbrowser -t "https://manpages.debian.org/jump?q=$1"
 }
 
 # Display a color testcard
