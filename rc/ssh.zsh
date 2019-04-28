@@ -3,7 +3,8 @@
 ssh() {
     # Modify the title of the current by using LocalCommand option.
     local -a extra
-    extra=(-o PermitLocalCommand=yes -o LocalCommand="$ZSH/run/u/$HOST-$UID/title \"> ssh %n\" ${PRCH[running]}%n")
+    extra=(-o PermitLocalCommand=yes
+           -o LocalCommand="$ZSH/run/u/$HOST-$UID/title \"> ssh %n\" ${PRCH[running]}%n")
 
     # TERM is one of the variables that is usually allowed to be
     # transmitted to the remote session. The remote host should have
