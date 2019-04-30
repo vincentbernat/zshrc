@@ -13,6 +13,7 @@
 
 ZSH=${ZSH:-${ZDOTDIR:-$HOME}/.zsh}
 
+# fpath
 [[ -d ~/.nix-profile/share/zsh/site-functions ]] && \
       fpath=(~/.nix-profile/share/zsh/site-functions $fpath)
 fpath=($ZSH/functions $ZSH/completions $fpath)
