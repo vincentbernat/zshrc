@@ -27,7 +27,7 @@ autoload -U is-at-least
 
 () {
     for config_file ($ZSH/rc/*.zsh) source $config_file
-        [ ! -e $ZSH/env ] || . $ZSH/env
+    [ ! -e $ZSH/env ] || . $ZSH/env
 }
 
 _vbe_setprompt
