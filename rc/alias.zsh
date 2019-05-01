@@ -73,12 +73,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
          fgrep F
          zgrep "")
   for cmd in ${(k)greps}; do
-    if (( $+commands[$cmd] )); then
-        alias $cmd="$cmd ${colors}"
-    else
-      [[ -n ${greps[$cmd]} ]] &&
-          alias $cmd="command grep -${greps[$cmd]} ${colors}"
-    fi
+      alias $cmd="command grep ${${greps[$cmd]}:+-}${greps[$cmd]} ${colors}"
   done
 }
 
