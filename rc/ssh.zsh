@@ -65,3 +65,39 @@ rssh() {
     ssh -oProxyCommand="socat TCP-LISTEN:$port,bind=127.0.0.1,reuseaddr STDIO" \
         "$@"
 }
+
+# Invoke this shell on a remote host. All arguments are passed to SSH,
+# but we expect to use this for interactive shells only. Several
+# connections may be needed to install the appropriate files. It
+# shadows the "zssh" command which enables interactive transfers over
+# ssh with zmodem.
+zssh() {
+    ssh -t "$@" "
+# If zsh is not installed, just execute a shell
+which zsh 2> /dev/null > /dev/null || exec \$SHELL -i -l
+
+# If dotfiles are already up-to-date, execute the shell
+current=\$(cat ~/.zsh.$USER/run/version 2> /dev/null || echo 0)
+target=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
+if [ \$current  = \$target  ]; then
+    export ZDOTDIR=~/.zsh.$USER
+    export ZSH=~/.zsh.$USER
+    exec zsh -i -l -d
+fi
+
+# Otherwise signal we want to install
+exit 201
+"
+    local ret=$?
+    case $ret in
+        201)
+            # We need to install dotfiles and reconnect
+            cat $ZSH/run/zsh-install.sh | ssh "$@" "env ZDOTDIR=~/.zsh.$USER ZSH=~/.zsh.$USER sh -s"
+            ssh -t "$@" "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec zsh -i -l -d"
+            ;;
+        *)
+            return $ret
+            ;;
+    esac
+}
+(( $+functions[compdef] )) && compdef _ssh zssh=ssh
