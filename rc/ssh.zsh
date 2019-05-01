@@ -72,28 +72,40 @@ rssh() {
 # shadows the "zssh" command which enables interactive transfers over
 # ssh with zmodem.
 zssh() {
-    ssh -t "$@" "
-# If zsh is not installed, just execute a shell
-which zsh 2> /dev/null > /dev/null || exec \$SHELL -i -l
+    local -a common
+    common=(-o ControlPath="~/tmp/zssh-%C")
+    command ssh -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
+# Check if zsh is installed.
+which zsh 2> /dev/null > /dev/null || exit 103
 
+# Check if dotfiles are up-to-date
 # If dotfiles are already up-to-date, execute the shell
 current=\$(cat ~/.zsh.$USER/run/version 2> /dev/null || echo 0)
 target=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
 if [ \$current  = \$target  ]; then
-    export ZDOTDIR=~/.zsh.$USER
-    export ZSH=~/.zsh.$USER
-    exec zsh -i -l -d
+    exit 104
 fi
 
 # Otherwise signal we want to install
-exit 201
+exit 105
 "
     local ret=$?
     case $ret in
-        201)
-            # We need to install dotfiles and reconnect
-            cat $ZSH/run/zsh-install.sh | ssh -C "$@" "env ZDOTDIR=~/.zsh.$USER ZSH=~/.zsh.$USER sh -s"
-            ssh -t "$@" "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec zsh -i -l -d"
+        103)
+            # No zsh, plain SSH connection
+            ssh $common "$@"
+            ;;
+        104)
+            # Dotfiles up-to-date, connect and execute zsh
+            ssh $common -t "$@" \
+                "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec zsh -i -l -d"
+            ;;
+        105)
+            # We need to install dotfiles, connect and execute zsh
+            cat $ZSH/run/zsh-install.sh | command ssh $common -C "$@" \
+                                              "env ZDOTDIR=~/.zsh.$USER ZSH=~/.zsh.$USER sh -s"
+            ssh $common -t "$@" \
+                "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec zsh -i -l -d"
             ;;
         *)
             return $ret
