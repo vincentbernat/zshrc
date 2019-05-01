@@ -61,19 +61,27 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
   export LESS_TERMCAP_us=$'\E[1;32m'
 }
 
-# grep
+# grep aliases
 () {
   local cmd
   local -A greps
+  local grep=grep
   local colors="--color=auto"
-  grep -q $colors . <<< yes 2> /dev/null || colors=""
+
+  # If GNU grep is available, use it
+  (( $+commands[ggrep] )) && grep=ggrep # GNU grep
+
+  # Check if grep supports colors
+  $grep -q $colors . <<< yes 2> /dev/null || colors=""
+
+  # Create aliases
   greps=(grep ""
          rgrep r
          egrep E
          fgrep F
          zgrep "")
   for cmd in ${(k)greps}; do
-      alias $cmd="command grep ${${greps[$cmd]}:+-}${greps[$cmd]} ${colors}"
+      alias $cmd="command ${grep}${${greps[$cmd]}:+ -}${greps[$cmd]} ${colors}"
   done
 }
 
