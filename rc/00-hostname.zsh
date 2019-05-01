@@ -10,6 +10,7 @@
             2) HOSTNAME="$(hostname -f)" ;;
             3) HOSTNAME=${${(M)${${(ps: :)${:-"$(LOCALDOMAIN= RES_TIMEOUT=1 getent hosts $HOST)"}}[2,-1]}:#*.*}[1]} ;;
             4) [[ $HOST != $(</etc/mailname) ]] && HOSTNAME=$HOST.$(</etc/mailname) ;;
+            5) HOSTNAME=$HOST.$(sed -n 's/domain //p' /etc/resolv.conf 2> /dev/null) ;;
             *) HOSTNAME=$HOST ; break ;;
         esac
         $(( step++ ))
