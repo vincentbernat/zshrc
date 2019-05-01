@@ -92,7 +92,7 @@ exit 201
     case $ret in
         201)
             # We need to install dotfiles and reconnect
-            cat $ZSH/run/zsh-install.sh | ssh "$@" "env ZDOTDIR=~/.zsh.$USER ZSH=~/.zsh.$USER sh -s"
+            cat $ZSH/run/zsh-install.sh | ssh -C "$@" "env ZDOTDIR=~/.zsh.$USER ZSH=~/.zsh.$USER sh -s"
             ssh -t "$@" "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec zsh -i -l -d"
             ;;
         *)

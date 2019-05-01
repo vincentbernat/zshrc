@@ -77,7 +77,7 @@ install-zsh() {
         {
             cat $ZSH/run/zsh-install.sh
             (( $+bash[1] )) && echo 'echo '"'"'[ -z "$PS1" ] || exec zsh -d'"'"' > ~/.bashrc'
-        } | ssh ${identity[2]+-i} ${identity[2]} $h sh -s
+        } | ssh -C ${identity[2]+-i} ${identity[2]} $h sh -s
     done
 }
 
