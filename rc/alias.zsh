@@ -90,7 +90,7 @@ susu() {
               ZSH=$ZSH ${DISPLAY+DISPLAY=$DISPLAY} \
               ${SSH_TTY+SSH_TTY=$SSH_TTY} \
               ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
-          zsh -i -l
+          ${ZSH_NAME} -i -l
 }
 
 # Aliases as a function
