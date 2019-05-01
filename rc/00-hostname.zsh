@@ -9,7 +9,7 @@
             1) HOSTNAME=$(</etc/hostname) ;;
             2) HOSTNAME="$(hostname -f)" ;;
             3) HOSTNAME=${${(M)${${(ps: :)${:-"$(LOCALDOMAIN= RES_TIMEOUT=1 getent hosts $HOST)"}}[2,-1]}:#*.*}[1]} ;;
-            4) HOSTNAME=$HOST.$(</etc/mailname) ;;
+            4) [[ $HOST != $(</etc/mailname) ]] && HOSTNAME=$HOST.$(</etc/mailname) ;;
             *) HOSTNAME=$HOST ; break ;;
         esac
         $(( step++ ))
