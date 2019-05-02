@@ -73,42 +73,51 @@ rssh() {
 # ssh with zmodem.
 zssh() {
     local -a common
+    local state
+
     common=(-o ControlPath="~/tmp/zssh-%C")
-    command ssh -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
+    state=$(command ssh -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
 # Check if zsh is installed.
-which zsh 2> /dev/null > /dev/null || exit 103
+if ! which zsh 2> /dev/null > /dev/null; then
+    echo no-zsh
+    exit 0
+fi
 
 # Check if dotfiles are up-to-date
 # If dotfiles are already up-to-date, execute the shell
 current=\$(cat ~/.zsh.$USER/run/version 2> /dev/null || echo 0)
 target=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
 if [ \$current  = \$target  ]; then
-    exit 104
+    echo ok
+    exit 0
 fi
 
 # Otherwise signal we want to install
-exit 105
-"
-    local ret=$?
-    case $ret in
-        103)
+echo need-update
+")
+    case $state in
+        no-zsh)
             # No zsh, plain SSH connection
+            print -u2 "[!] ZSH is not installed on remote"
             ssh $common "$@"
             ;;
-        104)
+        ok)
             # Dotfiles up-to-date, connect and execute zsh
             ssh $common -t "$@" \
                 "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec zsh -i -l -d"
             ;;
-        105)
+        need-update)
             # We need to install dotfiles, connect and execute zsh
-            cat $ZSH/run/zsh-install.sh | command ssh $common -C "$@" \
-                                              "env ZDOTDIR=~/.zsh.$USER ZSH=~/.zsh.$USER sh -s"
-            ssh $common -t "$@" \
-                "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec zsh -i -l -d"
+            print -u2 "[*] Installing dotfiles..." \
+                && cat $ZSH/run/zsh-install.sh \
+                    | command ssh $common -C "$@" \
+                              "env ZDOTDIR=~/.zsh.$USER ZSH=~/.zsh.$USER sh -s" \
+                && print -u2 "[*] Spawning remote zsh..." \
+                && ssh $common -t "$@" \
+                       "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec zsh -i -l -d"
             ;;
         *)
-            return $ret
+            return 1
             ;;
     esac
 }
