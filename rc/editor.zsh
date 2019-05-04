@@ -8,7 +8,6 @@
 	"emacs -nw ${(%):-%(!.-q.)} --eval='(global-font-lock-mode 1) (setq make-backup-files nil)'" # emacs
         "mg -n"           # emacs clone (make it not create backup files)
         "jove"            # Another emacs clone (don't create backup files by default)
-	"zile" "jed"      # Other emacs clone (create backup files by default)
 	"vim" "vi"	  # vi
 	"editor")	  # fallback
     for editor in $editors; do
