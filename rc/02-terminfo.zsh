@@ -1,10 +1,10 @@
 # -*- sh -*-
 
-# Update TERM if we have LC__ORIGINALTERM variable
-# Also, try a sensible term where we have terminfo stuff
+# Compute a sensible TERM and set colors
 autoload -U zsh/terminfo zsh/termcap
 () {
     local term
+    local -aU terms
 
     # Special case when running as Emacs, dumb doesn't have a terminfo
     # entry, try dumb-emacs-ansi instead.
@@ -12,7 +12,13 @@ autoload -U zsh/terminfo zsh/termcap
         LC__ORIGINALTERM=dumb-emacs-ansi
     fi
 
-    for term in $LC__ORIGINALTERM $TERM ${TERM/-256color} xterm-256color xterm; do
+    terms=($LC__ORIGINALTERM           # Received by SSH (see ssh.rc)
+           ${TERM%-256color}-256color  # Current TERM with -256color appended if needed
+           $TERM                       # Current TERM
+           ${TERM%-256color}           # Current TERM without -256color
+           xterm-256color              # Well-known TERM
+           xterm)                      # Even more well-known TERM
+    for term in $terms; do
         TERM=$term 2> /dev/null
         if (( ${terminfo[colors]:-0} >= 8 )) || \
             (zmodload zsh/termcap 2> /dev/null) && \
