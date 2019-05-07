@@ -6,14 +6,7 @@
     chmod 1777 $ZSH/run/u
 }
 
-# Create per-UID directory and do migration
+# Create per-UID directory
 [[ -d $ZSH/run/u/$HOST-$UID ]] || {
     mkdir -p $ZSH/run/u/$HOST-$UID
-    for f in $ZSH/run/{acpi,history,editor,zcompdump,bookmarks}-$HOST-$UID(N); do
-        mv $f $ZSH/run/u/$HOST-$UID/${${f##*/}%-$HOST-$UID}
-    done
-    for f in $ZSH/run/u/$UID/{acpi,history,editor,zcompdump,bookmarks}-$HOST(N); do
-        mv $f $ZSH/run/u/$HOST-$UID/${${f##*/}%-$HOST}
-    done
-    rmdir $ZSH/run/u/$UID 2> /dev/null
 }
