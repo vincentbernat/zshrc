@@ -13,7 +13,8 @@ autoload -U zsh/terminfo zsh/termcap
     fi
 
     terms=($LC__ORIGINALTERM           # Received by SSH (see ssh.rc)
-           ${TERM%-256color}-256color  # Current TERM with -256color appended if needed
+           # Current TERM with -256color appended when over SSH
+           ${SSH_CONNECTION+${TERM%-256color}-256color}
            $TERM                       # Current TERM
            ${TERM%-256color}           # Current TERM without -256color
            xterm-256color              # Well-known TERM
