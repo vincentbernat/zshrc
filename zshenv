@@ -21,6 +21,9 @@ if [ -z "$ZSH_VERSION" ]; then
     return
 fi
 
+# Compute a PATH without duplicates. This could have been done with
+# "typeset -aU" but this some paths are equal, like /usr/bin and /bin
+# in some cases.
 () {
     local -a wanted savedpath
     local p
