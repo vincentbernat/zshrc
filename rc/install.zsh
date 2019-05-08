@@ -29,9 +29,6 @@ install-zsh() {
 
         echo "$version" > "$ZSH/run/version"
 
-        # Move history
-        { mv "$ZSH"/history-* "$ZSH"/run || true } 2> /dev/null
-
         # Setup zshrc
         for rc in zshrc zshenv; do
             [ ! -f $ZDOTDIR/.${rc} ] || mv $ZDOTDIR/.${rc} $ZDOTDIR/.${rc}.old
