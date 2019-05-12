@@ -75,7 +75,7 @@ zssh() {
     local -a common
     local state
 
-    common=(-o ControlPath="~/tmp/zssh-%C")
+    common=(-o ControlPath="$ZSH/run/zssh-%C")
     state=$(command ssh -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
 # Check if zsh is installed.
 if ! which zsh 2> /dev/null > /dev/null; then
