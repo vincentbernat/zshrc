@@ -8,7 +8,7 @@ _vbe_title () {
     title=${1//[^[:alnum:]\/>< ._~:=?@-]/ }
     shorttitle=${2:-$1}
     print -n "\e]1;$title\a"
-    print -n "\e]2;$title\a"
+    print -n "\e]2;$shorttitle\a"
 }
 [ -x $ZSH/run/u/$HOST-$UID/title ] || {
     cat <<EOF > $ZSH/run/u/$HOST-$UID/title
