@@ -4,10 +4,8 @@ _vbe_battery () {
     [[ -d /sys/class/power_supply/BAT0 ]] || return
     _vbe_can_do_unicode || return
     local cache=$ZSH/run/u/$HOST-$UID/acpi
-    zmodload zsh/stat
-    zmodload zsh/datetime
     if [[ -f $cache ]] && \
-	(( $EPOCHSECONDS - $(stat +mtime $cache) < 240 )); then
+	(( $EPOCHSECONDS - $(zstat +mtime $cache) < 240 )); then
 	print -n $(<$cache)
 	return
     fi

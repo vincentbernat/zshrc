@@ -39,8 +39,6 @@ venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
 # Compile sudo if needed
 local sudo=$ZSH/run/u/$HOST-$UID/sudo
 function compile_sudo() {
-    zmodload -F zsh/stat b:zstat
-    zmodload zsh/datetime
     if [[ ! -f $sudo ]] || \
            (( $(zstat +mtime $ZSH/misc/sudo.c) > $(zstat +mtime $sudo) )) && \
                (( $+commands[gcc] )) ; then

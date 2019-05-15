@@ -31,6 +31,9 @@ autoload -U is-at-least
     alias zmodload='zmodload -s'
 }
 
+zmodload -F zsh/stat b:zstat
+zmodload zsh/datetime           # EPOCHSECONDS
+
 () {
     for config_file ($ZSH/rc/*.zsh) source $config_file
     [ ! -e $ZSH/env ] || . $ZSH/env

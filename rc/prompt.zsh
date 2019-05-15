@@ -3,7 +3,6 @@
 #  - https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/jonathan.zsh-theme
 #  - https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/agnoster.zsh-theme
 
-zmodload zsh/datetime
 _vbe_prompt_precmd () {
     _vbe_title "${SSH_TTY+${(%):-%M}:}${(%):-%50<..<%~}" "${SSH_TTY+${(%):-%M}:}${(%):-%20<..<%~}"
     local now=$EPOCHSECONDS
