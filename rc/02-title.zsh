@@ -11,14 +11,15 @@ _vbe_title () {
     print -n "\e]1;$title\a"
     print -n "\e]2;$shorttitle\a"
 }
-[ -x $ZSH/run/u/$HOST-$UID/title ] || {
+if [[ ! -x $ZSH/run/u/$HOST-$UID/title ]] || \
+       (( $EPOCHSECONDS - $(zstat +mtime $ZSH/run/u/$HOST-$UID/title) > 60*60*24 )); then
     cat <<EOF > $ZSH/run/u/$HOST-$UID/title
 #!/bin/zsh
 $(which _vbe_title)
 _vbe_title "\$@"
 EOF
     chmod +x $ZSH/run/u/$HOST-$UID/title
-}
+fi
 
 # Current running program as title
 _title_preexec () {
