@@ -5,6 +5,7 @@ _vbe_title () {
     [ -t 1 ] || return
     emulate -L zsh
     local title
+    local shorttitle
     title=${1//[^[:alnum:]\/>< ._~:=?@-]/ }
     shorttitle=${2:-$1}
     print -n "\e]1;$title\a"
