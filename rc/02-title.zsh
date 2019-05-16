@@ -8,6 +8,9 @@ _vbe_title () {
     local shorttitle
     title=${1//[^[:alnum:]\/>< ._~:=?@-]/ }
     shorttitle=${2:-$1}
+    # In tmux.conf:
+    #  set -g  set-titles on
+    #  set -g  set-titles-string "#T"
     print -n "\e]1;$title\a"
     print -n "\e]2;$shorttitle\a"
 }
