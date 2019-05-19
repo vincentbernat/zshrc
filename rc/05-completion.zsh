@@ -2,7 +2,7 @@
 
 autoload -U zutil
 
-_vbe_autoload compinit && {
+autoload compinit && {
     autoload -U complist
     compinit -i -d $ZSH/run/u/$HOST-$UID/zcompdump
 }

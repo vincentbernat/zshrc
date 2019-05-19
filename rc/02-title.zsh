@@ -64,10 +64,4 @@ _title_preexec () {
     esac
     _vbe_title "${SSH_TTY+${(%):-%M} }\> $t" "${SSH_TTY+${(%):-%M} }${PRCH[running]}${tt:-${t%% *}}"
 }
-if (( $+functions[add-zsh-hook] )); then
-    add-zsh-hook preexec _title_preexec
-else
-    preexec () {
-	_title_preexec
-    }
-fi
+add-zsh-hook preexec _title_preexec

@@ -1,16 +1,15 @@
 # -*- sh -*-
 
-_vbe_autoload () {
-    # Like autoload but actually load and fail silently if not able to load
-    (( $+functions[$1] )) && return 0
-    autoload +X $1 2> /dev/null || {
-        unset -f $1
-        return 1
-    }
-    return 0
+autoload is-at-least
+autoload add-zsh-hook
+
+[[ $ZSH_NAME == "zsh-static" ]] && is-at-least 5.4.1 && {
+    # Don't tell us when modules are not available
+    alias zmodload='zmodload -s'
 }
 
-_vbe_autoload is-at-least || is-at-least() { return 0 }
+zmodload -F zsh/stat b:zstat
+zmodload zsh/datetime           # EPOCHSECONDS
 
 # Test for unicode support
 _vbe_can_do_unicode () {

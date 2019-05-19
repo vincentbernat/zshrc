@@ -12,14 +12,8 @@ _vbe_prompt_precmd () {
 _vbe_prompt_preexec () {
     _vbe_cmd_timestamp=${_vbe_cmd_timestamp:-$EPOCHSECONDS}
 }
-if (( $+functions[add-zsh-hook] )); then
-    add-zsh-hook precmd _vbe_prompt_precmd
-    add-zsh-hook preexec _vbe_prompt_preexec
-else
-    precmd () {
-	_vbe_prompt_precmd
-    }
-fi
+add-zsh-hook precmd _vbe_prompt_precmd
+add-zsh-hook preexec _vbe_prompt_preexec
 
 # Stolen from https://github.com/sindresorhus/pure/blob/master/pure.zsh
 _vbe_human_time () {

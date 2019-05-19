@@ -2,7 +2,7 @@
 
 # Incorporate git and svn information into prompt
 
-(( $+functions[add-zsh-hook] )) && [[ $USERNAME != "root" ]] && {
+[[ $USERNAME != "root" ]] && {
 
     autoload -Uz vcs_info
 
@@ -29,10 +29,7 @@
 
     }
 
-    _vbe_vcs_precmd () {
-	vcs_info
-    }
-    add-zsh-hook precmd _vbe_vcs_precmd
+    add-zsh-hook precmd vcs_info
     _vbe_add_prompt_vcs () {
 	_vbe_prompt_segment cyan default ${vcs_info_msg_0_}
     }
