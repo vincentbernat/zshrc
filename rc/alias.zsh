@@ -402,14 +402,14 @@ colortest() {
         printf "\n"
     done
 
-    printf "\nGrayscale ramp:\n"
+    printf "Grayscale ramp:\n"
     for bg in {232..255}; do
       printf "\e[48;5;%dm  " bg
     done
     printf "\e[0m\n"
 
     # See: https://gist.github.com/XVilka/8346728
-    printf "\nTrue colors:\n"
+    printf "True colors:\n"
     local r g b colnum
     for colnum in {0..76}; do
         r=$((255 - colnum*255/76))
