@@ -4,7 +4,7 @@
 alias df='df -h'
 alias du='du -h'
 alias rm='rm -i'
-alias ll='ls -ltr'
+alias ll='ls -ltrh'
 alias tailf='tail -F'           # not shipped in util-linux anymore
 () {
   local dmesg_version=${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}
