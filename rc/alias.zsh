@@ -49,6 +49,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 (( $+commands[ipython] )) && (( $+commands[ipython3] )) && alias ipython2==ipython && alias ipython=ipython3
 (( $+commands[scapy3] )) && alias scapy=scapy3
 (( $+commands[nix-shell] )) && alias nix-zsh='nix-shell --command zsh -p glibcLocales -p'
+(( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 3 ))'
 
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
