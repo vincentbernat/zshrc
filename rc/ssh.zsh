@@ -111,7 +111,7 @@ echo need-update
             print -u2 "[*] Installing dotfiles..." \
                 && cat $ZSH/run/zsh-install.sh \
                     | command ssh $common -C "$@" \
-                              "env ZDOTDIR=~/.zsh.$USER ZSH=~/.zsh.$USER sh -s" \
+                              "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec sh -s" \
                 && print -u2 "[*] Spawning remote zsh..." \
                 && ssh $common -t "$@" \
                        "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec zsh -i -l -d"
