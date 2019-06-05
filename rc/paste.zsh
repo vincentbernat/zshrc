@@ -11,12 +11,9 @@
 #
 #    bind ] paste-buffer -p
 
-(( $+zle_bracketed_paste == 0 )) && [[  $TERM == rxvt-unicode || \
-    $TERM == rxvt-unicode-256color || \
-    $TERM == xterm || \
-    $TERM == xterm-256color || \
-    $TERM == screen || \
-    $TERM == screen-256color ]] && () {
+(( $+zle_bracketed_paste == 0 )) \
+    && [[  $TERM =~ ^(rxvt-unicode|xterm|screen)(-256color)?$ ]] \
+    && () {
 
     # create a new keymap to use while pasting
     bindkey -N paste
