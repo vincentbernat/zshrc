@@ -77,6 +77,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
   alias rgrep="grep -r"
   alias egrep="grep -E"
   alias fgrep="grep -F"
+  # --color=auto doesn't work. See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=792135
   (( $+commands[zgrep] )) && alias zgrep="GREP=${grep} command zgrep ${colors}"
 }
 
