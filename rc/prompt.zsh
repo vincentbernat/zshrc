@@ -137,6 +137,3 @@ _vbe_setprompt () {
     unset RPROMPT
     unset RPS1
 }
-
-# Autosuggest configuration
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=100
