@@ -2,7 +2,6 @@
 
 _vbe_battery () {
     [[ -d /sys/class/power_supply/BAT0 ]] || return
-    _vbe_can_do_unicode || return
     local cache=$ZSH/run/u/$HOST-$UID/acpi
     if [[ -f $cache ]] && \
 	(( $EPOCHSECONDS - $(zstat +mtime $cache) < 240 )); then
@@ -24,7 +23,11 @@ _vbe_battery () {
     local full
     local g
     local i j
-    gauge=(▲ ▼ △ ▽)
+    if _vbe_can_do_unicode; then
+        gauge=(▲ ▼ △ ▽)
+    else
+        gauge=(+ - . .)
+    fi
     full=$(( (${percent}*${size}+49)/100 ))
     if (( $percent < 10 )); then
 	g=red
