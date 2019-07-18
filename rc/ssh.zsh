@@ -76,7 +76,7 @@ zssh() {
     local state
 
     common=(-o ControlPath="$ZSH/run/zssh-%C")
-    state=$(command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
+    command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
 # Check if zsh is installed.
 if ! which zsh 2> /dev/null > /dev/null; then
     echo no-zsh
@@ -94,7 +94,7 @@ fi
 
 # Otherwise signal we want to install
 echo need-update
-")
+" | read state
     case $state in
         no-zsh)
             # No zsh, plain SSH connection
