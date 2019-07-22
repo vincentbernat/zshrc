@@ -1,18 +1,16 @@
 # -*- sh -*-
 
-# Incorporate git and svn information into prompt
+# Incorporate git information into prompt
 
 [[ $USERNAME != "root" ]] && {
 
     autoload -Uz vcs_info
 
-    zstyle ':vcs_info:*' enable git svn
+    zstyle ':vcs_info:*' enable git
     () {
         local common="${PRCH[branch]} %b%c%u"
 	zstyle ':vcs_info:*:*'   formats $common
 	zstyle ':vcs_info:*:*'   actionformats ${common}"%{${fg[default]}%} ${PRCH[sep]} %{${fg[green]}%}"%a
-	zstyle ':vcs_info:svn:*' branchformat '%b:%r'
-	zstyle ':vcs_info:hg*:*' hgrevformat '%r'
 	zstyle ':vcs_info:*:*'   stagedstr     "%{${fg[green]}%}${PRCH[circle]}"
 	zstyle ':vcs_info:*:*'   unstagedstr   "%{${fg[yellow]}%}${PRCH[circle]}"
 	zstyle ':vcs_info:*:*'   check-for-changes true
