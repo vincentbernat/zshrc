@@ -20,9 +20,7 @@ autoload run-help-ip
 WORDCHARS=${WORDCHARS:s#/#}
 
 if (( ${termcap[Co]:-0} > 8)); then
-    # Autosuggest for buffers smaller than that
+    # Enable and configure autosuggest
+    source ../third-party/zsh-autosuggestions.zsh 
     ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
-else
-    # Disable this feature
-    ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=0
 fi
