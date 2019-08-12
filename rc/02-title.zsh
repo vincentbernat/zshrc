@@ -45,7 +45,7 @@ _title_preexec () {
         %*)
 	    t=${jobtexts[${cmd[1]#%}]}
 	    ;;
-	*=*|exec|sudo|\()
+	*=*|exec|sudo|noglob|\()
 	    (( ${#cmd} > 1 )) && shift cmd
 	    ;&
 	*)
