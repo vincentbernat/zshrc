@@ -23,6 +23,8 @@ bindkey "\e," copy-earlier-word
 # Enable magic quoting of URL
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
+autoload -Uz bracketed-paste-magic
+zle -N bracketed-paste bracketed-paste-magic
 
 # Meta-S will toggle sudo
 function vbe-sudo-command-line() {
