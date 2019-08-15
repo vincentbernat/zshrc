@@ -20,6 +20,10 @@ autoload -U copy-earlier-word
 zle -N copy-earlier-word
 bindkey "\e," copy-earlier-word
 
+# Enable magic quoting of URL
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
+
 # Meta-S will toggle sudo
 function vbe-sudo-command-line() {
     [[ -z $BUFFER ]] && zle up-history
