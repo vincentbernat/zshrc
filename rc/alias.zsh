@@ -333,7 +333,7 @@ function currency() {
         ;;
     esac
   done
-  (( $#currencies > 1 )) || currencies=($currencies chf eur usd)
+  (( $#currencies > 1 )) || currencies=($currencies eur usd)
   local from=${currencies[1]}
   local rate
   for amount in $amounts; do
