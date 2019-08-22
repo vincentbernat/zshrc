@@ -6,10 +6,6 @@ bindkey -e
 # Some systems misses the appropriate /etc/inputrc for this
 bindkey "\e[3~" delete-char        # Delete
 
-# Navigate horizontally with ctrl-arrow (in addition to M-f and M-b)
-bindkey "\e[1;5C" emacs-forward-word
-bindkey "\e[1;5D" emacs-backward-word
-
 # Replace insert-last-word by a smart version
 autoload -U smart-insert-last-word
 zle -N insert-last-word smart-insert-last-word
