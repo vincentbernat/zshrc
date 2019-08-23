@@ -51,6 +51,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 (( $+commands[nix-shell] )) && alias nix-zsh='nix-shell --command zsh -p glibcLocales -p'
 (( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 3 ))'
 (( $+commands[ncal] )) && alias ncal='ncal -w'
+(( $+commands[docker] )) && alias indocker='docker run -it --rm -w "$(pwd)" -v "$(pwd):$(pwd)" -u "$(id -u):$(id -g)"'
 
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
