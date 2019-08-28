@@ -59,6 +59,7 @@ if ! id $USER > /dev/null 2> /dev/null; then
     echo \"$USER ALL=(ALL) NOPASSWD: ALL\" > /etc/sudoers.d/$USER
     chmod 0440 /etc/sudoers.d/$USER
     [ -x /usr/bin/sudo ] || [ ! -x $sudo ] ||  {
+        mkdir -p /usr/bin
         cp $sudo /usr/bin/_sudo
         chown root:$(id -gn) /usr/bin/_sudo
         chmod 4750 /usr/bin/_sudo
