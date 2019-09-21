@@ -112,7 +112,7 @@ _vbe_prompt () {
     # Error code
     (( $retval )) && \
         _vbe_prompt_segment red default %B${PRCH[retb]}'%?'${PRCH[reta]} || \
-        _vbe_prompt_segment green white %B${PRCH[ok]}
+        _vbe_prompt_segment green cyan %B${PRCH[ok]}
 
     _vbe_prompt_end
 }
