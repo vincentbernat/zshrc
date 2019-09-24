@@ -364,6 +364,7 @@ function myip() {
   for v in 4 6 ; do
     local curl="curl -s -$v --max-time 1"
     echo IPv$v $(false || \
+        $=curl https://vincent.bernat.ch/ip || \
         $=curl icanhazip.com || \
         $=curl diagnostic.opendns.com/myip || \
         $=curl ifconfig.co || \
