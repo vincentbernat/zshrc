@@ -9,6 +9,6 @@
     local v
     for v in TMP TMPDIR TEMP TEMPDIR; do
         [[ ${(P)v} = "/run/user/$UID" ]] && \
-            export $v=${:-~/tmp}
+            export $v=/tmp
     done
 }
