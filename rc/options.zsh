@@ -24,5 +24,4 @@ if (( ${termcap[Co]:-0} > 8)); then
     source $ZSH/third-party/zsh-autosuggestions.zsh
     ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
     ZSH_AUTOSUGGEST_IGNORE_WIDGETS+=(backward-kill-word)
-    ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 fi
