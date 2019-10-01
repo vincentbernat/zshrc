@@ -52,10 +52,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 (( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 3 ))'
 (( $+commands[ncal] )) && alias ncal='ncal -w'
 (( $+commands[docker] )) && alias indocker='docker run -it --rm -w "$(pwd)" -v "$(pwd):$(pwd)" -u "$(id -u):$(id -g)"'
-
-# Automatic autocorrect for some common typos (too difficult to remove
-# unaliased command from ZSH history)
-(( $+commands[git] )) && alias gti='() { print -rs git "$@"; git "$@" }'
+(( $+commands[git] )) && alias gti=git
 
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
