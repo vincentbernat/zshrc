@@ -46,7 +46,8 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 
 # Other simple aliases
 (( $+commands[irb] )) && alias irb='irb --readline -r irb/completion'
-(( $+commands[ipython] )) && (( $+commands[ipython3] )) && alias ipython2==ipython && alias ipython=ipython3
+(( $+commands[ipython] )) && alias ipython2==ipython
+(( $+commands[ipython3] )) && alias ipython=ipython3
 (( $+commands[pip] )) && alias pip=pip --disable-pip-version-check
 (( $+commands[scapy3] )) && alias scapy=scapy3
 (( $+commands[nix-shell] )) && alias nix-zsh='nix-shell --command zsh -p glibcLocales'
