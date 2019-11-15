@@ -55,6 +55,8 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 (( $+commands[ncal] )) && alias ncal='ncal -w'
 (( $+commands[docker] )) && alias indocker='docker run -it --rm -w "$(pwd)" -v "$(pwd):$(pwd)" -u "$(id -u):$(id -g)"'
 (( $+commands[git] )) && alias gti=git
+evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
+mkcd() { command mkdir -p $1 && cd $1 }
 
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
@@ -99,10 +101,6 @@ susu() {
               ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
           ${ZSH_NAME} -i -l
 }
-
-# Aliases as a function
-evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
-mkcd() { command mkdir -p $1 && cd $1 }
 
 # JSON pretty-printing.
 #
