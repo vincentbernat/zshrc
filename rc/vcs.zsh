@@ -27,7 +27,12 @@
 
     }
 
-    add-zsh-hook precmd vcs_info
+    add-zsh-hook precmd (){
+        # Heuristics to check if we are on a virtual filesystem
+        # (sshfs, restic...)
+        [[ $(zstat +blocks $PWD) -eq 0 ]] || \
+            vcs_info
+    }
     _vbe_add_prompt_vcs () {
 	_vbe_prompt_segment cyan default ${vcs_info_msg_0_}
     }
