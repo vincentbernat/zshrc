@@ -41,7 +41,7 @@
     # Asynchronous VCS status
     source $ZSH/third-party/async.zsh
     async_init
-    async_start_worker vcs_info -n
+    async_start_worker vcs_info
     async_register_callback vcs_info _vbe_vcs_info_done
     add-zsh-hook precmd (){
         # Heuristic to check for a fuse-like filesystem
