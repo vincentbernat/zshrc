@@ -51,6 +51,10 @@
             vcs_info_msg_0_=
         fi
     }
+    add-zsh-hook chpwd (){
+        [[ -z vcs_info_msg_0_ ]] ||
+            vcs_info_msg_0_="$vcs_info_msg_0_${PRCH[ellipsis]}"
+    }
     _vbe_add_prompt_vcs () {
 	_vbe_prompt_segment cyan default ${vcs_info_msg_0_}
     }
