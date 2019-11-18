@@ -4,6 +4,17 @@
 
 [[ $USERNAME != "root" ]] && {
 
+    # Async helpers
+    _vbe_vcs_info() {
+        cd -q $1
+        vcs_info
+        print ${vcs_info_msg_0_}
+    }
+    _vbe_vcs_info_done() {
+        vcs_info_msg_0_="$3"
+        zle reset-prompt
+    }
+
     autoload -Uz vcs_info
 
     zstyle ':vcs_info:*' enable git
@@ -27,11 +38,15 @@
 
     }
 
+    source $ZSH/third-party/async.zsh
+    async_init
+    async_start_worker vcs_info -n
+    async_register_callback vcs_info _vbe_vcs_info_done
     add-zsh-hook precmd (){
         # Heuristics to check if we are on a virtual filesystem
         # (sshfs, restic...)
         [[ $(zstat +blocks $PWD) -eq 0 ]] || \
-            vcs_info
+            async_job vcs_info _vbe_vcs_info $PWD
     }
     _vbe_add_prompt_vcs () {
 	_vbe_prompt_segment cyan default ${vcs_info_msg_0_}
