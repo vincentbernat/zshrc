@@ -45,8 +45,11 @@
     add-zsh-hook precmd (){
         # Heuristics to check if we are on a virtual filesystem
         # (sshfs, restic...)
-        [[ $(zstat +blocks $PWD) -eq 0 ]] || \
+        if [[ $(zstat +blocks $PWD) -ne 0 ]]; then
             async_job vcs_info _vbe_vcs_info $PWD
+        else
+            vcs_info_msg_0_=
+        fi
     }
     _vbe_add_prompt_vcs () {
 	_vbe_prompt_segment cyan default ${vcs_info_msg_0_}
