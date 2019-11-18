@@ -39,22 +39,31 @@
     }
 
     # Asynchronous VCS status
-    source $ZSH/third-party/async.zsh
-    async_init
-    async_start_worker vcs_info
-    async_register_callback vcs_info _vbe_vcs_info_done
-    add-zsh-hook precmd (){
-        # Heuristic to check for a fuse-like filesystem
-        if [[ $(zstat +blocks $PWD) -ne 0 ]]; then
-            async_job vcs_info _vbe_vcs_info $PWD
-        else
-            vcs_info_msg_0_=
-        fi
-    }
-    add-zsh-hook chpwd (){
-        [[ -z vcs_info_msg_0_ ]] ||
-            vcs_info_msg_0_="$vcs_info_msg_0_${PRCH[ellipsis]}"
-    }
+    if is-at-least 5.2; then
+        source $ZSH/third-party/async.zsh
+        async_init
+        async_start_worker vcs_info
+        async_register_callback vcs_info _vbe_vcs_info_done
+        add-zsh-hook precmd (){
+            # Heuristic to check for a fuse-like filesystem
+            if [[ $(zstat +blocks $PWD) -ne 0 ]]; then
+                async_job vcs_info _vbe_vcs_info $PWD
+            else
+                vcs_info_msg_0_=
+            fi
+        }
+        add-zsh-hook chpwd (){
+            [[ -z vcs_info_msg_0_ ]] ||
+                vcs_info_msg_0_="$vcs_info_msg_0_${PRCH[ellipsis]}"
+        }
+    else
+        add-zsh-hook precmd (){
+            # Heuristic to check for a fuse-like filesystem
+            if [[ $(zstat +blocks $PWD) -ne 0 ]]; then
+                vcs_info
+            fi
+        }
+    fi
 
     _vbe_add_prompt_vcs () {
 	_vbe_prompt_segment cyan default ${vcs_info_msg_0_}
