@@ -25,7 +25,6 @@
 	zstyle ':vcs_info:*:*'   stagedstr     "%{${fg[green]}%}${PRCH[circle]}"
 	zstyle ':vcs_info:*:*'   unstagedstr   "%{${fg[yellow]}%}${PRCH[circle]}"
 	zstyle ':vcs_info:*:*'   check-for-changes true
-        zstyle ':vcs_info:hg*:*' get-revision true
 
         zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 
