@@ -53,7 +53,7 @@
             fi
         }
         add-zsh-hook chpwd (){
-            [[ -z vcs_info_msg_0_ ]] ||
+            [[ -z $vcs_info_msg_0_ ]] ||
                 vcs_info_msg_0_="$vcs_info_msg_0_${PRCH[ellipsis]}"
         }
     else
