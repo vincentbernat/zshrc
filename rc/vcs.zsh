@@ -6,6 +6,7 @@
 
     # Async helpers
     _vbe_vcs_info() {
+        autoload -Uz vcs_info
         cd -q $1
         vcs_info
         print ${vcs_info_msg_0_}
@@ -14,8 +15,6 @@
         vcs_info_msg_0_="$3"
         zle reset-prompt
     }
-
-    autoload -Uz vcs_info
 
     zstyle ':vcs_info:*' enable git
     () {
@@ -52,6 +51,7 @@
                 vcs_info_msg_0_="$vcs_info_msg_0_${PRCH[ellipsis]}"
         }
     else
+        autoload -Uz vcs_info
         add-zsh-hook precmd vcs_info
     fi
 
