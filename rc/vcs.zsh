@@ -20,7 +20,7 @@
     () {
         local common="${PRCH[branch]} %b%c%u"
 	zstyle ':vcs_info:*:*'   formats $common
-	zstyle ':vcs_info:*:*'   actionformats ${common}"%{${fg[default]}%} ${PRCH[sep]} %{${fg[green]}%}"%a
+	zstyle ':vcs_info:*:*'   actionformats "${common}%{${fg[default]}%} ${PRCH[sep]} %{${fg[green]}%}%a"
 	zstyle ':vcs_info:*:*'   stagedstr     "%{${fg[green]}%}${PRCH[circle]}"
 	zstyle ':vcs_info:*:*'   unstagedstr   "%{${fg[yellow]}%}${PRCH[circle]}"
 	zstyle -e ':vcs_info:*:*'   check-for-changes '[[ $(zstat +blocks $PWD) -ne 0 ]] && reply=( true ) || reply=( false )'
