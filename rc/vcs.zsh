@@ -54,20 +54,16 @@
     }
 
     # Asynchronous VCS status
-    if is-at-least 5.2; then
-        source $ZSH/third-party/async.zsh
-        async_init
-        _vbe_vcs_async_start
-        add-zsh-hook precmd (){
-            async_job vcs_info _vbe_vcs_info $PWD
-        }
-        add-zsh-hook chpwd (){
-            [[ -z $vcs_info_msg_0_ ]] ||
-                vcs_info_msg_0_="$vcs_info_msg_0_${PRCH[ellipsis]}"
-        }
-    else
-        add-zsh-hook precmd vcs_info
-    fi
+    source $ZSH/third-party/async.zsh
+    async_init
+    _vbe_vcs_async_start
+    add-zsh-hook precmd (){
+        async_job vcs_info _vbe_vcs_info $PWD
+    }
+    add-zsh-hook chpwd (){
+        [[ -z $vcs_info_msg_0_ ]] ||
+            vcs_info_msg_0_="$vcs_info_msg_0_${PRCH[ellipsis]}"
+    }
 
     _vbe_add_prompt_vcs () {
 	_vbe_prompt_segment cyan default ${vcs_info_msg_0_}
