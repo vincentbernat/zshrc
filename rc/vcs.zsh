@@ -63,8 +63,7 @@
         async_job vcs_info _vbe_vcs_info $PWD
     }
     add-zsh-hook chpwd (){
-        [[ -z $vcs_info_msg_0_ ]] ||
-            vcs_info_msg_0_="$vcs_info_msg_0_${PRCH[ellipsis]}"
+        vcs_info_msg_0_=
     }
 
     _vbe_add_prompt_vcs () {
