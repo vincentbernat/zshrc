@@ -18,6 +18,7 @@
         local job=$1
         local return_code=$2
         local stdout=$3
+        local more=$6
         if [[ $job == '[async]' ]]; then
             if [[ $return_code -eq 2 ]]; then
                 # Need to restart the worker. Stolen from
@@ -27,7 +28,7 @@
             fi
         fi
         vcs_info_msg_0_=$stdout
-        zle reset-prompt
+        [[ $more == 1 ]] || zle reset-prompt
     }
 
     autoload -Uz vcs_info
