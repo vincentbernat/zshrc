@@ -10,12 +10,12 @@
         # systemd
         for cmd ($cmds) {
             (( $+functions[compdef] )) && compdef -d $cmd
-            alias   $cmd="${(%):-%(#..sudo )}systemctl $cmd"
+            alias $cmd="${(%):-%(#..sudo )}systemctl $cmd"
         }
     else
         # generic service
         for cmd ($cmds) {
-            function  $cmd() {
+            function $cmd() {
                 name=$1 ; shift
                 ${(%):-%(#..sudo)} service $name $0 "$@"
             }
