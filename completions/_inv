@@ -1,0 +1,13 @@
+#compdef inv invoke
+
+_inv() {
+    local collection_arg
+    local -a completions
+    if [[ "${words}" =~ "(-c|--collection) [^ ]+" ]]; then
+        collection_arg=$MATCH
+    fi
+    completions=( $(invoke ${=collection_arg} --complete -- ${words}) )
+    _describe -t invoke-arguments "invoke argument" completions "$@"
+}
+
+_inv "$@"
