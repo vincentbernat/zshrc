@@ -61,7 +61,11 @@ zssh() {
     command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
 # Check if zsh is installed.
 if ! which zsh 2> /dev/null > /dev/null; then
-    echo no-zsh
+    if grep -q '^ID=debian\$' /etc/os-release 2> /dev/null && [ x\$USER = xroot ]; then
+        echo no-zsh-but-debian
+    else
+        echo no-zsh
+    fi
     exit 0
 fi
 
@@ -78,16 +82,22 @@ fi
 echo need-update
 " | read state
     case $state in
-        no-zsh)
-            # No zsh, plain SSH connection
-            print -u2 "[!] ZSH is not installed on remote"
-            ssh $common "$@"
-            ;;
         ok)
             # Dotfiles up-to-date, connect and execute zsh
             ssh $common -t "$@" \
                 "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && export SHELL=\$(which zsh) && exec zsh -i -l -d"
             ;;
+        no-zsh)
+            # No zsh, plain SSH connection
+            print -u2 "[!] ZSH is not installed on remote"
+            ssh $common "$@"
+            ;;
+        no-zsh-but-debian)
+            # No zsh but remote is Debian
+            print -u2 "[*] Installing Zsh..." \
+                && command ssh $command -C "$@" "DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh" \
+                || return 1
+            ;&
         need-update)
             # We need to install dotfiles, connect and execute zsh
             print -u2 "[*] Installing dotfiles..." \
