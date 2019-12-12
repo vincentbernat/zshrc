@@ -48,14 +48,14 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 (( $+commands[irb] )) && alias irb='irb --readline -r irb/completion'
 (( $+commands[ipython] )) && alias ipython2==ipython
 (( $+commands[ipython3] )) && alias ipython=ipython3
-(( $+commands[pip] )) && alias pip=pip --disable-pip-version-check
+(( $+commands[pip] )) && alias pip='pip --disable-pip-version-check'
 (( $+commands[scapy3] )) && alias scapy=scapy3
 (( $+commands[nix-shell] )) && alias nix-zsh='nix-shell --command zsh -p glibcLocales'
 (( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 3 ))'
 (( $+commands[ncal] )) && alias ncal='ncal -w'
 (( $+commands[docker] )) && alias indocker='docker run -it --rm -w "$(pwd)" -v "$(pwd):$(pwd)" -u "$(id -u):$(id -g)"'
 (( $+commands[git] )) && alias gti=git
-(( $+commands[mtr] )) && alias mtrr=mtr -wzb
+(( $+commands[mtr] )) && alias mtrr='mtr -wzb'
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
 mkcd() { command mkdir -p $1 && cd $1 }
 
