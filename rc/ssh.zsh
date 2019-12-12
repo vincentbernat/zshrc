@@ -61,7 +61,7 @@ zssh() {
     command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
 # Check if zsh is installed.
 if ! which zsh 2> /dev/null > /dev/null; then
-    if grep -q '^ID=debian\$' /etc/os-release 2> /dev/null && [ x\$USER = xroot ]; then
+    if grep -Eq '^ID=(debian|ubuntu)\$' /etc/os-release 2> /dev/null && [ x\$USER = xroot ]; then
         echo no-zsh-but-debian
     else
         echo no-zsh
