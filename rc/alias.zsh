@@ -55,6 +55,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 (( $+commands[ncal] )) && alias ncal='ncal -w'
 (( $+commands[docker] )) && alias indocker='docker run -it --rm -w "$(pwd)" -v "$(pwd):$(pwd)" -u "$(id -u):$(id -g)"'
 (( $+commands[git] )) && alias gti=git
+(( $+commands[mtr] )) && alias mtrr=mtr -wzb
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
 mkcd() { command mkdir -p $1 && cd $1 }
 
