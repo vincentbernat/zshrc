@@ -4,6 +4,7 @@
 alias df='df -h'
 alias du='du -h'
 alias rm='rm -i'
+alias mv='mv -i'
 alias ll='ls -ltrh'
 alias tailf='tail -F'           # not shipped in util-linux anymore
 () {
