@@ -57,6 +57,7 @@ zssh() {
     local -a common
     local state
 
+    [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
     common=(-o ControlPath="$ZSH/run/zssh-%C")
     command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
 # Check if zsh is installed.
@@ -73,7 +74,7 @@ fi
 # If dotfiles are already up-to-date, execute the shell
 current=\$(cat ~/.zsh.$USER/run/version 2> /dev/null || echo 0)
 target=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
-if [ \$current  = \$target  ]; then
+if [ x\$current = x\$target ]; then
     echo ok
     exit 0
 fi
