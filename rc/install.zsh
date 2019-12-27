@@ -31,7 +31,7 @@ install-zsh() {
 
         # Setup zshrc
         for rc in zshrc zshenv; do
-            [ ! -f $ZDOTDIR/.${rc} ] || mv $ZDOTDIR/.${rc} $ZDOTDIR/.${rc}.old
+            [ ! -f $ZDOTDIR/.${rc} ] || mv -f $ZDOTDIR/.${rc} $ZDOTDIR/.${rc}.old
             ln -s "$ZSH"/${rc} $ZDOTDIR/.${rc}
         done
 
