@@ -39,11 +39,11 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
   (( ${terminfo[colors]:-0} >= 8 )) && ip -color -human rule > /dev/null 2> /dev/null && \
       alias ip='ip -color -human'
   alias ip6='ip -6'
-  alias ipr='ip -r'
-  alias ip6r='ip -6 -r'
-  alias ipm='ip -r monitor'
-  alias ipb='ip --brief'
-  alias ip6b='ip -6 --brief'
+  alias ipr='ip -resolve'
+  alias ip6r='ip -6 -resolve'
+  alias ipm='ip -resolve monitor'
+  alias ipb='ip -brief'
+  alias ip6b='ip -6 -brief'
 }
 
 # Other simple aliases
