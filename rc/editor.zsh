@@ -5,7 +5,7 @@
     local -a editors
     local editor
     editors=(
-	"emacs -nw ${(%):-%(!.-q.)} --eval='(global-font-lock-mode 1) (setq make-backup-files nil)'" # emacs
+	"emacs -nw ${(%):-%(!.-q.)} --eval='(progn (global-font-lock-mode 1) (setq make-backup-files nil))'" # emacs
         "mg -n"           # emacs clone (make it not create backup files)
         "jove"            # Another emacs clone (don't create backup files by default)
 	"vim" "vi"	  # vi
