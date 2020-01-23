@@ -41,13 +41,11 @@
         zstyle    ':vcs_info:*:*' actionformats     $actionformats
         zstyle    ':vcs_info:*:*' stagedstr         "%{${fg[green]}%}${PRCH[circle]}"
         zstyle    ':vcs_info:*:*' unstagedstr       "%{${fg[yellow]}%}${PRCH[circle]}"
-	zstyle -e ':vcs_info:*:*' check-for-changes \
-               '[[ $(zstat +blocks $PWD) -ne 0 ]] && reply=( true ) || reply=( false )'
+	zstyle    ':vcs_info:*:*' check-for-changes true
 
         zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 
         +vi-git-untracked(){
-            [[ $(zstat +blocks $PWD) -ne 0 ]] || return
             if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
                 git status --porcelain 2> /dev/null | grep -q '??' ; then
                 hook_com[staged]+="%{${fg[black]}%}${PRCH[circle]}"
