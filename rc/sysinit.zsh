@@ -11,6 +11,7 @@
         for cmd ($cmds) {
             (( $+functions[compdef] )) && compdef -d $cmd
             alias $cmd="${(%):-%(#..sudo )}systemctl $cmd"
+            alias u$cmd="systemctl --user $cmd"
         }
     else
         # generic service
