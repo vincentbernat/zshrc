@@ -52,7 +52,6 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 (( $+commands[ipython3] )) && alias ipython=ipython3
 (( $+commands[pip] )) && alias pip='pip --disable-pip-version-check'
 (( $+commands[scapy3] )) && alias scapy=scapy3
-(( $+commands[nix-shell] )) && alias nix-zsh='nix-shell --command zsh -p glibcLocales'
 (( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 3 ))'
 (( $+commands[ncal] )) && alias ncal='ncal -w'
 (( $+commands[docker] )) && alias indocker='docker run -it --rm -w "$(pwd)" -v "$(pwd):$(pwd)" -u "$(id -u):$(id -g)"'
@@ -60,6 +59,12 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 (( $+commands[mtr] )) && alias mtrr='mtr -wzbe'
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
 mkcd() { command mkdir -p $1 && cd $1 }
+(( $+commands[nix-shell] )) && nix-zsh() {
+        case $# in
+            0) nix-shell --command zsh ;;
+            *) nix-shell --command zsh -p glibcLocales "$@" ;;
+        esac
+}
 
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
