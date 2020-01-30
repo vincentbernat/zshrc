@@ -60,7 +60,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 evince() { command evince ${*:-*.(djvu|dvi|pdf)(om[1])} }
 mkcd() { command mkdir -p $1 && cd $1 }
 (( $+commands[nix-shell] )) && nix-zsh() {
-        case $# in
+        case ${#${@:#--*}} in
             0) nix-shell --command zsh ;;
             *) nix-shell --command zsh -p glibcLocales "$@" ;;
         esac
