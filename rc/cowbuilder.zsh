@@ -40,7 +40,7 @@
                 opts=(--debootstrap debootstrap)
         else
             case $arch,$(dpkg-architecture -q DEB_BUILD_ARCH) in
-                amd64,i386)
+                i386,amd64)
                     opts=(--debootstrap debootstrap)
                     ;;
                 *)
