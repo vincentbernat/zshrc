@@ -118,7 +118,8 @@ susu() {
 # `stdbuf -o L`.
 (( $+commands[python] + $+commands[python3] )) && \
 json() {
-  PATH=/usr/bin:$PATH ${commands[python3]:-$commands[python]} -u -c '#!/usr/bin/env python3
+  local -a pythons=(/usr/{,local/}bin/python{3,,2}(XN) $commands[python3] $commands[python])
+  ${pythons[1]} -u -c '#!/usr/bin/env python3
 
 # Pretty-print files containing JSON lines. Reads from stdin when no
 # argument is provided, otherwise pretty print each argument. This
