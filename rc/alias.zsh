@@ -369,9 +369,9 @@ function \$() {
 # Get my own external IP
 function myip() {
   for v in 4 6 ; do
-    local curl="curl -s -$v --max-time 1"
+    local curl=(curl -s -$v --max-time 1)
     echo IPv$v \
-         $($=curl https://vincent.bernat.ch/ip || echo "unknown")
+         $($curl https://vincent.bernat.ch/ip || echo "unknown")
   done 2> /dev/null
 }
 
