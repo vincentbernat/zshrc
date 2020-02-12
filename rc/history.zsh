@@ -6,8 +6,8 @@ setopt hist_ignore_all_dups	# ignores duplicates
 setopt hist_ignore_space        # don't store commands starting with a space
 
 HISTFILE=$ZSH/run/u/$HOST-$UID/history
-HISTSIZE=20000
-SAVEHIST=20000
+HISTSIZE=30000
+SAVEHIST=30000
 
 # Ctrl-r search in the history with patterns
 (( $+widgets[history-incremental-pattern-search-backward] )) &&	\
