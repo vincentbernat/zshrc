@@ -9,7 +9,9 @@
 #      applied. Currently, if it ends with -backports, the backports
 #      mirror will be added.
 #
-# Note: have a look at cowbuilder-dist in ubuntu-dev-tools which is similar.
+# Note: have a look at cowbuilder-dist in ubuntu-dev-tools which is
+# similar. Also, the layout is compatible with git-pbuilder from
+# git-buildpackage package.
 
 (( $+commands[cowbuilder] )) && {
     cowbuilder() {
