@@ -163,75 +163,42 @@ rm $enter
     return 1
 }
 
-function save() {
-    local v
-    for v ($@) {
-            _saved_environment[$v]=${${(e):-\$$v}}
-        }
-}
-
-function restore() {
-    local v
-    for v (${(k)_saved_environment}) {
-            unset $v
-            [[ -z ${_saved_environment[$v]} ]] || export $v=${_saved_environment[$v]}
-        }
-}
-
-# If in another virtualenv, call deactivate
-(( $+functions[deactivate_node] )) && deactivate_node
-(( $+functions[deactivate] )) && {
-    deactivate
-    restore
-}
-
 # Virtualenv
-[[ ${venv[(r)$env]} == $env ]] && {
+[[ ${venv[(r)$env]} == $env ]] && {(
     local activate="$WORKON_HOME/$env/bin/activate"
     local VIRTUAL_ENV_DISABLE_PROMPT=1
     local NODE_VIRTUAL_ENV_DISABLE_PROMPT=1
-    source $activate
-
-    typeset -Ag _saved_environment
+    source $activate # nowadays, it really just push virtualenv's bin in PATH
 
     # Gems.
     # GEM_HOME is where gems will be installed.
     # GEM_PATH is where gems are searched
-    save GEM_HOME GEM_PATH
     export GEM_HOME=$VIRTUAL_ENV/gems
     export GEM_PATH=$GEM_HOME
     path=( $GEM_HOME/bin $path )
 
     # Go
-    save GOPATH
     export GOPATH=$VIRTUAL_ENV/go
     path=( $GOPATH/bin $path)
 
     # C (install with ./configure --prefix=$VIRTUAL_ENV)
-    save LD_LIBRARY_PATH PKG_CONFIG_PATH
     export LD_LIBRARY_PATH=$VIRTUAL_ENV/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
     export PKG_CONFIG_PATH=$VIRTUAL_ENV/lib/pkgconfig
     path=( $VIRTUAL_ENV/sbin $path )
 
     # OCaml (through OPAM)
     (( $+commands[opam] )) && {
-        save OPAMROOT MANPATH PERL5LIB CAML_LD_LIBRARY_PATH OCAML_TOPLEVEL_PATH
         export OPAMROOT=$VIRTUAL_ENV/opam
         [[ -d $OPAMROOT ]] && \
             eval $(opam config env)
     }
 
     # node.js workaround
-    [[ -z $NPM_CONFIG_PREFIX ]] || {
-        save npm_config_prefix
-        export npm_config_prefix=$NPM_CONFIG_PREFIX
-    }
+    [[ -z $NPM_CONFIG_PREFIX ]] || export npm_config_prefix=$NPM_CONFIG_PREFIX
 
-    rehash
-    return
-}
+    export PATH
+    exec $SHELL -i
+); return }
 
-[[ $env == "-" ]] || {
-    print "ERROR: environment $env does not exist"
-    return 2
-}
+print "ERROR: environment $env does not exist"
+return 2
