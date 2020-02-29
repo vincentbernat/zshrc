@@ -3,8 +3,6 @@
 # Virtualenv related functions
 # Simplified version of virtualenvwrapper.
 
-# Also setup the environment for Ruby gems.
-
 WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
 
 (( $+commands[virtualenv] )) && {
