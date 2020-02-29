@@ -36,7 +36,6 @@ EOF
 }
 
 (( $+commands[virtualenv] )) && {
-    export PIP_REQUIRE_VIRTUALENV=true
     hash -d venvs=$WORKON_HOME
 
     _vbe_add_prompt_virtualenv () {

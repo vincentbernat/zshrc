@@ -50,7 +50,8 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 (( $+commands[irb] )) && alias irb='irb --readline -r irb/completion'
 (( $+commands[ipython] )) && alias ipython2==ipython
 (( $+commands[ipython3] )) && alias ipython=ipython3
-(( $+commands[pip] )) && alias pip='pip --disable-pip-version-check'
+(( $+commands[pip] )) && alias pip='PIP_REQUIRE_VIRTUALENV=true pip --disable-pip-version-check'
+(( $+commands[pip3] )) && alias pip='PIP_REQUIRE_VIRTUALENV=true pip3 --disable-pip-version-check'
 (( $+commands[scapy3] )) && alias scapy=scapy3
 (( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 3 ))'
 (( $+commands[ncal] )) && alias ncal='ncal -w'
