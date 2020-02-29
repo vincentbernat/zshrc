@@ -7,7 +7,7 @@
 #  . ~/.nix-profile/etc/profile.d/nix.sh
 #  env > b
 #  diff -u a b
-[ -d $HOME/.nix-defexpr/channels/nixpkgs ] && {
+[ x$IN_NIX_SHELL != xpure ] && [ -d $HOME/.nix-defexpr/channels/nixpkgs ] && {
     [ -n "$NIX_PATH" ] || \
         export NIX_PATH=nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
     [ -n "$NIX_SSL_CERT_FILE" ] || \
@@ -25,6 +25,7 @@ fi
 # "typeset -aU" but this some paths are equal, like /usr/bin and /bin
 # in some cases.
 () {
+    [[ $IN_NIX_SHELL == pure ]] && return
     local -a wanted savedpath
     local p
     wanted=(~/bin ~/.nix-profile/bin /usr/lib/ccache
