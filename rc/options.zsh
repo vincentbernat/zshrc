@@ -3,6 +3,8 @@
 setopt rmstarsilent             # Don't ask for confirmation on rm *
 setopt interactivecomments	# Allow comments inside commands
 setopt autopushd		# Maintain directories in a heap
+setopt pushdignoredups          # Remove duplicates from directory heap
+setopt pushdminus               # Invert + and - meanings
 setopt autocd			# Don't need to use `cd`
 setopt extendedglob             # Enable extended globbing
 setopt longlistjobs             # Display PID when using jobs
