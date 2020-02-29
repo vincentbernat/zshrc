@@ -28,6 +28,8 @@ ${fg[white]}
 EOF
 	popd > /dev/null || return
         workon ${@[-1]}
+        [[ ${@[-1]} == "tmp" ]] && \
+            rm -rf $WORKON_HOME/tmp
     }
     alias virtualenv2='_virtualenv 2'
     alias virtualenv3='_virtualenv 3'
