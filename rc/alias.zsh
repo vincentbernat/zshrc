@@ -47,6 +47,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 }
 
 # Other simple aliases
+(( $+commands[xdg-open] )) && alias o=xdg-open
 (( $+commands[irb] )) && alias irb='irb --readline -r irb/completion'
 (( $+commands[ipython] )) && alias ipython2==ipython # maybe inexact
 (( $+commands[ipython3] )) && alias ipython=ipython3
