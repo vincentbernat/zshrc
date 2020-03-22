@@ -43,7 +43,6 @@ install-zsh() {
                     rm -rf "$f"
             esac
         done
-
     }
 
     {
@@ -66,16 +65,13 @@ install-zsh() {
         echo 'upgrade'
     } > $ZSH/run/zsh-install.sh
 
-    # When invoked with -b, replace .bashrc
     # Can use an identity file with -i
-    local -a bash identity
-    zparseopts -D b=bash i:=identity
+    local -a identity
+    zparseopts -D i:=identity
     (( $# == 0 )) || for h in $@; do
         echo "$fg[green]>>>$reset_color $h"
-        {
-            cat $ZSH/run/zsh-install.sh
-            (( $+bash[1] )) && echo 'echo '"'"'[ -z "$PS1" ] || exec zsh -d'"'"' > ~/.bashrc'
-        } | ssh -C ${identity[2]+-i ${identity[2]}} $h sh -s
+        cat $ZSH/run/zsh-install.sh \
+            | ssh -C ${identity[2]+-i ${identity[2]}} $h sh -s
     done
 }
 
