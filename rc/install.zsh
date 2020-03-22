@@ -71,6 +71,7 @@ install-zsh() {
     local -a bash identity
     zparseopts -D b=bash i:=identity
     (( $# == 0 )) || for h in $@; do
+        echo "$fg[green]>>>$reset_color $h"
         {
             cat $ZSH/run/zsh-install.sh
             (( $+bash[1] )) && echo 'echo '"'"'[ -z "$PS1" ] || exec zsh -d'"'"' > ~/.bashrc'
