@@ -170,21 +170,26 @@ rm $enter
     local NODE_VIRTUAL_ENV_DISABLE_PROMPT=1
     source $activate # nowadays, it really just push virtualenv's bin in PATH
 
+    append_path() {
+        mkdir -p $1
+        path=( $1 $path )
+    }
+
     # Gems.
     # GEM_HOME is where gems will be installed.
     # GEM_PATH is where gems are searched
     export GEM_HOME=$VIRTUAL_ENV/gems
     export GEM_PATH=$GEM_HOME
-    path=( $GEM_HOME/bin $path )
+    append_path $GEM_HOME/bin
 
     # Go
     export GOPATH=$VIRTUAL_ENV/go
-    path=( $GOPATH/bin $path)
+    append_path $GOPATH/bin
 
     # C (install with ./configure --prefix=$VIRTUAL_ENV)
     export LD_LIBRARY_PATH=$VIRTUAL_ENV/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
     export PKG_CONFIG_PATH=$VIRTUAL_ENV/lib/pkgconfig
-    path=( $VIRTUAL_ENV/sbin $path )
+    append_path $VIRTUAL_ENV/sbin
 
     # OCaml (through OPAM)
     (( $+commands[opam] )) && {
