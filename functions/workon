@@ -15,8 +15,8 @@ local env=$1
 local -a venv dimages dcontainers
 venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
 (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && {
-    dimages=( $(docker images | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
-    dcontainers=( $(docker ps | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
+    dimages=( $(docker image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
+    dcontainers=( $(docker container list | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
 }
 
 # No parameters, list available environment
@@ -87,7 +87,7 @@ exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
      $sudo -u $(id -u) -g $(id -g) -c '$PWD' \$SHELL -i -l
 EOF
     (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -
-    docker run -t -i \
+    docker container run -t -i \
            $([[ -d /usr/share/zsh ]] && print -- -v /usr/share/zsh:/usr/share/zsh-static:ro) \
            $([[ -x ${SHELL}-static ]] && print -- -v ${SHELL}-static:${SHELL}-static:ro) \
            -v $HOME:$HOME \
@@ -105,7 +105,7 @@ EOF
 
 # Docker containers
 [[ ${dcontainers[(r)$env]} == $env ]] && {
-    local id=$(docker inspect --format '{{.State.Pid}}' $env)
+    local id=$(docker container inspect --format '{{.State.Pid}}' $env)
 
     # We need to mount $HOME inside the container, that's quite
     # hacky: we get the device we need to mount, we mount it
