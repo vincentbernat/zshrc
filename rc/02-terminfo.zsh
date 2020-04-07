@@ -29,7 +29,6 @@ autoload -U zsh/terminfo zsh/termcap
         fi
     done
     unset LC__ORIGINALTERM
-    unset COLORTERM
     export TERM
 }
 
