@@ -36,11 +36,8 @@ ssh() {
     # host, the locale is reset with the help of
     # `$ZSH/rc/01-locale.zsh`.
     case "$TERM" in
-	rxvt-256color|rxvt-unicode*)
-	    LC__ORIGINALTERM=$TERM TERM=rxvt LANG=C LC_MESSAGES=C command ssh $extra "$@"
-	    ;;
-	screen-256color)
-	    LC__ORIGINALTERM=$TERM TERM=screen LANG=C LC_MESSAGES=C command ssh $extra "$@"
+	*-*)
+	    LC__ORIGINALTERM=$TERM TERM=${TERM%%-*} LANG=C LC_MESSAGES=C command ssh $extra "$@"
 	    ;;
 	*)
 	    LANG=C LC_MESSAGES=C command ssh $extra "$@"
