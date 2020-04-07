@@ -116,13 +116,4 @@ echo need-update
 # Connect with agent-forwarding enabled but using a locked-down SSH
 # agent. This assumes the key used to connect to the server will be
 # the only one needed.
-assh() {
-    (
-        unset SSH_AUTH_SOCK
-        eval $(ssh-agent)
-        [[ -n $SSH_AUTH_SOCK ]] || exit 1
-        trap "ssh-agent -k > /dev/null" EXIT
-        ssh -o AddKeysToAgent=confirm -o ForwardAgent=yes "$@"
-    )
-}
-(( $+functions[compdef] )) && compdef _ssh assh=ssh
+alias assh="ssh-agent ssh -o AddKeysToAgent=confirm -o ForwardAgent=yes"
