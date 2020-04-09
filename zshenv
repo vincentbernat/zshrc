@@ -29,9 +29,18 @@ fi
     [[ $IN_NIX_SHELL == pure ]] && return
     local -a wanted savedpath
     local p
-    wanted=(~/bin ~/.nix-profile/bin /usr/lib/ccache
-            /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
-            /usr/local/games /usr/games /var/lib/flatpak/exports/bin)
+    wanted=(~/bin
+            ~/.nix-profile/bin
+            /usr/lib/ccache
+            /usr/local/sbin
+            /usr/local/bin
+            /var/lib/flatpak/exports/bin
+            /usr/sbin
+            /usr/bin
+            /sbin
+            /bin
+            /usr/local/games
+            /usr/games)
     savedpath=($path)
     path=()
     for p in $savedpath; do
