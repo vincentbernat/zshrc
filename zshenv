@@ -17,7 +17,8 @@
 export GOPATH=$HOME/src/gocode
 
 if [ -z "$ZSH_VERSION" ]; then
-    eval $(zsh -c 'typeset -gpx PATH')
+    eval $(zsh -c 'typeset PATH')
+    export PATH
     return
 fi
 
