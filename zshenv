@@ -30,7 +30,7 @@ fi
     local p
     wanted=(~/bin ~/.nix-profile/bin /usr/lib/ccache
             /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
-            /usr/local/games /usr/games)
+            /usr/local/games /usr/games /var/lib/flatpak/exports/bin)
     savedpath=($path)
     path=()
     for p in $savedpath; do
