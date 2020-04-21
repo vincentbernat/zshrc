@@ -6,6 +6,8 @@ alias du='du -h'
 alias rm='rm -i'
 alias mv='mv -i'
 alias ll='ls -ltrh'
+alias chown='chown -h'
+alias chgrp='chgrp -h'
 alias tailf='tail -F'           # not shipped in util-linux anymore
 () {
   local dmesg_version=${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}
