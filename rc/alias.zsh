@@ -72,6 +72,12 @@ mkcd() { command mkdir -p $1 && cd $1 }
         esac
 }
 
+# Global aliases. I am using `,' as a prefix.
+alias -g ,nd='*(/om[1])'        # last directory
+alias -g ,ndd='*(/om[1])'       # before-last directory
+alias -g ,nf='*(.om[1])'        # last file
+alias -g ,nff='*(.om[1])'       # before-last file
+
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
   export LESS_TERMCAP_mb=$'\E[1;31m'
