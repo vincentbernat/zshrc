@@ -14,7 +14,7 @@ setopt always_to_end
 setopt glob_complete
 unsetopt list_beep
 
-zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*' completer _expand_alias _complete _match _approximate
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt ''
 zstyle ':completion:*' group-name ''
