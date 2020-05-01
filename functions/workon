@@ -51,6 +51,8 @@ local setupuser="
 for SHELL in ${SHELL}-static $SHELL /bin/bash /bin/sh; do
     [ ! -x \$SHELL ] || break
 done
+mkdir -p /tmp
+chmod 1777 /tmp
 if ! id $USER > /dev/null 2> /dev/null; then
     echo $(getent passwd $(id -u)) >> /etc/passwd
     echo $(getent group $(id -g)) >> /etc/group
