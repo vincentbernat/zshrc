@@ -32,6 +32,8 @@ zstyle ':completion:history-words:*' remove-all-dups true
 
 zstyle ':completion:*:*:docker:*' option-stacking yes
 zstyle ':completion:*:*:docker-*:*' option-stacking yes
+zstyle ':completion:*:*:git-fetch:argument-rest:' tag-order '!remote-repositories'
+zstyle ':completion:*:*:git-pull:argument-1:' tag-order '!remote-repositories'
 
 # Host completion
 _custom_hosts() {
