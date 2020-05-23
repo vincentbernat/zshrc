@@ -78,6 +78,8 @@ alias -g ,nd='*(/om[1])'        # last directory
 alias -g ,ndd='*(/om[1])'       # before-last directory
 alias -g ,nf='*(.om[1])'        # last file
 alias -g ,nff='*(.om[1])'       # before-last file
+alias -g ,silent="> /dev/null 2>&1"
+alias -g ,noerr="2> /dev/null"
 
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
