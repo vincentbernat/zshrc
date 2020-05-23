@@ -108,14 +108,21 @@ EOF
     # to the underlying container. However, some directories and files
     # are created: tmp, home directory, /usr/bin/sudo, /bin/zsh-static, /etc/passwd,
     # /etc/shadow.
+    #
+    # The user inside the container has the same right than the one
+    # inside the shell. So, you can hack processes from the container
+    # but processes from the container can hack you too. I don't think
+    # there is a way to change that since we are not the parent of the
+    # container.
     local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
     local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
     local rootdev=$(readlink -f ${${(f)"$(df --output=source /)"}[-1]})
     local enter=$(mktemp --tmpdir nsenter-XXXXXXXXX)
     local environ=$(docker container inspect --format "{{range .Config.Env}}export {{.}}"$'\n'"{{end}}" $env)
     compile_sudo
+    (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -
     ${=${(%):-%(!..sudo -v)}}
-    coproc ${=${(%):-%(!..sudo -n)}} =nsenter -m -t $id -- unshare --mount /bin/sh -ec "
+    ${=${(%):-%(!..sudo -n)}} =nsenter -m -u -i -n -p -t $id -- unshare --mount /bin/sh -ec "
 #!/bin/sh
 tmp=\$(mktemp -d)
 mkdir -p ${HOME}
@@ -159,24 +166,11 @@ for SHELL in $commands[zsh-static] $SHELL /bin/bash /bin/sh; do
     [ ! -x \$SHELL ] || break
 done
 
-# Setup a command to enter this environment
->  $enter echo \"$environ\"
->> $enter echo exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
+$environ
+exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
    $sudo -u $(id -u) -g $(id -g) -c \$PWD \$SHELL -i -l
-
-echo \$\$
-read nothing
-rm $enter
 "
-    read -p pid
-    if [[ -n $pid ]]; then
-        (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -
-        ${(%):-%(!..sudo)} =nsenter --mount=/proc/$pid/ns/mnt -u -i -n -p -t $id -- /bin/sh $enter
-        ret=$?
-        print -p done
-        return $ret
-    fi
-    return 1
+    return
 }
 
 # Virtualenv
