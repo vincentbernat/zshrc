@@ -27,7 +27,8 @@ fi
 
 # Compute a PATH without duplicates. This could have been done with
 # "typeset -aU" but some paths are equal, like /usr/bin and /bin when
-# symlinked.
+# symlinked. We want to keep symlinks because some of them may move
+# (for example, Nix).
 () {
     [[ $IN_NIX_SHELL == pure ]] && return
     local -a wanted savedpath
