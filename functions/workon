@@ -129,6 +129,7 @@ EOF
     local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
     local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
     local enter=$(mktemp --tmpdir nsenter-XXXXXXXXX)
+    local environ=$(docker container inspect --format "{{range .Config.Env}}export {{.}}"$'\n'"{{end}}" $env)
     compile_sudo
     ${=${(%):-%(!..sudo -v)}}
     coproc ${=${(%):-%(!..sudo -n)}} =nsenter -m -t $id -- unshare --mount /bin/sh -ec "
@@ -136,7 +137,7 @@ EOF
 tmp=\$(mktemp -d)
 mkdir -p ${HOME}
 [ -b /dev/home-directory ] || \
-    mknod /dev/home-directory b $(($(stat -c "0x%t" ${homedev}))) $(($(stat -c "0x%T" ${homedev})))
+    mknod /dev/home-directory b $(($(stat -c 0x%t ${homedev}))) $(($(stat -c 0x%T ${homedev})))
 mount -n /dev/home-directory \$tmp
 rm /dev/home-directory
 mount -n --bind \$tmp/${HOME#$homemnt} $HOME
@@ -146,7 +147,7 @@ rmdir \$tmp
 $setupuser
 
 # Setup a command to enter this environment
->  $enter cd $HOME
+>  $enter echo $environ
 >> $enter echo exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
    $sudo -u $(id -u) -g $(id -g) -c \$PWD \$SHELL -i -l
 
