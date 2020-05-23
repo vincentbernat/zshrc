@@ -124,6 +124,7 @@ mknod \$tmp/home-directory b $(($(stat -c 0x%t ${homedev}))) $(($(stat -c 0x%T $
 mkdir \$tmp/home
 mount -n \$tmp/home-directory \$tmp/home
 mount -n --bind \$tmp/home/${HOME#$homemnt} $HOME
+umount -n \$tmp/home
 for f in passwd group; do
   if [ -f /etc/\$f ]; then
     cp /etc/\$f \$tmp/\$f
@@ -151,11 +152,8 @@ if [ $+commands[zsh-static] -eq 1 ]; then
   touch $commands[zsh-static]
   mount -n --bind \$tmp/root/$commands[zsh-static] $commands[zsh-static]
   mount -n --bind \$tmp/root/usr/share/zsh /usr/share/zsh-static
+  umount -n \$tmp/root
 fi
-
-# Not needed, but maybe safer
-umount -n \$tmp/home
-umount -n \$tmp/root
 
 for SHELL in $commands[zsh-static] $SHELL /bin/bash /bin/sh; do
     [ ! -x \$SHELL ] || break
