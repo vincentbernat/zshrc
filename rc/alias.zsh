@@ -74,10 +74,10 @@ mkcd() { command mkdir -p $1 && cd $1 }
 }
 
 # Global aliases. I am using `,' as a prefix.
-alias -g ,nd='*(/om[1])'        # last directory
-alias -g ,ndd='*(/om[1])'       # before-last directory
-alias -g ,nf='*(.om[1])'        # last file
-alias -g ,nff='*(.om[1])'       # before-last file
+alias -g ,nd='*(/om[1])'        # newest directory
+alias -g ,ndd='*(/om[1])'       # before-newest directory
+alias -g ,nf='*(.om[1])'        # newest file
+alias -g ,nff='*(.om[1])'       # before-newest file
 alias -g ,silent="> /dev/null 2>&1"
 alias -g ,noerr="2> /dev/null"
 
