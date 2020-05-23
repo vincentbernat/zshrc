@@ -147,7 +147,7 @@ rmdir \$tmp
 $setupuser
 
 # Setup a command to enter this environment
->  $enter echo $environ
+>  $enter echo \"$environ\"
 >> $enter echo exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
    $sudo -u $(id -u) -g $(id -g) -c \$PWD \$SHELL -i -l
 
