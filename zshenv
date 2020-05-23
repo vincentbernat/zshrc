@@ -26,8 +26,8 @@ if [ -z "$ZSH_VERSION" ]; then
 fi
 
 # Compute a PATH without duplicates. This could have been done with
-# "typeset -aU" but this some paths are equal, like /usr/bin and /bin
-# in some cases.
+# "typeset -aU" but some paths are equal, like /usr/bin and /bin when
+# symlinked.
 () {
     [[ $IN_NIX_SHELL == pure ]] && return
     local -a wanted savedpath
@@ -46,11 +46,13 @@ fi
             /usr/games)
     savedpath=($path)
     path=()
+    # First, put paths from savedpaths not in the wanted list
     for p in $savedpath; do
 	(( ${${wanted[(r)$p]}:+1} )) || (( ${${path[(r)${p:A}]}:+1} )) || {
 	    [ -d ${p:A} ] && path=($path $p)
 	}
     done
+    # Then, put paths in the wanted list
     for p in $wanted; do
 	(( ${${path[(r)${p:A}]}:+1} )) || {
 	    [ -d ${p:A} ] && path=($path $p)
