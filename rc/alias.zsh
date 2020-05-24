@@ -155,8 +155,7 @@ try:
 except ImportError:
     pygments = None
 
-jsonre = re.compile(r"(?P<prefix>.*?)(?P<json>\{.*\})(?P<suffix>.*)")
-
+jsonre = re.compile(r"(?P<prefix>.*?)(?P<json>\{.*\}|\[.*\])(?P<suffix>.*)")
 
 def display(f):
     pager = None
