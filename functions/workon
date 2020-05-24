@@ -116,7 +116,23 @@ EOF
     # container.
     #
     # This only works if the container has some base utils (sh,
-    # unshare, mount, mktemp) installed.
+    # unshare, mount, mktemp) installed. mount supports "-N" to work
+    # on other namespaces, but we would still need unshare to work.
+    #
+    # --mount-only will not enter pid, network or IPC namespace
+    local -a nsenter_args=(-m -u)
+    case $2 in
+        --mount-only)
+            :
+            ;;
+        "")
+            nsenter_args=($nsenter_args -i -n -p)
+            ;;
+        *)
+            >&2 echo "unknown additional argument $2"
+            return 1
+            ;;
+    esac
     local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
     local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
     local rootdev=$(readlink -f ${${(f)"$(df --output=source /)"}[-1]})
@@ -125,7 +141,7 @@ EOF
     compile_sudo
     (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -
     ${=${(%):-%(!..sudo -v)}}
-    ${=${(%):-%(!..sudo -n)}} =nsenter -m -u -i -n -p -t $id -- unshare --mount /bin/sh -ec "
+    ${=${(%):-%(!..sudo -n)}} =nsenter $nsenter_args -t $id -- unshare --mount /bin/sh -ec "
 #!/bin/sh
 tmp=\$(mktemp -d)
 mkdir -p ${HOME}
