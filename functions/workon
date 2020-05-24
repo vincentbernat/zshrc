@@ -141,7 +141,7 @@ EOF
     compile_sudo
     (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -
     ${=${(%):-%(!..sudo -v)}}
-    ${=${(%):-%(!..sudo -n)}} =nsenter $nsenter_args -t $id -- unshare --mount /bin/sh -ec "
+    ${=${(%):-%(!..sudo -n)}} =nsenter $nsenter_args -t $id -- unshare --mount --propagation private /bin/sh -ec "
 #!/bin/sh
 tmp=\$(mktemp -d)
 mkdir -p ${HOME}
