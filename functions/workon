@@ -114,6 +114,9 @@ EOF
     # but processes from the container can hack you too. I don't think
     # there is a way to change that since we are not the parent of the
     # container.
+    #
+    # This only works if the container has some base utils (sh,
+    # unshare, mount, mktemp) installed.
     local homemnt=${${(f)"$(df --output=target $HOME)"}[-1]}
     local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
     local rootdev=$(readlink -f ${${(f)"$(df --output=source /)"}[-1]})
