@@ -13,10 +13,6 @@
     [ -n "$NIX_SSL_CERT_FILE" ] || \
         export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 }
-[ x$IN_NIX_SHELL = x ] || {
-    export FONTCONFIG_FILE=$(nix eval --raw nixpkgs.fontconfig.out.outPath)/etc/fonts/fonts.conf
-}
-
 export GOPATH=$HOME/src/gocode
 
 if [ -z "$ZSH_VERSION" ]; then
@@ -61,4 +57,8 @@ fi
     done
 
     export PATH
+}
+
+[ x$IN_NIX_SHELL = x ] || {
+    export FONTCONFIG_FILE=$(nix eval --raw nixpkgs.fontconfig.out.outPath)/etc/fonts/fonts.conf
 }
