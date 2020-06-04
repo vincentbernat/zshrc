@@ -115,16 +115,6 @@ alias -g ,noerr="2> /dev/null"
 alias smv='rsync -P --remove-source-files'
 (( $+functions[compdef] )) && compdef _ssh smv=scp
 
-# Less generic aliases
-susu() {
-  command sudo -H -u ${1:-root} \
-          env ZDOTDIR=${ZDOTDIR:-$HOME} \
-              ZSH=$ZSH ${DISPLAY+DISPLAY=$DISPLAY} \
-              ${SSH_TTY+SSH_TTY=$SSH_TTY} \
-              ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
-          ${ZSH_NAME} -i -l
-}
-
 # JSON pretty-printing.
 #
 # Many programs have a flag to enable unbuffered output. For example,
