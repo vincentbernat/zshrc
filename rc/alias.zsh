@@ -117,12 +117,7 @@ alias smv='rsync -P --remove-source-files'
 
 # Less generic aliases
 susu() {
-  command sudo -H -u ${1:-root} \
-          env ZDOTDIR=${ZDOTDIR:-$HOME} \
-              ZSH=$ZSH ${DISPLAY+DISPLAY=$DISPLAY} \
-              ${SSH_TTY+SSH_TTY=$SSH_TTY} \
-              ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
-          ${ZSH_NAME} -i -l
+  command sudo -sE -u ${1:-root}
 }
 
 # JSON pretty-printing.
