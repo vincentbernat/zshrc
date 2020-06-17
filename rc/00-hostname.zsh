@@ -30,7 +30,7 @@
         *)
             local next=${${HOSTNAME#*.}%%.*}
             local next0=${next%%[0-9]*}
-            (( ${#next0} >= 2 && ${#next0} <= 4 )) && HOST=${HOSTNAME%%.*}.$next
+            (( ${#next0} >= 2 && ${#next0} <= 5 )) && HOST=${HOSTNAME%%.*}.$next
             ;;
     esac
 } 2> /dev/null
