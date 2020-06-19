@@ -11,6 +11,7 @@ install:
   - sed -i 's+git@github.com:+https://github.com/+' .gitmodules
   - git submodule update --init --recursive
 script:
+  - for f in rc/*.zsh; do zsh -n "$f" || return 1; done
   - ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh"
   - mkdir artifacts && cp run/zsh-install.sh artifacts && git reset --hard
 deploy:
