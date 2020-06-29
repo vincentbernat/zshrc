@@ -14,9 +14,16 @@
 ZSH=${ZSH:-${ZDOTDIR:-$HOME}/.zsh}
 
 # fpath
-[[ -d ~/.nix-profile/share/zsh/site-functions ]] && \
-      fpath=(~/.nix-profile/share/zsh/site-functions $fpath)
-fpath=($ZSH/functions $ZSH/completions $fpath)
+fpath=(
+    # Custom functions and completions
+    $ZSH/functions $ZSH/completions
+    # For nix-shell, add share/zsh for elements in PATH
+    ${^${(M)path:#/nix/store/*}}/../share/zsh/site-functions(N/)
+    # Add functions from our own profile
+    ~/.nix-profile/share/zsh/site-functions(N/)
+    # Default fpath
+    $fpath
+)
 [[ $ZSH_NAME == "zsh-static" ]] && [[ -d /usr/share/zsh-static ]] && {
     # Rewrite /usr/share/zsh to /usr/share/zsh-static
     fpath=(${fpath/\/usr\/share\/zsh\//\/usr\/share\/zsh-static\/})
