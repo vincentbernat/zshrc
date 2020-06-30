@@ -115,6 +115,14 @@ alias -g ,noerr="2> /dev/null"
 alias smv='rsync -P --remove-source-files'
 (( $+functions[compdef] )) && compdef _ssh smv=scp
 
+# Like sudo -sE but it preserves ZDOTDIR, see:
+#  <https://sources.debian.org/src/sudo/1.9.1-1/plugins/sudoers/env.c/?hl=187#L187>
+suzsh() {
+    ZDOTDIR=${ZDOTDIR:-$HOME} command sudo \
+            --preserve-env=ZDOTDIR \
+            -sE -u ${1:-root}
+}
+
 # JSON pretty-printing.
 #
 # Many programs have a flag to enable unbuffered output. For example,
