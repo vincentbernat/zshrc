@@ -18,6 +18,9 @@ __net_command () {
         completions=(${completions## #})
         completions=(${completions/   #:  /:})
         completions=(${completions:#<*})
+    else
+        # Trim spaces at end
+        completions=(${completions%% *})
     fi
     _describe -t net-command "net completion" completions "$@"
 }
