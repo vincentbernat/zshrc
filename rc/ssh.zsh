@@ -83,7 +83,7 @@ echo need-update
         ok)
             # Dotfiles up-to-date, connect and execute zsh
             ssh $common -t "$@" \
-                "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && export SHELL=\$(which zsh) && exec zsh -i -l -d"
+                "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && export SHELL=\$(which zsh) && exec zsh -i -l"
             ;;
         no-zsh)
             # No zsh, plain SSH connection
@@ -104,7 +104,7 @@ echo need-update
                               "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec sh -s" \
                 && print -u2 "[*] Spawning remote zsh..." \
                 && ssh $common -t "$@" \
-                       "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && export SHELL=\$(which zsh) && exec zsh -i -l -d"
+                       "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && export SHELL=\$(which zsh) && exec zsh -i -l"
             ;;
         *)
             return 1
