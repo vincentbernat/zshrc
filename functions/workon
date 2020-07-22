@@ -12,6 +12,7 @@ emulate -L zsh
 setopt nomonitor
 
 local env=$1
+shift
 local -a venv dimages dcontainers
 venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
 (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && {
@@ -79,6 +80,7 @@ EOF
            --rm \
            -h ${${${image##*/}:gs/:/-}:gs/./-} \
            --entrypoint /bin/sh \
+           "$@" \
            $image $tmp/start
     local ret=$?
     rm -f $tmp/start && rmdir $tmp
