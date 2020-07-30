@@ -31,10 +31,8 @@ EOF
         # Maybe use emacsclient?
         [[ $editor == emacs* ]] && (( $+commands[emacsclient] )) && {
 	    export ALTERNATE_EDITOR=$EDITOR
-            for editor in "emacsclient.${editor[(w)1]}" "emacsclient"; do
-                (( $+commands[$editor] )) && break
-            done
             export EDITOR=$ZSH/run/u/$HOST-$UID/editor-ec
+            editor=emacsclient
             cat <<EOF > $EDITOR
 #!/bin/sh
 case \$DISPLAY in
