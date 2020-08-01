@@ -319,8 +319,9 @@ screenrecord() {
         -s $((${WIDTH} / 2 * 2))x$((${HEIGHT} / 2 * 2)) \
         -i ${DISPLAY}+$((X+BORDER)),$((Y+BORDER)) \
         \\\\$'\n' \
-        -pix_fmt yuv420p \
-        -c:v libx264 \
+        -vaapi_device /dev/dri/renderD128 \
+        -vf 'hwupload,scale_vaapi=format=nv12' \
+        -c:v h264_vaapi \
         -qp 0 \
         -preset ultrafast \
         \\\\$'\n' \
