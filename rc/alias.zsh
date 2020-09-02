@@ -283,8 +283,8 @@ v() {
             return
             ;;
     esac
-    (( $+commands[emacsclient] )) && [[ -S /tmp/emacs$UID/server ]] && [[ -O /tmp/emacs$UID/server ]] && {
-        emacsclient -t -e "(view-buffer (find-file-noselect \"$1\") 'vbe:kill-buffer-and-frame)"
+    (( $+commands[batcat] )) && {
+        batcat "$@"
         return
     }
     zless -FX "$@"
