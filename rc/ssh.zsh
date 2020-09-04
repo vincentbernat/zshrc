@@ -94,7 +94,11 @@ echo need-update
             # No zsh but remote is Debian
             print -u2 "[*] Installing Zsh..." \
                 && command ssh $command -C "$@" "DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg" \
-                || return 1
+                || {
+                    print -u2 "[!] Cannot install ZSH"
+                    ssh $common "$@"
+                    return
+                }
             ;&
         need-update)
             # We need to install dotfiles, connect and execute zsh
