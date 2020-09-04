@@ -10,10 +10,9 @@ ssh() {
     # transmitted to the remote session. The remote host should have
     # the appropriate termcap or terminfo file to handle the TERM you
     # provided. When connecting to random hosts, this may not be the
-    # case if your TERM is somewhat special. A good fallback is
-    # xterm. Most terminals are compatible with xterm and all hosts
-    # have a termcap or terminfo file to handle xterm. Therefore, for
-    # some values of TERM, we fallback to xterm.
+    # case if your TERM is somewhat special. A good fallback is xterm,
+    # but nowadays, you can just use the basename of your current TERM
+    # (screen instead of screen-256color).
     #
     # Now, you may connect to a host where your current TERM is fully
     # supported and you will get xterm instead (which means 8 base
