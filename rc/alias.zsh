@@ -270,7 +270,7 @@ else
 fi
 
 xml() {
-    cat "$@" | xmllint --format -
+    cat "$@" | xmllint --format - | v
 }
 
 v() {
