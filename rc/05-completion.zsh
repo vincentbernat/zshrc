@@ -34,7 +34,7 @@ zstyle ':completion:*:*:docker:*' option-stacking yes
 zstyle ':completion:*:*:docker-*:*' option-stacking yes
 zstyle ':completion:*:*:git-fetch:argument-rest:' tag-order '!remote-repositories'
 zstyle ':completion:*:*:git-pull:argument-1:' tag-order '!remote-repositories'
-zstyle ':completion:*:(ssh|scp|sftp|rsync):*:users' users "$USERNAME" "vincent" "root" "blade"
+zstyle ':completion:*:(ssh|scp|sftp|rsync):*:users' users root "$USERNAME" vincent blade cumulus
 
 # Host completion
 _custom_hosts() {
