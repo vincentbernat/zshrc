@@ -67,10 +67,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 mkcd() { command mkdir -p $1 && cd $1 }
 (( $+commands[nix-shell] )) && nix-zsh() {
-        case ${#${@:#-*}} in
-            0) nix-shell --command zsh "$@" ;;
-            *) nix-shell --command zsh -p glibcLocales "$@" ;;
-        esac
+        nix-shell --command zsh "$@"
 }
 
 # Global aliases. I am using `,' as a prefix.
