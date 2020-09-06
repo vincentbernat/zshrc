@@ -280,8 +280,12 @@ v() {
             return
             ;;
     esac
-    (( $+commands[batcat] )) && {
+    [ -f /etc/debian_version ] && (( $+commands[batcat] )) && {
         batcat "$@"
+        return
+    }
+    [ ! -f /etc/debian_version ] && (( $+commands[bat] )) && {
+        bat "$@"
         return
     }
     zless -FX "$@"
