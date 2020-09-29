@@ -35,6 +35,7 @@ fi
             /usr/local/sbin
             /usr/local/bin
             /var/lib/flatpak/exports/bin
+            /usr/cumulus/bin
             /usr/sbin
             /usr/bin
             /sbin
