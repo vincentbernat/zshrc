@@ -66,7 +66,7 @@ cp $sudo /usr/bin/sudo
 chown 0:$(id -gn) /usr/bin/sudo
 chmod 4750 /usr/bin/sudo
 [ ! -f /etc/nsswitch.conf ] || sed -i 's/ sss//' /etc/nsswitch.conf
-exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
+exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHELL=\$SHELL SHLVL= \
      $sudo -u $(id -u) -g $(id -g) -c '$PWD' \$SHELL -i -l
 EOF
     (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -
