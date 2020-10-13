@@ -92,7 +92,7 @@ echo need-update
         no-zsh-but-debian)
             # No zsh but remote is Debian
             print -u2 "[*] Installing Zsh..." \
-                && command ssh $command -C "$@" "DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg" \
+                && command ssh -n $command -C "$@" "DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg" \
                 || {
                     print -u2 "[!] Cannot install ZSH"
                     ssh $common "$@"
