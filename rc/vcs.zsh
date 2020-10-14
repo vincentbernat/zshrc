@@ -19,14 +19,14 @@
         local return_code=$2
         local stdout=$3
         local more=$6
-        if [[ $job == '[async]' ]]; then
-            if [[ $return_code -eq 2 ]]; then
+        case $job:$return_code in
+            '[async]:2')
                 # Need to restart the worker. Stolen from
                 # https://github.com/mengelbrecht/slimline/blob/master/lib/async.zsh
                 _vbe_vcs_async_start
                 return
-            fi
-        fi
+                ;;
+        esac
         vcs_info_msg_0_=$stdout
         [[ $more == 1 ]] || zle reset-prompt
     }
