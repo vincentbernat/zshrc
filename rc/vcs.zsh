@@ -2,7 +2,7 @@
 
 # Incorporate git information into prompt
 
-[[ $USERNAME != "root" ]] && [[ $ZSH_NAME != "zsh-static" ]] && {
+[[ $USERNAME != "root" ]] && [[ $ZSH_NAME != "zsh-static" ]] && is-at-least 5.1.0 && {
 
     # Async helpers
     _vbe_vcs_async_start() {
@@ -19,14 +19,14 @@
         local return_code=$2
         local stdout=$3
         local more=$6
-        case $job:$return_code in
-            '[async]:2')
+        if [[ $job == '[async]' ]]; then
+            if [[ $return_code -eq 2 ]]; then
                 # Need to restart the worker. Stolen from
                 # https://github.com/mengelbrecht/slimline/blob/master/lib/async.zsh
                 _vbe_vcs_async_start
                 return
-                ;;
-        esac
+            fi
+        fi
         vcs_info_msg_0_=$stdout
         [[ $more == 1 ]] || zle reset-prompt
     }
