@@ -15,6 +15,13 @@ _vbe_prompt_preexec () {
 add-zsh-hook precmd _vbe_prompt_precmd
 add-zsh-hook preexec _vbe_prompt_preexec
 
+function _vbe_reset-prompt-and-accept-line {
+    _vbe_cmd_elapsed=-1
+    zle reset-prompt
+    zle .accept-line            # builtin
+}
+zle -N accept-line _vbe_reset-prompt-and-accept-line
+
 # Stolen from https://github.com/sindresorhus/pure/blob/master/pure.zsh
 _vbe_human_time () {
     local tmp=$1
@@ -105,9 +112,12 @@ _vbe_prompt () {
     # Additional info
     _vbe_add_prompt
 
-    # Time elapsed
-    (($_vbe_cmd_elapsed >= 5)) && \
+    # Time elapsed or current time
+    if (($_vbe_cmd_elapsed < 0)); then
+        _vbe_prompt_segment white black "%T"
+    elif (($_vbe_cmd_elapsed >= 5)); then
         _vbe_prompt_segment white black "$(_vbe_human_time $_vbe_cmd_elapsed)"
+    fi
 
     # Error code
     (( $retval )) && \
