@@ -2,7 +2,7 @@
 
 # Incorporate git information into prompt
 
-[[ $USERNAME != "root" ]] && [[ $ZSH_NAME != "zsh-static" ]] && is-at-least 5.1.0 && {
+[[ $USERNAME != "root" ]] && [[ $ZSH_NAME != "zsh-static" ]] && {
 
     # Async helpers
     _vbe_vcs_async_start() {
