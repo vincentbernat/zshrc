@@ -50,6 +50,7 @@ _vbe_battery () {
 [[ $USERNAME != "root" ]] && [[ -d /sys/class/power_supply/BAT0 ]] && {
 
     _vbe_add_prompt_battery () {
+        (($_vbe_cmd_elapsed < 0)) && return
         local v="$(_vbe_battery)"
         local color=${v% *}
         local gauge="${v#* }"
