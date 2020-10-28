@@ -59,6 +59,7 @@
     async_init
     _vbe_vcs_async_start
     add-zsh-hook precmd (){
+        async_flush_jobs vcs_info
         async_job vcs_info _vbe_vcs_info $PWD
     }
     add-zsh-hook chpwd (){
