@@ -15,7 +15,7 @@ _vbe_prompt_preexec () {
 add-zsh-hook precmd _vbe_prompt_precmd
 add-zsh-hook preexec _vbe_prompt_preexec
 
-function _vbe_reset-prompt-and-accept-line {
+_vbe_reset-prompt-and-accept-line () {
     _vbe_cmd_elapsed=-1
     zle reset-prompt
     zle .accept-line            # builtin
