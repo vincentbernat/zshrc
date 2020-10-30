@@ -22,6 +22,7 @@ _vbe_reset-prompt-and-accept-line () {
 }
 zle -N accept-line _vbe_reset-prompt-and-accept-line
 zle-isearch-exit () {
+    [[ $KEYS != $'\r' ]] && return
     _vbe_cmd_elapsed=-1
     zle reset-prompt
 }
