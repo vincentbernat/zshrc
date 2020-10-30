@@ -21,6 +21,12 @@ _vbe_reset-prompt-and-accept-line () {
     zle .accept-line            # builtin
 }
 zle -N accept-line _vbe_reset-prompt-and-accept-line
+_vbe_reset-prompt-and-zle-isearch-exit () {
+    _vbe_cmd_elapsed=-1
+    zle reset-prompt
+    zle .zle-isearch-exit       # builtin
+}
+zle -N zle-isearch-exit _vbe_reset-prompt-and-zle-isearch-exit
 
 # Stolen from https://github.com/sindresorhus/pure/blob/master/pure.zsh
 _vbe_human_time () {
