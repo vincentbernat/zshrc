@@ -1,0 +1,27 @@
+name: Tests
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 0 1 * *"
+jobs:
+  tests:
+    name: Check syntax and installer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up git repository
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Install zsh
+        run: |
+          sudo apt-get update
+          sudo apt-get install zsh
+      - name: Check syntax
+        run: |
+          for f in rc/*.zsh; do
+            zsh -n "$f" || return 1
+          done
+      - name: Run installer
+        run: |
+          ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh"
