@@ -54,7 +54,7 @@ zssh() {
     local state
 
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
-    common=(-o ControlPath="$ZSH/run/zssh-%C")
+    common=(-o ControlPath="$ZSH/run/%r@%h:%p")
     command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
 # Check if zsh is installed.
 if ! which zsh 2> /dev/null > /dev/null; then
