@@ -130,7 +130,8 @@ suzsh() {
 # `stdbuf -o L`.
 (( $+commands[python] + $+commands[python3] )) && \
 json() {
-  local -a pythons=(/usr/{,local/}bin/python{3,,2}(XN) $commands[python3] $commands[python])
+  local -a pythons
+  pythons=(/usr/{,local/}bin/python{3,,2}(XN) $commands[python3] $commands[python])
   ${pythons[1]} -u -c '#!/usr/bin/env python3
 
 # Pretty-print files containing JSON lines. Reads from stdin when no
