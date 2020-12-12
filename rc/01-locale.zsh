@@ -4,16 +4,19 @@
     local -a available
     local -A locales
     local locale
-    locales=( "LANG" "C.UTF-8 C.utf8 en_US.UTF-8 en_US.utf8 C"
-	      "LC_MESSAGES" "fr_FR.utf8 en_US.UTF-8 en_US.utf8 C.UTF-8 C.utf8 C"
-	      "LC_NUMERIC" "en_US.UTF-8 en_US.utf8 C.UTF-8 C.utf8 C" )
+    locales=( "LANG" "C en_US"
+	      "LC_MESSAGES" "en_US C"
+	      "LC_NUMERIC" "en_US C" )
     available=("${(f)$(locale -a)}")
     for locale in ${(k)locales}; do
+        export $locale=C        # default value
 	for l in $=locales[$locale]; do
-            if (( ${available[(i)$l]} <= ${#available} )); then
-		export $locale=$l
-		break
-	    fi
+            for charset in UTF-8 utf8; do
+                if (( ${available[(i)$l.$charset]} <= ${#available} )); then
+		    export $locale=$l.$charset
+		    break 2
+	        fi
+            done
 	done
     done
     export LC_CTYPE=$LANG
