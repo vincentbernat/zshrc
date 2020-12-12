@@ -2,16 +2,16 @@
 
 (( $+commands[locale] )) && () {
     local -a available
-    local -a locales
+    local -A locales
     local locale
-    locales=( "LANG C.UTF-8 C.utf8 en_US.UTF-8 en_US.utf8 C"
-	      "LC_MESSAGES en_US.UTF-8 en_US.utf8 C.UTF-8 C.utf8 C"
-	      "LC_NUMERIC en_US.UTF-8 en_US.utf8 C.UTF-8 C.utf8 C" )
+    locales=( "LANG" "C.UTF-8 C.utf8 en_US.UTF-8 en_US.utf8 C"
+	      "LC_MESSAGES" "fr_FR.utf8 en_US.UTF-8 en_US.utf8 C.UTF-8 C.utf8 C"
+	      "LC_NUMERIC" "en_US.UTF-8 en_US.utf8 C.UTF-8 C.utf8 C" )
     available=("${(f)$(locale -a)}")
-    for locale in $locales; do
-	for l in $=locale[(w)2,-1]; do
+    for locale in ${(k)locales}; do
+	for l in $=locales[$locale]; do
             if (( ${available[(i)$l]} <= ${#available} )); then
-		export $locale[(w)1]=$l
+		export $locale=$l
 		break
 	    fi
 	done
