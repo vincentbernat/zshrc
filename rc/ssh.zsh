@@ -59,6 +59,8 @@ zssh() {
     execzsh="export ZDOTDIR=~/.zsh.$USER \
       && export ZSH=~/.zsh.$USER \
       && export SHELL=\$(which zsh) \
+      && uname -a \
+      && cat < /etc/motd \
       && exec zsh -i -l"
     command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
 # Check if zsh is installed.
