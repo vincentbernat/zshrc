@@ -52,9 +52,14 @@ ssh() {
 zssh() {
     local -a common
     local state
+    local execzsh
 
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
     common=(-o ControlPath="$ZSH/run/%r@%h:%p")
+    execzsh="export ZDOTDIR=~/.zsh.$USER \
+      && export ZSH=~/.zsh.$USER \
+      && export SHELL=\$(which zsh) \
+      && exec zsh -i -l"
     command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
 # Check if zsh is installed.
 if ! which zsh 2> /dev/null > /dev/null; then
@@ -81,8 +86,7 @@ echo need-update
     case $state in
         ok)
             # Dotfiles up-to-date, connect and execute zsh
-            ssh $common -t "$@" \
-                "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && export SHELL=\$(which zsh) && exec zsh -i -l"
+            ssh $common -t "$@" $execzsh
             ;;
         no-zsh)
             # No zsh, plain SSH connection
@@ -106,8 +110,7 @@ echo need-update
                     | command ssh $common -C "$@" \
                               "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec sh -s" \
                 && print -u2 "[*] Spawning remote zsh..." \
-                && ssh $common -t "$@" \
-                       "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && export SHELL=\$(which zsh) && exec zsh -i -l"
+                && ssh $common -t "$@" $execzsh
             ;;
         *)
             return 1
