@@ -56,12 +56,11 @@ zssh() {
 
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
     common=(-o ControlPath="$ZSH/run/%r@%h:%p")
-    execzsh="ignore() { \"\$@\" 2> /dev/null } \
-      && export ZDOTDIR=~/.zsh.$USER \
+    execzsh="export ZDOTDIR=~/.zsh.$USER \
       && export ZSH=~/.zsh.$USER \
       && export SHELL=\$(which zsh) \
       && uname -a \
-      && ignore cat /etc/motd \
+      && { cat /etc/motd 2>/dev/null || true; } \
       && exec zsh -i -l"
     command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
 # Check if zsh is installed.
@@ -89,7 +88,7 @@ echo need-update
     case $state in
         ok)
             # Dotfiles up-to-date, connect and execute zsh
-            ssh $common -t "$@" $execzsh
+            ssh $common -t "$@" ${execzsh}
             ;;
         no-zsh)
             # No zsh, plain SSH connection
@@ -113,7 +112,7 @@ echo need-update
                     | command ssh $common -C "$@" \
                               "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec sh -s" \
                 && print -u2 "[*] Spawning remote zsh..." \
-                && ssh $common -t "$@" $execzsh
+                && ssh $common -t "$@" ${execzsh}
             ;;
         *)
             return 1
