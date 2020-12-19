@@ -65,7 +65,7 @@ _vbe_prompt_end() {
   else
     print -n "%{%b%}"
   fi
-  print -n "%{${reset_color}%}"
+  print -n "%{%b%}"
   CURRENT_BG=''
 }
 
@@ -74,7 +74,10 @@ _vbe_prompt () {
 
     # When old command, just time + prompt sign
     if (($_vbe_cmd_elapsed < 0)); then
-        print -n "%{${fg[yellow]}%}%T %{%B${fg[${(%):-%(!.red.green)}]}%}${PRCH[prompt]}%{${reset_color}%}"
+        print -n "%{${fg[yellow]}%}%T%{%b%} "
+        [[ $SSH_TTY ]] && \
+            print -n "on %{%B${fg[magenta]}%}%M%{%b%} "
+        print -n "%{%B${fg[${(%):-%(!.red.green)}]}%}${PRCH[prompt]}%{%b%}"
         return
     fi
 
