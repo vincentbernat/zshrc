@@ -71,7 +71,7 @@ _vbe_prompt_end() {
   unset CURRENT_BG
 }
 _vbe_prompt_short() {
-    print -n "%B%F{${(%):-%(!.red.green)}}${PRCH[prompt]}%b%f"
+    print -n "%B%F{$1}${PRCH[prompt]}%b%f"
 }
 
 _vbe_prompt () {
@@ -82,7 +82,10 @@ _vbe_prompt () {
         print -n "%B%F{yellow}%T%b%f "
         [[ $SSH_TTY ]] && \
             print -n "on %B%F{magenta}%M%b%f "
-        _vbe_prompt_short
+        case $retval in
+            0) _vbe_prompt_short green ;;
+            *) _vbe_prompt_short red ;;
+        esac
         return
     fi
 
@@ -153,7 +156,7 @@ _vbe_add_prompt () {
 }
 _vbe_prompt_ps2 () {
     # For some reason, we may not use the right segments due to how we reset the prompt...
-    _vbe_prompt_short
+    _vbe_prompt_short grey
 }
 _vbe_setprompt () {
     setopt prompt_subst
