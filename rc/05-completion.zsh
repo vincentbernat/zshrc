@@ -16,6 +16,7 @@ zstyle ':completion:*' completer _expand_alias _complete _match _approximate
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt ''
 zstyle ':completion:*' group-name ''
+zstyle ':completion:*' menu yes=long select
 zstyle ':completion:*:descriptions' format '%B%d%b'
 zstyle ':completion:*:functions' ignored-patterns '_*'
 zstyle ':completion:*:match:*' original only
@@ -33,7 +34,7 @@ zstyle ':completion:*:*:git-fetch:argument-rest:' tag-order '!remote-repositorie
 zstyle ':completion:*:*:git-pull:argument-1:' tag-order '!remote-repositories'
 zstyle ':completion:*:(ssh|scp|sftp|rsync):*:users' users root "$USERNAME" vincent blade cumulus
 
-zstyle -e ':completion:*' menu 'reply=(yes=$((LINES/2)) select)'
+# Make menu uses only half the lines
 _vbe_half-lines() {
     LINES=$((LINES/2))
 }
