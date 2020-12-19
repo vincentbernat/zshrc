@@ -33,21 +33,7 @@ zstyle ':completion:*:*:git-fetch:argument-rest:' tag-order '!remote-repositorie
 zstyle ':completion:*:*:git-pull:argument-1:' tag-order '!remote-repositories'
 zstyle ':completion:*:(ssh|scp|sftp|rsync):*:users' users root "$USERNAME" vincent blade cumulus
 
-# Make the menu uses only half the height. Thanks to Bart Schaefer!
 zstyle -e ':completion:*' menu 'reply=(yes=$((LINES/2)) select)'
-_vbe_half-lines() {
-    LINES=$((LINES/2))
-}
-_vbe_full-lines() {
-    # Force terminal query
-    LINES=0
-}
-_vbe_comp-lines() {
-    _vbe_full-lines
-    compprefuncs=( _vbe_half-lines )
-}
-add-zsh-hook preexec _vbe_full-lines
-add-zle-hook-widget line-init _vbe_comp-lines
 
 # Host completion
 _custom_hosts() {
