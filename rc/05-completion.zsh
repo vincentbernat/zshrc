@@ -16,21 +16,20 @@ zstyle ':completion:*' completer _expand_alias _complete _match _approximate
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt ''
 zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion:*:functions' ignored-patterns '_*'
+zstyle ':completion:*:match:*' original only
+zstyle ':completion::complete:*' use-cache 1
+zstyle ':completion::complete:*' cache-path $ZSH/run/u/$HOST-$UID/cache/
+zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX + $#SUFFIX) / 3 )) )'
+zstyle ':completion:history-words:*' remove-all-dups true
 
 # Go directly to menu when many matches (yes=long). When in menu mode, use select.
 zstyle -e ':completion:*' menu 'reply=(yes=$((LINES/2)) select)'
 
+zstyle ':completion:*:processes' command "ps -eo pid,user,comm,cmd -w -w"
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:kill:*' force-list always
-zstyle ':completion:*:processes' command "ps -eo pid,user,comm,cmd -w -w"
-zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path $ZSH/run/u/$HOST-$UID/cache/
-zstyle ':completion:*:descriptions' format '%B%d%b'
-zstyle ':completion:*:functions' ignored-patterns '_*'
-zstyle ':completion:*:match:*' original only
-zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX + $#SUFFIX) / 3 )) )'
-zstyle ':completion:history-words:*' remove-all-dups true
-
 zstyle ':completion:*:*:docker:*' option-stacking yes
 zstyle ':completion:*:*:docker-*:*' option-stacking yes
 zstyle ':completion:*:*:git-fetch:argument-rest:' tag-order '!remote-repositories'
