@@ -27,6 +27,13 @@ zle-isearch-exit () {
     zle reset-prompt
 }
 zle -N zle-isearch-exit
+TRAPINT() {
+    zle && {
+        _vbe_cmd_elapsed=-1
+        zle reset-prompt
+    }
+    return $((128+$1))
+}
 
 # Stolen from https://github.com/sindresorhus/pure/blob/master/pure.zsh
 _vbe_human_time () {
