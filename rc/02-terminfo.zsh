@@ -24,7 +24,6 @@ autoload -U zsh/terminfo zsh/termcap
         if (( ${terminfo[colors]:-0} >= 8 )) || \
             (zmodload zsh/termcap 2> /dev/null) && \
             (( ${termcap[Co]:-0} >= 8)); then
-            autoload colors && colors
             break
         fi
     done

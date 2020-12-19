@@ -17,7 +17,6 @@ _virtualenv () {
     pushd $WORKON_HOME > /dev/null || return
     ! command $interpreter -m virtualenv -p =$interpreter "$@" || \
             cat <<EOF >&2
-${fg[white]}
 # To reuse the environment for Node.JS, use:
 #  \$ pip install nodeenv
 #  \$ nodeenv -p -n system

@@ -35,9 +35,9 @@ is-at-least 4.3.12 && () {
             # When no arguments are provided, just display existing
             # bookmarks
             for link in $MARKPATH/*(N@); do
-                local markname="$fg[green]${link:t}$reset_color"
-                local markpath="$fg[blue]${link:A}$reset_color"
-                printf "%-30s -> %s\n" $markname $markpath
+                local markname=${(%):-%F{green}${link:t}%f}
+                local markpath=${(%):-%F{blue}${link:A}%f}
+                printf "%-30s → %s\n" $markname $markpath
             done
         else
             # Otherwise, we may want to add a bookmark or delete an

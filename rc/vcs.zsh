@@ -36,11 +36,11 @@
     zstyle ':vcs_info:*' enable git
     () {
         local formats="${PRCH[branch]} %b%c%u"
-        local actionformats="${formats}%{${fg[default]}%} ${PRCH[sep]} %{${fg[green]}%}%a"
+        local actionformats="${formats}%F{default} ${PRCH[sep]} %F{green}%a%f"
         zstyle    ':vcs_info:*:*' formats           $formats
         zstyle    ':vcs_info:*:*' actionformats     $actionformats
-        zstyle    ':vcs_info:*:*' stagedstr         "%{${fg[green]}%}${PRCH[circle]}"
-        zstyle    ':vcs_info:*:*' unstagedstr       "%{${fg[yellow]}%}${PRCH[circle]}"
+        zstyle    ':vcs_info:*:*' stagedstr         "%F{green}${PRCH[circle]}%f"
+        zstyle    ':vcs_info:*:*' unstagedstr       "%F{yellow}${PRCH[circle]}%f"
 	zstyle    ':vcs_info:*:*' check-for-changes true
 
         zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
@@ -48,7 +48,7 @@
         +vi-git-untracked(){
             if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
                 git status --porcelain 2> /dev/null | grep -q '??' ; then
-                hook_com[staged]+="%{${fg[black]}%}${PRCH[circle]}"
+                hook_com[staged]+="%F{black}${PRCH[circle]}%f"
             fi
         }
 

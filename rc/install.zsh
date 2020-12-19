@@ -69,7 +69,7 @@ install-zsh() {
     local -a identity
     zparseopts -D i:=identity
     (( $# == 0 )) || for h in $@; do
-        echo "$fg[green]>>>$reset_color $h"
+        print -P "%F{green}>>>%f $h"
         cat $ZSH/run/zsh-install.sh \
             | ssh -C ${identity[2]+-i ${identity[2]}} $h sh -s
     done
