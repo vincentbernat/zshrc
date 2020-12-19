@@ -68,16 +68,19 @@ _vbe_prompt_end() {
   print -n "%{%b%}"
   CURRENT_BG=''
 }
+_vbe_prompt_short() {
+    print -n "%{%B${fg[${(%):-%(!.red.green)}]}%}${PRCH[prompt]}%{%b%}"
+}
 
 _vbe_prompt () {
     local retval=$?
 
     # When old command, just time + prompt sign
     if (($_vbe_cmd_elapsed < 0)); then
-        print -n "%{${fg[yellow]}%}%T%{%b%} "
+        print -n "%{%B${fg[yellow]}%}%T%{%b%} "
         [[ $SSH_TTY ]] && \
             print -n "on %{%B${fg[magenta]}%}%M%{%b%} "
-        print -n "%{%B${fg[${(%):-%(!.red.green)}]}%}${PRCH[prompt]}%{%b%}"
+        _vbe_prompt_short
         return
     fi
 
@@ -148,10 +151,8 @@ _vbe_add_prompt () {
     done
 }
 _vbe_prompt_ps2 () {
-    for seg in ${${(s. .)${1}}[1,-2]}; do
-        _vbe_prompt_segment cyan default $seg
-    done
-    _vbe_prompt_end
+    # For some reason, we may not use the right segments due to how we reset the prompt...
+    _vbe_prompt_short
 }
 _vbe_setprompt () {
     setopt prompt_subst
