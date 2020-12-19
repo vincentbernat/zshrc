@@ -26,7 +26,7 @@ zle-isearch-exit () {
 }
 zle -N zle-isearch-exit
 TRAPINT() {
-    zle && {
+    zle && [[ $#zsh_eval_context == 1 ]] && {
         _vbe_cmd_elapsed=-1
         zle reset-prompt
     }
