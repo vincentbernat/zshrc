@@ -1,7 +1,4 @@
 # -*- sh -*-
-# Mostly taken from:
-#  - https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/jonathan.zsh-theme
-#  - https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/agnoster.zsh-theme
 
 _vbe_prompt_precmd () {
     _vbe_title "${SSH_TTY+${(%):-%M}:}${(%):-%50<..<%~}" "${SSH_TTY+${(%):-%M}:}${(%):-%20<..<%~}"
@@ -15,6 +12,7 @@ _vbe_prompt_preexec () {
 add-zsh-hook precmd _vbe_prompt_precmd
 add-zsh-hook preexec _vbe_prompt_preexec
 
+# Ensure prompt is redrawn before executing a command
 _vbe_reset-prompt-and-accept-line () {
     _vbe_cmd_elapsed=-1
     zle reset-prompt
