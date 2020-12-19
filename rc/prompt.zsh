@@ -43,33 +43,30 @@ _vbe_human_time () {
     print -n "${result[1,2]}"
 }
 
-CURRENT_BG=NONE
 _vbe_prompt_segment() {
   local b f
-  [[ -n $1 ]] && b="$bg[$1]" || b="$bg[default]"
-  [[ -n $2 ]] && f="$fg[$2]" || f="$fg[default]"
+  [[ -n $1 ]] && b="%K{$1}" || b="%k"
+  [[ -n $2 ]] && f="%F{$2}" || f="%f"
   [[ -n $3 ]] || return
-  if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-      print -n " %{%b$b$fg[$CURRENT_BG]%}${PRCH[end]}%{$f%} "
+  if [[ -n $CURRENT_BG && $1 != $CURRENT_BG ]]; then
+      print -n " %b$b%F{$CURRENT_BG}${PRCH[end]}$f "
   elif [[ $1 == $CURRENT_BG ]]; then
-      print -n " %{%b$b$f%}${PRCH[sep]} "
+      print -n " %b$b$f${PRCH[sep]} "
   else
-      print -n "%{%b$b$f%} "
+      print -n "%b$b$f "
   fi
   CURRENT_BG=$1
   print -n $3
 }
 _vbe_prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
-    print -n " %{%b$fg[$CURRENT_BG]%}${PRCH[end]}"
-  else
-    print -n "%{%b%}"
+    print -n " %b%k%F{$CURRENT_BG}${PRCH[end]}"
   fi
-  print -n "%{%b%}"
-  CURRENT_BG=''
+  print -n "%b%k%f"
+  unset CURRENT_BG
 }
 _vbe_prompt_short() {
-    print -n "%{%B${fg[${(%):-%(!.red.green)}]}%}${PRCH[prompt]}%{%b%}"
+    print -n "%B%F{${(%):-%(!.red.green)}}${PRCH[prompt]}%b%f"
 }
 
 _vbe_prompt () {
@@ -77,9 +74,9 @@ _vbe_prompt () {
 
     # When old command, just time + prompt sign
     if (($_vbe_cmd_elapsed < 0)); then
-        print -n "%{%B${fg[yellow]}%}%T%{%b%} "
+        print -n "%B%F{yellow}%T%b%f "
         [[ $SSH_TTY ]] && \
-            print -n "on %{%B${fg[magenta]}%}%M%{%b%} "
+            print -n "on %B%F{magenta}%M%b%f "
         _vbe_prompt_short
         return
     fi
@@ -95,7 +92,7 @@ _vbe_prompt () {
     local f1=${(%):-%(!.red.${${SUDO_USER:+white}:-green})}
     local f2=${(%):-${${SSH_TTY:+magenta}:-$f1}}
     _vbe_prompt_segment black $f1 \
-        %B%n%b%{${fg[cyan]}%}${${(%):-%n}:+@}%B%{${bg[black]}${fg[$f2]}%}%M
+        %B%n%b%F{cyan}${${(%):-%n}:+@}%B%K{black}$%F{$f2}%M
 
     # Directory
     local -a segs
@@ -126,7 +123,7 @@ _vbe_prompt () {
 
     # New line
     print
-    CURRENT_BG=NONE
+    unset CURRENT_BG
 
     # Additional info
     _vbe_add_prompt
