@@ -81,8 +81,7 @@ _vbe_prompt () {
         return
     fi
 
-    print "%F{cyan}${(r:$COLUMNS::.:):-}%f"
-
+    print
     # user:
     #  - when root, red
     #  - when sudo in action, white
