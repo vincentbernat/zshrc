@@ -92,7 +92,7 @@ _vbe_prompt () {
     local f1=${(%):-%(!.red.${${SUDO_USER:+white}:-green})}
     local f2=${(%):-${${SSH_TTY:+magenta}:-$f1}}
     _vbe_prompt_segment black $f1 \
-        %B%n%b%F{cyan}${${(%):-%n}:+@}%B%K{black}$%F{$f2}%M
+        %B%n%b%F{cyan}${${(%):-%n}:+@}%B%K{black}%F{$f2}%M
 
     # Directory
     local -a segs
