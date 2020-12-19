@@ -1,7 +1,5 @@
 # -*- sh -*-
 
-autoload -U zutil
-
 autoload compinit && {
     autoload -U complist
     compinit -i -d $ZSH/run/u/$HOST-$UID/zcompdump
