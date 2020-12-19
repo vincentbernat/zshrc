@@ -18,7 +18,7 @@ zstyle ':completion:*' list-prompt ''
 zstyle ':completion:*' group-name ''
 
 # Go directly to menu when many matches (yes=long). When in menu mode, use select.
-zstyle ':completion:*' menu yes=long select
+zstyle -e ':completion:*' menu 'reply=(yes=$((LINES/2)) select)'
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:kill:*' force-list always
