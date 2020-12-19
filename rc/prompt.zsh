@@ -123,7 +123,6 @@ _vbe_prompt () {
 
     # New line
     print
-    unset CURRENT_BG
 
     # Additional info
     _vbe_add_prompt
