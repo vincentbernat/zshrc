@@ -41,6 +41,7 @@ if _vbe_can_do_unicode; then
         circle $'\u25CF' branch $'\uE0A0'
         ok $'\u2714' ellipsis $'\u2026'
         eol $'\u23CE' running $'\u21BB'
+        prompt $'\u2771'
     )
 else
     PRCH=(
@@ -49,6 +50,7 @@ else
         circle "*" branch "\`|"
         ok ">" ellipsis ".."
         eol "~~" running "> "
+        prompt "$"
     )
 fi
 

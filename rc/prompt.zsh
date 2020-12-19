@@ -72,6 +72,13 @@ _vbe_prompt_end() {
 _vbe_prompt () {
     local retval=$?
 
+    # When old command, just time + prompt sign
+    if (($_vbe_cmd_elapsed < 0)); then
+        print -n "%{${fg[yellow]}%}%T %{%B${fg[${(%):-%(!.red.green)}]}%}${PRCH[prompt]}%{${reset_color}%}"
+        return
+    fi
+
+    print
     # user:
     #  - when root, red
     #  - when sudo in action, white
@@ -118,10 +125,8 @@ _vbe_prompt () {
     # Additional info
     _vbe_add_prompt
 
-    # Time elapsed or current time
-    if (($_vbe_cmd_elapsed < 0)); then
-        _vbe_prompt_segment white black "%T"
-    elif (($_vbe_cmd_elapsed >= 5)); then
+    # Time elapsed
+    if (($_vbe_cmd_elapsed >= 5)); then
         _vbe_prompt_segment white black "$(_vbe_human_time $_vbe_cmd_elapsed)"
     fi
 
