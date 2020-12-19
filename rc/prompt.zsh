@@ -74,7 +74,7 @@ _vbe_prompt () {
 
     # When old command, just time + prompt sign
     if (($_vbe_cmd_elapsed < 0)); then
-        print -n "%{${fg[yellow]}%}%T %{%B${fg[${(%):-%(!.red.green)}]}%}${PRCH[prompt]}%{${reset_color}%}"
+        print -n "%{${fg[yellow]}%}${PRCH[clock]}%T %{%B${fg[${(%):-%(!.red.green)}]}%}${PRCH[prompt]}%{${reset_color}%}"
         return
     fi
 
