@@ -36,12 +36,10 @@ zstyle ':completion:*:(ssh|scp|sftp|rsync):*:users' users root "$USERNAME" vince
 
 # Make menu uses only half the lines
 _vbe_half-lines() {
-    (( LINES > 5 )) && \
-        LINES=$(((LINES - 1)/2))
+    (( LINES > 5 )) && (( LINES = (LINES - 1) / 2 ))
 }
 _vbe_full-lines() {
-    # Force terminal query
-    LINES=0
+    LINES=0                     # Force terminal query
 }
 add-zsh-hook preexec _vbe_full-lines
 add-zle-hook-widget line-init _vbe_half-lines
