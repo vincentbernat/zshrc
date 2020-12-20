@@ -79,7 +79,7 @@ _vbe_prompt () {
 
     # When old command, just time + prompt sign
     if (($_vbe_cmd_elapsed < 0)); then
-        print -n "%B%F{yellow}%T%b%f "
+        print -n "%B%F{yellow}%D{%a %H:%M}%b%f "
         [[ $SSH_TTY ]] && \
             print -n "on %B%F{magenta}%M%b%f "
         case $retval in
