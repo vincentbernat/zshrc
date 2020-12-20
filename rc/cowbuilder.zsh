@@ -18,7 +18,7 @@
 
         # Usage
         (( $# > 0 )) || {
-            print "$0 distrib[/arch] ..." >&2
+            print -u2 "$0 distrib[/arch] ..."
             return 1
         }
 

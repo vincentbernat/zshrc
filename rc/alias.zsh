@@ -264,7 +264,7 @@ if (( $+commands[convert] )); then
     }
 else
     image() {
-        >&2 print "ImageMagick needed to display images"
+        print -u2 "ImageMagick needed to display images"
         return 1
     }
 fi
