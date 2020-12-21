@@ -61,7 +61,7 @@ _vbe_prompt_segment() {
       print -n "%b$b$f "
   fi
   CURRENT_BG=$1
-  print -n ${3## *}
+  print -n ${3# *}
 }
 _vbe_prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
@@ -76,11 +76,14 @@ _vbe_prompt () {
 
     # When old command, just time + prompt sign
     if (($_vbe_cmd_elapsed < 0)); then
+        _vbe_prompt_segment cyan default "%D{%a %H:%M}"
         [[ $SSH_TTY ]] && \
             _vbe_prompt_segment black magenta "%B%M%b"
-        (( $retval )) && \
-            _vbe_prompt_segment red default "%D{%a %H:%M}" || \
-            _vbe_prompt_segment green black "%D{%a %H:%M}"
+        if (( $retval )); then
+            _vbe_prompt_segment red default ${PRCH[reta]}
+        else
+            _vbe_prompt_segment green cyan ${PRCH[ok]}
+        fi
         _vbe_prompt_end
         return
     fi
