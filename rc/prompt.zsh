@@ -52,6 +52,7 @@ _vbe_prompt_segment() {
   local b f
   [[ -n $1 ]] && b="%K{$1}" || b="%k"
   [[ -n $2 ]] && f="%F{$2}" || f="%f"
+  [[ -n $3 ]] || return
   if [[ -n $CURRENT_BG && $1 != $CURRENT_BG ]]; then
       print -n " %b$b%F{$CURRENT_BG}${PRCH[end]}$f "
   elif [[ $1 == $CURRENT_BG ]]; then
@@ -60,7 +61,7 @@ _vbe_prompt_segment() {
       print -n "%b$b$f "
   fi
   CURRENT_BG=$1
-  print -n $3
+  print -n ${3## *}
 }
 _vbe_prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
@@ -79,8 +80,8 @@ _vbe_prompt () {
         [[ $SSH_TTY ]] && \
             _vbe_prompt_segment black magenta "%B%M%b"
         (( $retval )) && \
-            _vbe_prompt_segment red default "" || \
-                _vbe_prompt_segment green cyan ""
+            _vbe_prompt_segment red default " " || \
+                _vbe_prompt_segment green cyan " "
         _vbe_prompt_end
         return
     fi
