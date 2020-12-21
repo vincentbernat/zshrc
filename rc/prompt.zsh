@@ -52,7 +52,6 @@ _vbe_prompt_segment() {
   local b f
   [[ -n $1 ]] && b="%K{$1}" || b="%k"
   [[ -n $2 ]] && f="%F{$2}" || f="%f"
-  [[ -n $3 ]] || return
   if [[ -n $CURRENT_BG && $1 != $CURRENT_BG ]]; then
       print -n " %b$b%F{$CURRENT_BG}${PRCH[end]}$f "
   elif [[ $1 == $CURRENT_BG ]]; then
@@ -70,22 +69,19 @@ _vbe_prompt_end() {
   print -n "%b%k%f"
   unset CURRENT_BG
 }
-_vbe_prompt_short() {
-    print -n "%B%F{$1}${PRCH[prompt]}%b%f"
-}
 
 _vbe_prompt () {
     local retval=$?
 
     # When old command, just time + prompt sign
     if (($_vbe_cmd_elapsed < 0)); then
-        print -n "%B%F{yellow}%D{%a %H:%M}%b%f "
+        _vbe_prompt_segment white black "%D{%a %H:%M}"
         [[ $SSH_TTY ]] && \
-            print -n "on %B%F{magenta}%M%b%f "
-        case $retval in
-            0) _vbe_prompt_short green ;;
-            *) _vbe_prompt_short red ;;
-        esac
+            _vbe_prompt_segment black magenta "%B%M%b"
+        (( $retval )) && \
+            _vbe_prompt_segment red default "" || \
+                _vbe_prompt_segment green cyan ""
+        _vbe_prompt_end
         return
     fi
 
@@ -156,7 +152,8 @@ _vbe_add_prompt () {
 }
 _vbe_prompt_ps2 () {
     # For some reason, we may not use the right segments due to how we reset the prompt...
-    _vbe_prompt_short grey
+    _vbe_prompt_segment cyan white " "
+    _vbe_prompt_end
 }
 _vbe_setprompt () {
     setopt prompt_subst
