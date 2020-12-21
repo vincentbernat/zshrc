@@ -76,12 +76,11 @@ _vbe_prompt () {
 
     # When old command, just time + prompt sign
     if (($_vbe_cmd_elapsed < 0)); then
-        _vbe_prompt_segment white black "%D{%a %H:%M}"
         [[ $SSH_TTY ]] && \
             _vbe_prompt_segment black magenta "%B%M%b"
         (( $retval )) && \
-            _vbe_prompt_segment red default " " || \
-                _vbe_prompt_segment green cyan " "
+            _vbe_prompt_segment red default "%D{%a %H:%M}" || \
+            _vbe_prompt_segment green black "%D{%a %H:%M}"
         _vbe_prompt_end
         return
     fi
