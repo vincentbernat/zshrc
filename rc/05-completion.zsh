@@ -34,7 +34,9 @@ zstyle ':completion:*:*:git-fetch:argument-rest:' tag-order '!remote-repositorie
 zstyle ':completion:*:*:git-pull:argument-1:' tag-order '!remote-repositories'
 zstyle ':completion:*:(ssh|scp|sftp|rsync):*:users' users root "$USERNAME" vincent blade cumulus
 
-# Make menu uses only half the lines
+# Make menu uses only half the lines. This is not quite reliable,
+# notably SIGWINCH will reset to full height, as well as some
+# completions.
 _vbe_half-lines() {
     (( LINES > 5 )) && LINES=$(( (LINES - 1) / 2 ))
 }
