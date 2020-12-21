@@ -19,12 +19,20 @@ _vbe_reset-prompt-and-accept-line () {
     zle .accept-line            # builtin
 }
 zle -N accept-line _vbe_reset-prompt-and-accept-line
-zle-isearch-exit () {
+_vbe_zle-isearch-exit () {
     [[ $KEYS != $'\r' ]] && return
     _vbe_cmd_elapsed=-1
     zle reset-prompt
 }
-zle -N zle-isearch-exit
+zle -N zle-isearch-exit _vbe_zle-isearch-exit
+_vbe_reset-prompt-and-exit () {
+    _vbe_cmd_elapsed=-1
+    zle reset-prompt
+    exit
+}
+setopt ignoreeof
+zle -N _vbe_reset-prompt-and-exit
+bindkey '^D' _vbe_reset-prompt-and-exit
 TRAPINT() {
     zle && [[ $#zsh_eval_context == 1 ]] && {
         _vbe_cmd_elapsed=-1
@@ -32,6 +40,7 @@ TRAPINT() {
     }
     return $((128+$1))
 }
+
 
 # Stolen from https://github.com/sindresorhus/pure/blob/master/pure.zsh
 _vbe_human_time () {
