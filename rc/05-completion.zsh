@@ -35,14 +35,14 @@ zstyle ':completion:*:*:git-pull:argument-1:' tag-order '!remote-repositories'
 zstyle ':completion:*:(ssh|scp|sftp|rsync):*:users' users root "$USERNAME" vincent blade cumulus
 
 # Host completion
-_custom_hosts() {
+_vbe_custom_hosts() {
     # Complete ~/.zsh/local/hosts.*
     local host
     for host in $ZSH/local/hosts.*(N-.); do
 	_wanted hosts expl "remote host name" compadd "$@" $(<$host)
     done
 }
-zstyle -e ':completion:*' hosts '_custom_hosts "$@"'
+zstyle -e ':completion:*' hosts '_vbe_custom_hosts "$@"'
 
 # Don't use known_hosts_file (too slow)
 zstyle ":completion:*:hosts" known-hosts-files ''
