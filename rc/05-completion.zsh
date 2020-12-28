@@ -16,7 +16,8 @@ zstyle ':completion:*' completer _expand_alias _complete _match _approximate
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt ''
 zstyle ':completion:*' group-name ''
-zstyle ':completion:*' menu yes=long select
+zstyle ':completion:*' insert-unambiguous
+zstyle ':completion:*' menu yes=long select interactive
 zstyle ':completion:*:descriptions' format '%B%d%b'
 zstyle ':completion:*:functions' ignored-patterns '_*'
 zstyle ':completion:*:match:*' original only
