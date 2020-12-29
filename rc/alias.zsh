@@ -386,9 +386,12 @@ function \$() {
 
 # Get my own external IP
 function myip() {
+  local -a get
+  (( $+commands[wget] )) && get=(wget -q -O - -T 1)
+  (( $+commands[curl] )) && get=(curl -s --max-time 1)
   for v in 4 6 ; do
     echo IPv$v \
-         $(curl -s -$v --max-time 1 https://vincent.bernat.ch/ip || echo "unknown")
+         $($get -$v https://vincent.bernat.ch/ip || echo "unknown")
   done 2> /dev/null
 }
 
