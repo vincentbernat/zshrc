@@ -10,6 +10,7 @@ case $HOSTNAME in
         HISTFILE=~/.zsh_history
         if [[ -O $ZSH/run/u/$HOST-$UID/history ]]; then
             fc -R $ZSH/run/u/$HOST-$UID/history
+            fc -A
             rm -f $ZSH/run/u/$HOST-$UID/history
         fi
         ;;
