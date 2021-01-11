@@ -585,10 +585,5 @@ alias virtualenv2='_virtualenv 2'
 alias virtualenv3='_virtualenv 3'
 (( $+commands[python2] )) && alias virtualenv='_virtualenv 2'
 (( $+commands[python3] )) && alias virtualenv='_virtualenv 3'
-
 hash -d venvs=$WORKON_HOME
-_vbe_add_prompt_virtualenv () {
-    _vbe_prompt_env 've' '${VIRTUAL_ENV##*/}'
-}
-
 autoload -Uz workon

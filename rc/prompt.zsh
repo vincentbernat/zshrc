@@ -41,7 +41,6 @@ TRAPINT() {
     return $((128+$1))
 }
 
-
 # Stolen from https://github.com/sindresorhus/pure/blob/master/pure.zsh
 _vbe_human_time () {
     local tmp=$1
@@ -57,6 +56,7 @@ _vbe_human_time () {
     print -n "${result[1,2]}"
 }
 
+# Segment handling
 _vbe_prompt_segment() {
   local b f
   [[ -n $1 ]] && b="%K{$1}" || b="%k"
@@ -157,13 +157,6 @@ _vbe_prompt () {
 
     _vbe_prompt_end
 }
-
-# Collect additional information from functions matching _vbe_add_prompt_*
-_vbe_add_prompt () {
-    for f in ${(M)${(k)functions}:#_vbe_add_prompt_*}; do
-	$f
-    done
-}
 _vbe_prompt_ps2 () {
     # For some reason, we may not use the right segments due to how we reset the prompt...
     _vbe_prompt_segment cyan white " "
@@ -176,4 +169,101 @@ _vbe_setprompt () {
     PROMPT_EOL_MARK="%B${PRCH[eol]}%b"
     unset RPROMPT
     unset RPS1
+}
+
+# Collect additional information from functions matching _vbe_add_prompt_*
+_vbe_add_prompt () {
+    for f in ${(M)${(k)functions}:#_vbe_add_prompt_*}; do
+	$f
+    done
+}
+
+# Below are "current environment" indicator
+_vbe_prompt_env () {
+    local kind=$1
+    local name=${(e)${2}}
+    [[ -z $name ]] || {
+        _vbe_prompt_segment blue black $kind
+        _vbe_prompt_segment blue black $name
+    }
+}
+
+# Are we running inside lxc? lxc sets `container` environment variable
+# for PID 1 but this seems difficult to get as a simple
+# user. Therefore, we will look at /proc/self/cgroup.
+[[ -z $DOCKER_CHROOT_NAME ]] && [[ -f /proc/self/cgroup ]] && {
+    autoload -U zsh/regex
+    case $(</proc/self/cgroup) in
+        *:/lxc/*)
+            LXC_CHROOT_NAME=${${(s:/:)${${(s: :)$(</proc/self/cgroup)}[(rw)*:/lxc/*]}}[-1]}
+            # Maybe, it's a docker container, keep only 12 characters in this case
+            if [[ $LXC_CHROOT_NAME -regex-match [0-9a-f]{64} ]]; then
+                DOCKER_CHROOT_NAME=${LXC_CHROOT_NAME[1,12]}
+                unset LXC_CHROOT_NAME
+            fi
+            ;;
+        *:/docker/*)
+            DOCKER_CHROOT_NAME=${${${(s:/:)${${(s: :)$(</proc/self/cgroup)}[(rw)*:/docker/*]}}[-1]}[1,12]}
+            ;;
+        */docker-*)
+            DOCKER_CHROOT_NAME=${${${(s:-:)${${(s: :)$(</proc/self/cgroup)}[(rw)*/docker-*]}}[-1]}[1,12]}
+            ;;
+    esac
+}
+[[ -z $LXC_CHROOT_NAME ]] || {
+    _vbe_add_prompt_lxc () {
+        _vbe_prompt_env 'lxc' '${LXC_CHROOT_NAME}'
+    }
+}
+[[ -z $DOCKER_CHROOT_NAME ]] || {
+    DOCKER_CHROOT_NAME=${DOCKER_CHROOT_NAME##*/}
+    _vbe_add_prompt_docker () {
+        _vbe_prompt_env 'docker' '${DOCKER_CHROOT_NAME}'
+    }
+}
+
+# Include schroot name in prompt if available
+[[ ! -f /etc/debian_chroot ]] || [[ -n $LXC_CHROOT_NAME ]] || \
+    SCHROOT_CHROOT_NAME=$(</etc/debian_chroot)
+[[ -z $SCHROOT_CHROOT_NAME ]] || {
+    _vbe_add_prompt_schroot () {
+        _vbe_prompt_env 'sch' '${SCHROOT_CHROOT_NAME}'
+    }
+}
+
+# In pbuilderrc, add:
+#   export PBUILDERPID=$$
+[[ -z $PBUILDERPID ]] || {
+    _vbe_add_prompt_pbuilder () {
+        _vbe_prompt_env 'pb' '${PBUILDERPID}'
+    }
+}
+
+# In netns
+(( $+commands[ip] )) && [[ -n "$(ip netns identify 2> /dev/null)" ]] && {
+    _vbe_add_prompt_netns () {
+        _vbe_prompt_env 'netns' "$(ip netns identify)"
+    }
+}
+
+# In Cumulus VRF
+(( $+commands[vrf] )) && case $(vrf identify) in
+    default) ;;
+    *)
+        _vbe_add_prompt_netns () {
+            _vbe_prompt_env 'vrf' "$(vrf identify)"
+        }
+        ;;
+esac
+
+# In nix-shell
+[[ -n $IN_NIX_SHELL ]] && {
+    _vbe_add_prompt_nixshell() {
+        _vbe_prompt_env 'nix' ${${name#shell}:-${${IN_WHICH_NIX_SHELL:-${(j:+:)${${=${:-${buildInputs} ${nativeBuildInputs}}}#*-}:#glibc*}}:-${PRCH[ellipsis]}}}
+    }
+}
+
+# In virtualenv
+_vbe_add_prompt_virtualenv () {
+    _vbe_prompt_env 've' '${VIRTUAL_ENV##*/}'
 }
