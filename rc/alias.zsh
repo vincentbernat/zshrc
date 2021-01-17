@@ -107,6 +107,9 @@ alias -g ,noerr="2> /dev/null"
   (( $+commands[zgrep] )) && alias zgrep="GREP=${grep} command zgrep ${colors}"
 }
 
+# Import a secret into an environment variable
+alias secret="< /dev/tty IFS= read -rs"
+
 # smv like scp
 alias smv='rsync -P --remove-source-files'
 (( $+functions[compdef] )) && compdef _ssh smv=scp
