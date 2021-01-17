@@ -108,7 +108,13 @@ alias -g ,noerr="2> /dev/null"
 }
 
 # Import a secret into an environment variable
-alias secret="< /dev/tty IFS= read -rs"
+secret() {
+  for s in $@; do
+      print -n "$s: "
+      < /dev/tty IFS= read -rs $s
+      print
+  done
+}
 
 # smv like scp
 alias smv='rsync -P --remove-source-files'
