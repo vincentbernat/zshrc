@@ -142,7 +142,10 @@ EOF
     local homedev=$(readlink -f ${${(f)"$(df --output=source $HOME)"}[-1]})
     local rootdev=$(readlink -f ${${(f)"$(df --output=source /)"}[-1]})
     local enter=$(mktemp --tmpdir nsenter-XXXXXXXXX)
-    local environ=$(docker container inspect --format "{{range .Config.Env}}export {{.}}"$'\n'"{{end}}" $env)
+    local -a environ
+    environ=(${(@f)"$(docker container inspect --format "{{range .Config.Env}}{{.}}"$'\n'"{{end}}" $env)"})
+    for ((i = 1; i < $#environ; i++)) \
+            environ[$i]="export ${environ[$i]%%=*}=${(q-)${environ[$i]#*=}}"
     compile_sudo
     (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -
     ${=${(%):-%(!..sudo -v)}}
@@ -190,7 +193,7 @@ for SHELL in $commands[zsh-static] $SHELL /bin/bash /bin/sh; do
     [ ! -x \$SHELL ] || break
 done
 
-$environ
+${(pj:\n:)environ}
 exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
    $sudo -u $(id -u) -g $(id -g) -c \$PWD \$SHELL -i -l
 "
