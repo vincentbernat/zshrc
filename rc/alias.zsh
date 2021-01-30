@@ -61,7 +61,6 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 (( $+commands[docker] )) && alias indocker='docker run -it --rm -w "$(pwd)" -v "$(pwd):$(pwd)" -u "$(id -u):$(id -g)"'
 (( $+commands[git] )) && alias gti=git
 (( $+commands[mtr] )) && alias mtrr='mtr -wzbe'
-(( $+commands[tmate] )) && alias tmate='env -u TMUX tmate'
 (( $+commands[ag] )) && alias ag='ag --pager="less -FRX"'
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 mkcd() { command mkdir -p $1 && cd $1 }
