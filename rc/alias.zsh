@@ -87,6 +87,21 @@ alias -g ,noerr="2> /dev/null"
   export LESS_TERMCAP_us=$'\E[1;32m'
 }
 
+# Expand aliases
+globalias() {
+   # Get last word to the left of the cursor:
+   # (z) splits into words using shell parsing
+   # (A) makes it an array even if there's only one element
+   local word=${${(Az)LBUFFER}[-1]}
+   zle _expand_alias
+   zle expand-word
+   zle self-insert
+}
+zle -N globalias
+bindkey -M emacs " " globalias
+bindkey -M emacs "^ " magic-space
+bindkey -M isearch " " magic-space
+
 # grep aliases
 () {
   # If GNU grep is available, use it
