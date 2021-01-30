@@ -58,7 +58,6 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 (( $+commands[pip3] )) && alias pip3='PIP_REQUIRE_VIRTUALENV=true pip3 --disable-pip-version-check'
 (( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 3 ))'
 (( $+commands[ncal] )) && alias ncal='ncal -w'
-(( $+commands[docker] )) && alias indocker='docker run -it --rm -w "$(pwd)" -v "$(pwd):$(pwd)" -u "$(id -u):$(id -g)"'
 (( $+commands[git] )) && alias gti=git
 (( $+commands[mtr] )) && alias mtrr='mtr -wzbe'
 (( $+commands[ag] )) && alias ag='ag --pager="less -FRX"'
