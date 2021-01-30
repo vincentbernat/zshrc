@@ -1,5 +1,23 @@
 # -*- sh -*-
 
+# Autoexpand some aliases
+typeset -ga _vbe_autoexpand
+_vbe_zle-autoexpand() {
+    # Get last word to the left of the cursor:
+    # (z) splits into words using shell parsing
+    # (A) makes it an array even if there's only one element
+    local word=${${(Az)LBUFFER}[-1]}
+    (( ${#_vbe_autoexpand[(r)$word]} )) && {
+        zle _expand_alias
+        zle expand-word
+    }
+    zle self-insert
+}
+zle -N _vbe_zle-autoexpand
+bindkey -M emacs " " _vbe_zle-autoexpand
+bindkey -M emacs "^ " magic-space
+bindkey -M isearch " " magic-space
+
 # Some generic aliases
 alias df='df -h'
 alias du='du -h'
@@ -9,6 +27,7 @@ alias ll='ls -ltrh'
 alias chown='chown -h'
 alias chgrp='chgrp -h'
 alias tailf='tail -F'           # not shipped in util-linux anymore
+_vbe_autoexpand+=(ll tailf)
 () {
   local dmesg_version=${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}
   if is-at-least 2.23 $dmesg_version; then
@@ -46,6 +65,7 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
   alias ipm='ip -resolve monitor'
   alias ipb='ip -brief'
   alias ip6b='ip -6 -brief'
+  _vbe_autoexpand+=(ip6 ipr ip6r ipm ipb ip6b)
 }
 
 # Other simple aliases
@@ -62,12 +82,15 @@ alias tailf='tail -F'           # not shipped in util-linux anymore
 (( $+commands[mtr] )) && alias mtrr='mtr -wzbe'
 (( $+commands[ag] )) && alias ag='ag --pager="less -FRX"'
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
+_vbe_autoexpand+=(ncal gti mtrr)
+
 mkcd() { command mkdir -p $1 && cd $1 }
 (( $+commands[nix-shell] )) && nix-zsh() {
         nix-shell --command zsh "$@"
 }
 
 # Global aliases. I am using `,' as a prefix.
+_vbe_autoexpand+=(,nd ,ndd ,nf ,nff ,silent ,noerr)
 alias -g ,nd='*(/om[1])'        # newest directory
 alias -g ,ndd='*(/om[1])'       # before-newest directory
 alias -g ,nf='*(.om[1])'        # newest file
@@ -101,6 +124,7 @@ alias -g ,noerr="2> /dev/null"
   alias rgrep="grep -r"
   alias egrep="grep -E"
   alias fgrep="grep -F"
+  _vbe_autoexpand+=(rgrep egrep fgrep)
   # --color=auto doesn't work. See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=792135
   (( $+commands[zgrep] )) && alias zgrep="GREP=${grep} command zgrep ${colors}"
 }

@@ -9,9 +9,9 @@
     if [ -d /run/systemd/system ]; then
         # systemd
         for cmd ($cmds) {
-            (( $+functions[compdef] )) && compdef -d $cmd
             alias $cmd="${(%):-%(#..sudo )}systemctl $cmd"
             alias u$cmd="systemctl --user $cmd"
+            _vbe_autoexpand+=($cmd u$cmd)
         }
     else
         # generic service
