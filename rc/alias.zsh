@@ -82,7 +82,7 @@ _vbe_autoexpand+=(ll tailf)
 (( $+commands[mtr] )) && alias mtrr='mtr -wzbe'
 (( $+commands[ag] )) && alias ag='ag --pager="less -FRX"'
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
-_vbe_autoexpand+=(ncal gti mtrr)
+_vbe_autoexpand+=(gti mtrr)
 
 mkcd() { command mkdir -p $1 && cd $1 }
 (( $+commands[nix-shell] )) && nix-zsh() {
