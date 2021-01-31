@@ -212,7 +212,7 @@ _vbe_prompt_env () {
 }
 [[ -z $DOCKER_CHROOT_NAME ]] || {
     _vbe_add_prompt_docker () {
-        _vbe_prompt_env 'docker' '${DOCKER_CHROOT_NAME##*/}'
+        _vbe_prompt_env "$PRCH[docker]" '${DOCKER_CHROOT_NAME##*/}'
     }
 }
 
@@ -259,5 +259,5 @@ esac
 
 # In virtualenv
 _vbe_add_prompt_virtualenv () {
-    _vbe_prompt_env 've' '${VIRTUAL_ENV##*/}'
+    _vbe_prompt_env $PRCH[python] '${VIRTUAL_ENV##*/}'
 }

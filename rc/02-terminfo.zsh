@@ -40,6 +40,8 @@ if _vbe_can_do_unicode; then
         circle $'\u25CF' branch $'\uE0A0'
         ok $'\u2713' ellipsis $'\u2026'
         eol $'\u23CE' running $'\u21BB'
+        python $'\U1f40d'
+        docker $'\U1f40b'
     )
 else
     PRCH=(
@@ -48,6 +50,8 @@ else
         circle "*" branch "\`|"
         ok ">" ellipsis ".."
         eol "~~" running "> "
+        python "python"
+        docker "docker"
     )
 fi
 
