@@ -4,9 +4,9 @@
 typeset -ga _vbe_autoexpand
 _vbe_zle-autoexpand() {
     # Get last word to the left of the cursor:
-    # (z) splits into words using shell parsing
-    # (A) makes it an array even if there's only one element
-    local word=${${(Az)LBUFFER}[-1]}
+    local -a words
+    words=(${(z)LBUFFER})
+    local word=${words[-1]}
     (( ${#_vbe_autoexpand[(r)$word]} )) && {
         zle _expand_alias
         zle expand-word
