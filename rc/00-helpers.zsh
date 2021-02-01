@@ -15,16 +15,14 @@ zmodload zsh/datetime           # EPOCHSECONDS
 # Test for unicode support
 _vbe_can_do_unicode () {
     # We need:
-    #  1. at least zsh 4.3.4
-    #  2. multibyte input support
-    #  3. locale support
-    #  4. terminal support
+    #  1. multibyte input support
+    #  2. locale support
+    #  3. terminal support
     # Locale support is tested by trying to output an unicode
     # character. zsh will choke with "character not in range" if this
     # doesn't work.
-    if is-at-least 4.3.4 && \
-            [[ -o multibyte ]] && \
-            (( ${#${:-$(print -n "\u21B5\u21B5" 2> /dev/null)}} == 2 )); then
+    if [[ -o multibyte ]] \
+       && (( ${#${:-$(print -n "\u21B5\u21B5" 2> /dev/null)}} == 2 )); then
         case $TERM in
             screen*|xterm*|rxvt*) return 0 ;;
         esac
