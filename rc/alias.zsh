@@ -134,6 +134,7 @@ secret() {
       print -n "$s: "
       < /dev/tty IFS= read -rs $s
       print
+      export $s
   done
 }
 
