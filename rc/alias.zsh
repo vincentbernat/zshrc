@@ -75,7 +75,7 @@ _vbe_autoexpand+=(ll tailf)
 (( $+commands[ipython3] )) && alias ipython=ipython3
 (( $+commands[pip] )) && alias pip='PIP_REQUIRE_VIRTUALENV=true pip --disable-pip-version-check'
 (( $+commands[pip3] )) && alias pip3='PIP_REQUIRE_VIRTUALENV=true pip3 --disable-pip-version-check'
-(( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 3 ))'
+(( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 4 ))'
 (( $+commands[ncal] )) && alias ncal='ncal -w'
 (( $+commands[git] )) && alias gti=git
 (( $+commands[mtr] )) && alias mtrr='mtr -wzbe'
