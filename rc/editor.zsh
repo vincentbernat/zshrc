@@ -27,7 +27,6 @@ EOF
 	}
     done
     [[ -z $EDITOR ]] || {
-        alias e=$EDITOR
         # Maybe use emacsclient?
         [[ $editor == emacs* ]] && (( $+commands[emacsclient] )) && {
 	    export ALTERNATE_EDITOR=$EDITOR
@@ -36,13 +35,13 @@ EOF
             cat <<EOF > $EDITOR
 #!/bin/sh
 case \$DISPLAY in
-  "") $editor -t -c "\$@" ;;
-  *) $editor "\$@" ;;
+  "") exec $editor -t -c "\$@" ;;
+  *) exec $editor "\$@" ;;
 esac
 EOF
             chmod +x $EDITOR
-	    alias e="$editor "'${=${DISPLAY:+-n}:--t -c}'
         }
+        alias e=$EDITOR
     }
 
 }
