@@ -32,7 +32,7 @@ function vbe-sudo-command-line() {
     sudo\ *)
         LBUFFER="${LBUFFER#sudo }"
         ;;
-    e\ *)
+    e\ *|e)
         LBUFFER="sudoedit${LBUFFER#e}"
         ;;
     *)
