@@ -24,12 +24,20 @@ zle -N bracketed-paste bracketed-paste-magic
 
 # Meta-S will toggle sudo
 function vbe-sudo-command-line() {
-    [[ -z $BUFFER ]] && zle up-history
-    if [[ $BUFFER == sudo\ * ]]; then
+  [[ -z $BUFFER ]] && zle up-history
+  case $BUFFER in
+    sudoedit\ *)
+        LBUFFER="e${LBUFFER#sudoedit}"
+        ;;
+    sudo\ *)
         LBUFFER="${LBUFFER#sudo }"
-    else
+        ;;
+    e\ *)
+        LBUFFER="sudoedit${LBUFFER#e}"
+        ;;
+    *)
         LBUFFER="sudo $LBUFFER"
-    fi
+  esac
 }
 zle -N vbe-sudo-command-line
 bindkey "\es" vbe-sudo-command-line
