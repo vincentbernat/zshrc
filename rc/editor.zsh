@@ -31,15 +31,15 @@ EOF
         [[ $editor == emacs* ]] && (( $+commands[emacsclient] )) && {
 	    export ALTERNATE_EDITOR=$EDITOR
             export EDITOR=$ZSH/run/u/$HOST-$UID/editor-ec
-            editor=emacsclient
-            cat <<EOF > $EDITOR
+            cat <<'EOF' > $EDITOR.$$
 #!/bin/sh
-case \$DISPLAY in
-  "") exec $editor -t -c "\$@" ;;
-  *) exec $editor "\$@" ;;
+case $DISPLAY in
+  "") exec emacsclient -t -c "$@" ;;
+  *) exec emacsclient "$@" ;;
 esac
 EOF
-            chmod +x $EDITOR
+            chmod +x $EDITOR.$$
+            mv -f $EDITOR.$$ $EDITOR
         }
         alias e=$EDITOR
     }
