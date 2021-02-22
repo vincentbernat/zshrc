@@ -26,6 +26,7 @@ zstyle ':completion::complete:*' cache-path $ZSH/run/u/$HOST-$UID/cache/
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX + $#SUFFIX) / 3 )) )'
 zstyle ':completion:history-words:*' remove-all-dups true
 
+zstyle ':completion:*:*:-command-:*:*' ignored-patterns 'cowbuilder-*'
 zstyle ':completion:*:processes' command "ps -eo pid,user,comm,cmd -w -w"
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:kill:*' force-list always
