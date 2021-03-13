@@ -30,6 +30,13 @@
         vcs_info_msg_0_=$stdout
         [[ $more == 1 ]] || zle reset-prompt
     }
+    _vbe_vcs_chpwd() {
+        vcs_info_msg_0_=
+    }
+    _vbe_vcs_precmd() {
+        async_flush_jobs vcs_info
+        async_job vcs_info _vbe_vcs_info $PWD
+    }
 
     autoload -Uz vcs_info
 
@@ -45,7 +52,7 @@
 
         zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 
-        +vi-git-untracked(){
+        +vi-git-untracked () {
             if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
                 git status --porcelain 2> /dev/null | grep -q '??' ; then
                 hook_com[staged]+="%F{black}${PRCH[circle]}%f"
@@ -58,13 +65,8 @@
     source $ZSH/third-party/async.zsh
     async_init
     _vbe_vcs_async_start
-    add-zsh-hook precmd (){
-        async_flush_jobs vcs_info
-        async_job vcs_info _vbe_vcs_info $PWD
-    }
-    add-zsh-hook chpwd (){
-        vcs_info_msg_0_=
-    }
+    add-zsh-hook precmd _vbe_vcs_precmd
+    add-zsh-hook chpwd _vbe_vcs_chpwd
 
     # Add VCS information to the prompt
     _vbe_add_prompt_vcs () {
