@@ -95,7 +95,6 @@ _vbe_autoexpand+=(ll tailf)
 }
 
 # Other simple aliases
-(( $+commands[xdg-open] )) && alias o=xdg-open
 (( $+commands[xdg-app-chooser] )) && alias o=xdg-app-chooser
 (( $+commands[irb] )) && alias irb='irb --readline -r irb/completion'
 (( $+commands[ipython] )) && alias ipython2=\=ipython # maybe inexact
