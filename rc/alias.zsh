@@ -26,7 +26,6 @@ alias ll='ls -ltrha'
 alias chown='chown -h'
 alias chgrp='chgrp -h'
 alias tailf='tail -F'           # not shipped in util-linux anymore
-alias reexec="exec -a $ZSH_ARGZERO $SHELL"
 _vbe_autoexpand+=(ll tailf)
 () {
   local dmesg_version=${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}
