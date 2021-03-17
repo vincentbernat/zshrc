@@ -1,9 +1,14 @@
 # -*- sh -*-
 
+# _vbe_prompt_compact: whetever to use compact prompt
+# _vbe_cmd_elapsed: elapsed time to be displayed in prompt
+# _vbe_cmd_timestamp: timestamp to compute elapsed time for a command
+
 _vbe_prompt_precmd () {
     _vbe_title "${SSH_TTY+${(%):-%M}:}${(%):-%50<..<%~}" "${SSH_TTY+${(%):-%M}:}${(%):-%20<..<%~}"
     local now=$EPOCHSECONDS
     _vbe_cmd_elapsed=$(($now - ${_vbe_cmd_timestamp:-$now}))
+    unset _vbe_prompt_compact
     unset _vbe_cmd_timestamp
 }
 _vbe_prompt_preexec () {
@@ -14,19 +19,19 @@ add-zsh-hook preexec _vbe_prompt_preexec
 
 # Ensure prompt is redrawn before executing a command
 _vbe_reset-prompt-and-accept-line () {
-    _vbe_cmd_elapsed=-1
+    _vbe_prompt_compact=1
     zle reset-prompt
     zle .accept-line            # builtin
 }
 zle -N accept-line _vbe_reset-prompt-and-accept-line
 _vbe_zle-isearch-exit () {
     [[ $KEYS != $'\r' ]] && return
-    _vbe_cmd_elapsed=-1
+    _vbe_prompt_compact=1
     zle reset-prompt
 }
 zle -N zle-isearch-exit _vbe_zle-isearch-exit
 _vbe_reset-prompt-and-exit () {
-    _vbe_cmd_elapsed=-1
+    _vbe_prompt_compact=1
     zle reset-prompt
     exit
 }
@@ -35,7 +40,7 @@ zle -N _vbe_reset-prompt-and-exit
 bindkey '^D' _vbe_reset-prompt-and-exit
 TRAPINT() {
     zle && [[ $#zsh_eval_context == 1 ]] && {
-        _vbe_cmd_elapsed=-1
+        _vbe_prompt_compact=1
         zle reset-prompt
     }
     return $((128+$1))
@@ -84,7 +89,7 @@ _vbe_prompt () {
     local retval=$?
 
     # When old command, just time + prompt sign
-    if (($_vbe_cmd_elapsed < 0)); then
+    if (($_vbe_prompt_compact)); then
         _vbe_prompt_segment cyan default "%D{%H:%M}"
         [[ $SSH_TTY ]] && \
             _vbe_prompt_segment black magenta "%B%M%b"
