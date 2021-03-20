@@ -359,21 +359,16 @@ v() {
 # Remove "-qp 0" for non-lossless compression.
 #
 screenrecord() {
-  local X Y WIDTH HEIGHT BORDER
-  eval $(xwininfo -id $(xdotool selectwindow) | \
-             sed -n \
-                 -e 's/ *Absolute upper-left X: *\([0-9]*\)/X=\1/p' \
-                 -e 's/ *Absolute upper-left Y: *\([0-9]*\)/Y=\1/p' \
-                 -e 's/ *Width: *\([0-9]*\)/WIDTH=\1/p' \
-                 -e 's/ *Height: *\([0-9]*\)/HEIGHT=\1/p' \
-                 -e 's/ *Border width: *\([0-9]*\)/BORDER=\1/p')
+  local x y width height border
+  eval $(slop -b 5 -l -c 0.3,0.4,0.6,0.4 -f 'x=%x y=%y width=%w height=%h')
+  [[ -n $x ]] || return
   print -z -- ffmpeg \
         \\\\$'\n' \
         -f x11grab \
         -draw_mouse 0 \
         -r 30 \
-        -s $((${WIDTH} / 2 * 2))x$((${HEIGHT} / 2 * 2)) \
-        -i ${DISPLAY}+$((X+BORDER)),$((Y+BORDER)) \
+        -s $((${width} / 2 * 2))x$((${height} / 2 * 2)) \
+        -i ${DISPLAY}+${x},${y} \
         \\\\$'\n' \
         -pix_fmt yuv420p \
         -c:v libx264 \
