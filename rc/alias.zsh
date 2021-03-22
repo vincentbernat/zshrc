@@ -37,6 +37,11 @@ _vbe_autoexpand+=(ll tailf)
 }
 (( $+commands[gdb] )) && alias gdb='gdb -q'
 
+# Fix typos
+alias gti='git'
+alias suod='sudo'
+_vbe_autoexpand+=(gti suod)
+
 # ls colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
   if ls --color=auto -d . &>/dev/null; then
