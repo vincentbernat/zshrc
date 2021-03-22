@@ -89,7 +89,7 @@ _vbe_prompt () {
     local retval=$?
 
     # When old command, just time + prompt sign
-    if (($_vbe_prompt_compact)); then
+    if (( $_vbe_prompt_compact )); then
         _vbe_prompt_segment cyan default "%D{%H:%M}"
         [[ $SSH_TTY ]] && \
             _vbe_prompt_segment black magenta "%B%M%b"
@@ -149,7 +149,7 @@ _vbe_prompt () {
     _vbe_add_prompt
 
     # Time elapsed
-    if (($_vbe_cmd_elapsed >= 5)); then
+    if (( $_vbe_cmd_elapsed >= 5 )); then
         _vbe_prompt_segment white black "$(_vbe_human_time $_vbe_cmd_elapsed)"
     fi
 
