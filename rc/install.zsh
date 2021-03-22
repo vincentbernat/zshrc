@@ -3,6 +3,7 @@
 # Install or update ZSH on a remote host.
 install-zsh() {
     local version=$(cd $ZSH ; git rev-parse HEAD)
+    # The following function should only use POSIX shell statements
     local __() {
         # Check version
         ZDOTDIR="${ZDOTDIR:-$HOME}"
