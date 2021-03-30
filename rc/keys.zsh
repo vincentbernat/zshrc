@@ -42,14 +42,6 @@ function vbe-sudo-command-line() {
 zle -N vbe-sudo-command-line
 bindkey "\es" vbe-sudo-command-line
 
-# Ctrl-Alt-R will reload Zsh on empty line
-function vbe-zsh-reload() {
-  BUFFER="exec -a $ZSH_ARGZERO $SHELL"
-  zle accept-line
-}
-zle -N vbe-zsh-reload
-bindkey "^[^R" vbe-zsh-reload
-
 # Expand ... to ../..
 function vbe-expand-dot-to-parent-directory-path() {
   case $LBUFFER in
