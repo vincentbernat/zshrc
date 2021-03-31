@@ -51,7 +51,7 @@ ssh() {
 # ssh with zmodem.
 zssh() {
     local state
-    local -a common=(-o ControlPath="$ZSH/run/%r@%h:%p")
+    local -a common
 
     # Probe to run on remote host to check the situation.
     local __() {
@@ -92,6 +92,7 @@ zssh() {
     local execzsh="$(which __); __ $USER"
 
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
+    common=(-o ControlPath="$ZSH/run/%r@%h:%p")
     command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" ${probezsh} | read state
     case $state in
         ok)
