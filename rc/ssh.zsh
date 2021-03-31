@@ -50,41 +50,49 @@ ssh() {
 # shadows the "zssh" command which enables interactive transfers over
 # ssh with zmodem.
 zssh() {
-    local -a common
     local state
-    local execzsh
+    local -a common=(-o ControlPath="$ZSH/run/%r@%h:%p")
+
+    # Probe to run on remote host to check the situation.
+    local __() {
+        # Check if zsh is installed.
+        if ! which zsh 2> /dev/null > /dev/null; then
+            if grep -Eq '^ID=(debian|ubuntu)$' /etc/os-release 2> /dev/null && [ x$USER = xroot ]; then
+                echo no-zsh-but-debian
+            else
+                echo no-zsh
+            fi
+            exit 0
+        fi
+
+        # Check if dotfiles are up-to-date
+        # If dotfiles are already up-to-date, execute the shell
+        current=$(cat ~/.zsh.$1/run/version 2> /dev/null || echo 0)
+        target=$2
+        if [ x$current = x$target ]; then
+            echo ok
+            exit 0
+        fi
+
+        # Otherwise signal we want to install
+        echo need-update
+    }
+    local probezsh="$(which __); __ $USER $(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)"
+
+    # Execution of Zsh on remote host.
+    local __() {
+        set -e
+        export ZDOTDIR=~/.zsh.$1
+        export ZSH=~/.zsh.$1
+        export SHELL=$(which zsh)
+        uname -a
+        { cat /etc/motd 2>/dev/null || true; }
+        exec zsh -i -l
+    }
+    local execzsh="$(which __); __ $USER"
 
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
-    common=(-o ControlPath="$ZSH/run/%r@%h:%p")
-    execzsh="export ZDOTDIR=~/.zsh.$USER \
-      && export ZSH=~/.zsh.$USER \
-      && export SHELL=\$(which zsh) \
-      && uname -a \
-      && { cat /etc/motd 2>/dev/null || true; } \
-      && exec zsh -i -l"
-    command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" "
-# Check if zsh is installed.
-if ! which zsh 2> /dev/null > /dev/null; then
-    if grep -Eq '^ID=(debian|ubuntu)\$' /etc/os-release 2> /dev/null && [ x\$USER = xroot ]; then
-        echo no-zsh-but-debian
-    else
-        echo no-zsh
-    fi
-    exit 0
-fi
-
-# Check if dotfiles are up-to-date
-# If dotfiles are already up-to-date, execute the shell
-current=\$(cat ~/.zsh.$USER/run/version 2> /dev/null || echo 0)
-target=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
-if [ x\$current = x\$target ]; then
-    echo ok
-    exit 0
-fi
-
-# Otherwise signal we want to install
-echo need-update
-" | read state
+    command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" ${probezsh} | read state
     case $state in
         ok)
             # Dotfiles up-to-date, connect and execute zsh
