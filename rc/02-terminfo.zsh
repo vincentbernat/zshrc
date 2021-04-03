@@ -42,6 +42,7 @@ if _vbe_can_do_unicode; then
         eol $'\u23CE' running $'\u21BB'
         python $'\U1f40d'
         docker $'\U1f40b'
+        nix $'\u2744\ufe0f '
     )
 else
     PRCH=(
@@ -52,6 +53,7 @@ else
         eol "~~" running "> "
         python "python"
         docker "docker"
+        nix "nix"
     )
 fi
 
