@@ -50,34 +50,18 @@ ssh() {
 # shadows the "zssh" command which enables interactive transfers over
 # ssh with zmodem.
 zssh() {
-    local state
+    local -A state
     local -a common
+    local current=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
 
     # Probe to run on remote host to check the situation.
     local __() {
-        # Check if zsh is installed.
-        if ! which zsh 2> /dev/null > /dev/null; then
-            if grep -Eq '^ID=(debian|ubuntu)$' /etc/os-release 2> /dev/null && [ x$USER = xroot ]; then
-                echo no-zsh-but-debian
-            else
-                echo no-zsh
-            fi
-            exit 0
-        fi
-
-        # Check if dotfiles are up-to-date
-        # If dotfiles are already up-to-date, execute the shell
-        current=$(cat ~/.zsh.$1/run/version 2> /dev/null || echo 0)
-        target=$2
-        if [ x$current = x$target ]; then
-            echo ok
-            exit 0
-        fi
-
-        # Otherwise signal we want to install
-        echo need-update
+        echo "state[has-zsh]"=$(if which zsh 2> /dev/null > /dev/null; then echo 1; else echo 0; fi)
+        echo "state[distribution]"=$(sed -n 's/^ID=//p' /etc/os-release 2> /dev/null)
+        echo "state[username]"=$(echo $USER)
+        echo "state[version]"=$(cat ~/.zsh.$1/run/version 2> /dev/null || echo 0)
     }
-    local probezsh="$(which __); __ $USER $(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)"
+    local probezsh="$(which __); __ $USER"
 
     # Execution of Zsh on remote host.
     local __() {
@@ -93,40 +77,43 @@ zssh() {
 
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
     common=(-o ControlPath="$ZSH/run/%r@%h:%p")
-    command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" ${probezsh} | read state
-    case $state in
-        ok)
-            # Dotfiles up-to-date, connect and execute zsh
-            ssh $common -t "$@" ${execzsh}
-            ;;
-        no-zsh)
-            # No zsh, plain SSH connection
-            print -u2 "[!] ZSH is not installed on remote"
-            ssh $common "$@"
-            ;;
-        no-zsh-but-debian)
-            # No zsh but remote is Debian
-            print -u2 "[*] Installing Zsh..." \
-                && command ssh -n $command "$@" "DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg" \
-                || {
-                    print -u2 "[!] Cannot install ZSH"
-                    ssh $common "$@"
-                    return
-                }
-            ;&
-        need-update)
-            # We need to install dotfiles, connect and execute zsh
-            print -u2 "[*] Installing dotfiles..." \
-                && cat $ZSH/run/zsh-install.sh \
-                    | command ssh $common -C "$@" \
-                              "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec sh -s" \
-                && print -u2 "[*] Spawning remote zsh..." \
-                && ssh $common -t "$@" ${execzsh}
-            ;;
-        *)
-            return 1
-            ;;
-    esac
+    eval $(command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" ${probezsh} \
+               | grep -E '^state\[[0-9a-z-]+\]=[0-9a-z-]+$')
+    (( $#state )) || return 1
+
+    # Install Zsh if possible
+    if (( !state[has-zsh] )) \
+           && [[ $state[username] == "root" ]] \
+           && [[ $state[distribution] =~ "^(debian|ubuntu)$" ]]; then
+            print -u2 "[*] Installing Zsh..."
+            if command ssh -n $command "$@" "DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg"; then
+                state[has-zsh]=1
+            else
+                print -u2 "[!] Cannot install ZSH"
+            fi
+    fi
+
+    # Update dotfiles
+    if (( state[has-zsh] )) \
+           && [[ $state[version] != $current ]]; then
+            print -u2 "[*] Updating dotfiles (from ${current[1,12]} to ${state[version][1,12]})..."
+            cat $ZSH/run/zsh-install.sh \
+                | command ssh $common -C "$@" \
+                          "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec sh -s" \
+                && state[version]=$current
+    fi
+
+    # Execute remote shell
+    if (( !state[has-zsh] )); then
+        print -u2 "[!] No remote zsh!"
+        ssh $common "$@"
+    elif [[ $state[version] == 0 ]]; then
+        print -u2 "[!] No remote configuration!"
+        ssh $common "$@"
+    else
+        print -u2 "[*] Spawning remote zsh..."
+        ssh $common -t "$@" ${execzsh}
+    fi
 }
 (( $+functions[compdef] )) && compdef _ssh zssh=ssh
 
