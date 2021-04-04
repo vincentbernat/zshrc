@@ -58,7 +58,7 @@ zssh() {
     local __() {
         echo "state[has-zsh]"=$(if which zsh 2> /dev/null > /dev/null; then echo 1; else echo 0; fi)
         echo "state[kernel]"=$(uname -s)
-        echo "state[distribution]"=$(sed -n 's/^ID=//p' /etc/os-release 2> /dev/null)
+        echo "state[distribution]"=$(sed -n 's/^ID=//p' /etc/os-release /usr/lib/os-release 2> /dev/null | head -1)
         echo "state[username]"=$(echo $USER)
         echo "state[version]"=$(cat ~/.zsh.$1/run/version 2> /dev/null || echo 0)
     }
