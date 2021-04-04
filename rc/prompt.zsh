@@ -167,7 +167,7 @@ _vbe_setprompt () {
     PS1='$(_vbe_prompt) '
     PS2='$(_vbe_prompt_segment cyan default "%_"; _vbe_prompt_end) '
     PS3='$(_vbe_prompt_segment cyan default "?"; _vbe_prompt_end) '
-    PS4='$(_vbe_prompt_segment cyan default "%N"; _vbe_prompt_segment blue default "%i"; _vbe_prompt_end) '
+    PS4='$(_vbe_prompt_segment white black "%N"; _vbe_prompt_segment blue default "%i"; _vbe_prompt_end) '
     PROMPT_EOL_MARK="%B${PRCH[eol]}%b"
     unset RPS1
     unset RPS2
