@@ -86,7 +86,7 @@ zssh() {
         export ZSH=~/.zsh.$1
         export SHELL=$(which zsh)
         uname -a
-        { cat /etc/motd 2>/dev/null || true; }
+        cat /etc/motd 2>/dev/null || true
         exec zsh -i -l
     }
     local execzsh="$(which __); __ $USER"
