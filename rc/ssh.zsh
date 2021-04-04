@@ -57,6 +57,7 @@ zssh() {
     # Probe to run on remote host to check the situation.
     local __() {
         echo "state[has-zsh]"=$(if which zsh 2> /dev/null > /dev/null; then echo 1; else echo 0; fi)
+        echo "state[kernel]"=$(uname -s)
         echo "state[distribution]"=$(sed -n 's/^ID=//p' /etc/os-release 2> /dev/null)
         echo "state[username]"=$(echo $USER)
         echo "state[version]"=$(cat ~/.zsh.$1/run/version 2> /dev/null || echo 0)
@@ -78,25 +79,34 @@ zssh() {
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
     common=(-o ControlPath="$ZSH/run/%r@%h:%p")
     eval $(command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" ${probezsh} \
-               | grep -E '^state\[[0-9a-z-]+\]=[0-9a-z-]+$')
+               | grep -E '^state\[[0-9a-z-]+\]=[0-9A-Za-z-]*$')
     (( $#state )) || return 1
 
     # Install Zsh if possible
-    if (( !state[has-zsh] )) \
-           && [[ $state[username] == "root" ]] \
-           && [[ $state[distribution] =~ "^(debian|ubuntu)$" ]]; then
+    if (( !state[has-zsh] )); then
+        local cmd
+        case $state[username],$state[kernel],$state[distribution] in
+            root,Linux,debian|root,Linux,ubuntu)
+                cmd="DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg"
+                ;;
+            root,OpenBSD,*)
+                cmd="pkg_add -I zsh"
+                ;;
+        esac
+        if [[ -n $cmd ]]; then
             print -u2 "[*] Installing Zsh..."
-            if command ssh -n $command "$@" "DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg"; then
+            if command ssh -n $command "$@" $cmd; then
                 state[has-zsh]=1
             else
                 print -u2 "[!] Cannot install Zsh"
             fi
+        fi
     fi
 
     # Update dotfiles
     if (( state[has-zsh] )) \
            && [[ $state[version] != $current ]]; then
-            print -u2 "[*] Updating dotfiles (from ${current[1,12]} to ${state[version][1,12]})..."
+            print -u2 "[*] Updating dotfiles (from ${state[version][1,12]} to ${current[1,12]})..."
             cat $ZSH/run/zsh-install.sh \
                 | command ssh $common -C "$@" \
                           "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec sh -s" \
