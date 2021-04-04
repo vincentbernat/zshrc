@@ -162,15 +162,11 @@ _vbe_prompt () {
 
     _vbe_prompt_end
 }
-_vbe_prompt_ps2 () {
-    # For some reason, we may not use the right segments due to how we reset the prompt...
-    _vbe_prompt_segment cyan white " "
-    _vbe_prompt_end
-}
 _vbe_setprompt () {
     setopt prompt_subst
     PROMPT='$(_vbe_prompt) '
-    PS2='$(_vbe_prompt_ps2 ${(%):-%_}) '
+    PROMPT3='$(_vbe_prompt_segment cyan white "?"; _vbe_prompt_end) '
+    PS2='$(_vbe_prompt_segment cyan white " "; _vbe_prompt_end) '
     PROMPT_EOL_MARK="%B${PRCH[eol]}%b"
     unset RPROMPT
     unset RPS1
