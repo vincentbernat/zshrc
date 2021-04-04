@@ -31,7 +31,7 @@ ssh() {
     # this:
     #    http://vincent.bernat.im/en/blog/2011-zsh-zshrc.html
     #
-    # Also, when the same ZSH configuration is used on the remote
+    # Also, when the same Zsh configuration is used on the remote
     # host, the locale is reset with the help of
     # `$ZSH/rc/01-locale.zsh`.
     case "$TERM" in
@@ -89,7 +89,7 @@ zssh() {
             if command ssh -n $command "$@" "DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg"; then
                 state[has-zsh]=1
             else
-                print -u2 "[!] Cannot install ZSH"
+                print -u2 "[!] Cannot install Zsh"
             fi
     fi
 
