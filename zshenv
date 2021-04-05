@@ -1,24 +1,10 @@
 # -*- sh -*-
 
-# This file needs to be also sourceable from a POSIX shell.
-
-# Nix stuff. Mostly, this is just about doing that:
-#  env > a
-#  . ~/.nix-profile/etc/profile.d/nix.sh
-#  env > b
-#  diff -u a b
-[ x$IN_NIX_SHELL != xpure ] && [ -d $HOME/.nix-defexpr/channels ] && {
-    [ -n "$NIX_PATH" ] || \
-        export NIX_PATH=$HOME/.nix-defexpr/channels
-    [ -n "$NIX_SSL_CERT_FILE" ] || \
-        export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
-    export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
-}
-export GOPATH=$HOME/src/gocode
-
 if [ -z "$ZSH_VERSION" ]; then
-    eval $(zsh -c 'typeset PATH')
-    export PATH
+    eval $(zsh -c "typeset PATH
+                   typeset NIX_PATH NIX_PROFILES NIX_SSL_CERT_FILE LOCALE_ARCHIVE
+                   typeset FONTCONFIG_FILE GOPATH" \
+                       | sed 's/^/export /')
     return
 fi
 
@@ -61,6 +47,22 @@ fi
     export PATH
 }
 
-[ x$IN_NIX_SHELL = x ] || {
+# Compute NIX_PATH with deduplication
+() {
+    [[ $IN_NIX_SHELL == pure ]] && return
+    [[ ! -d $HOME/.nix-defexpr/channels ]] && return
+
+    local -aU nix_path
+    nix_path=(${(ps.:.)NIX_PATH} ~/.nix-defexpr/channels)
+
+    export NIX_PATH=${(pj.:.)nix_path}
+    export NIX_PROFILES="/nix/var/nix/profiles/default $HOME/.nix-profile"
+    export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+    export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
+}
+
+[[ -z $IN_NIX_SHELL ]] || {
     export FONTCONFIG_FILE=$(nix eval --raw nixpkgs.fontconfig.out.outPath)/etc/fonts/fonts.conf
 }
+
+[[ -d $HOME/src ]] && export GOPATH=$HOME/src/gocode
