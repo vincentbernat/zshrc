@@ -12,6 +12,7 @@
         export NIX_PATH=$HOME/.nix-defexpr/channels
     [ -n "$NIX_SSL_CERT_FILE" ] || \
         export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+    export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
 }
 export GOPATH=$HOME/src/gocode
 
