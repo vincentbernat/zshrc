@@ -48,6 +48,7 @@ zstyle -e ':completion:*' hosts '_vbe_custom_hosts "$@"'
 
 # Don't use known_hosts_file (too slow)
 zstyle ":completion:*:hosts" known-hosts-files ''
+zstyle ':completion:*:approximate:*' max-errors 0
 
 # In menu, select items with +
 zmodload -i zsh/complist
