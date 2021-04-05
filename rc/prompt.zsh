@@ -190,23 +190,6 @@ _vbe_prompt_env () {
     }
 }
 
-# Are we running inside lxc? lxc sets `container` environment variable
-# for PID 1 but this seems difficult to get as a simple
-# user. Therefore, we will look at /proc/self/cgroup.
-[[ -f /proc/self/cgroup ]] && {
-    autoload -U zsh/regex
-    case $(</proc/self/cgroup) in
-        *:/lxc/*)
-            LXC_CHROOT_NAME=${${(s:/:)${${(s: :)$(</proc/self/cgroup)}[(rw)*:/lxc/*]}}[-1]}
-            ;;
-        *:/docker/*)
-            DOCKER_CHROOT_NAME=${${${(s:/:)${${(s: :)$(</proc/self/cgroup)}[(rw)*:/docker/*]}}[-1]}[1,12]}
-            ;;
-        */docker-*)
-            DOCKER_CHROOT_NAME=${${${(s:-:)${${(s: :)$(</proc/self/cgroup)}[(rw)*/docker-*]}}[-1]}[1,12]}
-            ;;
-    esac
-}
 [[ -z $LXC_CHROOT_NAME ]] || {
     _vbe_add_prompt_lxc () {
         _vbe_prompt_env 'lxc' '${LXC_CHROOT_NAME}'
