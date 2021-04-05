@@ -12,8 +12,6 @@
         export NIX_PATH=$HOME/.nix-defexpr/channels
     [ -n "$NIX_SSL_CERT_FILE" ] || \
         export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
-    [ -n "$MANPATH" ] || \
-        export MANPATH="$HOME/.nix-profile/share/man:$MANPATH"
 }
 export GOPATH=$HOME/src/gocode
 
