@@ -7,9 +7,9 @@
 #  . ~/.nix-profile/etc/profile.d/nix.sh
 #  env > b
 #  diff -u a b
-[ x$IN_NIX_SHELL != xpure ] && [ -d $HOME/.nix-defexpr/channels/nixpkgs ] && {
+[ x$IN_NIX_SHELL != xpure ] && [ -d $HOME/.nix-defexpr/channels ] && {
     [ -n "$NIX_PATH" ] || \
-        export NIX_PATH=nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
+        export NIX_PATH=$HOME/.nix-defexpr/channels
     [ -n "$NIX_SSL_CERT_FILE" ] || \
         export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
     [ -n "$MANPATH" ] || \
