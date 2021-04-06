@@ -1,10 +1,9 @@
 # -*- sh -*-
 
 if [ -z "$ZSH_VERSION" ]; then
-    eval $(zsh -c "typeset PATH
+    eval export $(zsh -c "typeset PATH
                    typeset NIX_PATH NIX_PROFILES NIX_SSL_CERT_FILE LOCALE_ARCHIVE
-                   typeset FONTCONFIG_FILE GOPATH" \
-                       | sed 's/^/export /')
+                   typeset FONTCONFIG_FILE GOPATH")
     return
 fi
 
