@@ -58,7 +58,7 @@ _vbe_human_time () {
     (( $hours   > 0 )) && result=( $result "${hours}h" )
     (( $minutes > 0 )) && result=( $result "${minutes}m" )
     (( $seconds > 0 )) && result=( $result "${seconds}s" )
-    print -n "${result[1,2]}"
+    print -n "${(pj::)result[1,2]}"
 }
 
 # Segment handling
