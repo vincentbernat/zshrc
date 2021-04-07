@@ -87,7 +87,7 @@ zssh() {
         local cmd
         case $state[username],$state[kernel],$state[distribution] in
             root,Linux,debian|root,Linux,ubuntu)
-                cmd="DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg"
+                cmd="DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg > /dev/null"
                 ;;
             root,OpenBSD,*)
                 cmd="pkg_add -I zsh"
