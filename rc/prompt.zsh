@@ -156,7 +156,7 @@ _vbe_prompt () {
     _vbe_add_prompt
 
     # Current hour and time elapsed
-    _vbe_prompt_segment cyan default "%D{%H:%M}"
+    _vbe_prompt_segment white black "%D{%H:%M}"
     if (( $_vbe_cmd_elapsed >= 5 )); then
         _vbe_prompt_segment white black "$(_vbe_human_time $_vbe_cmd_elapsed)"
     fi
