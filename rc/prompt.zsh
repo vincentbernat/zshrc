@@ -4,12 +4,19 @@
 # _vbe_cmd_elapsed: elapsed time to be displayed in prompt
 # _vbe_cmd_timestamp: timestamp to compute elapsed time for a command
 
+_vbe_scheduleprompt() {
+    local i=${"${(@)zsh_scheduled_events#*:*:}"[(I)_vbe_scheduleprompt]}
+    (( i )) && sched -$i
+    zle && zle reset-prompt
+    sched +$((61 - EPOCHSECONDS%60)) _vbe_scheduleprompt
+}
 _vbe_prompt_precmd () {
     _vbe_title "${SSH_TTY+${(%):-%M}:}${(%):-%50<..<%~}" "${SSH_TTY+${(%):-%M}:}${(%):-%20<..<%~}"
     local now=$EPOCHSECONDS
     _vbe_cmd_elapsed=$(($now - ${_vbe_cmd_timestamp:-$now}))
     unset _vbe_prompt_compact
     unset _vbe_cmd_timestamp
+    sched +$((61 - EPOCHSECONDS%60)) _vbe_scheduleprompt
 }
 _vbe_prompt_preexec () {
     _vbe_cmd_timestamp=${_vbe_cmd_timestamp:-$EPOCHSECONDS}
@@ -148,7 +155,8 @@ _vbe_prompt () {
     # Additional info
     _vbe_add_prompt
 
-    # Time elapsed
+    # Current hour and time elapsed
+    _vbe_prompt_segment cyan default "%D{%H:%M}"
     if (( $_vbe_cmd_elapsed >= 5 )); then
         _vbe_prompt_segment white black "$(_vbe_human_time $_vbe_cmd_elapsed)"
     fi
