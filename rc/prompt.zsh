@@ -150,7 +150,7 @@ _vbe_prompt () {
 
     # Time elapsed
     if (( $_vbe_cmd_elapsed >= 5 )); then
-        _vbe_prompt_segment white black "$(_vbe_human_time $_vbe_cmd_elapsed)"
+        _vbe_prompt_segment white black "$(_vbe_human_time $_vbe_cmd_elapsed) @%D{%H:%M}"
     fi
 
     # Error code
