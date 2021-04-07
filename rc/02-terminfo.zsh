@@ -43,6 +43,7 @@ if _vbe_can_do_unicode; then
         python $'\U1f40d'
         docker $'\U1f40b'
         nix $'\u2744\ufe0f '
+        elapsed $'\u231b\ufe0e' time $'\U1f319\ufe0e'
     )
 else
     PRCH=(
@@ -54,6 +55,7 @@ else
         python "python"
         docker "docker"
         nix "nix"
+        elapsed '' time '@'
     )
 fi
 
