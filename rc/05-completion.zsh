@@ -23,7 +23,7 @@ zstyle ':completion:*:functions' ignored-patterns '_*'
 zstyle ':completion:*:match:*' original only
 zstyle ':completion::complete:*' use-cache 1
 zstyle ':completion::complete:*' cache-path $ZSH/run/u/$HOST-$UID/cache/
-zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX + $#SUFFIX) / 3 )) )'
+zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX + $#SUFFIX) / 3 )) numeric )'
 zstyle ':completion:history-words:*' remove-all-dups true
 
 zstyle ':completion:*:*:-command-:*:*' ignored-patterns 'cowbuilder-*'
