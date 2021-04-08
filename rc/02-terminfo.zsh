@@ -43,7 +43,7 @@ if _vbe_can_do_unicode; then
         python $'\U1f40d'
         docker $'\U1f40b'
         nix $'\u2744\ufe0f '
-        elapsed $'\u231b\ufe0e'
+        elapsed $'\u231b'
     )
 else
     PRCH=(
