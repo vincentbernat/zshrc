@@ -35,8 +35,8 @@ EOF
             cat <<'EOF' > $EDITOR.$$
 #!/bin/sh
 case $DISPLAY in
-  "") exec emacsclient -t -c "$@" ;;
-  *) exec emacsclient "$@" ;;
+  "") exec emacsclient -q -t -c "$@" ;;
+  *) exec emacsclient -q "$@" ;;
 esac
 EOF
             chmod +x $EDITOR.$$
