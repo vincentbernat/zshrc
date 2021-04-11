@@ -12,7 +12,6 @@ emulate -L zsh
 setopt nomonitor
 
 local env=$1
-shift
 local -a venv dimages dcontainers
 venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
 (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && {
@@ -22,7 +21,7 @@ venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
 
 # No parameters, list available environment
 [[ -n $env ]] || {
-    print "INFO: List of available environments:"
+    print -u2 "List of available environments:"
     for env in $venv; do
         print " - [virtualenv] $env"
     done
@@ -34,6 +33,7 @@ venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
     done
     return 0
 }
+shift
 
 [[ $env == "." ]] && env=${PWD:t}
 
