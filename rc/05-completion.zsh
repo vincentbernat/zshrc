@@ -1,7 +1,7 @@
 # -*- sh -*-
 
 autoload compinit && {
-    autoload -U complist        # menu selection widget
+    autoload complist        # menu selection widget
     compinit -i -d $ZSH/run/u/$HOST-$UID/zcompdump
 }
 

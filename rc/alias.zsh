@@ -403,7 +403,7 @@ function \=() {
 aliases[=]='noglob ='           # not really supported: http://www.zsh.org/mla/workers/2016/msg00081.html
 (( $+commands[units] )) && alias units='noglob units --verbose'
 # Also, we can use zcalc
-autoload -Uz zcalc
+autoload zcalc
 
 # Currency conversion
 function currency() {
@@ -642,4 +642,4 @@ alias virtualenv3='_virtualenv 3'
 (( $+commands[python2] )) && alias virtualenv='_virtualenv 2'
 (( $+commands[python3] )) && alias virtualenv='_virtualenv 3'
 hash -d venvs=$WORKON_HOME
-autoload -Uz workon
+autoload workon

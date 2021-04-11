@@ -1,7 +1,7 @@
 # -*- sh -*-
 
 # Compute a sensible TERM and set colors
-autoload -U zsh/terminfo zsh/termcap
+autoload zsh/terminfo zsh/termcap
 () {
     local term
     local -aU terms
