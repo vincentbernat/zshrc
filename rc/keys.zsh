@@ -22,6 +22,11 @@ zle -N self-insert url-quote-magic
 autoload -Uz bracketed-paste-magic
 zle -N bracketed-paste bracketed-paste-magic
 
+# Edit line in editor
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey "^x^e" edit-command-line
+
 # Meta-S will toggle sudo
 function vbe-sudo-command-line() {
   [[ -z $BUFFER ]] && zle up-history
