@@ -1,9 +1,7 @@
 # -*- sh -*-
 
-autoload compinit && {
-    autoload complist        # menu selection widget
-    compinit -i -d $ZSH/run/u/$HOST-$UID/zcompdump
-}
+autoload compinit complist
+compinit -i -d $ZSH/run/u/$HOST-$UID/zcompdump
 
 setopt auto_menu
 setopt auto_remove_slash
