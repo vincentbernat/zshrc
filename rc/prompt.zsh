@@ -247,3 +247,5 @@ esac
 _vbe_add_prompt_virtualenv () {
     _vbe_prompt_env $PRCH[python] '${VIRTUAL_ENV##*/}'
 }
+
+_vbe_setprompt
