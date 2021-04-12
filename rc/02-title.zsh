@@ -15,7 +15,7 @@ _vbe_title () {
     print -n "\e]2;$shorttitle\a"
 }
 if [[ ! -x $ZSH/run/u/$HOST-$UID/title ]] || \
-       (( $EPOCHSECONDS - $(zstat +mtime $ZSH/run/u/$HOST-$UID/title) > 60*60*24 )); then
+       (( $(zstat +mtime $ZSH/run/u/$HOST-$UID/title) < $(zstat +mtime $0) )); then
     cat <<EOF > $ZSH/run/u/$HOST-$UID/title
 #!/bin/zsh
 $(which _vbe_title)
