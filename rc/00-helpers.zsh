@@ -24,6 +24,12 @@ _vbe_can_do_unicode () {
     # doesn't work. Correct width is checked by asking Zsh to pad a
     # recent double-width unicode character. Both tests are combined.
     #
+    # Funny fact: wcwidth() returns -1 when it doesn't know the width.
+    # So, the expression value below could be 3 if wcwidth() knows the
+    # correct width, 4 if it does not (it returns 1), but it could be
+    # 5 if wcwidth() has no clue about the character at all and
+    # returns -1.
+    #
     # Source for width checking:
     # https://unix.stackexchange.com/questions/245013/get-the-display-width-of-a-string-of-characters/591447#591447
     [[ -o multibyte ]] || return 1
