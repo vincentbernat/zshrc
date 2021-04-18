@@ -38,7 +38,7 @@
         async_job vcs_info _vbe_vcs_info $PWD
     }
 
-    autoload vcs_info
+    autoload -Uz vcs_info
 
     zstyle ':vcs_info:*' enable git
     () {

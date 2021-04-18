@@ -1,6 +1,6 @@
 # -*- sh -*-
 
-autoload compinit complist
+autoload -Uz compinit complist
 compinit -i -d $ZSH/run/u/$HOST-$UID/zcompdump
 
 setopt auto_menu

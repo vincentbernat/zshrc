@@ -11,12 +11,12 @@ setopt longlistjobs             # Display PID when using jobs
 setopt nobeep                   # Never beep
 
 # meta-h will invoke man for the current command
-autoload run-help
+autoload -Uz run-help
 # When the command is {sudo,git,openssl} something, get help on something
-autoload run-help-sudo
-autoload run-help-git
-autoload run-help-openssl
-autoload run-help-ip
+autoload -Uz run-help-sudo
+autoload -Uz run-help-git
+autoload -Uz run-help-openssl
+autoload -Uz run-help-ip
 
 # Remove / from WORDCHARS (more like bash)
 WORDCHARS=${WORDCHARS:s#/#}

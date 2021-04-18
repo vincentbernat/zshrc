@@ -1,8 +1,8 @@
 # -*- sh -*-
 
-autoload is-at-least
-autoload add-zsh-hook
-autoload add-zle-hook-widget
+autoload -Uz is-at-least
+autoload -Uz add-zsh-hook
+autoload -Uz add-zle-hook-widget
 
 [[ $ZSH_NAME == "zsh-static" ]] && is-at-least 5.4.1 && {
     # Don't tell us when modules are not available

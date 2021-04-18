@@ -7,23 +7,23 @@ bindkey -e
 bindkey "\e[3~" delete-char        # Delete
 
 # Replace insert-last-word by a smart version
-autoload smart-insert-last-word
+autoload -Uz smart-insert-last-word
 zle -N insert-last-word smart-insert-last-word
 zstyle :insert-last-word match '*([[:digit:]][.:][[:digit:]]|[[:digit:]][[:digit:]][[:digit:]]|[[:alpha:]/\\])*'
 
 # Also copy previous word
-autoload copy-earlier-word
+autoload -Uz copy-earlier-word
 zle -N copy-earlier-word
 bindkey "\e," copy-earlier-word
 
 # Enable magic quoting of URL
-autoload url-quote-magic
+autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
-autoload bracketed-paste-magic
+autoload -Uz bracketed-paste-magic
 zle -N bracketed-paste bracketed-paste-magic
 
 # Edit line in editor
-autoload edit-command-line
+autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey "^x^e" edit-command-line
 
