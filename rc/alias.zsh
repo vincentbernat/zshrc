@@ -110,7 +110,7 @@ _vbe_autoexpand+=(gti suod)
 (( $+commands[ncal] )) && alias ncal='ncal -w'
 (( $+commands[git] )) && alias gti=git
 (( $+commands[mtr] )) && alias mtrr='mtr -wzbe'
-(( $+commands[ag] )) && alias ag='ag --pager="less -FRX"'
+(( $+commands[ag] )) && (( $+commands[less] )) && alias ag='ag --pager="less -FRX"'
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 _vbe_autoexpand+=(gti mtrr)
 
@@ -349,7 +349,15 @@ v() {
         bat "$@"
         return
     }
-    zless -FX "$@"
+    (( $+commands[less] )) && {
+        zless -FX "$@"
+        return
+    }
+    (( $+commands[more] )) && {
+        zmore "$@"
+        return
+    }
+    gzip -cdfq -- "$@"
 }
 
 # Prepare a command to record a video:
