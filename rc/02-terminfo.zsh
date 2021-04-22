@@ -66,40 +66,45 @@ autoload -Uz zsh/terminfo zsh/termcap
     fi
 
     typeset -gA PRCH
-    if (( _vbe_can_do_unicode )); then
-        PRCH=(
-            sep $'\uE0B1' end $'\uE0B0'
-            retb "" reta $' \u2717'
-            circle $'\u25CF' branch $'\uE0A0'
-            ok $'\u2713' ellipsis $'\u2026'
-            eol $'\u23CE' running $'\u21BB'
-            elapsed $'\u231b'
-        )
-    else
-        PRCH=(
-            sep "/" end ""
-            retb "<" reta ">"
-            circle "*" branch "\`|"
-            ok ">" ellipsis ".."
-            eol "~~" running "> "
-            elapsed ''
-        )
-    fi
-    if (( _vbe_can_do_unicode > 1 )); then
-        PRCH=(
-            "${(@fkv)PRCH}"
-            python $'\U1f40d'
-            docker $'\U1f40b'
-            nix $'\u2744\ufe0f '
-        )
-    else
-        PRCH=(
-            "${(@fkv)PRCH}"
-            python "python"
-            docker "docker"
-            nix "nix"
-        )
-    fi
+    case $_vbe_can_do_unicode in
+        *)
+            PRCH=(
+                sep "/" end ""
+                retb "<" reta ">"
+                circle "*" branch "\`|"
+                ok ">" ellipsis ".."
+                eol "~~" running "> "
+                elapsed ''
+            )
+            ;|
+        1|2)
+            PRCH=(
+                "${(@fkv)PRCH}"
+                sep $'\uE0B1' end $'\uE0B0'
+                retb "" reta $' \u2717'
+                circle $'\u25CF' branch $'\uE0A0'
+                ok $'\u2713' ellipsis $'\u2026'
+                eol $'\u23CE' running $'\u21BB'
+                elapsed $'\u231b'
+            )
+            ;|
+        0|1)
+            PRCH=(
+                "${(@fkv)PRCH}"
+                python "python"
+                docker "docker"
+                nix "nix"
+            )
+            ;|
+        2)
+            PRCH=(
+                "${(@fkv)PRCH}"
+                python $'\U1f40d'
+                docker $'\U1f40b'
+                nix $'\u2744\ufe0f '
+            )
+            ;|
+    esac
 }
 
 # Freeze the terminal
