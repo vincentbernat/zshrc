@@ -53,11 +53,17 @@ autoload -Uz zsh/terminfo zsh/termcap
     # Source for width checking:
     # https://unix.stackexchange.com/questions/245013/get-the-display-width-of-a-string-of-characters/591447#591447
     local _vbe_can_do_unicode=0
-    [[ -o multibyte ]] || return
-    case $TERM in screen*|xterm*|rxvt*) ;; *) return ;; esac
-    (( ${#${:-$(print -n "\u21B5\u21B5" 2> /dev/null)}} == 2 )) || return
-    _vbe_can_do_unicode=1
-    (( ${#${(ml[4])${:-$(print -n "\U1f40b" 2> /dev/null)}}} == 3 )) && _vbe_can_do_unicode=2
+    if [[ -o multibyte ]] && [[ $TERM =~ ^(screen|xterm|rxvt).* ]]; then
+        if (( ${#${:-$(print -n "\u21B5\u21B5" 2> /dev/null)}} == 2 )); then
+            if (( ${#${(ml[4])${:-$(print -n "\U1f40b" 2> /dev/null)}}} == 3 )); then
+                # Can do unicode with characters using several columns
+                _vbe_can_do_unicode=2
+            else
+                # Can do unicode, but cannot determine characters' widths
+                _vbe_can_do_unicode=1
+            fi
+        fi
+    fi
 
     typeset -gA PRCH
     if (( _vbe_can_do_unicode )); then
