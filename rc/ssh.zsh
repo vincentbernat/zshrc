@@ -76,6 +76,7 @@ zssh() {
     }
     local execzsh="$(which __); __ $USER"
 
+    (( $#@ )) || return 1
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
     common=(-o ControlPath="$ZSH/run/%r@%h:%p")
     eval $(command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" ${probezsh} \
