@@ -623,17 +623,20 @@ _virtualenv () {
     shift
     [[ -d $WORKON_HOME ]] || mkdir -p $WORKON_HOME
     pushd $WORKON_HOME > /dev/null || return
-    ! command $interpreter -m virtualenv -p =$interpreter "$@" || \
+    {
+        ! command $interpreter -m virtualenv -p =$interpreter "$@" || \
             cat <<EOF >&2
 # To reuse the environment for Node.JS, use:
 #  \$ pip install nodeenv
 #  \$ nodeenv -p -n system
 
 EOF
+    } always {
 	popd > /dev/null || return
-        workon ${@[-1]}
-        [[ ${@[-1]} == "tmp" ]] && \
-            rm -rf $WORKON_HOME/tmp
+    }
+    workon ${@[-1]}
+    [[ ${@[-1]} == "tmp" ]] && \
+        rm -rf $WORKON_HOME/tmp
 }
 
 alias virtualenv2='_virtualenv 2'
