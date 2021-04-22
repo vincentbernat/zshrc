@@ -114,7 +114,7 @@ _vbe_autoexpand+=(gti suod)
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 _vbe_autoexpand+=(gti mtrr)
 
-mkcd() { command mkdir -p $1 && cd $1 }
+mkcd() { command mkdir -p -- $1 && cd -- $1 }
 (( $+commands[nix-shell] )) && nix-zsh() {
         nix-shell --command zsh "$@"
 }
