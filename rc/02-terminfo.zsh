@@ -67,7 +67,7 @@ autoload -Uz zsh/terminfo zsh/termcap
 
     typeset -gA PRCH
     case $_vbe_can_do_unicode in
-        *)
+        0)
             PRCH=(
                 sep "/" end ""
                 retb "<" reta ">"
@@ -79,7 +79,6 @@ autoload -Uz zsh/terminfo zsh/termcap
             ;|
         1|2)
             PRCH=(
-                "${(@fkv)PRCH}"
                 sep $'\uE0B1' end $'\uE0B0'
                 retb "" reta $' \u2717'
                 circle $'\u25CF' branch $'\uE0A0'
