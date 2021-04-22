@@ -81,14 +81,14 @@ autoload -Uz zsh/terminfo zsh/termcap
     fi
     if (( _vbe_can_do_unicode > 1 )); then
         PRCH=(
-            ${(qkv)PRCH}
+            "${(@fkv)PRCH}"
             python $'\U1f40d'
             docker $'\U1f40b'
             nix $'\u2744\ufe0f '
         )
     else
         PRCH=(
-            ${(qkv)PRCH}
+            "${(@fkv)PRCH}"
             python "python"
             docker "docker"
             nix "nix"
