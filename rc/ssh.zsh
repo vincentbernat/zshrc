@@ -51,8 +51,9 @@ ssh() {
 # ssh with zmodem.
 zssh() {
     local -A state
-    local -a common
+    local -a common_ssh_args
     local current=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
+    common_ssh_args=(-o ControlPath="$ZSH/run/%r@%h:%p")
 
     # Probe to run on remote host to check the situation.
     local __() {
@@ -78,8 +79,7 @@ zssh() {
 
     (( $#@ )) || return 1
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
-    common=(-o ControlPath="$ZSH/run/%r@%h:%p")
-    eval $(command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common "$@" ${probezsh} \
+    eval $(command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common_ssh_args "$@" ${probezsh} \
                | grep -E '^state\[[0-9a-z-]+\]=[0-9A-Za-z-]*$')
     (( $#state )) || return 1
 
@@ -109,7 +109,7 @@ zssh() {
            && [[ $state[version] != $current ]]; then
             print -u2 "[*] Updating dotfiles (from ${state[version][1,12]} to ${current[1,12]})..."
             cat $ZSH/run/zsh-install.sh \
-                | command ssh $common -C "$@" \
+                | command ssh $common_ssh_args -C "$@" \
                           "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec sh -s" \
                 && state[version]=$current
     fi
@@ -117,13 +117,13 @@ zssh() {
     # Execute remote shell
     if (( !state[has-zsh] )); then
         print -u2 "[!] No remote zsh!"
-        ssh $common "$@"
+        ssh $common_ssh_args "$@"
     elif [[ $state[version] == 0 ]]; then
         print -u2 "[!] No remote configuration!"
-        ssh $common "$@"
+        ssh $common_ssh_args "$@"
     else
         print -u2 "[*] Spawning remote zsh..."
-        ssh $common -t "$@" ${execzsh}
+        ssh $common_ssh_args -t "$@" ${execzsh}
     fi
 }
 (( $+functions[compdef] )) && compdef _ssh zssh=ssh
