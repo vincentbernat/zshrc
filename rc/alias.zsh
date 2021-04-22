@@ -119,15 +119,6 @@ mkcd() { command mkdir -p $1 && cd $1 }
         nix-shell --command zsh "$@"
 }
 
-# Global aliases. I am using `,' as a prefix.
-_vbe_autoexpand+=(,nd ,ndd ,nf ,nff ,silent ,noerr)
-alias -g ,nd='*(/om[1])'        # newest directory
-alias -g ,ndd='*(/om[1])'       # before-newest directory
-alias -g ,nf='*(.om[1])'        # newest file
-alias -g ,nff='*(.om[1])'       # before-newest file
-alias -g ,silent="> /dev/null 2>&1"
-alias -g ,noerr="2> /dev/null"
-
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
   export LESS_TERMCAP_mb=$'\E[1;31m'
