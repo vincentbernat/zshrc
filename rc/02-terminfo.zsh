@@ -89,7 +89,7 @@ autoload -Uz zsh/terminfo zsh/termcap
             ;|
         0|1)
             PRCH=(
-                "${(@fkv)PRCH}"
+                "${(@kv)PRCH}"
                 python "python"
                 docker "docker"
                 nix "nix"
@@ -97,7 +97,7 @@ autoload -Uz zsh/terminfo zsh/termcap
             ;|
         2)
             PRCH=(
-                "${(@fkv)PRCH}"
+                "${(@kv)PRCH}"
                 python $'\U1f40d'
                 docker $'\U1f40b'
                 nix $'\u2744\ufe0f '
