@@ -65,3 +65,5 @@ fi
 }
 
 [[ -d $HOME/src ]] && export GOPATH=$HOME/src/gocode
+
+unset MAILCHECK
