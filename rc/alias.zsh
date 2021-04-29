@@ -296,11 +296,12 @@ if (( $+commands[convert] )); then
                     lower=()
                     previous=
                 fi
-                (( $max == 256 )) || {
-                    red=$(( red*256/max ))
-                    green=$(( green*256/max ))
-                    blue=$(( blue*256/max ))
-                }
+                red=$(( red*255/max ))
+                green=$(( green*255/max ))
+                blue=$(( blue*255/max ))
+                red=${red%.*}
+                green=${green%.*}
+                blue=${blue%.*}
                 if [[ $((row%2)) = 0 ]]; then
                     upper=($upper "$red;$green;$blue")
                 else
