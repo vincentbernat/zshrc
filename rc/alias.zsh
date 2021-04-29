@@ -267,72 +267,11 @@ jsonf() {
   tail -f "$@" | json
 }
 
-# Image display
-if (( $+commands[convert] )); then
-    image() {
-        local col row dummy red green blue rest1 rest2 previous current max first
-        local -a upper lower
-        max=256
-        first=1
-        convert -thumbnail ${COLUMNS}x$((LINES*2 - 4)) $1 txt:- | \
-            while IFS=',:() ' read col row dummy red green blue rest1 rest2; do
-                # ImageMagick pixel enumeration: 85,68,65535,rgba
-                [[ $first == 1 ]] && [[ $col == "#" ]] && \
-                  [[ $row == "ImageMagick" ]] && max=$rest1
-                first=0
-                [[ $col == "#" ]] && continue
-                if (( $#upper > 0 && row%2 == 0 && col == 0 )); then
-                    for i in {1..$#upper}; do
-                        current=$(printf "\e[38;2;%s;48;2;%sm" $upper[$i] $lower[$i])
-                        if [[ $current == $previous ]]; then
-                            printf "▀"
-                        else
-                            printf "$current▀"
-                        fi
-                        previous=$current
-                    done
-                    printf "\e[0m\e[K\n"
-                    upper=()
-                    lower=()
-                    previous=
-                fi
-                red=$(( red*255/max ))
-                green=$(( green*255/max ))
-                blue=$(( blue*255/max ))
-                red=${red%.*}
-                green=${green%.*}
-                blue=${blue%.*}
-                if [[ $((row%2)) = 0 ]]; then
-                    upper=($upper "$red;$green;$blue")
-                else
-                    lower=($lower "$red;$green;$blue")
-                fi
-            done
-        (( $#upper == 0 )) || {
-            for i in {1..$#upper}; do
-                printf "\e[38;2;%sm▀" $upper[$i]
-            done
-            printf "\e[0m\e[K\n"
-        }
-    }
-else
-    image() {
-        print -u2 "ImageMagick needed to display images"
-        return 1
-    }
-fi
-
 xml() {
     cat "$@" | xmllint --format - | v
 }
 
 v() {
-    case $(file --brief --mime-type $1 2> /dev/null) in
-        image/*)
-            image $1
-            return
-            ;;
-    esac
     [ -f /etc/debian_version ] && (( $+commands[batcat] )) && {
         batcat "$@"
         return
