@@ -28,7 +28,7 @@
             fi
         fi
         vcs_info_msg_0_=$stdout
-        [[ $more == 1 ]] || zle reset-prompt
+        (( $more )) || zle reset-prompt
     }
     _vbe_vcs_chpwd() {
         vcs_info_msg_0_=
