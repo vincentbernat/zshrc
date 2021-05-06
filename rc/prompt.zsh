@@ -219,13 +219,6 @@ _vbe_prompt_env () {
     }
 }
 
-# In virtualenv
-[[ -z $VIRTUAL_ENV ]] || {
-    _vbe_add_prompt_virtualenv () {
-        _vbe_prompt_env $PRCH[python] '${VIRTUAL_ENV##*/}'
-    }
-}
-
 # In netns
 (( $+commands[ip] )) && [[ -n "$(ip netns identify 2> /dev/null)" ]] && {
     _vbe_add_prompt_netns () {
@@ -248,6 +241,11 @@ esac
     _vbe_add_prompt_nixshell() {
         _vbe_prompt_env $PRCH[nix] ${${name#shell}:-${${IN_WHICH_NIX_SHELL:-${(j:+:)${${=${:-${buildInputs} ${nativeBuildInputs}}}#*-}:#glibc*}}:-${PRCH[ellipsis]}}}
     }
+}
+
+# In virtualenv (can happen when shell is sourced)
+_vbe_add_prompt_virtualenv () {
+    _vbe_prompt_env $PRCH[python] '${VIRTUAL_ENV##*/}'
 }
 
 _vbe_setprompt
