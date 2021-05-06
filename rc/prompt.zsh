@@ -246,7 +246,7 @@ esac
 # In virtualenv (can happen when shell is sourced)
 VIRTUAL_ENV_DISABLE_PROMPT=1
 _vbe_add_prompt_virtualenv () {
-    _vbe_prompt_env $PRCH[python] '${VIRTUAL_ENV##*/}'
+    _vbe_prompt_env $PRCH[python] '${${VIRTUAL_ENV%/.venv}##*/}'
 }
 
 _vbe_setprompt
