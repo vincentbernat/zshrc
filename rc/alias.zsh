@@ -111,6 +111,7 @@ _vbe_autoexpand+=(gti suod)
 (( $+commands[git] )) && alias gti=git
 (( $+commands[mtr] )) && alias mtrr='mtr -wzbe'
 (( $+commands[ag] )) && (( $+commands[less] )) && alias ag='ag --pager="less -FRX"'
+(( $+commands[pass] )) && alias pass='PASSWORD_STORE_ENABLE_EXTENSIONS=true pass'
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 _vbe_autoexpand+=(gti mtrr)
 
