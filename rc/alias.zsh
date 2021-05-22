@@ -306,8 +306,15 @@ v() {
 #
 screenrecord() {
   local x y width height border
-  eval $(slop -b 5 -l -c 0.3,0.4,0.6,0.4 -f 'x=%x y=%y width=%w height=%h')
+  eval $(slop -b 5 -l -c 0.3,0.4,0.6,0.4 -f 'x=%x y=%y width=%w height=%h window=%i')
   [[ -n $x ]] || return
+  [[ -z $window ]] || {
+      border=$(xwininfo -id $window | sed -n 's/  Border width: //p')
+      (( x += border ))
+      (( y += border ))
+      (( width -= border*2 ))
+      (( height -= border*2 ))
+  }
   print -z -- ffmpeg \
         \\\\$'\n' \
         -f x11grab \
