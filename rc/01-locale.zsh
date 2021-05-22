@@ -20,5 +20,4 @@
 	done
     done
     export LC_CTYPE=$LANG
-    unset LC_ALL
 } 2> /dev/null
