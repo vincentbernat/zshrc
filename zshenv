@@ -2,10 +2,12 @@
 
 if [ -z "$ZSH_VERSION" ]; then
     unset LC_ALL
-    eval export $(zsh -c "typeset PATH
+    eval export $(zsh -c \
+                  "typeset PATH
                    typeset NIX_PATH NIX_PROFILES NIX_SSL_CERT_FILE LOCALE_ARCHIVE
                    typeset FONTCONFIG_FILE GOPATH
-                   typeset $(locale | sed 's/=.*//' | tr '\n' ' ')")
+                   typeset LC_ALL $(locale 2> /dev/null | sed 's/=.*//' | tr '\n' ' ')
+                  ")
     return
 fi
 
