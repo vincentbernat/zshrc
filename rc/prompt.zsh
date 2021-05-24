@@ -17,7 +17,7 @@ add-zsh-hook precmd _vbe_prompt_precmd
 add-zsh-hook preexec _vbe_prompt_preexec
 
 # Transient prompt
-# 1. See: https://github.com/romkatv/powerlevel10k/issues/888
+# See: https://github.com/romkatv/powerlevel10k/issues/888
 _vbe-zle-line-init() {
     [[ $CONTEXT == start ]] || return 0
 
@@ -25,7 +25,9 @@ _vbe-zle-line-init() {
         zle .recursive-edit
         local -i ret=$?
         [[ $ret == 0 && $KEYS == $'\4' ]] || break
-        [[ -o ignore_eof ]] || exit 0
+        _vbe_prompt_compact=1
+        zle .reset-prompt
+        exit
     done
 
     _vbe_prompt_compact=1
@@ -40,15 +42,6 @@ _vbe-zle-line-init() {
     return ret
 }
 zle -N zle-line-init _vbe-zle-line-init
-# 2. Handle exit of exiting the current shell
-_vbe_reset-prompt-and-exit () {
-    _vbe_prompt_compact=1
-    zle .reset-prompt
-    exit
-}
-setopt ignoreeof
-zle -N _vbe_reset-prompt-and-exit
-bindkey '^D' _vbe_reset-prompt-and-exit
 
 # Stolen from https://github.com/sindresorhus/pure/blob/master/pure.zsh
 _vbe_human_time () {
