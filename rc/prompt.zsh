@@ -8,7 +8,6 @@ _vbe_prompt_precmd () {
     _vbe_title "${SSH_TTY+${(%):-%M}:}${(%):-%50<..<%~}" "${SSH_TTY+${(%):-%M}:}${(%):-%20<..<%~}"
     local now=$EPOCHSECONDS
     _vbe_cmd_elapsed=$(($now - ${_vbe_cmd_timestamp:-$now}))
-    unset _vbe_prompt_compact
     unset _vbe_cmd_timestamp
 }
 _vbe_prompt_preexec () {
@@ -17,44 +16,39 @@ _vbe_prompt_preexec () {
 add-zsh-hook precmd _vbe_prompt_precmd
 add-zsh-hook preexec _vbe_prompt_preexec
 
-# 1. accepting a new command line
-_vbe_reset-prompt-and-accept-line () {
+# Transient prompt
+# 1. See: https://github.com/romkatv/powerlevel10k/issues/888
+_vbe-zle-line-init() {
+    [[ $CONTEXT == start ]] || return 0
+
+    while true; do
+        zle .recursive-edit
+        local -i ret=$?
+        [[ $ret == 0 && $KEYS == $'\4' ]] || break
+        [[ -o ignore_eof ]] || exit 0
+    done
+
     _vbe_prompt_compact=1
-    zle reset-prompt
-    zle .accept-line            # builtin
+    zle .reset-prompt
+    unset _vbe_prompt_compact
+
+    if (( ret )); then
+        zle .send-break
+    else
+        zle .accept-line
+    fi
+    return ret
 }
-zle -N accept-line _vbe_reset-prompt-and-accept-line
-# 2. executing a command from the history
-_vbe_zle-isearch-exit () {
-    [[ $KEYS != $'\r' ]] && return
-    _vbe_prompt_compact=1
-    zle reset-prompt
-}
-zle -N zle-isearch-exit _vbe_zle-isearch-exit
-# 3. exiting the current shell
+zle -N zle-line-init _vbe-zle-line-init
+# 2. Handle exit of exiting the current shell
 _vbe_reset-prompt-and-exit () {
     _vbe_prompt_compact=1
-    zle reset-prompt
+    zle .reset-prompt
     exit
 }
 setopt ignoreeof
 zle -N _vbe_reset-prompt-and-exit
 bindkey '^D' _vbe_reset-prompt-and-exit
-# 4. hitting Ctrl-C
-if is-at-least 5.3; then
-   TRAPINT() {
-       _vbe_prompt_compact=2
-       zle reset-prompt
-       return $((128+$1))
-   }
-   _vbe_zle-line-pre-redraw () {
-       if (( ${_vbe_prompt_compact:-0} == 2 )); then
-           unset _vbe_prompt_compact
-           zle reset-prompt
-       fi
-   }
-   zle -N zle-line-pre-redraw _vbe_zle-line-pre-redraw
-fi
 
 # Stolen from https://github.com/sindresorhus/pure/blob/master/pure.zsh
 _vbe_human_time () {
