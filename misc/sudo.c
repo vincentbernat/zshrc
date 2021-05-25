@@ -22,6 +22,7 @@
 #include <errno.h>
 #include <limits.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define	INVALID		1
 #define	TOOSMALL	2
@@ -97,33 +98,42 @@ usage(void) {
 	fprintf(stderr, "   -u UID  change to selected UID (default: 0)\n");
 	fprintf(stderr, "   -g GID  change to selected GID (default: 0)\n");
 	fprintf(stderr, "   -c CWD  change current directory\n");
+	fprintf(stderr, "   -H      set HOME variable to /root when UID == 0\n");
 }
 
 int
 main(int argc, char * const argv[])
 {
 	int ch;
+	int sethome = 0;
 	uid_t uid = 0;
 	gid_t gid = 0;
 	gid_t gidset[1];
 	const char *cwd = NULL;
 	const char *errstr;
 
-	while ((ch = getopt(argc, argv, "+u:g:c:h")) != -1) {
+	while ((ch = getopt(argc, argv, "+u:g:c:hH")) != -1) {
 		switch (ch) {
 		case 'h':
 			usage();
 			exit(EXIT_SUCCESS);
 			break;
+		case 'H':
+			sethome = 1;
+			break;
 		case 'c':
 			cwd = optarg;
 			break;
 		case 'u':
-			uid = strtonum(optarg, 0, 65535, &errstr);
-			if (errstr != NULL) {
-				fprintf(stderr, "Provided UID `%s' is %s\n", optarg, errstr);
-				usage();
-				exit(EXIT_FAILURE);
+			if (!strcmp(optarg, "root")) {
+				uid = 0;
+			} else {
+				uid = strtonum(optarg, 0, 65535, &errstr);
+				if (errstr != NULL) {
+					fprintf(stderr, "Provided UID `%s' is %s\n", optarg, errstr);
+					usage();
+					exit(EXIT_FAILURE);
+				}
 			}
 			break;
 		case 'g':
@@ -153,6 +163,10 @@ main(int argc, char * const argv[])
 		fprintf(stderr, "unable to change UID %d/GID %d: %m\n",
 		    uid, gid);
 		exit(EXIT_FAILURE);
+	}
+
+	if (sethome && uid == 0) {
+		setenv("HOME", "/root", 1);
 	}
 
 	if (cwd != NULL && chdir(cwd) == -1) {
