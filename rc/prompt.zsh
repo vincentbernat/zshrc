@@ -21,22 +21,28 @@ add-zsh-hook preexec _vbe_prompt_preexec
 _vbe-zle-line-init() {
     [[ $CONTEXT == start ]] || return 0
 
-    while true; do
-        zle .recursive-edit
-        local -i ret=$?
-        [[ $ret == 0 && $KEYS == $'\4' ]] || break
+    # Go back to regular edition
+    zle .recursive-edit
+    local -i ret=$?
+
+    # Received EOT, should exit the shell
+    if [[ $ret == 0 && $KEYS == $'\4' ]]; then
         _vbe_prompt_compact=1
         zle .reset-prompt
         exit
-    done
+    fi
 
+    # Edition of command-line is over, we need to draw a new prompt.
+    # Shorten the current one.
     _vbe_prompt_compact=1
     zle .reset-prompt
     unset _vbe_prompt_compact
 
     if (( ret )); then
+        # Ctrl-C
         zle .send-break
     else
+        # Enter
         zle .accept-line
     fi
     return ret
