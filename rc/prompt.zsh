@@ -22,8 +22,10 @@ _vbe-zle-line-init() {
     [[ $CONTEXT == start ]] || return 0
 
     # Go back to regular edition
+    (( $+zle_bracketed_paste )) && print -r -n - $zle_bracketed_paste[1]
     zle .recursive-edit
     local -i ret=$?
+    (( $+zle_bracketed_paste )) && print -r -n - $zle_bracketed_paste[2]
 
     # Received EOT, should exit the shell
     if [[ $ret == 0 && $KEYS == $'\4' ]]; then

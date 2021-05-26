@@ -24,8 +24,6 @@
 
     zle -N _start_paste
     zle -N _end_paste
-    zle -N zle-line-init _zle_line_init
-    zle -N zle-line-finish _zle_line_finish
     zle -N paste-insert _paste_insert
 
     # switch the active keymap to paste mode
@@ -46,14 +44,5 @@
         _paste_content+=$KEYS
     }
 
-    function _zle_line_init() {
-        # Tell terminal to send escape codes around pastes.
-        printf '\e[?2004h'
-    }
-
-    function _zle_line_finish() {
-        # Tell it to stop when we leave zle, so pasting in other programs
-        # doesn't get the ^[[200~ codes around the pasted text.
-        printf '\e[?2004l'
-    }
+    zle_bracketed_paste=( $'\C-[[?2004h' $'\C-[[?2004l' )
 }
