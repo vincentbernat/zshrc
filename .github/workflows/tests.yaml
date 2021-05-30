@@ -25,12 +25,6 @@ jobs:
       - name: Run installer
         run: |
           ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh"
-      - name: Upload installer
-        uses: actions/upload-artifact@v2
-        with:
-          name: installer
-          path: run/zsh-install.sh
-          if-no-files-found: error
       - name: Make a release
         uses: "marvinpinto/action-automatic-releases@latest"
         if: github.ref == 'refs/heads/master'
