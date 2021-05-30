@@ -30,3 +30,10 @@ jobs:
       - name: Run installer
         run: |
           ZSH=$PWD zsh -c ". rc/install.zsh && install-zsh"
+      - name: Upload installer
+        uses: actions/upload-artifact@v2
+        if: github.ref == 'refs/heads/master'
+        with:
+          name: installer
+          path: run/zsh-install.sh
+          if-no-files-found: error
