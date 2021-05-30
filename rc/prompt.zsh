@@ -161,9 +161,9 @@ _vbe_prompt () {
 
     # Error code
     if (( $retval )); then
-        _vbe_prompt_segment red default %B${PRCH[retb]}$retval${PRCH[reta]}
+        _vbe_prompt_segment red default ${PRCH[retb]}$retval${PRCH[reta]}
     else
-        _vbe_prompt_segment green cyan %B${PRCH[ok]}
+        _vbe_prompt_segment green cyan ${PRCH[ok]}
     fi
 
     _vbe_prompt_end
