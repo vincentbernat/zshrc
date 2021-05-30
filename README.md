@@ -27,7 +27,7 @@ Installation
 So, if you are one of those young generation not concerned about
 arbitrary code execution, you can do:
 
-    curl -s https://vincentbernat-zshrc.s3.amazonaws.com/zsh-install.sh | sh
+    curl -sL https://github.com/vincentbernat/zshrc/releases/download/latest/zsh-install.sh | sh
 
 License
 -------
