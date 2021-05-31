@@ -66,6 +66,7 @@ autoload -Uz zsh/terminfo zsh/termcap
     fi
 
     typeset -gA PRCH
+    PRCH=(running ">" remote "@")
     case $_vbe_can_do_unicode in
         0)
             PRCH=(
@@ -73,8 +74,8 @@ autoload -Uz zsh/terminfo zsh/termcap
                 retb "<" reta ">"
                 circle "*" branch "\`|"
                 ok ">" ellipsis ".."
-                eol "~~" running "> "
-                elapsed ''
+                eol "~~" running ">"
+                elapsed '' remote "@"
             )
             ;|
         1|2)
@@ -83,8 +84,8 @@ autoload -Uz zsh/terminfo zsh/termcap
                 retb "" reta $' \u2717'
                 circle $'\u25CF' branch $'\uE0A0'
                 ok $'\u2713' ellipsis $'\u2026'
-                eol $'\u23CE' running $'\u21BB'
-                elapsed $'\u231b'
+                eol $'\u23CE' running $'\u276d'
+                elapsed $'\u231b' remote "@"
             )
             ;|
         0|1)

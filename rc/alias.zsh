@@ -549,7 +549,6 @@ colortest() {
             target=$distrib
         fi
 
-        _vbe_title "cowbuilder $target: $*"
         sudo env DEBIAN_BUILDARCH="$arch" $prefix cowbuilder $1 \
             --distribution ${distrib%%-*}  \
             --basepath /var/cache/pbuilder/base-${target}.cow \

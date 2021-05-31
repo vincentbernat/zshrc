@@ -5,7 +5,7 @@
 # _vbe_cmd_timestamp: timestamp to compute elapsed time for a command
 
 _vbe_prompt_precmd () {
-    _vbe_title "${SSH_TTY+${(%):-%M}:}${(%):-%50<..<%~}" "${SSH_TTY+${(%):-%M}:}${(%):-%20<..<%~}"
+    _vbe_title "${SSH_TTY+${(%):-%M}:}${(%):-%20<..<%~}"
     local now=$EPOCHSECONDS
     _vbe_cmd_elapsed=$(($now - ${_vbe_cmd_timestamp:-$now}))
     unset _vbe_cmd_timestamp
