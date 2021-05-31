@@ -85,20 +85,23 @@ zssh() {
 
     # Install Zsh if possible
     if (( !state[has-zsh] )); then
-        local cmd
+        local cmd method
         case $state[username],$state[kernel],$state[distribution] in
             root,Linux,debian|root,Linux,ubuntu)
+                method="apt-get"
                 cmd="DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg > /dev/null"
                 ;;
             root,Linux,fedora)
+                method="dnf"
                 cmd="dnf -qy install zsh"
                 ;;
             root,OpenBSD,*)
+                method="pkg-add"
                 cmd="pkg_add -I zsh"
                 ;;
         esac
         if [[ -n $cmd ]]; then
-            print -u2 "[*] Installing Zsh (for ${state[distribution]}/${state[kernel]})..."
+            print -u2 "[*] Installing Zsh (with $method)..."
             if command ssh -n $command "$@" $cmd; then
                 state[has-zsh]=1
             else
