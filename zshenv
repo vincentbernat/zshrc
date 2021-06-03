@@ -19,7 +19,7 @@ fi
     [[ $IN_NIX_SHELL == pure ]] && return
     local -a wanted savedpath
     local p
-    wanted=(~/bin
+    wanted=(~/.local/bin
             ~/.nix-profile/bin
             /usr/lib/ccache
             /usr/local/sbin
