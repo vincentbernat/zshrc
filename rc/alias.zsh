@@ -48,7 +48,7 @@ _vbe_autoexpand+=(gti suod)
   if ls --color=auto -d . &>/dev/null; then
       export LS_COLORS='ex=00:su=00:sg=00:ca=00:'
       alias ls='ls --color=auto'
-  elif ls -G &> /dev/null; then
+  elif ls -G -d . &> /dev/null; then
       export LSCOLORS="Gxfxcxdxbxegedabagacad"
       alias ls='ls -G'
   fi
