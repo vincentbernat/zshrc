@@ -22,7 +22,6 @@ alias df='df -h'
 alias du='du -h'
 alias rm='rm -i'
 alias mv='mv -i'
-alias ll='ls -ltrhA'
 alias chown='chown -h'
 alias chgrp='chgrp -h'
 alias tailf='tail -F'           # not shipped in util-linux anymore
@@ -43,16 +42,29 @@ alias gti='git'
 alias suod='sudo'
 _vbe_autoexpand+=(gti suod)
 
-# ls colors
-(( ${terminfo[colors]:-0} >= 8 )) && {
-  if ls --color=auto -d . &>/dev/null; then
-      export LS_COLORS='ex=00:su=00:sg=00:ca=00:'
-      alias ls='ls --color=auto'
-  elif ls -G -d . &> /dev/null; then
-      export LSCOLORS="Gxfxcxdxbxegedabagacad"
-      alias ls='ls -G'
-  fi
-}
+# ls
+alias ll='ls -ltrhA'
+if ls --color=auto --g -d . &>/dev/null; then
+    # GNU ls
+    if (( ${terminfo[colors]:-0} >= 8 )); then
+        export LS_COLORS='ex=00:su=00:sg=00:ca=00:'
+        alias ls='ls --color=auto --g'
+    else
+        unset LS_COLORS
+        alias ls='ls --g -p'
+    fi
+elif ls -G -d . &> /dev/null; then
+    # FreeBSD ls
+    if (( ${terminfo[colors]:-0} >= 8 )); then
+        export LSCOLORS="Gxfxcxdxbxegedabagacad"
+        alias ls='ls -G'
+    else
+        unset LSCOLORS
+        alias ls='ls -p'
+    fi
+else
+    alias ls='ls -p'
+fi
 
 # System init-related aliases
 () {
