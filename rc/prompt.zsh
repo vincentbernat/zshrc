@@ -22,6 +22,7 @@ _vbe-zle-line-init() {
     [[ $CONTEXT == start ]] || return 0
 
     # Go back to regular edition
+    unset _paste_content
     (( $+zle_bracketed_paste )) && print -r -n - $zle_bracketed_paste[1]
     zle .recursive-edit
     local -i ret=$?

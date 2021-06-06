@@ -15,15 +15,15 @@
     && () {
 
     # create a new keymap to use while pasting
-    bindkey -N paste
-    bindkey -R -M paste "^@"-"\M-^?" paste-insert
-    bindkey '^[[200~' _start_paste
-    bindkey -M paste '^[[201~' _end_paste
-    bindkey -M paste -s '^M' '^J'
+    bindkey -N  paste
+    bindkey -RM paste    '\x00-\xFF' _paste_insert
+    bindkey -M  main     '^[[200~'   _start_paste
+    bindkey -M  paste    '^[[201~'   _end_paste
+    bindkey -M  paste -s '^M' '^J'
 
     zle -N _start_paste
     zle -N _end_paste
-    zle -N paste-insert _paste_insert
+    zle -N _paste_insert
 
     # switch the active keymap to paste mode
     function _start_paste() {
