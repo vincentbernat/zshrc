@@ -80,26 +80,31 @@ zssh() {
 
     (( $#@ )) || return 1
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
-    eval $(command ssh -n -o ControlPersist=5s -o ControlMaster=auto $common_ssh_args "$@" ${probezsh} \
-               | grep -E '^state\[[0-9a-z-]+\]=[0-9A-Za-z-]*$')
+    eval $(command ssh -n \
+                   -o ControlPersist=5s -o ControlMaster=auto \
+                   -o PermitLocalCommand=yes -o LocalCommand="/bin/echo 'state[hostname]=%n'" \
+                   $common_ssh_args "$@" \
+                   ${probezsh} \
+               | grep -E '^state\[[0-9a-z-]+\]=[0-9A-Za-z.-]*$')
     (( $#state )) || return 1
 
     # Install Zsh if possible
     if (( !state[has-zsh] )); then
         local cmd method
-        case $state[username],$state[kernel],$state[distribution],$state[variant] in
-            root,Linux,debian,*|root,Linux,ubuntu,*)
+        case $state[hostname],$state[username],$state[kernel],$state[distribution],$state[variant] in
+            *,root,Linux,debian,*|root,Linux,ubuntu,*)
                 method="apt-get"
                 cmd="DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg > /dev/null"
                 ;;
-            *,Linux,fedora,coreos)
-                print -u2 "[.] Zsh could be installed with \`rpm-ostree install --apply-live zsh'"
+            *.lab,core,Linux,fedora,coreos)
+                method="rpm-ostree"
+                cmd="sudo rpm-ostree install --apply-live zsh > /dev/null"
                 ;;
-            root,Linux,fedora,*)
+            *,root,Linux,fedora,*)
                 method="dnf"
                 cmd="dnf -qy install zsh"
                 ;;
-            root,OpenBSD,*)
+            *,root,OpenBSD,*)
                 method="pkg-add"
                 cmd="pkg_add -I zsh"
                 ;;
