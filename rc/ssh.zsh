@@ -60,6 +60,7 @@ zssh() {
         echo "state[has-zsh]"=$(if which zsh 2> /dev/null > /dev/null; then echo 1; else echo 0; fi)
         echo "state[kernel]"=$(uname -s)
         echo "state[distribution]"=$(sed -n 's/^ID=//p' /etc/os-release /usr/lib/os-release 2> /dev/null | head -1)
+        echo "state[variant]"=$(sed -n 's/^VARIANT_ID=//p' /etc/os-release /usr/lib/os-release 2> /dev/null | head -1)
         echo "state[username]"=$(id -un)
         echo "state[version]"=$(cat ~/.zsh.$1/run/version 2> /dev/null || echo 0)
     }
@@ -86,12 +87,15 @@ zssh() {
     # Install Zsh if possible
     if (( !state[has-zsh] )); then
         local cmd method
-        case $state[username],$state[kernel],$state[distribution] in
-            root,Linux,debian|root,Linux,ubuntu)
+        case $state[username],$state[kernel],$state[distribution],$state[variant] in
+            root,Linux,debian,*|root,Linux,ubuntu,*)
                 method="apt-get"
                 cmd="DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg > /dev/null"
                 ;;
-            root,Linux,fedora)
+            *,Linux,fedora,coreos)
+                print -u2 "[.] Zsh could be installed with \`rpm-ostree install --apply-live zsh'"
+                ;;
+            root,Linux,fedora,*)
                 method="dnf"
                 cmd="dnf -qy install zsh"
                 ;;
