@@ -3,13 +3,10 @@
 # Autoexpand some aliases
 typeset -ga _vbe_autoexpand
 _vbe_zle-autoexpand() {
-    # Get last word to the left of the cursor:
     local -a words; words=(${(z)LBUFFER})
-    local word=${words[-1]}
-    (( ${#_vbe_autoexpand[(r)$word]} )) && {
-        zle _expand_alias
-        zle expand-word
-    }
+    (( $#words == 1 )) \
+        && (( ${#_vbe_autoexpand[(r)${words[1]}]} )) \
+        && zle _expand_alias
     zle self-insert
 }
 zle -N _vbe_zle-autoexpand
