@@ -30,5 +30,6 @@ fpath=(
 }
 
 () {
+    local config_file
     for config_file ($ZSH/rc/*.zsh) source $config_file
 }
