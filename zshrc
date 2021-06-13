@@ -31,5 +31,4 @@ fpath=(
 
 () {
     for config_file ($ZSH/rc/*.zsh) source $config_file
-    [ ! -e $ZSH/env ] || . $ZSH/env
 }
