@@ -66,7 +66,6 @@ autoload -Uz zsh/terminfo zsh/termcap
     fi
 
     typeset -gA PRCH
-    PRCH=(running ">" remote "@")
     case $_vbe_can_do_unicode in
         0)
             PRCH=(
