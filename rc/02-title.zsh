@@ -26,7 +26,7 @@ _vbe_title_preexec () {
     local title
     local -a cmd
     cmd=(${(z)1})
-    while [[ -z $title ]]; do
+    while [[ -z $title && -n $cmd ]]; do
         case $cmd[1] in
 	    *=*|exec|sudo|noglob|\()
 	        shift cmd
@@ -57,6 +57,7 @@ _vbe_title_preexec () {
                 ;;
         esac
     done
-    _vbe_title "${SSH_TTY+${(%):-%M} }${PRCH[running]}${title}"
+    [[ -n $title ]] && \
+        _vbe_title "${SSH_TTY+${(%):-%M} }${PRCH[running]}${title}"
 }
 add-zsh-hook preexec _vbe_title_preexec
