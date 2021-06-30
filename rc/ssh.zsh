@@ -111,7 +111,10 @@ zssh() {
                 # Only for labs as this is not considered secure to rely on third-party binaries.
                 # We assume to have both wget and sudo available.
                 method="zsh-bin"
-                cmd='wget -qO- https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh -s -- -q -d /usr/local -e no'
+                cmd='(wget -qO- https://raw.githubusercontent.com/romkatv/zsh-bin/master/install \
+                   || curl -sfL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install \
+                   || echo false) 2> /dev/null \
+                   | sh -s -- -q -d /usr/local -e no'
                 ;;
         esac
         if [[ -n $cmd ]]; then
