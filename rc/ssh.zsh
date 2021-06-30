@@ -104,12 +104,14 @@ zssh() {
                 method="pkg-add"
                 cmd="pkg_add -I zsh"
                 ;;
-            *.lab,*)
-                method="zsh-static"
-                cmd='wget -qO- https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh -s -- -q -d /usr/local -e no'
-                ;;
             *,*,Linux,fedora,coreos)
                 print -u2 "[.] Zsh could be installed with \`rpm-ostree install --reboot zsh'"
+                ;;
+            *.lab,*)
+                # Only for labs as this is not considered secure to rely on third-party binaries.
+                # We assume to have both wget and sudo available.
+                method="zsh-bin"
+                cmd='wget -qO- https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh -s -- -q -d /usr/local -e no'
                 ;;
         esac
         if [[ -n $cmd ]]; then
