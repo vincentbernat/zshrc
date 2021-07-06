@@ -16,7 +16,7 @@ autoload -Uz zsh/terminfo zsh/termcap
            # Current TERM with -256color appended when over SSH
            ${SSH_CONNECTION+${TERM%-256color}-256color}
            $TERM                       # Current TERM
-           ${TERM%-256color}           # Current TERM without -256color
+           ${TERM%-*}                  # Current TERM without right part
            xterm-256color              # Well-known TERM
            xterm)                      # Even more well-known TERM
     for term in $terms; do
