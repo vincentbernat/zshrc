@@ -37,7 +37,7 @@ autoload -Uz zsh/terminfo zsh/termcap
     # We need:
     #  1. multibyte input support
     #  2. locale support + correct width
-    #  3. terminal support
+    #  3. terminal support (for powerline)
     #
     # Locale support is tested by trying to output an unicode
     # character. Zsh will choke with "character not in range" if this
@@ -53,7 +53,7 @@ autoload -Uz zsh/terminfo zsh/termcap
     # Source for width checking:
     # https://unix.stackexchange.com/questions/245013/get-the-display-width-of-a-string-of-characters/591447#591447
     local _vbe_can_do_unicode=0
-    if [[ -o multibyte ]]; then
+    if [[ -o multibyte ]] && ()(( $@[(I)${TERM%%-*}] )) xterm screen rxvt; then
         if (( ${#${:-$(print -n "\u21B5\u21B5" 2> /dev/null)}} == 2 )); then
             if (( ${#${(ml[4])${:-$(print -n "\U1f40b" 2> /dev/null)}}} == 3 )); then
                 # Can do unicode with characters using several columns
