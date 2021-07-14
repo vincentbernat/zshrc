@@ -498,7 +498,6 @@ colortest() {
         esac
         shift
         local -a opts
-        local -a prefix
 
         if [[ -z $arch ]] || [[ $arch == $(dpkg-architecture -q DEB_BUILD_ARCH) ]]; then
                 opts=(--debootstrap debootstrap)
@@ -558,11 +557,11 @@ colortest() {
             target=$distrib
         fi
 
-        sudo env DEBIAN_BUILDARCH="$arch" $prefix cowbuilder $1 \
-            --distribution ${distrib%%-*}  \
-            --basepath /var/cache/pbuilder/base-${target}.cow \
-            --buildresult $PWD \
-            $opts $*[2,$#]
+        sudo --preserve-env=DEB_BUILD_OPTIONS env DEBIAN_BUILDARCH="$arch" cowbuilder $1 \
+             --distribution ${distrib%%-*}  \
+             --basepath /var/cache/pbuilder/base-${target}.cow \
+             --buildresult $PWD \
+             $opts $*[2,$#]
     }
 }
 
