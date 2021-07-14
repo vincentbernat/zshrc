@@ -30,6 +30,7 @@
 
     # Manage bookmarks
     bookmark() {
+        local link
         [[ -d $MARKPATH ]] || mkdir -p $MARKPATH
         if (( $# == 0 )); then
             # When no arguments are provided, just display existing

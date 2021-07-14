@@ -3,7 +3,7 @@
 (( $+commands[locale] )) && () {
     local -a available
     local -A locales
-    local locale
+    local locale l
     locales=( "LANG" "C en_US"
 	      "LC_MESSAGES" "en_US C"
 	      "LC_NUMERIC" "en_US C" )
