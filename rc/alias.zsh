@@ -183,6 +183,16 @@ secret() {
   done
 }
 
+(( $+commands[emacsclient] * $+commands[git] )) && magit() {
+  local root=$(git rev-parse --show-toplevel)
+  emacsclient -e "(progn
+                    (select-frame-set-input-focus
+                      (window-frame
+                        (get-buffer-window
+                           (magit-status \"${root}\"))))
+                    (delete-other-windows))"
+}
+
 # smv like scp
 alias smv='rsync -P --remove-source-files'
 
