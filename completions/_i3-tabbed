@@ -1,0 +1,5 @@
+#compdef i3-tabbed
+
+shift words
+(( CURRENT -= 1 ))
+_normal -p i3-tabbed
