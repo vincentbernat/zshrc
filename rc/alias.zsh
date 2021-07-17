@@ -295,6 +295,12 @@ xml() {
 }
 
 v() {
+    case $(file --brief --mime-type $1 2> /dev/null) in
+        image/*)
+            (( $+commands[sxiv] )) && ${I3SOCK+i3-tabbed} sxiv $1
+            return
+            ;;
+    esac
     [ -f /etc/debian_version ] && (( $+commands[batcat] )) && {
         batcat "$@"
         return
