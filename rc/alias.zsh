@@ -300,6 +300,9 @@ v() {
             (( $+commands[sxiv] )) && ${I3SOCK+i3-tabbed} sxiv $1
             return
             ;;
+        video/*)
+            (( $+commands[mpv] )) && ${I3SOCK+i3-tabbed} mpv --no-fs $1
+            return
     esac
     [ -f /etc/debian_version ] && (( $+commands[batcat] )) && {
         batcat "$@"
