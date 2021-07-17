@@ -429,6 +429,34 @@ function myip() {
   done 2> /dev/null
 }
 
+# Cleanup various things on a system
+function clean() {
+    local prompt() {
+        local what=$1
+        local prompt="${(%):-%F{green}Clean $what?${(%):-%F{default}"
+        read -sq "?$prompt "
+        case $? in
+            0)
+                print -P "%F{cyan}yes%F{default}"
+                return 0
+                ;;
+        esac
+        print -P "%F{red}no%F{default}"
+        return 1
+    }
+
+    (( $+commands[apt] )) && prompt "system APT cache" && \
+        sudo apt clean
+    [[ -d /var/cache/pbuilder/aptcache ]] && prompt "pbuilder APT cache" && \
+        sudo find /var/cache/pbuilder/aptcache -type f -delete
+    (( $+commands[docker] )) && prompt "Docker related stuff" && \
+        sudo docker system prune -f
+    [[ -d /nix ]] && prompt "nix store" && \
+        nix-collect-garbage -d
+    [[ -d /var/log/journal ]] && prompt "journal logs" && \
+        sudo journalctl --vacuum-time='2 months'
+}
+
 # Display a color testcard
 # From: http://tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html
 colortest() {
