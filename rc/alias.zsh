@@ -380,12 +380,15 @@ screenrecord() {
 
 # Simple calculator
 function \=() {
-  echo $(($@))
+  if (( $+commands[qalc] )); then
+    qalc "$@"
+  else
+    autoload -Uz zcalc
+    echo $(($@))
+  fi
 }
 aliases[=]='noglob ='           # not really supported: http://www.zsh.org/mla/workers/2016/msg00081.html
 (( $+commands[units] )) && alias units='noglob units --verbose'
-# Also, we can use zcalc
-autoload -Uz zcalc
 
 # Currency conversion
 function currency() {
