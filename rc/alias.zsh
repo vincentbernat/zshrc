@@ -390,36 +390,6 @@ function \=() {
 aliases[=]='noglob ='           # not really supported: http://www.zsh.org/mla/workers/2016/msg00081.html
 (( $+commands[units] )) && alias units='noglob units --verbose'
 
-# Currency conversion
-function currency() {
-  local -a amounts
-  local -a currencies
-  for ((i=1; i<=$#; i++)); do
-    case ${@[i]} in
-      [0-9.]*)
-        amounts=($amounts ${@[i]})
-        ;;
-      *)
-        currencies=($currencies ${@[i]})
-        ;;
-    esac
-  done
-  (( $#currencies > 1 )) || currencies=($currencies eur usd)
-  local from=${currencies[1]}
-  local rate
-  for amount in $amounts; do
-    for to in $currencies; do
-      from=${from:u}
-      to=${to:u}
-      [[ ${to} != ${from} ]] || continue
-      #echo "Convert $amount ${from:u} to ${to:u}"
-      rate=$(curl -s "https://free.currencyconverterapi.com/api/v6/convert?q=${from}_${to}&compact=ultra&apiKey=cdca335960c293ac5e8d" \
-                 | sed -n 's/{.*:\(.*\)}/\1/p')
-      printf "%'.2f $from = %'.2f $to\n" $amount $(( amount * rate))
-    done
-  done
-}
-
 # Allow to prefix commands with `$` to help copy/paste operations.
 function \$() {
   "$@"
