@@ -308,12 +308,14 @@ v() {
             (( $+commands[mpv] )) && ${I3SOCK+i3-tabbed} mpv --no-fs $1
             return
     esac
-    [ -f /etc/debian_version ] && (( $+commands[batcat] )) && {
-        batcat "$@"
-        return
-    }
-    [ ! -f /etc/debian_version ] && (( $+commands[bat] )) && {
-        bat "$@"
+    (( $+commands[bat] )) && {
+        (( $# )) || {
+            gzip -cdfq | bat
+            return
+        }
+        for f in "$@"; do
+            gzip -cdfq -- $f | bat --file-name ${f%.gz}
+        done
         return
     }
     (( $+commands[less] )) && {
