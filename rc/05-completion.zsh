@@ -51,3 +51,7 @@ zstyle ':completion:*:hosts:*' completer _complete _match
 # In menu, select items with +
 zmodload -i zsh/complist
 bindkey -M menuselect "+" accept-and-menu-complete
+
+# TODO: try fzf
+# https://github.com/Aloxaf/fzf-tab
+# https://github.com/lincheney/fzf-tab-completion
