@@ -17,9 +17,9 @@ ZSH=${ZSH:-${ZDOTDIR:-$HOME}/.zsh}
 fpath=(
     # Custom functions and completions
     $ZSH/functions $ZSH/completions
-    # For nix-shell, add share/zsh for elements in PATH
+    # For nix-shell, add share/zsh for elements in PATH (for nix-shell)
     ${^${(M)path:#/nix/store/*}}/../share/zsh/site-functions(N/)
-    # Add functions from our own profile
+    # Add functions from our own profile (for home-manager)
     ~/.nix-profile/share/zsh/site-functions(N/)
     # Default fpath
     $fpath
