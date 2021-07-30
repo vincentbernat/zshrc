@@ -5,7 +5,7 @@ if [ -z "$ZSH_VERSION" ]; then
     eval export $(zsh -c \
                   "typeset PATH
                    typeset NIX_PATH NIX_PROFILES NIX_SSL_CERT_FILE LOCALE_ARCHIVE
-                   typeset FONTCONFIG_FILE GOPATH
+                   typeset FONTCONFIG_FILE GOPATH XDG_DATA_DIRS
                    typeset LC_ALL $(locale 2> /dev/null | sed 's/=.*//' | tr '\n' ' ')
                   ")
     return
@@ -62,8 +62,12 @@ fi
 
     local -aU nix_path
     nix_path=(${(ps.:.)NIX_PATH} ~/.nix-defexpr/channels)
-
     export NIX_PATH=${(pj.:.)nix_path}
+
+    local -aU xdg_data_dirs
+    xdg_data_dirs=( ~/.nix-profile/share ${(ps.:.)XDG_DATA_DIRS})
+    export XDG_DATA_DIRS=${(pj.:.)xdg_data_dirs}
+
     export NIX_PROFILES="/nix/var/nix/profiles/default $HOME/.nix-profile"
     export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
     export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
