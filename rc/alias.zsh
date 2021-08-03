@@ -300,6 +300,7 @@ xml() {
 
 v() {
     case $(file --brief --mime-type $1 2> /dev/null) in
+        image/svg+xml) ;;
         image/*)
             (( $+commands[sxiv] )) && ${I3SOCK+i3-tabbed} sxiv $1
             return
