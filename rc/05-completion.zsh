@@ -10,6 +10,9 @@ setopt always_to_end
 setopt glob_complete
 unsetopt list_beep
 
+# To find the current context: "Ctrl-x h" instead of "Tab".
+# To debug more: "Ctrl-x ?".
+
 zstyle ':completion:*' completer _expand_alias _complete _match _approximate
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt ''
