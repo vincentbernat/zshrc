@@ -116,11 +116,10 @@ fi
 (( $+commands[pip3] )) && alias pip3='PIP_REQUIRE_VIRTUALENV=true pip3 --disable-pip-version-check'
 (( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 4 ))'
 (( $+commands[ncal] )) && alias ncal='ncal -w'
-(( $+commands[mtr] )) && alias mtrr='mtr -wzbe'
+(( $+commands[mtr] )) && alias mtrr='mtr -wzbe' && _vbe_autoexpand+=(mtrr)
 (( $+commands[ag] )) && (( $+commands[less] )) && alias ag='ag --pager="less -FRX"'
 (( $+commands[pass] )) && alias pass='PASSWORD_STORE_ENABLE_EXTENSIONS=true pass'
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
-_vbe_autoexpand+=(mtrr)
 
 mkcd() { command mkdir -p -- $1 && cd -- $1 }
 
