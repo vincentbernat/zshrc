@@ -55,7 +55,7 @@
                 # be named after the current directory.
                 local name=$1
                 [[ $name == "." ]] && name=${PWD:t}
-                ln -s $PWD $MARKPATH/$name
+                ln -sf $PWD $MARKPATH/$name
                 hash -d -- -${name}=${PWD}
             fi
         fi
