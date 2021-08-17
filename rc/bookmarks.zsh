@@ -17,7 +17,7 @@
     hash -d doc=/usr/share/doc
 
     # Populate the hash
-    for link ($MARKPATH/*(N@)) {
+    for link ($MARKPATH/*(-N/)) {
         hash -d -- -${link:t}=${link:A}
     }
 
