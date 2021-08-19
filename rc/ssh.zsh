@@ -3,7 +3,7 @@
 _vbe_ssh_command() {
     # Modify the title of the current by using LocalCommand option.
     local -a cmd
-    cmd=(ssh
+    cmd=(${1:-ssh}
          -o PermitLocalCommand=yes
          -o LocalCommand="$ZSH/run/u/$HOST-$UID/title ${PRCH[remote]}%n")
 
@@ -60,7 +60,15 @@ ssh() {
         . $ZSH/local/ssh2passname
         sshpass -f<(pass show $PASSNAME) $reply "$@"
     }
-    (( $+functions[compdef] )) && compdef _ssh pssh=ssh
+    pscp() {
+        _vbe_ssh_command scp
+        . $ZSH/local/ssh2passname
+        sshpass -f<(pass show $PASSNAME) $reply "$@"
+    }
+    (( $+functions[compdef] )) && {
+        compdef _ssh pssh=ssh
+        compdef _ssh pscp=scp
+    }
 }
 
 # Invoke this shell on a remote host. All arguments are passed to SSH,
