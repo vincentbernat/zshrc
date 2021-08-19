@@ -1,10 +1,11 @@
 # -*- sh -*-
 
-ssh() {
+_vbe_ssh_command() {
     # Modify the title of the current by using LocalCommand option.
-    local -a extra
-    extra=(-o PermitLocalCommand=yes
-           -o LocalCommand="$ZSH/run/u/$HOST-$UID/title ${PRCH[remote]}%n")
+    local -a cmd
+    cmd=(ssh
+         -o PermitLocalCommand=yes
+         -o LocalCommand="$ZSH/run/u/$HOST-$UID/title ${PRCH[remote]}%n")
 
     # TERM is one of the variables that is usually allowed to be
     # transmitted to the remote session. The remote host should have
@@ -36,12 +37,20 @@ ssh() {
     # `$ZSH/rc/01-locale.zsh`.
     case "$TERM" in
 	*-*)
-	    LC__ORIGINALTERM=$TERM TERM=${TERM%%-*} LANG=C LC_MESSAGES=C command ssh $extra "$@"
-	    ;;
-	*)
-	    LANG=C LC_MESSAGES=C command ssh $extra "$@"
+            cmd=(LC__ORIGINALTERM=$TERM TERM=${TERM%%-*}
+                 $cmd)
 	    ;;
     esac
+    cmd=(env LANG=C LC_MESSAGES=C
+         $cmd)
+
+    # Return array in reply
+    : ${(A)reply::="${cmd[@]}"}
+}
+
+ssh() {
+    _vbe_ssh_command
+    $reply "$@"
 }
 
 # Invoke this shell on a remote host. All arguments are passed to SSH,
