@@ -53,6 +53,16 @@ ssh() {
     $reply "$@"
 }
 
+(( $+commands[sshpass] )) && [[ -f $ZSH/local/ssh2passname ]] && {
+    # Connect with a password
+    pssh() {
+        _vbe_ssh_command
+        . $ZSH/local/ssh2passname
+        sshpass -f<(pass show $PASSNAME) $reply "$@"
+    }
+    (( $+functions[compdef] )) && compdef _ssh pssh=ssh
+}
+
 # Invoke this shell on a remote host. All arguments are passed to SSH,
 # but we expect to use this for interactive shells only. Several
 # connections may be needed to install the appropriate files. It
