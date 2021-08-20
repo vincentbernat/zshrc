@@ -1,7 +1,10 @@
 # -*- sh -*-
 
 _vbe_ssh_command() {
-    # Modify the title of the current by using LocalCommand option.
+    # Modify the title of the current by using LocalCommand option. An
+    # alternative would be to use "ssh -G $@", but there is no way to
+    # get the original hostname from this. "ssh -F none -G $@" could
+    # work but "$@" could contain "-F something".
     local -a cmd
     cmd=(${1:-ssh}
          -o PermitLocalCommand=yes
