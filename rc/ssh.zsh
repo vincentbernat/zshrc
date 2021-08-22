@@ -87,7 +87,7 @@ zssh() {
 
     # Probe to run on remote host to check the situation.
     local __() {
-        echo "state[has-zsh]"=$(if which zsh 2> /dev/null > /dev/null; then echo 1; else echo 0; fi)
+        echo "state[has-zsh]"=$(if command -v zsh > /dev/null; then echo 1; else echo 0; fi)
         echo "state[kernel]"=$(uname -s)
         echo "state[distribution]"=$(sed -n 's/^ID=//p' /etc/os-release /usr/lib/os-release 2> /dev/null | head -1)
         echo "state[variant]"=$(sed -n 's/^VARIANT_ID=//p' /etc/os-release /usr/lib/os-release 2> /dev/null | head -1)
@@ -101,10 +101,10 @@ zssh() {
         set -e
         export ZDOTDIR=~/.zsh.$1
         export ZSH=~/.zsh.$1
-        export SHELL=$(which zsh)
+        export SHELL=$(command -v zsh)
         uname -a
         cat /etc/motd 2>/dev/null || true
-        exec zsh -i -l -d
+        exec $SHELL -i -l -d
     }
     local execzsh="$(which __); __ $USER"
 
