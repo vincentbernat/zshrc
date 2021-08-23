@@ -122,7 +122,7 @@ zssh() {
     if (( !state[has-zsh] )); then
         local cmd method
         case $state[hostname],$state[username],$state[kernel],$state[distribution],$state[variant] in
-            *,root,Linux,debian,*|root,Linux,ubuntu,*)
+            *,root,Linux,debian,*|*,root,Linux,ubuntu,*)
                 method="apt-get"
                 cmd="DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg > /dev/null"
                 ;;
