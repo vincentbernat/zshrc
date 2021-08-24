@@ -83,7 +83,8 @@ zssh() {
     local -A state
     local -a common_ssh_args
     local current=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
-    common_ssh_args=(-o ControlPath="$ZSH/run/%r@%h:%p")
+    ! ssh -G "$@" | grep -q '^controlpath ' && \
+        common_ssh_args=(-o ControlPath="$ZSH/run/%r@%h:%p")
 
     # Probe to run on remote host to check the situation.
     local __() {
