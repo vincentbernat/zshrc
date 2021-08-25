@@ -59,13 +59,13 @@ ssh() {
 (( $+commands[sshpass] )) && [[ -f $ZSH/local/ssh2passname ]] && {
     # Connect with a password
     pssh() {
-        _vbe_ssh_command
         . $ZSH/local/ssh2passname
+        _vbe_ssh_command
         sshpass -f<(pass show $PASSNAME) $reply "$@"
     }
     pscp() {
-        _vbe_ssh_command scp
         . $ZSH/local/ssh2passname
+        _vbe_ssh_command scp
         sshpass -f<(pass show $PASSNAME) $reply "$@"
     }
     (( $+functions[compdef] )) && {
