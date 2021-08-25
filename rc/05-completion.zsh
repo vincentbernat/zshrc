@@ -13,7 +13,7 @@ unsetopt list_beep
 # To find the current context: "Ctrl-x h" instead of "Tab".
 # To debug more: "Ctrl-x ?".
 
-zstyle -e ':completion:*' completer 'reply=(_expand_alias _complete _match); [[ $words[1] != "pssh" ]] && reply=($reply _approximate)'
+zstyle ':completion:*' completer _expand_alias _complete _match _approximate
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt ''
 zstyle ':completion:*' group-name ''
@@ -42,7 +42,7 @@ _vbe_custom_hosts() {
     # Complete ~/.zsh/local/hosts.*
     local host
     for host in $ZSH/local/hosts.*(N-.); do
-	_wanted hosts expl "remote host name" compadd "$@" $(<$host)
+	_wanted hosts expl "remote host name" compadd "$@" ${(M)$(<$host):#${PREFIX}*}
     done
 }
 zstyle -e ':completion:*' hosts '_vbe_custom_hosts "$@"'
