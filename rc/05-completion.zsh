@@ -13,7 +13,7 @@ unsetopt list_beep
 # To find the current context: "Ctrl-x h" instead of "Tab".
 # To debug more: "Ctrl-x ?".
 
-zstyle ':completion:*' completer _expand_alias _complete _match _approximate
+zstyle -e ':completion:*' completer 'reply=(_expand_alias _complete _match); [[ $words[1] != "pssh" ]] && reply=($reply _approximate)'
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt ''
 zstyle ':completion:*' group-name ''
@@ -49,7 +49,6 @@ zstyle -e ':completion:*' hosts '_vbe_custom_hosts "$@"'
 
 # Don't use known_hosts_file (too slow)
 zstyle ":completion:*:hosts" known-hosts-files ''
-zstyle ':completion:*:hosts:*' completer _complete _match
 
 # In menu, select items with +
 zmodload -i zsh/complist
