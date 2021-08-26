@@ -261,12 +261,13 @@ def display(f):
             output = line
         try:
             out.write(output)
-        except IOError as e:
-            if e.errno == errno.EPIPE or e.errno == errno.EINVAL:
-                break
-            raise
+        except BrokenPipeError:
+            break
     if pager is not None:
-        pager.stdin.close()
+        try:
+            pager.stdin.close()
+        except BrokenPipeError:
+            pass
         pager.wait()
 
 if len(sys.argv) == 1:
