@@ -112,8 +112,10 @@ zssh() {
     (( $#@ )) || return 1
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
     eval $(command ssh -n \
-                   -o ControlPersist=5s -o ControlMaster=auto \
-                   -o PermitLocalCommand=yes -o LocalCommand="/bin/echo 'state[hostname]=%n'" \
+                   $(ssh -G "$@" | grep -Fxq 'controlpersist no' && print -- -o ControlPersist=5s) \
+                   -o ControlMaster=auto \
+                   -o PermitLocalCommand=yes \
+                   -o LocalCommand="/bin/echo 'state[hostname]=%n'" \
                    $common_ssh_args "$@" \
                    ${probezsh} \
                | grep -E '^state\[[0-9a-z-]+\]=[0-9A-Za-z.-]*$')
