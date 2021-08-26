@@ -29,8 +29,6 @@ fpath=(
     fpath=(${fpath/\/usr\/share\/zsh\//\/usr\/share\/zsh-static\/})
 }
 
-[[ $TERM == "dumb" ]] && unsetopt zle && PS1='%(!.#.$) ' && return
-
 () {
     local config_file
     for config_file ($ZSH/rc/*.zsh) source $config_file
