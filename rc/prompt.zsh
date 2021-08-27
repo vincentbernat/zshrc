@@ -5,7 +5,11 @@
 # _vbe_cmd_timestamp: timestamp to compute elapsed time for a command
 
 _vbe_prompt_precmd () {
+    # Switch back to regular character set: https://www.in-ulm.de/~mascheck/various/alternate_charset/#solution
+    printf '%b' '\e[0m\e(B\e)0\017\e[?5l\e7\e[0;0r\e8'
+    # Set title
     _vbe_title "${SSH_TTY+${(%):-%M}:}${(%):-%20<..<%~}"
+    # Support to compute elapsed time
     local now=$EPOCHSECONDS
     _vbe_cmd_elapsed=$(($now - ${_vbe_cmd_timestamp:-$now}))
     unset _vbe_cmd_timestamp
