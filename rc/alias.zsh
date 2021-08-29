@@ -129,6 +129,9 @@ mkcd() { command mkdir -p -- $1 && cd -- $1 }
 #  nix-zsh -p python2 glibcLocales
 #  nix-zsh -I nixgl=https://github.com/guibou/nixGL/archive/master.tar.gz -p '(import <nixgl>{}).nixGLIntel' alacritty
 #  nix-zsh -p 'python3.withPackages(ps: with ps; [ ipython pulsectl ])'
+#
+# To get older versions of a package:
+#  https://lazamar.co.uk/nix-versions/
 (( $+commands[nix-shell] )) && nix-zsh() {
         nix-shell --command zsh "$@"
 }
