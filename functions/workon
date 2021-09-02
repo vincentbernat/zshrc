@@ -184,7 +184,7 @@ if [ $+commands[zsh-static] -eq 1 ]; then
   mkdir \$tmp/root
   mount -n \$tmp/root-directory \$tmp/root
   mkdir -p /usr/share/zsh-static
-  touch $commands[zsh-static]
+  [ -f $commands[zsh-static] ] || touch $commands[zsh-static]
   mount -n --bind \$tmp/root/$commands[zsh-static] $commands[zsh-static]
   mount -n --bind \$tmp/root/usr/share/zsh /usr/share/zsh-static
   umount -n \$tmp/root
