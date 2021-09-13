@@ -74,7 +74,7 @@ autoload -Uz zsh/terminfo zsh/termcap
                 circle "*" branch "\`|"
                 ok ">" ellipsis ".."
                 eol "~~" running ">"
-                elapsed '' remote "@"
+                remote "@"
             )
             ;|
         1|2)
@@ -84,12 +84,13 @@ autoload -Uz zsh/terminfo zsh/termcap
                 circle $'\u25CF' branch $'\uE0A0'
                 ok $'\u2713' ellipsis $'\u2026'
                 eol $'\u23CE' running $'\u276d'
-                elapsed $'\u231b' remote "@"
+                remote "@"
             )
             ;|
         0|1)
             PRCH=(
                 "${(@kv)PRCH}"
+                elapsed ''
                 python "python"
                 docker "docker"
                 nix "nix"
@@ -98,6 +99,7 @@ autoload -Uz zsh/terminfo zsh/termcap
         2)
             PRCH=(
                 "${(@kv)PRCH}"
+                elapsed $'\u231b'
                 python $'\U1f40d'
                 docker $'\U1f40b'
                 nix $'\u2744\ufe0f '
