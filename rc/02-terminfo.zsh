@@ -59,7 +59,7 @@ autoload -Uz zsh/terminfo zsh/termcap
                 # Can do unicode with characters using several columns
                 _vbe_can_do_unicode=2
             else
-                # Can do unicode, but cannot determine characters' widths
+                # Can do unicode, but cannot determine character widths
                 _vbe_can_do_unicode=1
             fi
         fi
