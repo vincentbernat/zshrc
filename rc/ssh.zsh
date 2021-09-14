@@ -56,17 +56,24 @@ ssh() {
     $reply "$@"
 }
 
-(( $+commands[sshpass] )) && [[ -f $ZSH/local/ssh2passname ]] && {
+(( $+commands[sshpass] )) && [[ -f $ZSH/local/ssh2passname ]] && () {
     # Connect with a password
+    local _vbe_sshpass() {
+        . $ZSH/local/ssh2passname
+        [[ -n $PASSNAME ]] || {
+            print -u2 "[!] No password entry found!"
+            return 1
+        }
+        print -u2 "[*] Using password entry $PASSNAME"
+        sshpass -f<(pass show $PASSNAME) $reply "$@"
+    }
     pssh() {
         _vbe_ssh_command
-        . $ZSH/local/ssh2passname
-        sshpass -f<(pass show $PASSNAME) $reply "$@"
+        _vbe_sshpass "$@"
     }
     pscp() {
         _vbe_ssh_command scp
-        . $ZSH/local/ssh2passname
-        sshpass -f<(pass show $PASSNAME) $reply "$@"
+        _vbe_sshpass "@"
     }
     (( $+functions[compdef] )) && {
         compdef _ssh pssh=ssh
