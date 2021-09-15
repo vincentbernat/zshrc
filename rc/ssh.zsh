@@ -59,13 +59,14 @@ ssh() {
 (( $+commands[sshpass] )) && [[ -f $ZSH/local/ssh2passname ]] && () {
     # Connect with a password
     local _vbe_sshpass() {
+        local passname
         . $ZSH/local/ssh2passname
-        [[ -n $PASSNAME ]] || {
+        [[ -n $passname ]] || {
             print -u2 "[!] No password entry found!"
             return 1
         }
-        print -u2 "[*] Using password entry $PASSNAME"
-        sshpass -f<(pass show $PASSNAME) $reply "$@"
+        print -u2 "[*] Using password entry $passname"
+        sshpass -f<(pass show $passname) $reply "$@"
     }
     pssh() {
         _vbe_ssh_command
