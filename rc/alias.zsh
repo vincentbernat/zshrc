@@ -601,6 +601,8 @@ colortest() {
 WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
 _virtualenv () {
     local interpreter
+    local venv
+    local -i delete_on_exit=0
     case $1 in
         2) interpreter=python2 ;;
         3) interpreter=python3 ;;
@@ -609,8 +611,16 @@ _virtualenv () {
     shift
     [[ -d $WORKON_HOME ]] || mkdir -p $WORKON_HOME
     pushd $WORKON_HOME > /dev/null || return
+
+    case ${@[-1]} in
+        tmp)
+            venv=tmp$$
+            delete_on_exit=1
+            ;;
+        *) venv=$1 ;;
+    esac
     {
-        ! command $interpreter -m virtualenv -p =$interpreter "$@" || \
+        ! command $interpreter -m virtualenv -p =$interpreter "${@[0,-2]}" $venv || \
             cat <<EOF >&2
 # To reuse the environment for Node.JS, use:
 #  \$ pip install nodeenv
@@ -620,9 +630,9 @@ EOF
     } always {
 	popd > /dev/null || return
     }
-    workon ${@[-1]}
-    [[ ${@[-1]} == "tmp" ]] && \
-        rm -rf $WORKON_HOME/tmp
+    workon $venv
+    (( delete_on_exit )) && \
+        rm -rf $WORKON_HOME/$venv
 }
 
 alias virtualenv2='_virtualenv 2'
