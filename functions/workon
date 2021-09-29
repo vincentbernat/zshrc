@@ -152,6 +152,7 @@ EOF
     ${=${(%):-%(!..sudo -v)}}
     ${=${(%):-%(!..sudo -n)}} =nsenter $nsenter_args -t $id -- unshare --mount --propagation private /bin/sh -ec "
 #!/bin/sh
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 tmp=\$(mktemp -d)
 mkdir -p ${HOME}
 mount -t tmpfs tmpfs \$tmp      # everything in $tmp will be invisible
