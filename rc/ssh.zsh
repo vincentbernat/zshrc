@@ -61,6 +61,7 @@ ssh() {
     local _vbe_sshpass() {
         local passname
         local login=$(ssh -G "$@" | sed -nE 's/^(hostname|user) //p' | paste -sd '@')
+        [[ -n $login ]] || return 2
         . $ZSH/local/ssh2passname
         [[ -n $passname ]] || {
             print -u2 "[!] No password entry found for $login!"
