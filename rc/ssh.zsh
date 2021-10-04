@@ -60,12 +60,13 @@ ssh() {
     # Connect with a password
     local _vbe_sshpass() {
         local passname
+        local hostname=$(ssh -G "$@" | sed -n 's/^hostname //p')
         . $ZSH/local/ssh2passname
         [[ -n $passname ]] || {
-            print -u2 "[!] No password entry found!"
+            print -u2 "[!] No password entry found for $hostname!"
             return 1
         }
-        print -u2 "[*] Using password entry $passname"
+        print -u2 "[*] Using password entry $passname for $hostname"
         sshpass -f<(pass show $passname) $reply "$@"
     }
     pssh() {
