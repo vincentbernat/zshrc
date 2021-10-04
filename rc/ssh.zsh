@@ -74,7 +74,7 @@ ssh() {
     }
     pscp() {
         _vbe_ssh_command scp
-        _vbe_sshpass "@"
+        _vbe_sshpass "$@"
     }
     (( $+functions[compdef] )) && {
         compdef _ssh pssh=ssh
