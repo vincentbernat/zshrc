@@ -56,7 +56,7 @@ ssh() {
     $reply "$@"
 }
 
-(( $+commands[passh] )) && [[ -f $ZSH/local/ssh2passname ]] && () {
+(( $+commands[sshpass] )) && [[ -f $ZSH/local/ssh2passname ]] && () {
     # Connect with a password
     local _vbe_sshpass() {
         local passname
@@ -68,7 +68,7 @@ ssh() {
             return 1
         }
         print -u2 "[*] Using password entry $passname for $login"
-        passh -c 1 -t 5 -p file:<(pass show $passname) $reply "$@"
+        sshpass -f<(pass show $passname) $reply "$@"
     }
     pssh() {
         _vbe_ssh_command
