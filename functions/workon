@@ -39,7 +39,7 @@ shift
 
 # Compile sudo if needed
 local sudo=$ZSH/run/u/$HOST-$UID/sudo
-function compile_sudo() {
+function _vbe_compile_sudo() {
     if [[ ! -f $sudo ]] || (( $(zstat +mtime $ZSH/misc/sudo.c) > $(zstat +mtime $sudo) )); then
         if (( $+commands[gcc] )); then
             gcc -Wall -static $ZSH/misc/sudo.c -o $sudo
@@ -54,7 +54,7 @@ function compile_sudo() {
 [[ ${dimages[(r)$env]} == $env ]] && {
     local image=${env}
     local tmp=$(mktemp -d)
-    compile_sudo
+    _vbe_compile_sudo
     <<EOF > $tmp/start
 #!/bin/sh
 for SHELL in ${SHELL}-static $SHELL /bin/bash /bin/sh; do
@@ -150,7 +150,7 @@ EOF
     environ=(${(@f)"$(docker container inspect --format "{{range .Config.Env}}{{.}}"$'\n'"{{end}}" $env)"})
     for ((i = 1; i < $#environ; i++)) \
             environ[$i]="export ${environ[$i]%%=*}=${(q-)${environ[$i]#*=}}"
-    compile_sudo
+    _vbe_compile_sudo
     (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -
     ${=${(%):-%(!..sudo -v)}}
     ${=${(%):-%(!..sudo -n)}} =nsenter $nsenter_args -t $id -- unshare --mount --propagation private /bin/sh -ec "
