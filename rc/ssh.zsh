@@ -26,7 +26,7 @@ _vbe_ssh_command() {
     #     ssh -t XXXXX env TERM=$TERM emacsclient -t -c
     #
     # If the remote host uses the same zshrc than this one, there is
-    # something in `$ZSH/rc/00-terminfo.zsh` to restore the
+    # something in `$ZSH/rc/02-terminfo.zsh` to restore the
     # appropriate terminal (saved in `LC__ORIGINALTERM`).
     #
     # The problem is quite similar for LANG and LC_MESSAGES. We reset
