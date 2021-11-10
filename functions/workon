@@ -77,6 +77,7 @@ EOF
     docker container run -t -i \
            $([[ -d /usr/share/zsh ]] && print -- -v /usr/share/zsh:/usr/share/zsh-static:ro) \
            $([[ -x ${SHELL}-static ]] && print -- -v ${SHELL}-static:${SHELL}-static:ro) \
+           $([[ -d ~/.terminfo ]] && print -- -v $HOME/.terminfo:${HOME}/.terminfo:ro) \
            -v ${ZDOTDIR:-$HOME}/.zshrc:$HOME/.zshrc:ro \
            -v ${ZSH}:$HOME/.zsh:ro \
            -v ${ZSH}/run:$HOME/.zsh/run:rw \
