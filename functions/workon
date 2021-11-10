@@ -38,8 +38,8 @@ shift
 [[ $env == "." ]] && env=${PWD:t}
 
 # Compile sudo if needed
-local sudo=$ZSH/run/u/$HOST-$UID/sudo
 function _vbe_compile_sudo() {
+    local sudo=$ZSH/run/u/$HOST-$UID/sudo
     if [[ ! -f $sudo ]] || (( $(zstat +mtime $ZSH/misc/sudo.c) > $(zstat +mtime $sudo) )); then
         if (( $+commands[gcc] )); then
             gcc -Wall -static $ZSH/misc/sudo.c -o $sudo
@@ -65,13 +65,13 @@ chmod 1777 /tmp
 echo $(getent passwd $(id -u)) >> /etc/passwd
 echo $(getent group $(id -g)) >> /etc/group
 mkdir -p /usr/bin
-cp $sudo /usr/bin/sudo
+cp $HOME/.zsh/run/u/$HOST-$UID/sudo /usr/bin/sudo
 chown 0:$(id -gn) /usr/bin/sudo
 chmod 4750 /usr/bin/sudo
 chown $(id -u):$(id -g) $HOME
 [ ! -f /etc/nsswitch.conf ] || sed -i 's/ sss//' /etc/nsswitch.conf
 exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHELL=\$SHELL SHLVL= \
-     $sudo -u $(id -u) -g $(id -g) -c '$PWD' \$SHELL -i -l
+     /usr/bin/sudo -u $(id -u) -g $(id -g) -c '$PWD' \$SHELL -i -l
 EOF
     (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -
     docker container run -t -i \
@@ -176,7 +176,7 @@ for f in passwd group; do
 done
 echo $(getent passwd $(id -u)) >> /etc/passwd
 echo $(getent group $(id -g)) >> /etc/group
-cp $sudo \$tmp/sudo
+cp $ZSH/run/u/$HOST-$UID/sudo \$tmp/sudo
 mkdir -p /usr/bin /bin
 [ -f /usr/bin/sudo ] || touch /usr/bin/sudo
 chown 0:$(id -gn) \$tmp/sudo
@@ -200,8 +200,8 @@ for SHELL in $commands[zsh-static] $SHELL /bin/bash /bin/sh; do
 done
 
 ${(pj:\n:)environ}
-exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
-   $sudo -u $(id -u) -g $(id -g) -c \$PWD \$SHELL -i -l
+exec env ZSH=$ZSH ZDOTDIR=$ZDOTDIR HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
+   /usr/bin/sudo -u $(id -u) -g $(id -g) -c \$PWD \$SHELL -i -l
 "
     return
 }
