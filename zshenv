@@ -25,6 +25,7 @@ fi
             /usr/local/sbin
             /usr/local/bin
             /var/lib/flatpak/exports/bin
+            /snap/bin
             /usr/cumulus/bin
             /usr/sbin
             /usr/bin
