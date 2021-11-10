@@ -40,10 +40,13 @@ shift
 # Compile sudo if needed
 local sudo=$ZSH/run/u/$HOST-$UID/sudo
 function compile_sudo() {
-    if [[ ! -f $sudo ]] || \
-           (( $(zstat +mtime $ZSH/misc/sudo.c) > $(zstat +mtime $sudo) )) && \
-               (( $+commands[gcc] )) ; then
-        gcc -Wall -static $ZSH/misc/sudo.c -o $sudo
+    if [[ ! -f $sudo ]] || (( $(zstat +mtime $ZSH/misc/sudo.c) > $(zstat +mtime $sudo) )); then
+        if (( $+commands[gcc] )); then
+            gcc -Wall -static $ZSH/misc/sudo.c -o $sudo
+        elif (( $+commands[docker] )); then
+            docker run --user=$UID:$GID --interactive --rm --volume=${sudo:h}:${sudo:h} gcc \
+                   gcc -Wall -static -x c - -o $sudo < $ZSH/misc/sudo.c
+        fi
     fi
 }
 
