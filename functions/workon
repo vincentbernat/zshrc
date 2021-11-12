@@ -200,7 +200,7 @@ for SHELL in $commands[zsh-static] $SHELL /bin/bash /bin/sh; do
 done
 
 ${(pj:\n:)environ}
-exec env ZSH=$ZSH ZDOTDIR=$ZDOTDIR HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
+exec env ZSH=$ZSH ${ZDOTDIR+ZDOTDIR=$ZDOTDIR} HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHLVL= \
    /usr/bin/sudo -u $(id -u) -g $(id -g) -c \$PWD \$SHELL -i -l
 "
     return
