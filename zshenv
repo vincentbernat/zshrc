@@ -75,7 +75,7 @@ fi
 }
 
 [[ -z $IN_NIX_SHELL ]] || {
-    export FONTCONFIG_FILE=$(nix eval --raw nixpkgs.fontconfig.out.outPath)/etc/fonts/fonts.conf
+    export FONTCONFIG_FILE=$(nix eval --raw -f '<nixpkgs>' fontconfig.out.outPath)/etc/fonts/fonts.conf
 }
 
 [[ -d $HOME/src ]] && export GOPATH=$HOME/src/gocode
