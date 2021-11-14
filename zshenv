@@ -80,5 +80,5 @@ fi
 
 [[ -d $HOME/src ]] && export GOPATH=$HOME/src/gocode
 
-[[ $TERM_PROGRAM == "tmux" ]] && unset TERM_PROGRAM TERM_PROGRAM_VERSION
+unset TERM_PROGRAM TERM_PROGRAM_VERSION
 unset MAILCHECK
