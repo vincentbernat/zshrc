@@ -123,17 +123,28 @@ alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 
 mkcd() { command mkdir -p -- $1 && cd -- $1 }
 
-# Wrapper like nix-shell
-#
-# Examples:
-#  nix-zsh -p python2 glibcLocales
-#  nix-zsh -I nixgl=https://github.com/guibou/nixGL/archive/master.tar.gz -p '(import <nixgl>{}).nixGLIntel' alacritty
-#  nix-zsh -p 'python3.withPackages(ps: with ps; [ ipython pulsectl ])'
-#
-# To get older versions of a package:
-#  https://lazamar.co.uk/nix-versions/
-(( $+commands[nix-shell] )) && nix-zsh() {
-        nix-shell --command zsh "$@"
+# Make nix-shell use zsh
+# Source: https://ianthehenry.com/posts/how-to-learn-nix/nix-zshell/
+(( $+commands[nix-shell] )) && nix-shell() {
+    local NIX_BUILD_SHELL="$(mktemp -t nix-build-shell-XXXXXXX)"
+    {
+        local bash=$(nix-build --no-out-link -E '(import <nixpkgs>{}).bashInteractive')
+        local zsh=$(nix-build --no-out-link -E '(import <nixpkgs>{}).zsh')
+        cat <<EOF > $NIX_BUILD_SHELL
+#!${bash}/bin/bash
+
+case \$#,"\$1" in
+  2,--rcfile) : ;;
+  *) >&2 echo "[!] Wrong invocation (\$@)" ; exit 1 ;;
+esac
+source "\$2"
+exec -a zsh ${zsh}/bin/zsh
+EOF
+        chmod +x $NIX_BUILD_SHELL
+        NIX_BUILD_SHELL=$NIX_BUILD_SHELL =nix-shell "$@"
+    } always {
+        rm -f $NIX_BUILD_SHELL
+    }
 }
 
 # Setting up less colors
