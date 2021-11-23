@@ -97,7 +97,7 @@ fi
 # ip aliases
 (( $+commands[ip] )) && {
   (( ${terminfo[colors]:-0} >= 8 )) && ip -color -human rule &> /dev/null && \
-      alias ip='ip -color=auto -human'
+      alias ip='ip -color -human'
   alias ip6='ip -6'
   alias ipr='ip -resolve'
   alias ip6r='ip -6 -resolve'
