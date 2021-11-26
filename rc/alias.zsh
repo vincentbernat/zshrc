@@ -2,7 +2,7 @@
 
 # Autoexpand some aliases
 typeset -ga _vbe_ealiases
-ealias() {
+abbrev-alias() {
     alias $1
     _vbe_ealiases+=(${1%%\=*})
 }
@@ -25,7 +25,7 @@ alias rm='rm -i'
 alias mv='mv -i'
 alias chown='chown -h'
 alias chgrp='chgrp -h'
-ealias tailf='tail -F'           # not shipped in util-linux anymore
+abbrev-alias tailf='tail -F'           # not shipped in util-linux anymore
 alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
 () {
   local dmesg_version=${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}
@@ -38,11 +38,11 @@ alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
 (( $+commands[gdb] )) && alias gdb='gdb -q'
 
 # Fix typos
-(( $+commands[git] )) && ealias gti=git
-(( $+commands[sudo] )) && ealias suod=sudo
+(( $+commands[git] )) && abbrev-alias gti=git
+(( $+commands[sudo] )) && abbrev-alias suod=sudo
 
 # ls
-ealias ll='ls -ltrhA'
+abbrev-alias ll='ls -ltrhA'
 if ls --color=auto --g -d . &>/dev/null; then
     # GNU ls
     if (( ${terminfo[colors]:-0} >= 8 )); then
@@ -74,8 +74,8 @@ fi
     if [[ -d /run/systemd/system ]]; then
         # systemd
         for cmd ($cmds) {
-            ealias $cmd="${(%):-%(#..sudo )}systemctl $cmd"
-            ealias u$cmd="systemctl --user $cmd"
+            abbrev-alias $cmd="${(%):-%(#..sudo )}systemctl $cmd"
+            abbrev-alias u$cmd="systemctl --user $cmd"
         }
     else
         # generic service
@@ -100,12 +100,12 @@ fi
 (( $+commands[ip] )) && {
   (( ${terminfo[colors]:-0} >= 8 )) && ip -color -human rule &> /dev/null && \
       alias ip='ip -color -human'
-  ealias ip6='ip -6'
-  ealias ipr='ip -resolve'
-  ealias ip6r='ip -6 -resolve'
-  ealias ipm='ip -resolve monitor'
-  ealias ipb='ip -brief'
-  ealias ip6b='ip -6 -brief'
+  abbrev-alias ip6='ip -6'
+  abbrev-alias ipr='ip -resolve'
+  abbrev-alias ip6r='ip -6 -resolve'
+  abbrev-alias ipm='ip -resolve monitor'
+  abbrev-alias ipb='ip -brief'
+  abbrev-alias ip6b='ip -6 -brief'
 }
 
 # Other simple aliases
@@ -117,7 +117,7 @@ fi
 (( $+commands[pip3] )) && alias pip3='PIP_REQUIRE_VIRTUALENV=true pip3 --disable-pip-version-check'
 (( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 4 ))'
 (( $+commands[ncal] )) && alias ncal='ncal -w'
-(( $+commands[mtr] )) && ealias mtrr='mtr -wzbe'
+(( $+commands[mtr] )) && abbrev-alias mtrr='mtr -wzbe'
 (( $+commands[ag] )) && (( $+commands[less] )) && alias ag='ag --pager="less -FRX"'
 (( $+commands[pass] )) && alias pass='PASSWORD_STORE_ENABLE_EXTENSIONS=true pass'
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
@@ -171,9 +171,9 @@ EOF
 
   # Declare aliases
   alias grep="command ${grep} ${colors}"
-  ealias rgrep="grep -r"
-  ealias egrep="grep -E"
-  ealias fgrep="grep -F"
+  abbrev-alias rgrep="grep -r"
+  abbrev-alias egrep="grep -E"
+  abbrev-alias fgrep="grep -F"
   # --color=auto doesn't work. See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=792135
   (( $+commands[zgrep] )) && alias zgrep="GREP=${grep} command zgrep ${colors}"
 }
