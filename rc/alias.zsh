@@ -1,13 +1,17 @@
 # -*- sh -*-
 
 # Autoexpand some aliases
-typeset -ga _vbe_autoexpand
+typeset -ga _vbe_ealiases
+ealias() {
+    alias $1
+    _vbe_ealiases+=(${1%%\=*})
+}
 _vbe_zle-autoexpand() {
-    local -a words; words=(${(z)LBUFFER})
-    (( $#words == 1 )) \
-        && (( ${#_vbe_autoexpand[(r)${words[1]}]} )) \
-        && zle _expand_alias
-    zle self-insert
+    if [[ $LBUFFER =~ "\<(${(j:|:)_vbe_ealiases})\$" ]]; then
+        zle _expand_alias
+        zle expand-word
+    fi
+    zle magic-space
 }
 zle -N _vbe_zle-autoexpand
 bindkey -M emacs " " _vbe_zle-autoexpand
@@ -21,9 +25,8 @@ alias rm='rm -i'
 alias mv='mv -i'
 alias chown='chown -h'
 alias chgrp='chgrp -h'
-alias tailf='tail -F'           # not shipped in util-linux anymore
+ealias tailf='tail -F'           # not shipped in util-linux anymore
 alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
-_vbe_autoexpand+=(ll tailf)
 () {
   local dmesg_version=${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}
   if is-at-least 2.23 $dmesg_version; then
@@ -35,11 +38,11 @@ _vbe_autoexpand+=(ll tailf)
 (( $+commands[gdb] )) && alias gdb='gdb -q'
 
 # Fix typos
-(( $+commands[git] )) && alias gti=git && _vbe_autoexpand+=(gti)
-(( $+commands[sudo] )) && alias suod=sudo && _vbe_autoexpand+=(sudo)
+(( $+commands[git] )) && ealias gti=git
+(( $+commands[sudo] )) && ealias suod=sudo
 
 # ls
-alias ll='ls -ltrhA'
+ealias ll='ls -ltrhA'
 if ls --color=auto --g -d . &>/dev/null; then
     # GNU ls
     if (( ${terminfo[colors]:-0} >= 8 )); then
@@ -71,9 +74,8 @@ fi
     if [[ -d /run/systemd/system ]]; then
         # systemd
         for cmd ($cmds) {
-            alias $cmd="${(%):-%(#..sudo )}systemctl $cmd"
-            alias u$cmd="systemctl --user $cmd"
-            _vbe_autoexpand+=($cmd u$cmd)
+            ealias $cmd="${(%):-%(#..sudo )}systemctl $cmd"
+            ealias u$cmd="systemctl --user $cmd"
         }
     else
         # generic service
@@ -98,13 +100,12 @@ fi
 (( $+commands[ip] )) && {
   (( ${terminfo[colors]:-0} >= 8 )) && ip -color -human rule &> /dev/null && \
       alias ip='ip -color -human'
-  alias ip6='ip -6'
-  alias ipr='ip -resolve'
-  alias ip6r='ip -6 -resolve'
-  alias ipm='ip -resolve monitor'
-  alias ipb='ip -brief'
-  alias ip6b='ip -6 -brief'
-  _vbe_autoexpand+=(ip6 ipr ip6r ipm ipb ip6b)
+  ealias ip6='ip -6'
+  ealias ipr='ip -resolve'
+  ealias ip6r='ip -6 -resolve'
+  ealias ipm='ip -resolve monitor'
+  ealias ipb='ip -brief'
+  ealias ip6b='ip -6 -brief'
 }
 
 # Other simple aliases
@@ -116,7 +117,7 @@ fi
 (( $+commands[pip3] )) && alias pip3='PIP_REQUIRE_VIRTUALENV=true pip3 --disable-pip-version-check'
 (( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 4 ))'
 (( $+commands[ncal] )) && alias ncal='ncal -w'
-(( $+commands[mtr] )) && alias mtrr='mtr -wzbe' && _vbe_autoexpand+=(mtrr)
+(( $+commands[mtr] )) && ealias mtrr='mtr -wzbe'
 (( $+commands[ag] )) && (( $+commands[less] )) && alias ag='ag --pager="less -FRX"'
 (( $+commands[pass] )) && alias pass='PASSWORD_STORE_ENABLE_EXTENSIONS=true pass'
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
@@ -170,10 +171,9 @@ EOF
 
   # Declare aliases
   alias grep="command ${grep} ${colors}"
-  alias rgrep="grep -r"
-  alias egrep="grep -E"
-  alias fgrep="grep -F"
-  _vbe_autoexpand+=(rgrep egrep fgrep)
+  ealias rgrep="grep -r"
+  ealias egrep="grep -E"
+  ealias fgrep="grep -F"
   # --color=auto doesn't work. See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=792135
   (( $+commands[zgrep] )) && alias zgrep="GREP=${grep} command zgrep ${colors}"
 }
