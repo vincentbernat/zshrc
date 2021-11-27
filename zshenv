@@ -74,9 +74,8 @@ fi
     export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
 }
 
-[[ -z $IN_NIX_SHELL ]] || {
+[[ -n $IN_NIX_SHELL ]] && [[ $IN_NIX_SHELL != pure ]] && \
     export FONTCONFIG_FILE=$(nix eval --raw -f '<nixpkgs>' fontconfig.out.outPath)/etc/fonts/fonts.conf
-}
 
 [[ -d $HOME/src ]] && export GOPATH=$HOME/src/gocode
 
