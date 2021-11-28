@@ -37,7 +37,7 @@ fi
     path=()
     # First, put paths from savedpaths not in the wanted list
     for p in $savedpath; do
-	[[ $p == /tmp ]] \
+	(( 0 )) \
             || (( ${${wanted[(r)$p]}:+1} )) \
             || (( ${${wanted[(r)${p:A}]}:+1} )) \
             || (( ${${path[(r)${p}]}:+1} )) \

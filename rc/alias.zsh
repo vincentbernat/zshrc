@@ -127,25 +127,20 @@ mkcd() { command mkdir -p -- $1 && cd -- $1 }
 # Make nix-shell use zsh
 # Source: https://ianthehenry.com/posts/how-to-learn-nix/nix-zshell/
 (( $+commands[nix-shell] )) && nix-shell() {
-    local NIX_BUILD_SHELL="$(mktemp -t nix-build-shell-XXXXXXX)"
-    {
-        local bash=$(nix-build --no-out-link -E '(import <nixpkgs>{}).bashInteractive')
-        local zsh=$(nix-build --no-out-link -E '(import <nixpkgs>{}).zsh')
-        cat <<EOF > $NIX_BUILD_SHELL
-#!${bash}/bin/bash
-
-case \$#,"\$1" in
+  local wrapper
+  read -d '' wrapper <<"EOF"
+with import <nixpkgs> {};
+writeShellScriptBin "_nix-shell-wrap" ''
+case $#,"$1" in
   2,--rcfile) : ;;
-  *) >&2 echo "[!] Wrong invocation (\$@)" ; exit 1 ;;
+  *) >&2 echo "[!] Wrong invocation ($@)" ; exit 1 ;;
 esac
-source "\$2"
+source "$2"
 exec -a zsh ${zsh}/bin/zsh
+''
 EOF
-        chmod +x $NIX_BUILD_SHELL
-        NIX_BUILD_SHELL=$NIX_BUILD_SHELL =nix-shell "$@"
-    } always {
-        rm -f $NIX_BUILD_SHELL
-    }
+  local nix_build_shell=$(nix-store --no-gc-warning -r $(nix-instantiate --no-gc-warning -E $wrapper))
+  NIX_BUILD_SHELL=${nix_build_shell}/bin/_nix-shell-wrap =nix-shell "$@"
 }
 
 # Setting up less colors
