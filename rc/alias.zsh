@@ -441,6 +441,8 @@ function clean() {
         sudo apt clean
     [[ -d /var/cache/pbuilder/aptcache ]] && prompt "pbuilder APT cache" && \
         sudo find /var/cache/pbuilder/aptcache -type f -delete
+    ()(($#)) /var/cache/pbuilder/build/cow*(N/) && prompt "pbuilder old build" && \
+        sudo rm -rf --one-file-system /var/cache/pbuilder/build/cow*
     (( $+commands[docker] )) && prompt "Docker related stuff" && \
         sudo docker system prune -f
     [[ -d /nix ]] && prompt "nix store" && \
