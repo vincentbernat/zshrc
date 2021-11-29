@@ -7,7 +7,8 @@ abbrev-alias() {
     _vbe_ealiases+=(${1%%\=*})
 }
 _vbe_zle-autoexpand() {
-    if (( ${#_vbe_ealiases[(r)${${(Az)LBUFFER}[-1]}]} )); then
+    local -a words; words=(${(z)LBUFFER})
+    if (( ${#_vbe_ealiases[(r)${words[-1]}]} )); then
         zle _expand_alias
         zle expand-word
     fi
