@@ -10,7 +10,6 @@ _vbe_zle-autoexpand() {
     local -a words; words=(${(z)LBUFFER})
     if (( ${#_vbe_ealiases[(r)${words[-1]}]} )); then
         zle _expand_alias
-        zle expand-word
     fi
     zle magic-space
 }
