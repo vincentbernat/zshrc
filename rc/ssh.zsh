@@ -79,8 +79,8 @@ ssh() {
         _vbe_sshpass "$@"
     }
     (( $+functions[compdef] )) && {
-        compdef _ssh pssh=ssh
-        compdef _ssh pscp=scp
+        compdef pssh=ssh
+        compdef pscp=scp
     }
 }
 
@@ -192,7 +192,7 @@ zssh() {
         ssh $common_ssh_args -t "$@" ${execzsh}
     fi
 }
-(( $+functions[compdef] )) && compdef _ssh zssh=ssh
+(( $+functions[compdef] )) && compdef zssh=ssh
 
 # Connect with agent-forwarding enabled but using a locked-down SSH
 # agent. This assumes the key used to connect to the server will be
