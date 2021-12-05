@@ -120,6 +120,7 @@ fi
 (( $+commands[mtr] )) && abbrev-alias mtrr='mtr -wzbe'
 (( $+commands[ag] )) && (( $+commands[less] )) && alias ag='ag --pager="less -FRX"'
 (( $+commands[pass] )) && alias pass='PASSWORD_STORE_ENABLE_EXTENSIONS=true pass'
+(( $+commands[dig] )) && alias dig='dig +noall +answer'
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 
 mkcd() { command mkdir -p -- $1 && cd -- $1 }
