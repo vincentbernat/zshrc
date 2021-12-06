@@ -44,16 +44,13 @@ _vbe_title_preexec () {
             %*)
 	        cmd=(${(z)jobtexts[${cmd[1]#%}]})
 	        ;;
-	    *)
-                case $cmd[1] in
-                    less|more|v|e|vi|vim|emacs)
-                        # Display filename
-                        title=${${${(R)cmd:#-*}[2]}:t}
-                        ;;
-                    *)
-                        title=$cmd[1]:t
-	                ;;
-                esac
+            less|more|v|e|vi|vim|emacs)
+                # Display filename
+                title=${${${(R)cmd:#-*}[2]}:t}
+                [[ -z $title ]] && title=$cmd[1]
+                ;;
+            *)
+                title=$cmd[1]:t
                 ;;
         esac
     done
