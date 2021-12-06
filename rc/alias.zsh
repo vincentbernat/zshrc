@@ -133,11 +133,15 @@ mkcd() { command mkdir -p -- $1 && cd -- $1 }
 with import <nixpkgs> {};
 writeShellScriptBin "_nix-shell-wrap" ''
 case $#,"$1" in
-  2,--rcfile) : ;;
-  *) >&2 echo "[!] Wrong invocation ($@)" ; exit 1 ;;
+  2,--rcfile)
+    source "$2"
+    exec -a zsh ${zsh}/bin/zsh
+  ;;
+  1,*)
+    source "$1"
+    exit $?
+    ;;
 esac
-source "$2"
-exec -a zsh ${zsh}/bin/zsh
 ''
 EOF
   local nix_build_shell=$(nix-store --no-gc-warning -r $(nix-instantiate --no-gc-warning -E $wrapper))
