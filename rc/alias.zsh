@@ -135,7 +135,8 @@ writeShellScriptBin "_nix-shell-wrap" ''
 case $#,"$1" in
   2,--rcfile)
     source "$2"
-    exec -a zsh ${zsh}/bin/zsh
+    SHELL=${zsh}/bin/zsh
+    exec -a zsh $SHELL
   ;;
   1,*)
     source "$1"
