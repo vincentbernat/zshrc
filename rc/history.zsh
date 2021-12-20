@@ -10,15 +10,15 @@ setopt hist_ignore_space        # don't store commands starting with a space
     local hashed=${"$(print Ahyeigh4yo $domain | ${commands[sha256sum]:-$commands[sha256]} 2> /dev/null)"[1,16]}
     case $hashed in
         49e78cdf67755528)
-            HISTFILE=~/.zsh_history
+            typeset -g HISTFILE=~/.zsh_history
             if [[ -O $ZSH/run/u/$HOST-$UID/history ]]; then
                 fc -R $ZSH/run/u/$HOST-$UID/history
                 fc -A
                 rm -f $ZSH/run/u/$HOST-$UID/history
             fi
             ;;
-        12e640a29535f352) HISTFILE=~/.zhistory ;;
-        *) HISTFILE=$ZSH/run/u/$HOST-$UID/history ;;
+        12e640a29535f352) typeset -g HISTFILE=~/.zhistory ;;
+        *) typeset -g HISTFILE=$ZSH/run/u/$HOST-$UID/history ;;
     esac
 }
 HISTSIZE=30000

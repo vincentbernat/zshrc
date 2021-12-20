@@ -3,6 +3,7 @@
 # _vbe_prompt_compact: whetever to use compact prompt
 # _vbe_cmd_elapsed: elapsed time to be displayed in prompt
 # _vbe_cmd_timestamp: timestamp to compute elapsed time for a command
+# _vbe_prompt_current_bg: current background when building prompt
 
 _vbe_prompt_precmd () {
     # Switch back to regular character set: https://www.in-ulm.de/~mascheck/various/alternate_charset/#solution
@@ -11,11 +12,11 @@ _vbe_prompt_precmd () {
     _vbe_title "${SSH_TTY+${(%):-%M}:}${(%):-%20<..<%~}"
     # Support to compute elapsed time
     local now=$EPOCHSECONDS
-    _vbe_cmd_elapsed=$(($now - ${_vbe_cmd_timestamp:-$now}))
+    typeset -g _vbe_cmd_elapsed=$(($now - ${_vbe_cmd_timestamp:-$now}))
     unset _vbe_cmd_timestamp
 }
 _vbe_prompt_preexec () {
-    _vbe_cmd_timestamp=${_vbe_cmd_timestamp:-$EPOCHSECONDS}
+    typeset -g _vbe_cmd_timestamp=${_vbe_cmd_timestamp:-$EPOCHSECONDS}
 }
 add-zsh-hook precmd _vbe_prompt_precmd
 add-zsh-hook preexec _vbe_prompt_preexec
@@ -77,22 +78,22 @@ _vbe_prompt_segment() {
   [[ -n $1 ]] && b="%K{$1}" || b="%k"
   [[ -n $2 ]] && f="%F{$2}" || f="%f"
   [[ -n $3 ]] || return
-  if [[ -n $CURRENT_BG && $1 != $CURRENT_BG ]]; then
-      print -n " %b$b%F{$CURRENT_BG}${PRCH[end]}$f "
-  elif [[ $1 == $CURRENT_BG ]]; then
+  if [[ -n $_vbe_prompt_current_bg && $1 != $_vbe_prompt_current_bg ]]; then
+      print -n " %b$b%F{$_vbe_prompt_current_bg}${PRCH[end]}$f "
+  elif [[ $1 == $_vbe_prompt_current_bg ]]; then
       print -n " %b$b$f${PRCH[sep]} "
   else
       print -n "%b$b$f "
   fi
-  CURRENT_BG=$1
+  typeset -g _vbe_prompt_current_bg=$1
   print -n ${3# *}
 }
 _vbe_prompt_end() {
-  if [[ -n $CURRENT_BG ]]; then
-    print -n " %b%k%F{$CURRENT_BG}${PRCH[end]}"
+  if [[ -n $_vbe_prompt_current_bg ]]; then
+    print -n " %b%k%F{$_vbe_prompt_current_bg}${PRCH[end]}"
   fi
   print -n "%b%k%f"
-  unset CURRENT_BG
+  unset _vbe_prompt_current_bg
 }
 
 _vbe_prompt () {
@@ -175,17 +176,18 @@ _vbe_prompt () {
 }
 _vbe_setprompt () {
     setopt prompt_subst
-    PS1='$(_vbe_prompt) '
-    PS2="$(_vbe_prompt_segment cyan default " "; _vbe_prompt_end) "
-    PS3="$(_vbe_prompt_segment cyan default "?"; _vbe_prompt_end) "
-    PS4="$(_vbe_prompt_segment white black "%N"; _vbe_prompt_segment blue default "%i"; _vbe_prompt_end) "
-    PROMPT_EOL_MARK="%B${PRCH[eol]}%b"
+    typeset -g PS1='$(_vbe_prompt) '
+    typeset -g PS2="$(_vbe_prompt_segment cyan default " "; _vbe_prompt_end) "
+    typeset -g PS3="$(_vbe_prompt_segment cyan default "?"; _vbe_prompt_end) "
+    typeset -g PS4="$(_vbe_prompt_segment white black "%N"; _vbe_prompt_segment blue default "%i"; _vbe_prompt_end) "
+    typeset -g PROMPT_EOL_MARK="%B${PRCH[eol]}%b"
     unset RPS1
     unset RPS2
 }
 
 # Collect additional information from functions matching _vbe_add_prompt_*
 _vbe_add_prompt () {
+    local f
     for f in ${(M)${(k)functions}:#_vbe_add_prompt_*}; do
 	$f
     done
@@ -254,7 +256,7 @@ esac
 }
 
 # In virtualenv (can happen when shell is sourced)
-VIRTUAL_ENV_DISABLE_PROMPT=1
+typeset -g VIRTUAL_ENV_DISABLE_PROMPT=1
 _vbe_add_prompt_virtualenv () {
     _vbe_prompt_env $PRCH[python] '${${VIRTUAL_ENV%/.venv}##*/}'
 }

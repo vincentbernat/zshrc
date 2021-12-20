@@ -612,7 +612,7 @@ colortest() {
 
 # Virtualenv related functions
 # Simplified version of virtualenvwrapper.
-WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
+typeset -g WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
 _virtualenv () {
     local interpreter
     local venv

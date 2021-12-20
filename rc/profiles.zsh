@@ -53,7 +53,7 @@ function chpwd_profiles() {
     return 0
 }
 
-chpwd_functions=(${chpwd_functions} chpwd_profiles)
+typeset -g chpwd_functions=(${chpwd_functions} chpwd_profiles)
 
 # Init
 chpwd_profiles

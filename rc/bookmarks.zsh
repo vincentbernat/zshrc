@@ -10,13 +10,14 @@
 # into `~-` by ZLE.
 
 () {
-    MARKPATH=$ZSH/run/marks
+    typeset -g MARKPATH=$ZSH/run/marks
 
     # Add some static entries
     hash -d log=/var/log
     hash -d doc=/usr/share/doc
 
     # Populate the hash
+    local link
     for link ($MARKPATH/*(-N/)) {
         hash -d -- -${link:t}=${link:A}
     }
