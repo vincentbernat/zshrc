@@ -9,15 +9,6 @@ _vbe_title () {
     #  set -g  set-titles-string "#T"
     print -n "\e]0;$1\a"
 }
-if [[ ! -x $ZSH/run/u/$HOST-$UID/title ]] || \
-       (( $(zstat +mtime $ZSH/run/u/$HOST-$UID/title) < $(zstat +mtime $0) )); then
-    cat <<EOF > $ZSH/run/u/$HOST-$UID/title
-#!/bin/zsh
-$(which _vbe_title)
-_vbe_title "\$@"
-EOF
-    chmod +x $ZSH/run/u/$HOST-$UID/title
-fi
 
 # Current running program as title
 _vbe_title_preexec () {

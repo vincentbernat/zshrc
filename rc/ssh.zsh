@@ -1,14 +1,15 @@
 # -*- sh -*-
 
 _vbe_ssh_command() {
-    # Modify the title of the current by using LocalCommand option. An
-    # alternative would be to use "ssh -G $@", but there is no way to
-    # get the original hostname from this. "ssh -F none -G $@" could
-    # work but "$@" could contain "-F something".
     local -a cmd
-    cmd=(${1:-ssh}
-         -o PermitLocalCommand=yes
-         -o LocalCommand="$ZSH/run/u/$HOST-$UID/title ${PRCH[remote]}%n")
+    cmd=($1)
+    shift
+
+    # We assume we have an OpenSSH client with this patch:
+    #  https://bugzilla.mindrot.org/attachment.cgi?id=3547
+    local remote=${${=${(M)${:-"${(@f)$(command ssh -G "$@")}"}:#(host|hostname) *}[1]}[-1]}
+    [[ -n $remote ]] &&
+        _vbe_title ${PRCH[remote]}${remote}
 
     # TERM is one of the variables that is usually allowed to be
     # transmitted to the remote session. The remote host should have
@@ -39,28 +40,25 @@ _vbe_ssh_command() {
     # host, the locale is reset with the help of
     # `$ZSH/rc/01-locale.zsh`.
     case "$TERM" in
-	*-*)
-            cmd=(LC__ORIGINALTERM=$TERM TERM=${TERM%%-*}
-                 $cmd)
-	    ;;
+	*-*) cmd=(LC__ORIGINALTERM=$TERM TERM=${TERM%%-*} $cmd) ;;
     esac
-    cmd=(env LANG=C LC_MESSAGES=C
-         $cmd)
+    cmd=(env LANG=C LC_MESSAGES=C $cmd "$@")
 
     # Return array in reply
     : ${(A)reply::="${cmd[@]}"}
 }
 
 ssh() {
-    _vbe_ssh_command
-    $reply "$@"
+    _vbe_ssh_command ssh "$@"
+    $reply
 }
 
 (( $+commands[sshpass] )) && [[ -f $ZSH/local/ssh2passname ]] && () {
     # Connect with a password
     local _vbe_sshpass() {
+        local cmd=$1 ; shift
         local passname
-        local login=$(ssh -G "$@" | sed -nE 's/^(hostname|user) //p' | paste -sd '@')
+        local login=$(command ssh -G "$@" | sed -nE 's/^(hostname|user) //p' | paste -sd '@')
         [[ -n $login ]] || return 2
         . $ZSH/local/ssh2passname
         [[ -n $passname ]] || {
@@ -68,15 +66,14 @@ ssh() {
             return 1
         }
         print -u2 "[*] Using password entry $passname for $login"
-        sshpass -f<(pass show $passname) $reply "$@"
+        _vbe_ssh_command $cmd "$@"
+        sshpass -f<(pass show $passname) $reply
     }
     pssh() {
-        _vbe_ssh_command
-        _vbe_sshpass "$@"
+        _vbe_sshpass ssh "$@"
     }
     pscp() {
-        _vbe_ssh_command scp
-        _vbe_sshpass "$@"
+        _vbe_sshpass scp "$@"
     }
     (( $+functions[compdef] )) && {
         compdef pssh=ssh
@@ -93,7 +90,7 @@ zssh() {
     local -A state
     local -a common_ssh_args
     local current=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
-    ! ssh -G "$@" | grep -q '^controlpath ' && \
+    ! command ssh -G "$@" | grep -q '^controlpath ' && \
         common_ssh_args=(-o ControlPath="$ZSH/run/%r@%h:%p")
 
     # Probe to run on remote host to check the situation.
@@ -122,7 +119,7 @@ zssh() {
     (( $#@ )) || return 1
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
     eval $(command ssh -n \
-                   $(ssh -G "$@" | grep -Fxq 'controlpersist no' && print -- -o ControlPersist=5s) \
+                   $(command ssh -G "$@" | grep -Fxq 'controlpersist no' && print -- -o ControlPersist=5s) \
                    -o ControlMaster=auto \
                    -o PermitLocalCommand=yes \
                    -o LocalCommand="/bin/echo 'state[hostname]=%n'" \
