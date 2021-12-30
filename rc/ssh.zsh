@@ -1,8 +1,10 @@
 # -*- sh -*-
 
 _vbe_ssh_command() {
+    # Provide ssh command to use as a reply instead of the provided
+    # command (ssh/scp included as first argument).
     local -a cmd
-    cmd=($1)
+    cmd=($commands[$1])
     shift
 
     # We assume we have an OpenSSH client with this patch:
@@ -62,7 +64,7 @@ ssh() {
         login=$(command ssh -G "$@" | sed -nE "s/^(${directive}|user) //p" | paste -sd '@')
         [[ -n $login ]] || return 2
         . $ZSH/local/ssh2passname
-        [[ -n $passname ]]
+        [[ -n $passname ]] || return 2
     }
     local _vbe_sshpass() {
         local cmd=$1 ; shift
@@ -195,8 +197,3 @@ zssh() {
     fi
 }
 (( $+functions[compdef] )) && compdef zssh=ssh
-
-# Connect with agent-forwarding enabled but using a locked-down SSH
-# agent. This assumes the key used to connect to the server will be
-# the only one needed.
-alias assh="ssh-agent ssh -o AddKeysToAgent=confirm -o ForwardAgent=yes"
