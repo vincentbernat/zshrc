@@ -57,18 +57,21 @@ ssh() {
 
 (( $+commands[sshpass] )) && [[ -f $ZSH/local/ssh2passname ]] && () {
     # Connect with a password
-    local passname
-    local login
-    local _vbe_sshpassname() {
-        local directive=$1 ; shift
-        login=$(command ssh -G "$@" | sed -nE "s/^(${directive}|user) //p" | paste -sd '@')
-        [[ -n $login ]] || return 2
-        . $ZSH/local/ssh2passname
-        [[ -n $passname ]] || return 2
-    }
     local _vbe_sshpass() {
         local cmd=$1 ; shift
-        _vbe_sshpassname "host" "$@" || _vbe_sshpassname "hostname" "$@" || {
+        local passname
+        local login
+        local directive
+        for directive in host{name,}; do
+            login=$(command ssh -G "$@" \
+                        | awk '($1 == "user") { user=$2 }
+                               ($1 == "'$directive'") { directive=$2 }
+                               END { print user "@" directive }')
+            [[ -n $login ]] || continue
+            passname=$(source $ZSH/local/ssh2passname $login)
+            [[ -z $passname ]] || break
+        done
+        [[ -n $passname ]] || {
             print -u2 "[!] No password entry found for $login!"
             return 1
         }
