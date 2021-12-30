@@ -67,7 +67,6 @@ ssh() {
                         | awk '($1 == "user") { user=$2 }
                                ($1 == "'$directive'") { directive=$2 }
                                END { print user "@" directive }')
-            [[ -n $login ]] || continue
             passname=$(source $ZSH/local/ssh2passname $login)
             [[ -z $passname ]] || break
         done
