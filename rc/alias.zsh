@@ -456,7 +456,7 @@ function clean() {
 update() {
     (( $+commands[apt] )) && sudo apt update && apt list --upgradable && sudo apt upgrade
     (( $+commands[flatpak] )) && flatpak update && flatpak uninstall --unused
-    (( $+commands[nix-channel] )) && nix-channel --update
+    (( $+commands[nix] )) && [[ -f ~/.config/nixpkgs/flake.nix ]] && nix flake lock ~/.config/nixpkgs
     (( $+commands[home-manager] )) && home-manager switch
 }
 
