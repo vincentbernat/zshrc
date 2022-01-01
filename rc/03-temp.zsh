@@ -1,7 +1,8 @@
 # -*- sh -*-
 
 [[ -n $IN_NIX_SHELL ]] && () {
-    # Nix configure temporary directory to /run/user/$UID. Why?
+    # nix-shell configure temporary directory to /run/user/$UID. Why?
+    # (this is not the case for "nix shell")
     local v
     for v in TMP TMPDIR TEMP TEMPDIR; do
         [[ ${(P)v} = "/run/user/$UID" ]] && \
