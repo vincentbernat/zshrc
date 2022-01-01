@@ -452,6 +452,14 @@ function clean() {
         sudo journalctl --vacuum-time='2 months'
 }
 
+# Update various things
+update() {
+    (( $+commands[apt] )) && sudo apt update && apt list --upgradable && sudo apt upgrade
+    (( $+commands[flatpak] )) && flatpak update && flatpak uninstall --unused
+    (( $+commands[nix-channel] )) && nix-channel --update
+    (( $+commands[home-manager] )) && home-manager switch
+}
+
 # Display a color testcard
 # From: http://tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html
 colortest() {
