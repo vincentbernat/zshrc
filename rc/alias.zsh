@@ -125,30 +125,6 @@ alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 
 mkcd() { command mkdir -p -- $1 && cd -- $1 }
 
-# Make nix-shell use zsh
-# Source: https://ianthehenry.com/posts/how-to-learn-nix/nix-zshell/
-(( $+commands[nix-shell] )) && nix-shell() {
-  local wrapper
-  read -d '' wrapper <<"EOF"
-with import <nixpkgs> {};
-writeShellScriptBin "_nix-shell-wrap" ''
-case $#,"$1" in
-  2,--rcfile)
-    source "$2"
-    SHELL=${zsh}/bin/zsh
-    exec -a zsh $SHELL
-  ;;
-  1,*)
-    source "$1"
-    exit $?
-    ;;
-esac
-''
-EOF
-  local nix_build_shell=$(nix-store --no-gc-warning -r $(nix-instantiate --no-gc-warning -E $wrapper))
-  NIX_BUILD_SHELL=${nix_build_shell}/bin/_nix-shell-wrap command nix-shell "$@"
-}
-
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
   export LESS_TERMCAP_mb=$'\E[1;31m'
