@@ -434,6 +434,7 @@ update() {
         && ! apt-get -s upgrade | grep -q '^0 upgraded,' && sudo apt upgrade
     (( $+commands[flatpak] )) && flatpak update && flatpak uninstall --unused
     (( $+commands[nix-channel] )) && [[ -s ~/.nix-channels ]] && nix-channel --update
+    (( $+commands[nix] )) && nix registry pin nixpkgs
     (( $+commands[nix] )) && [[ -f ~/.config/nixpkgs/flake.nix ]] && nix flake lock ~/.config/nixpkgs
     (( $+commands[home-manager] )) && home-manager switch
 }
