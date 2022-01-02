@@ -4,7 +4,7 @@ if [ -z "$ZSH_VERSION" ]; then
     unset LC_ALL
     eval export $(zsh -c \
                   "typeset PATH
-                   typeset NIX_PATH NIX_PROFILES NIX_SSL_CERT_FILE LOCALE_ARCHIVE
+                   typeset NIX_PROFILES NIX_SSL_CERT_FILE LOCALE_ARCHIVE
                    typeset FONTCONFIG_FILE GOPATH XDG_DATA_DIRS
                    typeset LC_ALL $(locale 2> /dev/null | sed 's/=.*//' | tr '\n' ' ')
                   ")
@@ -56,14 +56,8 @@ fi
     export PATH
 }
 
-# Compute NIX_PATH with deduplication
 () {
     [[ $IN_NIX_SHELL == pure ]] && return
-    [[ ! -d $HOME/.nix-defexpr/channels ]] && return
-
-    local -aU nix_path
-    nix_path=(${(ps.:.)NIX_PATH} ~/.nix-defexpr/channels)
-    export NIX_PATH=${(pj.:.)nix_path}
 
     local -aU xdg_data_dirs
     xdg_data_dirs=( ~/.nix-profile/share ${(ps.:.)XDG_DATA_DIRS})
@@ -75,7 +69,7 @@ fi
 }
 
 [[ -n $IN_NIX_SHELL ]] && [[ $IN_NIX_SHELL != pure ]] && \
-    export FONTCONFIG_FILE=$(nix eval --raw -f '<nixpkgs>' fontconfig.out.outPath)/etc/fonts/fonts.conf
+    export FONTCONFIG_FILE=$(nix eval --raw nixpkgs'#'fontconfig.out.outPath)/etc/fonts/fonts.conf
 
 [[ -d $HOME/src ]] && export GOPATH=$HOME/src/gocode
 
