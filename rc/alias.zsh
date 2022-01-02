@@ -146,7 +146,7 @@ esac
 ''
 EOF
   local nix_build_shell=$(nix-store --no-gc-warning -r $(nix-instantiate --no-gc-warning -E $wrapper))
-  NIX_BUILD_SHELL=${nix_build_shell}/bin/_nix-shell-wrap =nix-shell "$@"
+  NIX_BUILD_SHELL=${nix_build_shell}/bin/_nix-shell-wrap command nix-shell "$@"
 }
 
 # Setting up less colors
@@ -454,7 +454,8 @@ function clean() {
 
 # Update various things
 update() {
-    (( $+commands[apt] )) && sudo apt update && apt list --upgradable && sudo apt upgrade
+    (( $+commands[apt] )) && sudo apt update && apt list --upgradable \
+        && ! apt-get -s upgrade | grep -q '^0 upgraded,' && sudo apt upgrade
     (( $+commands[flatpak] )) && flatpak update && flatpak uninstall --unused
     (( $+commands[nix-channel] )) && [[ -s ~/.nix-channels ]] && nix-channel --update
     (( $+commands[nix] )) && [[ -f ~/.config/nixpkgs/flake.nix ]] && nix flake lock ~/.config/nixpkgs
