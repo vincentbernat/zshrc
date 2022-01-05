@@ -423,7 +423,7 @@ function clean() {
     (( $+commands[docker] )) && prompt "Docker related stuff" && \
         sudo docker system prune -f
     [[ -d /nix ]] && prompt "nix store" && \
-        nix-collect-garbage -d
+        nix-collect-garbage --delete-older-than 7d
     [[ -d /var/log/journal ]] && prompt "journal logs" && \
         sudo journalctl --vacuum-time='2 months'
 }
