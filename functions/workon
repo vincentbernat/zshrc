@@ -35,8 +35,6 @@ venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
 }
 shift
 
-[[ $env == "." ]] && env=${PWD:t}
-
 # Compile sudo if needed
 function _vbe_compile_sudo() {
     local sudo=$ZSH/run/u/$HOST-$UID/sudo
@@ -49,6 +47,15 @@ function _vbe_compile_sudo() {
         fi
     fi
 }
+
+# Enter current Flake shell
+[[ $env == "." ]] && [[ -f flake.nix ]] && {
+    nix develop -c $SHELL
+    return
+}
+
+# Otherwise, use current directory name
+[[ $env == "." ]] && env=${PWD:t}
 
 # Docker images
 [[ ${dimages[(r)$env]} == $env ]] && {
