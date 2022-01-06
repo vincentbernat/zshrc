@@ -4,7 +4,7 @@
     local -a available
     local -A locales
     local locale l
-    locales=( "LANG" "C en_US"
+    locales=( "LANG" "en_US C"
 	      "LC_MESSAGES" "en_US C"
 	      "LC_NUMERIC" "en_US C" )
     available=("${(f)$(locale -a)}")
