@@ -9,7 +9,7 @@ _vbe_ssh_command() {
 
     # We assume we have an OpenSSH client with this patch:
     #  https://bugzilla.mindrot.org/attachment.cgi?id=3547
-    local remote=${${=${(M)${:-"${(@f)$(command ssh -G "$@")}"}:#(host|hostname) *}[1]}[-1]}
+    local remote=${${=${(M)${:-"${(@f)$(command ssh -G "$@" 2>/dev/null)}"}:#(host|hostname) *}[1]}[-1]}
     [[ -n $remote ]] &&
         _vbe_title ${PRCH[remote]}${remote}
 
