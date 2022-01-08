@@ -371,15 +371,15 @@ screenrecord() {
 }
 
 # Simple calculator
-function \=() {
-  if (( $+commands[qalc] )); then
-    qalc "$@"
-  else
-    autoload -Uz zcalc
-    echo $(($@))
-  fi
-}
-aliases[=]='noglob ='           # not really supported: http://www.zsh.org/mla/workers/2016/msg00081.html
+if (( $+commands[qalc] )); then
+    aliases[=]='noglob qalc'
+else
+    function _vbe_calc() {
+        autoload -Uz zcalc
+        echo $(($@))
+    }
+    aliases[=]='noglob _vbe_calc'
+fi
 (( $+commands[units] )) && alias units='noglob units --verbose'
 
 # Allow to prefix commands with `$` to help copy/paste operations.
