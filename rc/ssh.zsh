@@ -143,11 +143,11 @@ zssh() {
         case $state[hostname],$state[username],$state[kernel],$state[distribution],$state[variant] in
             *,root,Linux,debian,*|*,root,Linux,ubuntu,*)
                 method="apt-get"
-                cmd="DEBIAN_FRONTEND=noninteractive apt-get -qq -y install zsh mg > /dev/null"
+                cmd="DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends -qq -y install zsh mg > /dev/null"
                 ;;
             *,root,Linux,fedora,*)
                 method="dnf"
-                cmd="dnf -qy install zsh"
+                cmd="dnf --setopt=install_weak_deps=False -qy install zsh"
                 ;;
             *,root,OpenBSD,*)
                 method="pkg-add"
