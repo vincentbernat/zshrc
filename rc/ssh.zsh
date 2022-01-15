@@ -147,7 +147,7 @@ zssh() {
                 ;;
             *,root,Linux,fedora,*)
                 method="dnf"
-                cmd="dnf --setopt=install_weak_deps=False -qy install zsh"
+                cmd="dnf --setopt=install_weak_deps=False -qy install zsh mg"
                 ;;
             *,root,OpenBSD,*)
                 method="pkg-add"
