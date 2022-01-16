@@ -398,6 +398,13 @@ function myip() {
   done 2> /dev/null
 }
 
+# Send a line to Android device using adb
+(( $+commands[adb] )) && function adbtext() {
+    while read -r line; do
+        adb shell input text ${(q)${line// /%s}}
+    done
+}
+
 # Cleanup various things on a system
 function clean() {
     local prompt() {
