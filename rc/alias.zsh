@@ -405,11 +405,11 @@ function myip() {
     case $# in
         0)
             while read -r line; do
-                adb shell input text ${(q)${line// /%s}}
+                adb shell input text ${(q)line}
             done
             ;;
         *)
-            adb shell input text ${(q)${(j:%s:)@// /%s}}
+            adb shell input text ${(q)${(j: :)@}}
             ;;
     esac
 }
