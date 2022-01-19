@@ -398,11 +398,20 @@ function myip() {
   done 2> /dev/null
 }
 
-# Send a line to Android device using adb
+# Send a line to Android device using adb. This is a bit broken as we
+# should escape "%s", but it is not escapable. "%%s" would just output
+# "% ".
 (( $+commands[adb] )) && function adbtext() {
-    while read -r line; do
-        adb shell input text ${(q)${line// /%s}}
-    done
+    case $# in
+        0)
+            while read -r line; do
+                adb shell input text ${(q)${line// /%s}}
+            done
+            ;;
+        *)
+            adb shell input text ${(q)${(j:%s:)@// /%s}}
+            ;;
+    esac
 }
 
 # Cleanup various things on a system
