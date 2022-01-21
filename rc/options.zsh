@@ -6,7 +6,7 @@ setopt autopushd		# Maintain directories in a heap
 setopt pushdignoredups          # Remove duplicates from directory heap
 setopt pushdminus               # Invert + and - meanings
 setopt autocd			# Don't need to use `cd`
-setopt extendedglob             # Enable extended globbing
+setopt extendedglob             # Enable extended globbing (^, ~, #)
 setopt longlistjobs             # Display PID when using jobs
 setopt nobeep                   # Never beep
 
