@@ -13,7 +13,7 @@ _vbe_title () {
 # Current running program as title
 _vbe_title_preexec () {
     emulate -L zsh
-    setopt extended_glob
+    setopt extendedglob
     local title
     local -a cmd
     cmd=(${(z)1})
