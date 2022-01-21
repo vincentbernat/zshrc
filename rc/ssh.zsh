@@ -99,7 +99,7 @@ zssh() {
     local -A state
     local -a common_ssh_args
     local current=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
-    ! command ssh -G "$@" | grep -q '^controlpath ' && \
+    ! command ssh -G "$@" | command grep -q '^controlpath ' && \
         common_ssh_args=(-o ControlPath="$ZSH/run/%r@%h:%p")
 
     # Probe to run on remote host to check the situation.
@@ -128,13 +128,13 @@ zssh() {
     (( $#@ )) || return 1
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
     eval $(command ssh -n \
-                   $(command ssh -G "$@" | grep -Fxq 'controlpersist no' && print -- -o ControlPersist=5s) \
+                   $(command ssh -G "$@" | command grep -Fxq 'controlpersist no' && print -- -o ControlPersist=5s) \
                    -o ControlMaster=auto \
                    -o PermitLocalCommand=yes \
                    -o LocalCommand="/bin/echo 'state[hostname]=%n'" \
                    $common_ssh_args "$@" \
                    ${probezsh} \
-               | grep -E '^state\[[0-9a-z-]+\]=[0-9A-Za-z.-]*$')
+               | command grep -E '^state\[[0-9a-z-]+\]=[0-9A-Za-z.-]*$')
     (( $#state )) || return 1
 
     # Install Zsh if possible

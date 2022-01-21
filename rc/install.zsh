@@ -57,7 +57,7 @@ install-zsh() {
         # Uncompress the archive
         echo 'cat <<EOA | $BASE64 | gzip -dc | tar -m -C $ZSH -xf -'
 	(
-            cd $ZSH ; git ls-files | grep -vFx .gitmodules | \
+            cd $ZSH ; git ls-files | command grep -vFx .gitmodules | \
                 while read f; do [[ -d $f ]] || echo $f ; done | \
                 tar --owner=root --group=root --numeric-owner -zhcf - -T - | base64
         )

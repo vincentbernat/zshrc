@@ -54,7 +54,7 @@
 
         +vi-git-untracked () {
             if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
-                git status --porcelain 2> /dev/null | grep -q '??' ; then
+                git status --porcelain 2> /dev/null | command grep -q '??' ; then
                 hook_com[staged]+="%F{black}${PRCH[circle]}%f"
             fi
         }
