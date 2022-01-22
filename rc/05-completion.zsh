@@ -1,7 +1,16 @@
 # -*- sh -*-
 
-autoload -Uz compinit complist
-compinit -i -d $ZSH/run/u/$HOST-$UID/zcompdump
+() {
+    emulate -L zsh
+    setopt extendedglob
+    local zcompdump=$ZSH/run/u/$HOST-$UID/zcompdump
+    autoload -Uz compinit complist
+    if [[ -n ${zcompdump}(#qN.mh+24) ]]; then
+        compinit -i -d $zcompdump
+    else
+        compinit -C -d $zcompdump
+    fi
+}
 
 setopt auto_menu
 setopt auto_remove_slash
