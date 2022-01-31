@@ -80,7 +80,7 @@ chown $(id -u):$(id -g) $HOME
 exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHELL=\$SHELL SHLVL= \
      /usr/bin/sudo -u $(id -u) -g $(id -g) -c '$PWD' \$SHELL -i -l
 EOF
-    (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -
+    (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -o $HOME/.terminfo -
     docker container run -t -i \
            $([[ -d /usr/share/zsh ]] && print -- -v /usr/share/zsh:/usr/share/zsh-static:ro) \
            $([[ -x ${SHELL}-static ]] && print -- -v ${SHELL}-static:${SHELL}-static:ro) \
