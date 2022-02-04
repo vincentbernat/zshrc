@@ -48,9 +48,14 @@ function _vbe_compile_sudo() {
     fi
 }
 
-# Enter current Flake shell
+# Enter current Flake shell. Avoid it to being garbage collected.
 [[ $env == "." ]] && [[ -f flake.nix ]] && {
-    nix develop -c $SHELL
+    nix develop -c sh -c "
+if [ -d result~ ]; then
+  find -P result~ -type l -delete
+nix-store -r \$(nix-store --query --references \$NIX_GCROOT) --add-root result~/result --indirect > /dev/null
+exec $SHELL
+"
     return
 }
 
