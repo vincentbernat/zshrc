@@ -1,12 +1,6 @@
 # -*- sh -*-
 
 _vbe_ssh_command() {
-    # Provide ssh command to use as a reply instead of the provided
-    # command (ssh/scp included as first argument).
-    local -a cmd
-    cmd=($commands[$1])
-    shift
-
     # We assume we have an OpenSSH client with this patch:
     #  https://bugzilla.mindrot.org/attachment.cgi?id=3547
     local remote=${${=${(M)${:-"${(@f)$(command ssh -G "$@" 2>/dev/null)}"}:#(host|hostname) *}[1]}[-1]}
@@ -41,24 +35,24 @@ _vbe_ssh_command() {
     # Also, when the same Zsh configuration is used on the remote
     # host, the locale is reset with the help of
     # `$ZSH/rc/01-locale.zsh`.
+    local -a cmd
     case "$TERM" in
 	*-*) cmd=(LC__ORIGINALTERM=$TERM TERM=${TERM%%-*} $cmd) ;;
     esac
-    cmd=(env LANG=C LC_MESSAGES=C $cmd "$@")
+    cmd=(env LANG=C LC_MESSAGES=C ssh "$@")
 
     # Return array in reply
     : ${(A)reply::="${cmd[@]}"}
 }
 
 ssh() {
-    _vbe_ssh_command ssh "$@"
+    _vbe_ssh_command "$@"
     $reply
 }
 
 (( $+commands[sshpass] )) && [[ -f $ZSH/local/ssh2passname ]] && () {
     # Connect with a password
-    local _vbe_sshpass() {
-        local cmd=$1 ; shift
+    pssh() {
         local passname
         local login
         local directive
@@ -75,19 +69,10 @@ ssh() {
             return 1
         }
         print -u2 "[*] Using password entry $passname for $login"
-        _vbe_ssh_command $cmd "$@"
+        _vbe_ssh_command "$@"
         sshpass -f<(pass show $passname) $reply
     }
-    pssh() {
-        _vbe_sshpass ssh "$@"
-    }
-    pscp() {
-        _vbe_sshpass scp "$@"
-    }
-    (( $+functions[compdef] )) && {
-        compdef pssh=ssh
-        compdef pscp=scp
-    }
+    (( $+functions[compdef] )) && compdef pssh=ssh
 }
 
 # Invoke this shell on a remote host. All arguments are passed to SSH,
