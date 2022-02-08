@@ -72,7 +72,23 @@ ssh() {
         _vbe_ssh_command "$@"
         sshpass -f<(pass show $passname) $reply
     }
-    (( $+functions[compdef] )) && compdef pssh=ssh
+    # SCP with a password
+    pscp() {
+        () {
+            local helper=$1
+            shift
+            chmod +x $helper
+            scp -S $helper "$@"
+        } =(<<EOF
+#!$SHELL --interactive
+pssh "\$@"
+EOF
+           ) "$@"
+    }
+    (( $+functions[compdef] )) && {
+        compdef pssh=ssh
+        compdef pscp=ssh
+    }
 }
 
 # Invoke this shell on a remote host. All arguments are passed to SSH,
