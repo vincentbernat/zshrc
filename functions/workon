@@ -53,7 +53,7 @@ function _vbe_compile_sudo() {
     nix develop -c sh -c "
 [ -d result~ ] && find -P result~ -type l -delete
 nix-store -r \$NIX_GCROOT --add-root result~ --indirect > /dev/null
-exec $SHELL
+exec env SHELL=$SHELL $SHELL
 "
     return
 }
