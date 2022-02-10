@@ -54,6 +54,7 @@ function _vbe_compile_sudo() {
 [ -d result~ ] && find -P result~ -type l -delete
 nix-store -r \$NIX_GCROOT --add-root result~ --indirect > /dev/null
 SHELL=$(nix eval --raw nixpkgs#zsh)/bin/zsh
+nix build --no-link \${SHELL}
 exec env SHELL=\$SHELL \$SHELL
 "
     return
