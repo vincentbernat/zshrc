@@ -8,6 +8,7 @@ setopt pushdminus               # Invert + and - meanings
 setopt autocd			# Don't need to use `cd`
 setopt longlistjobs             # Display PID when using jobs
 setopt nobeep                   # Never beep
+setopt nocorrect nocorrectall   # Disable autocorrect
 
 # meta-h will invoke man for the current command
 autoload -Uz run-help
