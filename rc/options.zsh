@@ -10,6 +10,10 @@ setopt longlistjobs             # Display PID when using jobs
 setopt nobeep                   # Never beep
 setopt nocorrect nocorrectall   # Disable autocorrect
 
+# Enable extended globbing, but not `#' (used by Nix flakes) and `^'
+# (used by git). Mostly, we only keep `~'.
+setopt extendedglob ; disable -p '#' ; disable -p '^'
+
 # meta-h will invoke man for the current command
 autoload -Uz run-help
 # When the command is {sudo,git,openssl} something, get help on something
