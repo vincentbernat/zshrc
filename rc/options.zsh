@@ -9,6 +9,7 @@ setopt autocd			# Don't need to use `cd`
 setopt longlistjobs             # Display PID when using jobs
 setopt nobeep                   # Never beep
 setopt nocorrect nocorrectall   # Disable autocorrect
+setopt noflowcontrol            # Disable flow control for Zsh
 
 # Enable extended globbing, but not `#' (used by Nix flakes) and `^'
 # (used by git). Mostly, we only keep `~'.
