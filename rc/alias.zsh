@@ -401,7 +401,7 @@ function myip() {
 # Send a line to Android device using adb. This is a bit broken as we
 # should escape "%s", but it is not escapable. "%%s" would just output
 # "% ".
-(( $+commands[adb] )) && function adbtext() {
+(( $+commands[adb] )) && function adbtype() {
     case $# in
         0)
             while read -r line; do
