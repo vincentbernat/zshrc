@@ -123,7 +123,10 @@ zssh() {
         set -e
         export ZDOTDIR=~/.zsh.$1
         export ZSH=~/.zsh.$1
-        export SHELL=$(command -v zsh || echo $(nix-build --no-out-link "<nixpkgs>" -A zsh)/bin/zsh)
+        export SHELL=$(command -v zsh)
+        [ -n "$SHELL" ] || \
+            SHELL=$(nix-build --no-out-link "<nixpkgs>" -A zsh 2> /dev/null ||
+                    nix eval --raw nixpkgs#zsh.out.outPath 2> /dev/null)/bin/zsh
         uname -a
         cat /etc/motd 2>/dev/null || true
         exec $SHELL -i -l -d
