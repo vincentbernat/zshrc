@@ -135,7 +135,7 @@ zssh() {
                    -o LocalCommand="/bin/echo 'state[hostname]=%n'" \
                    $common_ssh_args "$@" \
                    ${probezsh} \
-               | command grep -E '^state\[[0-9a-z-]+\]=[0-9A-Za-z.-]*$')
+               | command grep -E '^state\[[0-9a-z-]+\]=("?)[0-9A-Za-z.-]+\1$')
     (( $#state )) || return 1
 
     # Install Zsh if possible
@@ -149,6 +149,10 @@ zssh() {
             *,root,Linux,fedora,*)
                 method="dnf"
                 cmd="dnf --setopt=install_weak_deps=False -qy install zsh mg"
+                ;;
+            *,root,Linux,centos,*)
+                method="dnf"
+                cmd="dnf --setopt=install_weak_deps=False -qy install zsh"
                 ;;
             *,root,OpenBSD,*)
                 method="pkg-add"
