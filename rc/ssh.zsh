@@ -150,10 +150,6 @@ zssh() {
                 method="dnf"
                 cmd="dnf --setopt=install_weak_deps=False -qy install zsh mg"
                 ;;
-            *,root,Linux,centos,*)
-                method="dnf"
-                cmd="dnf --setopt=install_weak_deps=False -qy install zsh"
-                ;;
             *,root,OpenBSD,*)
                 method="pkg-add"
                 cmd="pkg_add -I zsh"
