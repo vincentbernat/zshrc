@@ -447,7 +447,7 @@ function clean() {
 # Update various things
 update() {
     (( $+commands[apt] )) && sudo apt update && apt list --upgradable \
-        && ! apt -s upgrade | command grep -q '^Inst ' && sudo apt upgrade
+        && apt -s upgrade 2> /dev/null | command grep -q '^Inst ' && sudo apt upgrade
     (( $+commands[flatpak] )) && flatpak update && flatpak uninstall --unused
     (( $+commands[nix-channel] )) && [[ -s ~/.nix-channels ]] && nix-channel --update
     (( $+commands[nix] )) && nix registry pin nixpkgs
