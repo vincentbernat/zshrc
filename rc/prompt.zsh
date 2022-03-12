@@ -129,7 +129,7 @@ _vbe_prompt () {
     # Directory
     local -a segs
     local remaining=$(($COLUMNS - ${#${(%):-%n@%M}} - 7))
-    local pwd=${(%):-%~}
+    local pwd=${${(%):-%~}//\%/%%}
     # When splitting, we will loose the leading /, keep it if needed
     local leading=${pwd[1]}
     [[ $leading == / ]] || leading=
@@ -148,7 +148,7 @@ _vbe_prompt () {
                 segs[i]=${segs[i][1]}
                 ((i++))
             done
-            _vbe_prompt_segment cyan default ${(%):-%${remaining}<${PRCH[ellipsis]}<$current}
+            _vbe_prompt_segment cyan default ${(%):-%${remaining//\%/%%}<${PRCH[ellipsis]}<${current//\%/%%}}
             ;;
     esac
     _vbe_prompt_end
@@ -198,8 +198,8 @@ _vbe_prompt_env () {
     local kind=$1
     local name=${(e)${2}}
     [[ -z $name ]] || {
-        _vbe_prompt_segment blue black $kind
-        _vbe_prompt_segment blue black $name
+        _vbe_prompt_segment blue black ${kind//\%/%%}
+        _vbe_prompt_segment blue black ${name//\%/%%}
     }
 }
 
