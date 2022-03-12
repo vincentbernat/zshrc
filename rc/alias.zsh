@@ -448,6 +448,9 @@ function clean() {
 update() {
     (( $+commands[apt] )) && sudo apt update && apt list --upgradable \
         && apt -s upgrade 2> /dev/null | command grep -q '^Inst ' && sudo apt upgrade
+    # Other Debian-related stuff:
+    #  - aptitude purge \~o: purge obsolete packages
+    #  - aptitude purge \~c: purge uninstalled packages
     (( $+commands[flatpak] )) && flatpak update && flatpak uninstall --unused
     (( $+commands[nix-channel] )) && [[ -s ~/.nix-channels ]] && nix-channel --update
     (( $+commands[nix] )) && nix registry pin nixpkgs
