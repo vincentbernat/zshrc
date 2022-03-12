@@ -6,11 +6,6 @@
 
     # Patch for CVE-2021-45444
     () {
-        # Impacted versions go from v5.0.3 to v5.8 (v5.8.1 is the first patched version)
-        if is-at-least 5.8.1 || ! is-at-least 5.0.3; then
-            return
-        fi
-
         # Quote necessary $hook_com[<field>] items just before they are used
         # in the line "VCS_INFO_hook 'post-backend'" of the VCS_INFO_formats
         # function, where <field> is:
