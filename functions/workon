@@ -162,7 +162,7 @@ EOF
     local enter=$(mktemp --tmpdir nsenter-XXXXXXXXX)
     local -a environ
     environ=(${(@f)"$(docker container inspect --format "{{range .Config.Env}}{{.}}"$'\n'"{{end}}" $env)"})
-    for ((i = 1; i < $#environ; i++)) {
+    for ((i = 1; i <= $#environ; i++)) {
             if [[ ${environ[$i]%%=*} =~ ^[a-zA-Z_]+[a-zA-Z0-9_]*$ ]]; then
                 environ[$i]="export ${environ[$i]%%=*}=${(q-)${environ[$i]#*=}}"
             else
