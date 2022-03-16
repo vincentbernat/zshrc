@@ -140,6 +140,7 @@ zssh() {
                    -o ControlMaster=auto \
                    -o PermitLocalCommand=yes \
                    -o LocalCommand="/bin/echo 'state[hostname]=%n'" \
+                   -o ClearAllForwardings=yes \
                    $common_ssh_args "$@" \
                    ${probezsh} \
                | command grep -E '^state\[[0-9a-z-]+\]=("?)[0-9A-Za-z.-]+\1$')
@@ -176,7 +177,7 @@ zssh() {
         esac
         if [[ -n $cmd ]]; then
             print -u2 "[*] Installing Zsh (with $method)..."
-            if command ssh -n $common_ssh_args $command "$@" $cmd; then
+            if command ssh -n -o ClearAllForwardings=yes $common_ssh_args $command "$@" $cmd; then
                 state[has-zsh]=1
             else
                 print -u2 "[!] Cannot install Zsh"
@@ -189,7 +190,7 @@ zssh() {
            && [[ $state[version] != $current ]]; then
             print -u2 "[*] Updating dotfiles (from ${state[version][1,12]} to ${current[1,12]})..."
             cat $ZSH/run/zsh-install.sh \
-                | command ssh $common_ssh_args -C "$@" \
+                | command ssh -o ClearAllForwardings=yes $common_ssh_args -C "$@" \
                           "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec sh -s" \
                 && state[version]=$current
     fi
