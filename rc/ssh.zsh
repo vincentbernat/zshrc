@@ -167,7 +167,6 @@ zssh() {
                 ;;
             *.lab,*)
                 # Only for labs as this is not considered secure to rely on third-party binaries.
-                # We assume to have both wget and sudo available.
                 method="zsh-bin"
                 cmd='(wget -qO- https://raw.githubusercontent.com/romkatv/zsh-bin/master/install \
                    || curl -sfL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install \
