@@ -105,7 +105,8 @@ zssh() {
 
     # Probe to run on remote host to check the situation.
     local __() {
-        echo "state[has-zsh]"=$(if command -v zsh > /dev/null || command -v nix-build > /dev/null; then
+        echo "state[has-zsh]"=$(if PATH=$PATH:$HOME/.local/bin command -v zsh > /dev/null ||
+                                        command -v nix-build > /dev/null; then
                                     echo 1
                                 else
                                     echo 0
@@ -121,6 +122,7 @@ zssh() {
     # Execution of Zsh on remote host.
     local __() {
         set -e
+        export PATH=$PATH:$HOME/.local/bin
         export ZDOTDIR=~/.zsh.$1
         export ZSH=~/.zsh.$1
         export SHELL=$(command -v zsh)
@@ -171,7 +173,7 @@ zssh() {
                 cmd='(wget -qO- https://raw.githubusercontent.com/romkatv/zsh-bin/master/install \
                    || curl -sfL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install \
                    || echo false) 2> /dev/null \
-                   | sh -s -- -q -d /usr/local -e no'
+                   | sh -s -- -q -d ~/.local -e no'
                 ;;
         esac
         if [[ -n $cmd ]]; then
