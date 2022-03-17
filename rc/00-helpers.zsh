@@ -11,5 +11,3 @@ autoload -Uz add-zle-hook-widget
 
 zmodload -F zsh/stat b:zstat
 zmodload zsh/datetime           # EPOCHSECONDS
-
-source $ZSH/third-party/zsh-defer.zsh

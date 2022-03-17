@@ -1,13 +1,13 @@
 # -*- sh -*-
 
-autoload -Uz compinit complist
 () {
     emulate -L zsh
     setopt extendedglob
+    autoload -Uz compinit complist
     if [[ -n $1(#qN.mh+24) ]]; then
-        zsh-defer compinit -i -d $1
+        compinit -i -d $1
     else
-        zsh-defer compinit -C -d $1
+        compinit -C -d $1
     fi
 } $ZSH/run/u/$HOST-$UID/zcompdump
 
