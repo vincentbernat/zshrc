@@ -190,13 +190,13 @@ suzsh() {
           ${ZSH_NAME} -i -l
 }
 
-# JSON pretty-printing.
+# Newline Delimited JSON pretty-printing.
 #
 # Many programs have a flag to enable unbuffered output. For example,
 # `curl -N`. Most programs can be forced to use unbuffered output with
 # `stdbuf -o L`.
 (( $+commands[python] + $+commands[python3] )) && \
-json() {
+ndjson() {
   local -a pythons
   pythons=(/usr/{,local/}bin/python{3,,2}(XN) $commands[python3] $commands[python])
   ${pythons[1]} -u -c '#!/usr/bin/env python3
@@ -278,12 +278,7 @@ for f in files:
 ' "$@"
 }
 
-(( $+functions[json] )) && \
-jsonf() {
-  tail -f "$@" | json
-}
-
-xml() {
+(( $+commands[xmllint] )) && xml() {
     cat "$@" | xmllint --format - | v
 }
 
