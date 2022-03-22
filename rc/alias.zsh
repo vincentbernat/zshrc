@@ -97,7 +97,7 @@ fi
     && alias diff='diff --color=auto'
 
 # ip aliases
-(( $+commands[ip] )) && {
+(( $+commands[ip] )) && [[ $(zstat +link -- $commands[ip]) != */busybox ]] && {
   (( ${terminfo[colors]:-0} >= 8 )) && ip -color -human rule &> /dev/null && \
       alias ip='ip -color -human'
   abbrev-alias ip6='ip -6'
