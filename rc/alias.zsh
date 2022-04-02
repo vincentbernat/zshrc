@@ -460,13 +460,13 @@ colortest() {
 
     local fg
     local bg
-    printf "%12s" ""
-    for fg in {40..47}; do
+    printf "%4s" ""
+    for fg in "" {40..47}; do
 	printf "%7sm" ${fg}
     done
     printf "\n"
     for fg in 0 1 $(for i in {30..37}; do echo $i 1\;$i; done); do
-	printf " %5s \e[%s  %s  " ${fg}m ${fg}m ${T}
+	printf " %5s \e[%s  %s  " ${fg} ${fg}m ${T}
 	for bg in {40..47}m; do
 	    printf " \e[%s\e[%s  %s  \e[0m" ${fg}m ${bg} ${T}
 	done
