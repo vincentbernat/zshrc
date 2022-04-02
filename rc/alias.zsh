@@ -116,7 +116,9 @@ fi
 (( $+commands[pip] )) && alias pip='PIP_REQUIRE_VIRTUALENV=true pip --disable-pip-version-check'
 (( $+commands[pip3] )) && alias pip3='PIP_REQUIRE_VIRTUALENV=true pip3 --disable-pip-version-check'
 (( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 4 ))'
-(( $+commands[ncal] )) && alias ncal='ncal -3'
+(( $+commands[gcal] )) \
+    && alias gcal='GCALANSI=1 gcal -H "\033[0;44m:\033[0m:\033[32m:\033[0m" --cc-holidays=FR --with-week-number --iso-week-number=yes --starting-day=1' \
+    && alias cal='gcal -i .+'
 (( $+commands[mtr] )) && abbrev-alias mtrr='mtr -wzbe'
 (( $+commands[ag] )) && (( $+commands[less] )) && alias ag='ag --pager="less -FRX"'
 (( $+commands[pass] )) && alias pass='PASSWORD_STORE_ENABLE_EXTENSIONS=true pass'
