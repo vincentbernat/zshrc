@@ -1,15 +1,7 @@
 # -*- sh -*-
 
-() {
-    emulate -L zsh
-    setopt extendedglob
-    autoload -Uz compinit complist
-    if [[ -n $1(#qN.mh+24) ]]; then
-        compinit -i -d $1
-    else
-        compinit -C -d $1
-    fi
-} $ZSH/run/u/$HOST-$UID/zcompdump
+autoload -Uz compinit complist
+compinit -d $ZSH/run/u/$HOST-$UID/zcompdump
 
 setopt auto_menu
 setopt auto_remove_slash
