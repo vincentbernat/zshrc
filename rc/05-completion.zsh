@@ -1,7 +1,27 @@
 # -*- sh -*-
 
-autoload -Uz compinit complist
-compinit -d $ZSH/run/u/$HOST-$UID/zcompdump
+() {
+    emulate -L zsh
+    setopt extendedglob
+    autoload -Uz compinit complist
+    local zcd=$1                # compdump
+    local zcdc=$1.zwc           # compiled compdump
+    local zcda=$1.last          # last compilation
+    local zcdl=$1.lock          # lock file
+    local attempts=30
+    while (( attempts-- > 0 )) && ! ln $zcd $zcdl 2> /dev/null; do sleep 0.1; done
+    {
+        if [[ -n $zcda(#qN.mh+24) ]]; then
+            compinit -i -d $zcd
+            > $zcda
+        else
+            compinit -C -d $zcd
+        fi
+        [[ ! -f $zcdc || $zcd -nt $zcdc ]] && rm -f $zcdc && zcompile -M $zcd &!
+    } always {
+        rm -f $zcdl
+    }
+} $ZSH/run/u/$HOST-$UID/zcompdump
 
 setopt auto_menu
 setopt auto_remove_slash
