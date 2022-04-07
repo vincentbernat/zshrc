@@ -17,7 +17,7 @@
         else
             compinit -C -d $zcd
         fi
-        [[ ! -f $zcdc || $zcd -nt $zcdc ]] && rm -f $zcdc && zcompile -M $zcd &!
+        [[ ! -f $zcdc || $zcd -nt $zcdc ]] && rm -f $zcdc && zcompile $zcd &!
     } always {
         rm -f $zcdl
     }
