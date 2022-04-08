@@ -2,6 +2,7 @@
 
 # Setup EDITOR
 () {
+    unset EDITOR ALTERNATE_EDITOR
     local -a editors
     local editor
     editors=(
