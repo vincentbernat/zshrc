@@ -37,7 +37,7 @@ shift
 
 # Compile sudo if needed
 function _vbe_compile_sudo() {
-    local sudo=$ZSH/run/u/$HOST-$UID/sudo
+    local sudo=$ZSHRUN/sudo
     if [[ ! -f $sudo ]] || (( $(zstat +mtime $ZSH/misc/sudo.c) > $(zstat +mtime $sudo) )); then
         if (( $+commands[gcc] )); then
             gcc -Wall -static $ZSH/misc/sudo.c -o $sudo

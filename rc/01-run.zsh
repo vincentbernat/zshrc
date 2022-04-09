@@ -7,6 +7,7 @@
 }
 
 # Create per-UID directory
-[[ -d $ZSH/run/u/$HOST-$UID ]] || {
-    mkdir -p $ZSH/run/u/$HOST-$UID
+ZSHRUN=$ZSH/run/u/$HOST-$UID
+[[ -d $ZSHRUN ]] || {
+    mkdir -p $ZSHRUN
 }

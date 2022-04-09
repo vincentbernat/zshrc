@@ -15,7 +15,7 @@
 	(( $+commands[$editor[(w)1]] )) && {
 	    # Some programs may not like to have arguments
 	    if [[ $editor == *\ * ]]; then
-		export EDITOR=$ZSH/run/u/$HOST-$UID/editor
+		export EDITOR=$ZSHRUN/editor
 		cat <<EOF > $EDITOR
 #!/bin/sh
 exec $editor "\$@"
@@ -34,7 +34,7 @@ EOF
         # Maybe use emacsclient?
         [[ $editor == emacs* ]] && (( $+commands[emacsclient] )) && {
 	    export ALTERNATE_EDITOR=$EDITOR
-            export EDITOR=$ZSH/run/u/$HOST-$UID/editor-ec
+            export EDITOR=$ZSHRUN/editor-ec
             cat <<'EOF' > $EDITOR.$$
 #!/bin/sh
 case $DISPLAY in

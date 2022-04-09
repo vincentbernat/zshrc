@@ -21,7 +21,7 @@
     } always {
         rm -f $zcdl
     }
-} $ZSH/run/u/$HOST-$UID/zcompdump
+} $ZSHRUN/zcompdump
 
 setopt auto_menu
 setopt auto_remove_slash
@@ -43,7 +43,7 @@ zstyle ':completion:*:descriptions' format '%B%d%b'
 zstyle ':completion:*:functions' ignored-patterns '_*'
 zstyle ':completion:*:match:*' original only
 zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path $ZSH/run/u/$HOST-$UID/cache/
+zstyle ':completion::complete:*' cache-path $ZSHRUN/cache/
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX + $#SUFFIX) / 3 )) numeric )'
 zstyle ':completion:history-words:*' remove-all-dups true
 

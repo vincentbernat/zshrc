@@ -11,14 +11,14 @@ setopt hist_ignore_space        # don't store commands starting with a space
     case $hashed in
         49e78cdf67755528)
             typeset -g HISTFILE=~/.zsh_history
-            if [[ -O $ZSH/run/u/$HOST-$UID/history ]]; then
-                fc -R $ZSH/run/u/$HOST-$UID/history
+            if [[ -O $ZSHRUN/history ]]; then
+                fc -R $ZSHRUN/history
                 fc -A
-                rm -f $ZSH/run/u/$HOST-$UID/history
+                rm -f $ZSHRUN/history
             fi
             ;;
         12e640a29535f352) typeset -g HISTFILE=~/.zhistory ;;
-        *) typeset -g HISTFILE=$ZSH/run/u/$HOST-$UID/history ;;
+        *) typeset -g HISTFILE=$ZSHRUN/history ;;
     esac
 }
 HISTSIZE=30000
