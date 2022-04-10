@@ -102,7 +102,7 @@ _vbe_prompt () {
     # When old command, just time + prompt sign
     if (( $_vbe_prompt_compact )); then
         _vbe_prompt_segment cyan default "%D{%H:%M${SSH_TTY+ %Z}}"
-        [[ $SSH_TTY ]] && \
+        [[ -n $SSH_TTY ]] && \
             _vbe_prompt_segment black magenta "%B%M%b"
         if (( $retval )); then
             _vbe_prompt_segment red default ${PRCH[reta]}
