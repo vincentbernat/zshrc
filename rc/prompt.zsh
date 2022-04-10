@@ -183,6 +183,7 @@ _vbe_setprompt () {
     typeset -g PROMPT_EOL_MARK="%B${PRCH[eol]}%b"
     unset RPS1
     unset RPS2
+    unset RPROMPT
 }
 
 # Collect additional information from functions matching _vbe_add_prompt_*
