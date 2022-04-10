@@ -13,7 +13,9 @@ setopt noflowcontrol            # Disable flow control for Zsh
 
 # Enable extended globbing, but not `#' (used by Nix flakes) and `^'
 # (used by git). Mostly, we only keep `~'.
-setopt extendedglob ; disable -p '#' ; disable -p '^'
+if is-at-least 5.0.3; then
+    setopt extendedglob ; disable -p '#' ; disable -p '^'
+fi
 
 # meta-h will invoke man for the current command
 autoload -Uz run-help

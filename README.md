@@ -17,9 +17,9 @@ function.
 `~/.zsh/run` contains runtime files, like history. `~/.zsh/local`
 contains local files that should not be copied to a remote host.
 
-I am targetting compatibility with Zsh 5.0.7 (the one in Jessie).
-Notably, I cannot use `local array=(el1 el2)`, as this is only allowed
-since Zsh 5.1.
+I am targetting compatibility with Zsh 5.0.2 (the one in CentOS 7,
+5.0.7 is in Jessie). Notably, I cannot use `local array=(el1 el2)`, as
+this is only allowed since Zsh 5.1.
 
 Installation
 ------------
