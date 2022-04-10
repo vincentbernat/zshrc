@@ -53,7 +53,7 @@ function chpwd_profiles() {
     return 0
 }
 
-typeset -g chpwd_functions=(${chpwd_functions} chpwd_profiles)
+add-zsh-hook chpwd chpwd_profiles
 
 # Init
 chpwd_profiles
