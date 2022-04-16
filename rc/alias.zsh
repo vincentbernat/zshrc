@@ -295,25 +295,25 @@ v() {
             (( $+commands[mpv] )) && ${I3SOCK+i3-tabbed} mpv --no-fs $1
             return
     esac
-    (( $+commands[bat] )) && {
-        (( $# )) || {
+    if (( $+commands[bat] )); then
+        if (( $# )); then
             gzip -cdfq | bat
-            return
-        }
-        for f in "$@"; do
-            gzip -cdfq -- $f | bat --file-name ${f%.gz}
-        done
-        return
-    }
-    (( $+commands[less] )) && {
+        else
+            for f in "$@"; do
+                gzip -cdfq -- $f | bat --file-name ${f%.gz}
+            done
+        fi
+    elif (( $+commands[zless] )); then
         zless -FX "$@"
-        return
-    }
-    (( $+commands[more] )) && {
+    elif (( $+commands[less] )); then
+        gzip -cdfq -- "$@" | less -FX
+    elif (( $+commands[zmore] )); then
         zmore "$@"
-        return
-    }
-    gzip -cdfq -- "$@"
+    elif (( $+commands[more] )); then
+        gzip -cdfq -- "$@" | more
+    else
+        gzip -cdfq -- "$@"
+    fi
 }
 
 # Prepare a command to record a video:
