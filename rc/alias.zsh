@@ -296,7 +296,7 @@ v() {
             return
     esac
     if (( $+commands[bat] )); then
-        if (( $# )); then
+        if (( ! $# )); then
             gzip -cdfq | bat
         else
             for f in "$@"; do
