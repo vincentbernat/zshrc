@@ -2,7 +2,10 @@
 
 # Install or update ZSH on a remote host.
 install-zsh() {
-    (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -o $ZSH/run/terminfo -
+    # Generate termcap/terminfo
+    (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM \
+            | tee $ZSH/run/$TERM.termcap \
+            | tic -o $ZSH/run/terminfo -
     local version=$(cd $ZSH ; git rev-parse HEAD)
     # The following function should only use POSIX shell statements
     local __() {
@@ -61,6 +64,7 @@ install-zsh() {
             cd $ZSH
             (
                 echo run/terminfo
+                echo run/*.termcap(N)
                 git ls-files | command grep -vFx .gitmodules | \
                     while read f; do [[ -d $f ]] || echo $f ; done
             ) | tar --owner=root --group=root --numeric-owner -zhcf - -T - | base64

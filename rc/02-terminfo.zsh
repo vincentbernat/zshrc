@@ -112,3 +112,5 @@ autoload -Uz zsh/terminfo zsh/termcap
 
 # Freeze the terminal
 ttyctl -f
+
+[[ -f $ZSH/run/$TERM.termcap ]] && export TERMCAP=$ZSH/run/$TERM.termcap
