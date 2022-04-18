@@ -86,14 +86,14 @@ chown $(id -u):$(id -g) $HOME
 exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHELL=\$SHELL SHLVL= \
      /usr/bin/sudo -u $(id -u) -g $(id -g) -c '$PWD' \$SHELL -i -l
 EOF
-    (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -o $HOME/.terminfo -
+    (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -o $ZSH/run/terminfo -
     docker container run -t -i \
            $([[ -d /usr/share/zsh ]] && print -- -v /usr/share/zsh:/usr/share/zsh-static:ro) \
            $([[ -x ${SHELL}-static ]] && print -- -v ${SHELL}-static:${SHELL}-static:ro) \
-           $([[ -d ~/.terminfo ]] && print -- -v $HOME/.terminfo:${HOME}/.terminfo:ro) \
            -v ${ZDOTDIR:-$HOME}/.zshrc:$HOME/.zshrc:ro \
            -v ${ZSH}:$HOME/.zsh:ro \
            -v ${ZSH}/run:$HOME/.zsh/run:rw \
+           $([[ -d $ZSH/run/terminfo ]] && print -- -v $ZSH/run/terminfo:${HOME}/.terminfo:ro) \
            $([[ ${PWD##$HOME/} != ${PWD} ]] && print -- -v ${PWD}:${PWD}:rw) \
            -v ${tmp}:${tmp} \
            -w $PWD \
