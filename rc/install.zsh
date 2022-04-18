@@ -2,6 +2,7 @@
 
 # Install or update ZSH on a remote host.
 install-zsh() {
+    (( $+commands[tic] )) && (( $+commands[infocmp] )) && infocmp $TERM | tic -o $ZSH/run/terminfo -
     local version=$(cd $ZSH ; git rev-parse HEAD)
     # The following function should only use POSIX shell statements
     local __() {
@@ -57,9 +58,12 @@ install-zsh() {
         # Uncompress the archive
         echo 'cat <<EOA | $BASE64 | gzip -dc | tar -m -C $ZSH -xf -'
 	(
-            cd $ZSH ; git ls-files | command grep -vFx .gitmodules | \
-                while read f; do [[ -d $f ]] || echo $f ; done | \
-                tar --owner=root --group=root --numeric-owner -zhcf - -T - | base64
+            cd $ZSH
+            (
+                echo run/terminfo
+                git ls-files | command grep -vFx .gitmodules | \
+                    while read f; do [[ -d $f ]] || echo $f ; done
+            ) | tar --owner=root --group=root --numeric-owner -zhcf - -T - | base64
         )
         echo 'EOA'
         echo '}'

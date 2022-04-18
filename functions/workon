@@ -93,7 +93,6 @@ EOF
            -v ${ZDOTDIR:-$HOME}/.zshrc:$HOME/.zshrc:ro \
            -v ${ZSH}:$HOME/.zsh:ro \
            -v ${ZSH}/run:$HOME/.zsh/run:rw \
-           $([[ -d $ZSH/run/terminfo ]] && print -- -v $ZSH/run/terminfo:${HOME}/.terminfo:ro) \
            $([[ ${PWD##$HOME/} != ${PWD} ]] && print -- -v ${PWD}:${PWD}:rw) \
            -v ${tmp}:${tmp} \
            -w $PWD \
