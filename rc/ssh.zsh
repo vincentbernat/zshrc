@@ -87,7 +87,7 @@ EOF
     }
     (( $+functions[compdef] )) && {
         compdef pssh=ssh
-        compdef pscp=ssh
+        compdef pscp=scp
     }
 }
 
