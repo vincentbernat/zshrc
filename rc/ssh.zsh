@@ -74,20 +74,16 @@ ssh() {
     }
     # SCP with a password
     pscp() {
-        emulate -L zsh
-        setopt nomonitor
-        local helper=$(mktemp)
-        {
-            > $helper <<EOF
+        () {
+            local helper=$1
+            shift
+            chmod +x $helper
+            scp -S $helper "$@"
+        } =(<<EOF
 #!$SHELL --interactive
 pssh "\$@"
 EOF
-            chmod +x $helper
-            scp -S $helper "$@" &
-            pv -d $!
-        } always {
-            \rm $helper
-        }
+           ) "$@"
     }
     (( $+functions[compdef] )) && {
         compdef pssh=ssh
