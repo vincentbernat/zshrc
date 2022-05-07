@@ -19,9 +19,10 @@
         fi
         [[ ! -f $zcdc || $zcd -nt $zcdc ]] && rm -f $zcdc && zcompile $zcd &!
     } always {
-        rm -f $zcdl
+        \rm -f $zcdl
     }
-} $ZSHRUN/zcompdump
+} $ZSHRUN/zcompdump-${ZSH_VERSION}-${#:-"$fpath"}
+\rm -f $ZSHRUN/zcompdump*(N.md+30)
 
 setopt auto_menu
 setopt auto_remove_slash
