@@ -12,9 +12,13 @@
     while (( attempts-- > 0 )) && ! ln $zcd $zcdl 2> /dev/null; do sleep 0.1; done
     {
         if [[ ! -e $zcda || -n $zcda(#qN.mh+24) ]]; then
+            # No compdump or too old
             compinit -i -d $zcd
             : > $zcda
+            # Remove old ones
+            \rm -f $ZSHRUN/zcompdump*(N.md+30)
         else
+            # Reuse existing one
             compinit -C -d $zcd
         fi
         [[ ! -f $zcdc || $zcd -nt $zcdc ]] && rm -f $zcdc && zcompile $zcd &!
@@ -22,7 +26,6 @@
         \rm -f $zcdl
     }
 } $ZSHRUN/zcompdump-${ZSH_VERSION}-${#:-"$fpath"}
-\rm -f $ZSHRUN/zcompdump*(N.md+30)
 
 setopt auto_menu
 setopt auto_remove_slash
