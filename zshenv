@@ -75,3 +75,6 @@ fi
 
 unset TERM_PROGRAM TERM_PROGRAM_VERSION
 unset MAILCHECK
+
+# Don't use distribution-provided RC files
+setopt no_global_rcs
