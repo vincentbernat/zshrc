@@ -16,7 +16,7 @@
             compinit -i -d $zcd
             : > $zcda
             # Remove old ones
-            \rm -f $ZSHRUN/zcompdump*(N.md+30)
+            \rm -f $ZSHRUN/zcompdump*(N.mM+6)
         else
             # Reuse existing one
             compinit -C -d $zcd
