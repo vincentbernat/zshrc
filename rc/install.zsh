@@ -5,7 +5,7 @@ install-zsh() {
     # Generate termcap/terminfo
     (( $+commands[tic] )) && (( $+commands[infocmp] )) && {
         infocmp $TERM | tic -o $ZSH/run/terminfo -
-        infocmp -C $TERM | tee $ZSH/run/$TERM.termcap
+        infocmp -C $TERM > $ZSH/run/$TERM.termcap
     }
     local version=$(cd $ZSH ; git rev-parse HEAD)
     # The following function should only use POSIX shell statements
