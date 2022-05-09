@@ -6,7 +6,7 @@
     local locale l
     locales=( "LANG" "en_US C"
 	      "LC_MESSAGES" "en_US C"
-              "LC_TIME" "en_GB C"
+              "LC_TIME" "C"
 	      "LC_NUMERIC" "en_US C" )
     available=("${(f)$(locale -a)}")
     for locale in ${(k)locales}; do
