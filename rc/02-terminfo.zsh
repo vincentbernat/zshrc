@@ -1,6 +1,6 @@
 # -*- sh -*-
 
-TERMINFO_DIRS=$ZSH/run/terminfo
+TERMINFO_DIRS=$ZSH/run/terminfo:$HOME/.terminfo:/etc/terminfo
 
 # Compute a sensible TERM and set colors
 autoload -Uz zsh/terminfo zsh/termcap

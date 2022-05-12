@@ -93,6 +93,7 @@ EOF
            -v ${ZSH}:$HOME/.zsh:ro \
            -v ${ZSH}/run:$HOME/.zsh/run:rw \
            $([[ ${PWD##$HOME/} != ${PWD} ]] && print -- -v ${PWD}:${PWD}:rw) \
+           $([[ -d $ZSH/run/terminfo ]] && print -- -v $ZSH/run/terminfo:${HOME}/.terminfo:ro) \
            -v ${tmp}:${tmp} \
            -w $PWD \
            -u 0 \
