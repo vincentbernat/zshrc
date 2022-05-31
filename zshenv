@@ -72,6 +72,7 @@ fi
     export FONTCONFIG_FILE=$(nix eval --raw nixpkgs'#'fontconfig.out.outPath)/etc/fonts/fonts.conf
 
 [[ -d $HOME/src ]] && export GOPATH=$HOME/src/gocode
+export GOPROXY=direct
 
 unset TERM_PROGRAM TERM_PROGRAM_VERSION
 unset MAILCHECK
