@@ -117,7 +117,7 @@ zssh() {
         echo "state[username]"=$(id -un)
         echo "state[version]"=$(cat ~/.zsh.$1/run/version 2> /dev/null || echo 0)
     }
-    local probezsh="$(which __); __ $USER"
+    local probezsh="sh -c '$(which __); __ $USER'"
 
     # Execution of Zsh on remote host.
     local __() {
@@ -133,7 +133,7 @@ zssh() {
         cat /etc/motd 2>/dev/null || true
         exec $SHELL -i -l -d
     }
-    local execzsh="$(which __); __ $USER"
+    local execzsh="sh -c '$(which __); __ $USER'"
 
     (( $#@ )) || return 1
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
@@ -190,9 +190,11 @@ zssh() {
     if (( state[has-zsh] )) \
            && [[ $state[version] != $current ]]; then
             print -u2 "[*] Updating dotfiles (from ${state[version][1,12]} to ${current[1,12]})..."
-            cat $ZSH/run/zsh-install.sh \
+            { echo "export ZDOTDIR=~/.zsh.$USER"
+              echo "export ZSH=~/.zsh.$USER"
+              cat $ZSH/run/zsh-install.sh } \
                 | command ssh -o ClearAllForwardings=yes $common_ssh_args -C "$@" \
-                          "export ZDOTDIR=~/.zsh.$USER && export ZSH=~/.zsh.$USER && exec sh -s" \
+                          sh -es \
                 && state[version]=$current
     fi
 
@@ -205,7 +207,7 @@ zssh() {
         ssh $common_ssh_args "$@"
     else
         print -u2 "[*] Spawning remote zsh..."
-        ssh $common_ssh_args -t "$@" ${execzsh}
+        ssh $common_ssh_args -t "$@" "${execzsh}"
     fi
 }
 (( $+functions[compdef] )) && compdef zssh=ssh
