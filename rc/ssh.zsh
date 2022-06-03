@@ -123,8 +123,8 @@ zssh() {
     local __() {
         set -e
         export PATH=$PATH:$HOME/.local/bin
-        export ZDOTDIR=~/.zsh.$1
-        export ZSH=~/.zsh.$1
+        export ZDOTDIR=$HOME/.zsh.$1
+        export ZSH=$HOME/.zsh.$1
         export SHELL=$(command -v zsh)
         [ -n "$SHELL" ] || \
             SHELL=$(nix-build --no-out-link "<nixpkgs>" -A zsh 2> /dev/null ||
@@ -190,8 +190,8 @@ zssh() {
     if (( state[has-zsh] )) \
            && [[ $state[version] != $current ]]; then
             print -u2 "[*] Updating dotfiles (from ${state[version][1,12]} to ${current[1,12]})..."
-            { echo "export ZDOTDIR=~/.zsh.$USER"
-              echo "export ZSH=~/.zsh.$USER"
+            { echo "export ZDOTDIR=\$HOME/.zsh.$USER"
+              echo "export ZSH=\$HOME/.zsh.$USER"
               cat $ZSH/run/zsh-install.sh } \
                 | command ssh -o ClearAllForwardings=yes $common_ssh_args -C "$@" \
                           sh -es \
