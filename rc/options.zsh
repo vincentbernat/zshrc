@@ -18,6 +18,7 @@ if is-at-least 5.0.3; then
 fi
 
 # meta-h will invoke man for the current command
+(( ${+aliases[run-help]} )) && unalias run-help
 autoload -Uz run-help
 () {
     local c
@@ -33,5 +34,5 @@ if (( ${termcap[Co]:-0} > 8)); then
     # Enable and configure autosuggest
     source $ZSH/third-party/zsh-autosuggestions.zsh
     typeset -g ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
-    ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(bracketed-paste accept-line insert-last-word copy-earlier-word run-help)
+    ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(bracketed-paste accept-line insert-last-word copy-earlier-word)
 fi
