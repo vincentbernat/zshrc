@@ -12,11 +12,13 @@
     while (( attempts-- > 0 )) && ! ln $zcd $zcdl 2> /dev/null; do sleep 0.1; done
     {
         if [[ ! -e $zcda || -n $zcda(#qN.mh+24) ]]; then
+            print -nu2 "Building completion cache..."
             # No compdump or too old
             compinit -i -d $zcd
             : > $zcda
             # Remove old ones
             \rm -f $ZSHRUN/zcompdump*(N.mM+6)
+            print -nu2 '\r'
         else
             # Reuse existing one
             compinit -C -d $zcd
