@@ -28,10 +28,25 @@
 
     # Slow pasting. First argument is tmux pane (X:Y.0)
     function tmux-slow-paste() {
-        target="$1"
+        local target="$1"
         shift
         cat "$@" | pv -W -q -L 500 | while IFS='' read -r line; do
             tmux send-keys -t "$target" -l "${line}"$'\n';
         done
+    }
+
+    # Unmangle a tmux capture
+    function tmux-capture-unmangle() {
+        {
+            local target
+            local lines
+            for target in "$@"; do
+                lines=$(wc -l < $target)
+                tmux set -g history-limit $((lines + 100))
+                tmux new-window "cat $target ; tmux capture-pane -pS - > $target.txt"
+            done
+        } always {
+            tmux source ~/.tmux.conf
+        }
     }
 }
