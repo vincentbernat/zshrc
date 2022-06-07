@@ -34,19 +34,4 @@
             tmux send-keys -t "$target" -l "${line}"$'\n';
         done
     }
-
-    # Unmangle a tmux capture
-    function tmux-capture-unmangle() {
-        {
-            local target
-            local lines
-            for target in "$@"; do
-                lines=$(wc -l < $target)
-                tmux set -g history-limit $((lines + 100))
-                tmux new-window "cat $target ; tmux capture-pane -pS - > $target.txt"
-            done
-        } always {
-            tmux source ~/.tmux.conf
-        }
-    }
 }
