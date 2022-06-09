@@ -1,15 +1,5 @@
 # -*- sh -*-
 
-# Alter window title
-_vbe_title () {
-    [ -t 1 ] || return
-    emulate -L zsh
-    # In tmux.conf:
-    #  set -g  set-titles on
-    #  set -g  set-titles-string "#T"
-    print -n "\e]0;$1\a"
-}
-
 # Current running program as title
 _vbe_title_preexec () {
     emulate -L zsh

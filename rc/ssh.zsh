@@ -5,7 +5,7 @@ _vbe_ssh_command() {
     #  https://bugzilla.mindrot.org/attachment.cgi?id=3547
     local remote=${${=${(M)${:-"${(@f)$(command ssh -G "$@" 2>/dev/null)}"}:#(host|hostname) *}[1]}[-1]}
     [[ -n $remote ]] &&
-        _vbe_title ${PRCH[remote]}${remote}
+        _vbe_title @${remote}
 
     # TERM is one of the variables that is usually allowed to be
     # transmitted to the remote session. The remote host should have
@@ -80,7 +80,8 @@ ssh() {
             chmod +x $helper
             scp -S $helper "$@"
         } =(<<EOF
-#!$SHELL --interactive
+#!$SHELL
+source $ZSH/rc/ssh.zsh
 pssh "\$@"
 EOF
            ) "$@"

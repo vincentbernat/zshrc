@@ -95,3 +95,4 @@ fpath=(
     # Rewrite /usr/share/zsh to /usr/share/zsh-static
     fpath=(${fpath/\/usr\/share\/zsh\//\/usr\/share\/zsh-static\/})
 }
+autoload -U $ZSH/functions/*(.:t)

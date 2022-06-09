@@ -76,7 +76,6 @@ autoload -Uz zsh/terminfo zsh/termcap
                 circle "*" branch "\`|"
                 ok ">" ellipsis ".."
                 eol "~~" running ">"
-                remote "@"
             )
             ;|
         1|2)
@@ -86,7 +85,6 @@ autoload -Uz zsh/terminfo zsh/termcap
                 circle $'\u25CF' branch $'\uE0A0'
                 ok $'\u2713' ellipsis $'\u2026'
                 eol $'\u23CE' running $'\u276d'
-                remote "@"
             )
             ;|
         0|1)
