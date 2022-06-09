@@ -79,3 +79,19 @@ unset MAILCHECK
 
 # Don't use distribution-provided RC files
 setopt no_global_rcs
+
+# fpath
+ZSH=${ZSH:-${ZDOTDIR:-$HOME}/.zsh}
+fpath=(
+    # Custom functions and completions
+    $ZSH/functions $ZSH/completions
+    # For nix-shell, add share/zsh for elements in PATH (for nix shell), as well as profiles.
+    ${^${(M)path:#/nix/store/*}}/../share/zsh/{site-functions,$ZSH_VERSION/functions,vendor-completions}(N/)
+    ${^${(z)NIX_PROFILES}}/share/zsh/{site-functions,$ZSH_VERSION/functions,vendor-completions}(N/)
+    # Default fpath
+    $fpath
+)
+[[ $ZSH_NAME == "zsh-static" ]] && [[ -d /usr/share/zsh-static ]] && {
+    # Rewrite /usr/share/zsh to /usr/share/zsh-static
+    fpath=(${fpath/\/usr\/share\/zsh\//\/usr\/share\/zsh-static\/})
+}

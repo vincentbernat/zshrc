@@ -1,6 +1,6 @@
 # -*- sh -*-
 
-[[ -o interactive ]] && () {
+() {
     emulate -L zsh
     setopt extendedglob
     autoload -Uz compinit complist
