@@ -34,5 +34,5 @@ if (( ${termcap[Co]:-0} > 8)); then
     # Enable and configure autosuggest
     source $ZSH/third-party/zsh-autosuggestions.zsh
     typeset -g ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
-    ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(bracketed-paste accept-line insert-last-word copy-earlier-word)
+    ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(bracketed-paste accept-line insert-last-word copy-earlier-word run-help)
 fi
