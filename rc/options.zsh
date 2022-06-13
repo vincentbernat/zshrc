@@ -27,8 +27,8 @@ autoload -Uz run-help
     done
 }
 
-# Remove / from WORDCHARS (more like bash)
-WORDCHARS=${WORDCHARS:s#/#}
+# Remove / and # from WORDCHARS
+WORDCHARS=${${WORDCHARS:s#/#}:s,#,}
 
 if (( ${termcap[Co]:-0} > 8)); then
     # Enable and configure autosuggest
