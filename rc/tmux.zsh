@@ -50,11 +50,10 @@
 
     # Reformat
     local current_limit=$(tmux show-options -gv history-limit)
-    local new_limit=$(($(wc -l < $out) + 100))
-    [[ $new_limit -gt $current_limit ]] && tmux set -g history-limit $new_limit
+    tmux set -g history-limit 2147483647
     {
         tmux new-window "cat $out ; tmux capture-pane -pS - | gzip -c > ${out%.rawlog}.log.gz"
     } always {
-        tmux set -g history-limit ${history}
+        tmux set -g history-limit ${current_limit}
     }
 }
