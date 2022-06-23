@@ -42,7 +42,7 @@
     local out=~/tmp/tmux-$HOST-$(date -I)-${1#%}.rawlog
 
     # Capture the current scrollback
-    tmux capture-pane -epS - > $out
+    tmux capture-pane -t $1 -epS - > $out
     sed -i -e :a -e '/^\n*$/{$d;N;ba' -e '}' $out
 
     # Capture the live output
