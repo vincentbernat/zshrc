@@ -99,10 +99,13 @@ EOF
 # ssh with zmodem.
 zssh() {
     local -A state
-    local -a common_ssh_args
+    local -a common_ssh_args probe_ssh_args
     local current=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
     ! command ssh -G "$@" | command grep -q '^controlpath ' && \
         common_ssh_args=(-o ControlPath="$ZSH/run/%r@%h:%p")
+    prepare_ssh_args=(-n -o ClearAllForwardings=yes -o ControlMaster=auto)
+    command ssh -G "$@" | command grep -Fxq 'controlpersist no' && \
+        prepare_ssh_args=($prepare_ssh_args -o ControlPersist=10s)
 
     # Probe to run on remote host to check the situation.
     local __() {
@@ -138,12 +141,10 @@ zssh() {
 
     (( $#@ )) || return 1
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
-    eval $(command ssh -n \
-                   $(command ssh -G "$@" | command grep -Fxq 'controlpersist no' && print -- -o ControlPersist=5s) \
-                   -o ControlMaster=auto \
+    eval $(command ssh \
                    -o PermitLocalCommand=yes \
                    -o LocalCommand="/bin/echo 'state[hostname]=%n'" \
-                   -o ClearAllForwardings=yes \
+                   $prepare_ssh_args \
                    $common_ssh_args "$@" \
                    ${probezsh} \
                | command grep -E '^state\[[0-9a-z-]+\]=("?)[0-9A-Za-z.-]+\1$')
@@ -179,7 +180,7 @@ zssh() {
         esac
         if [[ -n $cmd ]]; then
             print -u2 "[*] Installing Zsh (with $method)..."
-            if command ssh -n -o ClearAllForwardings=yes $common_ssh_args $command "$@" $cmd; then
+            if command ssh -o $prepare_ssh_args $common_ssh_args $command "$@" $cmd; then
                 state[has-zsh]=1
             else
                 print -u2 "[!] Cannot install Zsh"
