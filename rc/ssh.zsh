@@ -180,7 +180,7 @@ zssh() {
         esac
         if [[ -n $cmd ]]; then
             print -u2 "[*] Installing Zsh (with $method)..."
-            if command ssh -o $prepare_ssh_args $common_ssh_args $command "$@" $cmd; then
+            if command ssh $prepare_ssh_args $common_ssh_args $command "$@" $cmd; then
                 state[has-zsh]=1
             else
                 print -u2 "[!] Cannot install Zsh"
