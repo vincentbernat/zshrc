@@ -18,7 +18,11 @@ bindkey "\e," copy-earlier-word
 
 # Enable magic quoting of URL
 autoload -Uz url-quote-magic
-zle -N self-insert url-quote-magic
+function _vbe-url-quote-magic() {
+  emulate -L zsh
+  url-quote-magic "$@"
+}
+zle -N self-insert _vbe-url-quote-magic
 autoload -Uz bracketed-paste-magic
 zle -N bracketed-paste bracketed-paste-magic
 
