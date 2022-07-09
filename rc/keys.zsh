@@ -28,7 +28,7 @@ zle -N edit-command-line
 bindkey "^x^e" edit-command-line
 
 # Meta-S will toggle sudo
-function vbe-sudo-command-line() {
+function _vbe-sudo-command-line() {
   [[ -z $BUFFER ]] && zle up-history
   case $BUFFER in
     sudoedit\ *)
@@ -44,25 +44,25 @@ function vbe-sudo-command-line() {
         LBUFFER="sudo $LBUFFER"
   esac
 }
-zle -N vbe-sudo-command-line
-bindkey "\es" vbe-sudo-command-line
+zle -N _vbe-sudo-command-line
+bindkey "\es" _vbe-sudo-command-line
 
 # Expand ... to ../..
-function vbe-expand-dot-to-parent-directory-path() {
+function _vbe-expand-dot-to-parent-directory-path() {
   case $LBUFFER in
     (./..|* ./..) LBUFFER+='.' ;; # In Go: "go list ./..."
     (..|*[ /=]..) LBUFFER+='/..' ;;
     (*) LBUFFER+='.' ;;
   esac
 }
-zle -N vbe-expand-dot-to-parent-directory-path
-bindkey "." vbe-expand-dot-to-parent-directory-path
+zle -N _vbe-expand-dot-to-parent-directory-path
+bindkey "." _vbe-expand-dot-to-parent-directory-path
 bindkey -M isearch "." self-insert
 
 # Don't do history completion on empty words
-function vbe-history-complete-older() {
+function _vbe-history-complete-older() {
   [[ ${LBUFFER[-1]} == ' ' || ${LBUFFER} == '' ]] && return 1
   zle _history-complete-older "$@"
 }
-zle -N vbe-history-complete-older
-bindkey "\e/" vbe-history-complete-older
+zle -N _vbe-history-complete-older
+bindkey "\e/" _vbe-history-complete-older
