@@ -156,7 +156,9 @@ zssh() {
         case $state[hostname],$state[username],$state[kernel],$state[distribution],$state[variant] in
             *,root,Linux,debian,*|*,root,Linux,ubuntu,*)
                 method="apt-get"
-                cmd="DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends -qq -y install zsh mg > /dev/null"
+                cmd="(export DEBIAN_FRONTEND=noninteractive \
+                   && apt-get -qqy update \
+                   && apt-get --no-install-recommends -qqy install zsh mg) > /dev/null"
                 ;;
             *,root,Linux,fedora,*)
                 method="dnf"
