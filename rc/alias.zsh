@@ -440,6 +440,8 @@ function clean() {
         nix-collect-garbage --delete-older-than 7d
     [[ -d /var/log/journal ]] && prompt "journal logs" && \
         sudo journalctl --vacuum-time='2 months'
+    [[ -n ${GOMODCACHE:-$GOPATH} ]] && [[ -d ${GOMODCACHE:-$GOPATH} ]] && prompt "Go module cache" && \
+        go clean -modcache
 }
 
 # Update various things
