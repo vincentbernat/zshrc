@@ -65,6 +65,7 @@ fi
 
     export NIX_PROFILES="/nix/var/nix/profiles/default $HOME/.nix-profile"
     export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+    [ -f $NIX_SSL_CERT_FILE ] || unset NIX_SSL_CERT_FILE
     export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
 }
 
