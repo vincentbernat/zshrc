@@ -446,8 +446,12 @@ function clean() {
 
 # Update various things
 update() {
-    (( $+commands[apt] )) && sudo apt update && apt list --upgradable \
-        && apt -s upgrade 2> /dev/null | command grep -q '^Inst ' && sudo apt upgrade
+    (( $+commands[apt] )) \
+        && sudo apt update \
+        && apt list --upgradable \
+        && apt -s upgrade 2> /dev/null | command grep -q '^Inst ' \
+        && sudo apt upgrade \
+        && sudo apt autoremove
     # Other Debian-related stuff:
     #  - aptitude purge \~o: purge obsolete packages
     #  - aptitude purge \~c: purge uninstalled packages
