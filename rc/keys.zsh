@@ -43,6 +43,7 @@ function _vbe-sudo-command-line() {
     *)
         LBUFFER="sudo $LBUFFER"
   esac
+  zle _vbe-reset-autosuggest
 }
 zle -N _vbe-sudo-command-line
 bindkey "\es" _vbe-sudo-command-line
@@ -54,6 +55,7 @@ function _vbe-expand-dot-to-parent-directory-path() {
     (..|*[ /=]..) LBUFFER+='/..' ;;
     (*) LBUFFER+='.' ;;
   esac
+  zle _vbe-reset-autosuggest
 }
 zle -N _vbe-expand-dot-to-parent-directory-path
 bindkey "." _vbe-expand-dot-to-parent-directory-path

@@ -22,12 +22,13 @@
         hash -d -- -${link:t}=${link:A}
     }
 
-    vbe-insert-bookmark() {
+    function _vbe-insert-bookmark() {
         emulate -L zsh
         LBUFFER=${LBUFFER}"~-"
+        zle _vbe-reset-autosuggest
     }
-    zle -N vbe-insert-bookmark
-    bindkey '@@' vbe-insert-bookmark
+    zle -N _vbe-insert-bookmark
+    bindkey '@@' _vbe-insert-bookmark
 
     # Manage bookmarks
     bookmark() {

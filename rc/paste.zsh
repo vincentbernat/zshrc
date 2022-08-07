@@ -37,6 +37,7 @@
         bindkey -e
         LBUFFER+=$_paste_content
         unset _paste_content
+        zle _vbe-reset-autosuggest
     }
 
     function _paste_insert() {
