@@ -94,6 +94,7 @@ autoload -Uz zsh/terminfo zsh/termcap
                 python "python"
                 docker "docker"
                 nix "nix"
+                completion ""
             )
             ;|
         2)
@@ -103,6 +104,7 @@ autoload -Uz zsh/terminfo zsh/termcap
                 python $'\U1f40d'
                 docker $'\U1f40b'
                 nix $'\u2744\ufe0f '
+                completion $'\U1faa7'
             )
             ;|
     esac
