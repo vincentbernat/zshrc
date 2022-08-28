@@ -11,6 +11,9 @@ if [ -z "$ZSH_VERSION" ]; then
     return
 fi
 
+# It's possible to reimport PATH into user session with:
+#  systemctl --user import-environment PATH
+
 # Compute a PATH without duplicates. This could have been done with
 # "typeset -aU" but some paths are equal, like /usr/bin and /bin when
 # symlinked. We want to keep symlinks because some of them may move
@@ -19,20 +22,26 @@ fi
     [[ $IN_NIX_SHELL == pure ]] && return
     local -a wanted savedpath
     local p
-    wanted=(~/.local/bin
-            ~/.nix-profile/bin
-            /usr/lib/ccache
-            /usr/local/sbin
-            /usr/local/bin
-            /var/lib/flatpak/exports/bin
-            /snap/bin
-            /usr/cumulus/bin
-            /usr/sbin
-            /usr/bin
-            /sbin
-            /bin
-            /usr/local/games
-            /usr/games)
+    wanted=(
+        # User-local directories
+        ~/.local/bin/"${${(M@f)$(</etc/os-release):#ID=*}#ID=}"
+        ~/.local/bin
+        ~/.nix-profile/bin
+        # Locally-installed software
+        /usr/lib/ccache
+        /usr/local/sbin
+        /usr/local/bin
+        /var/lib/flatpak/exports/bin
+        /snap/bin
+        # Vendor-installed software
+        /usr/cumulus/bin
+        # Regular paths
+        /usr/sbin
+        /usr/bin
+        /sbin
+        /bin
+        /usr/games
+    )
     savedpath=($path)
     path=()
     # First, put paths from savedpaths not in the wanted list
