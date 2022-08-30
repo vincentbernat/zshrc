@@ -24,7 +24,7 @@ fi
     local p
     wanted=(
         # User-local directories
-        ~/.local/bin/"${${(M@f)$(</etc/os-release):#ID=*}#ID=}"
+        ~/.local/bin/${${(M@f)$(</etc/os-release):#ID=*}#ID=}
         ~/.local/bin
         ~/.nix-profile/bin
         # Locally-installed software
