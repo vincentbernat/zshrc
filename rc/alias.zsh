@@ -460,6 +460,7 @@ update() {
     (( $+commands[nix] )) && nix registry pin nixpkgs
     (( $+commands[nix] )) && [[ -f ~/.config/nixpkgs/flake.nix ]] && nix flake update ~/.config/nixpkgs
     (( $+commands[home-manager] )) && nice home-manager switch
+    [[ -f /run/reboot-required ]] && print -P "%F{red}*** %BReboot required%b ***%F{default}"
 }
 
 # Display a color testcard
