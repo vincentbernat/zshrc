@@ -442,6 +442,9 @@ function clean() {
         sudo journalctl --vacuum-time='2 months'
     [[ -n ${GOMODCACHE:-$GOPATH} ]] && [[ -d ${GOMODCACHE:-$GOPATH} ]] && prompt "Go module cache" && \
         go clean -modcache
+    [[ -d ~/tmp ]] && prompt "user-specific temp directory" && \
+        find ~/tmp -type f -atime +30 -delete && \
+        find ~/tmp -type d -empty -delete
 }
 
 # Update various things
