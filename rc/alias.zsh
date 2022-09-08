@@ -444,7 +444,7 @@ function clean() {
         go clean -modcache
     [[ -d ~/tmp ]] && prompt "user-specific temp directory" && \
         find ~/tmp -type f -atime +30 -delete && \
-        find ~/tmp -type d -empty -delete
+        find ~/tmp -type d -mindepth 1 -empty -delete
 }
 
 # Update various things
