@@ -184,6 +184,7 @@ _vbe_setprompt () {
     unset RPS1
     unset RPS2
     unset RPROMPT
+    unset RPROMPT2
 }
 
 # Collect additional information from functions matching _vbe_add_prompt_*
