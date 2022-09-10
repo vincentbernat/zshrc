@@ -72,7 +72,7 @@ fi
     xdg_data_dirs=( ~/.nix-profile/share ${(ps.:.)XDG_DATA_DIRS})
     export XDG_DATA_DIRS=${(pj.:.)xdg_data_dirs}
 
-    export NIX_PROFILES="/nix/var/nix/profiles/default $HOME/.nix-profile"
+    export NIX_PROFILES="/run/current-system/sw /nix/var/nix/profiles/default /nix/var/nix/profiles/per-user/$USER $HOME/.nix-profile"
     export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
     [ -f $NIX_SSL_CERT_FILE ] || unset NIX_SSL_CERT_FILE
     export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
