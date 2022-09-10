@@ -68,11 +68,19 @@ fi
 () {
     [[ $IN_NIX_SHELL == pure ]] && return
 
-    local -aU xdg_data_dirs
-    xdg_data_dirs=( ~/.nix-profile/share ${(ps.:.)XDG_DATA_DIRS})
+    local -aU xdg_data_dirs profiles
+    xdg_data_dirs=(~/.nix-profile/share ${(ps.:.)XDG_DATA_DIRS})
     export XDG_DATA_DIRS=${(pj.:.)xdg_data_dirs}
 
-    export NIX_PROFILES="/run/current-system/sw /nix/var/nix/profiles/default /nix/var/nix/profiles/per-user/$USER $HOME/.nix-profile"
+    profiles=(
+        /run/current-system/sw
+        /nix/var/nix/profiles/default
+        /nix/var/nix/profiles/per-user/$USER
+        $HOME/.nix-profile
+    )
+    profiles=(${profiles}(N/))
+    export NIX_PROFILES=${profiles}
+
     export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
     [ -f $NIX_SSL_CERT_FILE ] || unset NIX_SSL_CERT_FILE
     export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
