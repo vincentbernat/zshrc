@@ -126,7 +126,9 @@ fi
 (( $+commands[fdfind] )) && alias fd=fdfind
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 
-mkcd() { command mkdir -p -- $1 && cd -- $1 }
+mkcd() {
+    command mkdir -p -- $@ && cd -- ${@:$#}
+}
 
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
