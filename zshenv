@@ -104,8 +104,8 @@ fpath=(
     # Custom functions and completions
     $ZSH/functions $ZSH/completions
     # For nix-shell, add share/zsh for elements in PATH (for nix shell), as well as profiles.
-    ${^${(M)path:#/nix/store/*}}/../share/zsh/{site-functions,$ZSH_VERSION/functions,vendor-completions}(N/)
-    ${^${(z)NIX_PROFILES}}/share/zsh/{site-functions,$ZSH_VERSION/functions,vendor-completions}(N/)
+    ${^${(M)path:#/nix/store/*}}/../share/zsh/{site-functions,$ZSH_VERSION/functions,vendor-completions}(N-/)
+    ${^${(z)NIX_PROFILES}}/share/zsh/{site-functions,$ZSH_VERSION/functions,vendor-completions}(N-/)
     # Default fpath
     $fpath
 )
