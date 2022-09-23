@@ -78,7 +78,7 @@ fi
         /nix/var/nix/profiles/per-user/$USER
         $HOME/.nix-profile
     )
-    profiles=(${profiles}(N/))
+    profiles=(${^profiles}(N-/))
     export NIX_PROFILES=${profiles}
 
     export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
