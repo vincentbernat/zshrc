@@ -109,8 +109,7 @@ fi
 }
 
 # Python-related aliases
-(( $+commands[python] )) && alias python2=\\python
-(( $+commands[python3] )) && alias python=\\python3
+(( $+commands[python3] )) && ! (( $+commands[python] )) && alias python=python3
 (( $+commands[ipython3] )) && alias ipython='ipython3 --no-confirm-exit'
 (( $+commands[pip] )) && alias pip='PIP_REQUIRE_VIRTUALENV=true python -m pip --disable-pip-version-check'
 
