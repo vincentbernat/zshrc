@@ -108,13 +108,15 @@ fi
   abbrev-alias ip6b='ip -6 -brief'
 }
 
+# Python-related aliases
+(( $+commands[python] )) && alias python2=\\python
+(( $+commands[python3] )) && alias python=\\python3
+(( $+commands[ipython3] )) && alias ipython='ipython3 --no-confirm-exit'
+(( $+commands[pip] )) && alias pip='PIP_REQUIRE_VIRTUALENV=true python -m pip --disable-pip-version-check'
+
 # Other simple aliases
 (( $+commands[xdg-app-chooser] )) && alias o=xdg-app-chooser
 (( $+commands[irb] )) && alias irb='irb --readline -r irb/completion'
-(( $+commands[ipython] )) && alias ipython2='=ipython --no-confirm-exit' # maybe inexact
-(( $+commands[ipython3] )) && alias ipython='ipython3 --no-confirm-exit'
-(( $+commands[pip] )) && alias pip='PIP_REQUIRE_VIRTUALENV=true pip --disable-pip-version-check'
-(( $+commands[pip3] )) && alias pip3='PIP_REQUIRE_VIRTUALENV=true pip3 --disable-pip-version-check'
 (( $+commands[tzdiff] )) && alias tzdiff='tzdiff $(( LINES - 4 ))'
 (( $+commands[gcal] )) \
     && cal() {
