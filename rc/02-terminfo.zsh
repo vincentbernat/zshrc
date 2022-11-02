@@ -93,6 +93,7 @@ autoload -Uz zsh/terminfo zsh/termcap
                 elapsed ''
                 python "python"
                 docker "docker"
+                envrc "envrc"
                 nix "nix"
                 completion ""
             )
@@ -103,6 +104,7 @@ autoload -Uz zsh/terminfo zsh/termcap
                 elapsed $'\u231b'
                 python $'\U1f40d'
                 docker $'\U1f40b'
+                envrc $'\U1f343'
                 nix $'\u2744\ufe0f '
                 completion $'\U1faa7'
             )

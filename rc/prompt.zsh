@@ -262,6 +262,12 @@ elif [[ -n ${(M)path:#/nix/store*} ]]; then
     }
 fi
 
+(( $+commands[direnv] )) && {
+    _vbe_add_prompt_direnv () {
+        [[ -z $DIRENV_DIR ]] || _vbe_prompt_env $PRCH[envrc] ${DIRENV_DIR:t}
+    }
+}
+
 # In virtualenv (can happen when shell is sourced)
 typeset -g VIRTUAL_ENV_DISABLE_PROMPT=1
 _vbe_add_prompt_virtualenv () {
