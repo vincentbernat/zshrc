@@ -250,7 +250,9 @@ _vbe_prompt_env () {
         ;;
 esac
 
-if [[ -n $IN_NIX_SHELL ]]; then
+if [[ $DIRENV_STATUS == "allowed" ]]; then
+    :
+elif [[ -n $IN_NIX_SHELL ]]; then
     # In nix-shell
     _vbe_add_prompt_nixshell() {
         _vbe_prompt_env $PRCH[nix] ${${name#shell}:-${${IN_WHICH_NIX_SHELL:-${(j:+:)${${=${:-${buildInputs} ${nativeBuildInputs}}}#*-}:#glibc*}}:-${PRCH[ellipsis]}}}
