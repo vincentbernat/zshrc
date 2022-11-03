@@ -37,7 +37,7 @@
         if (( $# == 0 )); then
             # When no arguments are provided, just display existing
             # bookmarks
-            for link in $MARKPATH/*(N@); do
+            for link in $MARKPATH/*(-N/); do
                 local markname=${(%):-%F{green}${link:t}%f}
                 local markpath=${(%):-%F{blue}${link:A}%f}
                 printf "%-30s → %s\n" $markname $markpath
