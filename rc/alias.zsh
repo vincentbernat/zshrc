@@ -28,12 +28,12 @@ alias chgrp='chgrp -h'
 abbrev-alias tailf='tail -F'           # not shipped in util-linux anymore
 alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
 () {
-  local dmesg_version=${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}
-  if is-at-least 2.23 $dmesg_version; then
-      alias dmesg='dmesg -H -P'
-  elif is-at-least 0.1 $dmesg_version; then
-    alias dmesg='dmesg -T'
-  fi
+    local dmesg_version=${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}
+    if is-at-least 2.23 $dmesg_version; then
+        alias dmesg='dmesg -H -P'
+    elif is-at-least 0.1 $dmesg_version; then
+        alias dmesg='dmesg -T'
+    fi
 }
 (( $+commands[gdb] )) && alias gdb='gdb -q'
 
@@ -77,16 +77,16 @@ fi
             abbrev-alias $cmd="${(%):-%(#..sudo )}systemctl $cmd"
             abbrev-alias u$cmd="systemctl --user $cmd"
         }
-    else
-        # generic service
-        for cmd ($cmds) {
-            function $cmd() {
-                name=$1 ; shift
-                ${(%):-%(#..sudo)} service $name $0 "$@"
-            }
-            (( $+functions[compdef] )) && compdef _services $cmd
-        }
-    fi
+            else
+                # generic service
+                for cmd ($cmds) {
+                    function $cmd() {
+                        name=$1 ; shift
+                        ${(%):-%(#..sudo)} service $name $0 "$@"
+                    }
+                    (( $+functions[compdef] )) && compdef _services $cmd
+                }
+                fi
 
 }
 
@@ -98,14 +98,14 @@ fi
 
 # ip aliases
 (( $+commands[ip] )) && [[ $(zstat +link -- $commands[ip]) != */busybox ]] && {
-  (( ${terminfo[colors]:-0} >= 8 )) && ip -color -human rule &> /dev/null && \
-      alias ip='ip -color -human'
-  abbrev-alias ip6='ip -6'
-  abbrev-alias ipr='ip -resolve'
-  abbrev-alias ip6r='ip -6 -resolve'
-  abbrev-alias ipm='ip -resolve monitor'
-  abbrev-alias ipb='ip -brief'
-  abbrev-alias ip6b='ip -6 -brief'
+    (( ${terminfo[colors]:-0} >= 8 )) && ip -color -human rule &> /dev/null && \
+        alias ip='ip -color -human'
+    abbrev-alias ip6='ip -6'
+    abbrev-alias ipr='ip -resolve'
+    abbrev-alias ip6r='ip -6 -resolve'
+    abbrev-alias ipm='ip -resolve monitor'
+    abbrev-alias ipb='ip -brief'
+    abbrev-alias ip6b='ip -6 -brief'
 }
 
 # Python-related aliases
@@ -123,10 +123,10 @@ fi
             0) cal -i .+ ;;
             *)
                 GCALANSI=1 gcal \
-                           -H "\033[0;44m:\033[0m:\033[32m:\033[0m" \
-                           --cc-holidays=FR \
-                           --with-week-number --iso-week-number=yes \
-                           --starting-day=1 "$@"
+                    -H "\033[0;44m:\033[0m:\033[32m:\033[0m" \
+                    --cc-holidays=FR \
+                    --with-week-number --iso-week-number=yes \
+                    --starting-day=1 "$@"
                 ;;
         esac
     }
@@ -143,47 +143,47 @@ mkcd() {
 
 # Setting up less colors
 (( ${terminfo[colors]:-0} >= 8 )) && {
-  export LESS_TERMCAP_mb=$'\E[1;31m'
-  export LESS_TERMCAP_md=$'\E[1;38;5;74m'
-  export LESS_TERMCAP_me=$'\E[0m'
-  export LESS_TERMCAP_se=$'\E[0m'
-  export LESS_TERMCAP_so=$'\E[1;3;246m'
-  export LESS_TERMCAP_ue=$'\E[0m'
-  export LESS_TERMCAP_us=$'\E[1;32m'
+    export LESS_TERMCAP_mb=$'\E[1;31m'
+    export LESS_TERMCAP_md=$'\E[1;38;5;74m'
+    export LESS_TERMCAP_me=$'\E[0m'
+    export LESS_TERMCAP_se=$'\E[0m'
+    export LESS_TERMCAP_so=$'\E[1;3;246m'
+    export LESS_TERMCAP_ue=$'\E[0m'
+    export LESS_TERMCAP_us=$'\E[1;32m'
 }
 
 # grep aliases
 () {
-  # If GNU grep is available, use it
-  local grep=grep
-  (( $+commands[ggrep] )) && grep=ggrep # GNU grep
+    # If GNU grep is available, use it
+    local grep=grep
+    (( $+commands[ggrep] )) && grep=ggrep # GNU grep
 
-  # Check if grep supports colors
-  local colors="--color=auto"
-  $grep -q $colors . <<< yes 2> /dev/null || colors=""
+    # Check if grep supports colors
+    local colors="--color=auto"
+    $grep -q $colors . <<< yes 2> /dev/null || colors=""
 
-  # Declare aliases
-  alias grep="command ${grep} ${colors}"
-  abbrev-alias rgrep="grep -r"
-  abbrev-alias egrep="grep -E"
-  abbrev-alias fgrep="grep -F"
-  # --color=auto doesn't work. See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=792135
-  (( $+commands[zgrep] )) && alias zgrep="GREP=${grep} command zgrep ${colors}"
+    # Declare aliases
+    alias grep="command ${grep} ${colors}"
+    abbrev-alias rgrep="grep -r"
+    abbrev-alias egrep="grep -E"
+    abbrev-alias fgrep="grep -F"
+    # --color=auto doesn't work. See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=792135
+    (( $+commands[zgrep] )) && alias zgrep="GREP=${grep} command zgrep ${colors}"
 }
 
 # Import a secret into an environment variable
 secret() {
-  for s in $@; do
-      print -n "$s: "
-      < /dev/tty IFS= read -rs $s
-      print
-      export $s
-  done
+    for s in $@; do
+        print -n "$s: "
+        < /dev/tty IFS= read -rs $s
+        print
+        export $s
+    done
 }
 
 (( $+commands[emacsclient] * $+commands[git] )) && magit() {
-  local root=$(git rev-parse --show-toplevel)
-  emacsclient -e "(progn
+        local root=$(git rev-parse --show-toplevel)
+        emacsclient -e "(progn
                     (select-frame-set-input-focus
                       (window-frame
                         (get-buffer-window
@@ -197,13 +197,13 @@ alias smv='rsync -P --remove-source-files'
 # Like sudo -sE but it preserves ZDOTDIR, see:
 #  <https://sources.debian.org/src/sudo/1.9.1-1/plugins/sudoers/env.c/?hl=187#L187>
 suzsh() {
-  command sudo -H -u ${1:-root} \
-          env ZDOTDIR=${ZDOTDIR:-$HOME} \
-              ZSH=$ZSH \
-              ${DISPLAY+DISPLAY=$DISPLAY} \
-              ${SSH_TTY+SSH_TTY=$SSH_TTY} \
-              ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
-          ${ZSH_NAME} -i -l
+    command sudo -H -u ${1:-root} \
+        env ZDOTDIR=${ZDOTDIR:-$HOME} \
+        ZSH=$ZSH \
+        ${DISPLAY+DISPLAY=$DISPLAY} \
+        ${SSH_TTY+SSH_TTY=$SSH_TTY} \
+        ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
+        ${ZSH_NAME} -i -l
 }
 
 # Newline Delimited JSON pretty-printing.
@@ -212,10 +212,10 @@ suzsh() {
 # `curl -N`. Most programs can be forced to use unbuffered output with
 # `stdbuf -o L`.
 (( $+commands[python] + $+commands[python3] )) && \
-ndjson() {
-  local -a pythons
-  pythons=(/usr/{,local/}bin/python{3,,2}(XN) $commands[python3] $commands[python])
-  ${pythons[1]} -u -c '#!/usr/bin/env python3
+    ndjson() {
+        local -a pythons
+        pythons=(/usr/{,local/}bin/python{3,,2}(XN) $commands[python3] $commands[python])
+        ${pythons[1]} -u -c '#!/usr/bin/env python3
 
 # Pretty-print files containing JSON lines. Reads from stdin when no
 # argument is provided, otherwise pretty print each argument. This
@@ -295,7 +295,7 @@ for f in files:
 }
 
 (( $+commands[xmllint] )) && xml() {
-    cat "$@" | xmllint --format - | v
+        cat "$@" | xmllint --format - | v
 }
 
 v() {
@@ -343,17 +343,17 @@ v() {
 # Remove "-qp 0" for non-lossless compression.
 #
 screenrecord() {
-  local x y width height border
-  eval $(slop -b 5 -l -c 0.3,0.4,0.6,0.4 -f 'x=%x y=%y width=%w height=%h window=%i')
-  [[ -n $x ]] || return
-  [[ -z $window ]] || {
-      border=$(xwininfo -id $window | sed -n 's/  Border width: //p')
-      (( x += border ))
-      (( y += border ))
-      (( width -= border*2 ))
-      (( height -= border*2 ))
-  }
-  print -z -- ffmpeg \
+    local x y width height border
+    eval $(slop -b 5 -l -c 0.3,0.4,0.6,0.4 -f 'x=%x y=%y width=%w height=%h window=%i')
+    [[ -n $x ]] || return
+    [[ -z $window ]] || {
+        border=$(xwininfo -id $window | sed -n 's/  Border width: //p')
+        (( x += border ))
+        (( y += border ))
+        (( width -= border*2 ))
+        (( height -= border*2 ))
+    }
+    print -z -- ffmpeg \
         \\\\$'\n' \
         -f x11grab \
         -draw_mouse 0 \
@@ -371,15 +371,15 @@ screenrecord() {
 
 # Reimplementation of an xterm tool
 (( $+commands[resize] )) || resize() {
-  local previous=$(stty -g)
-  local rows
-  local cols
-  stty raw -echo min 0 time 1 # timeout: 1th of second
-  printf '\0337\033[r\033[999;999H\033[6n\0338'
-  IFS='[;R' read -r _ rows cols _ || true
-  stty $previous
-  stty cols $cols rows $rows
-}
+        local previous=$(stty -g)
+        local rows
+        local cols
+        stty raw -echo min 0 time 1 # timeout: 1th of second
+        printf '\0337\033[r\033[999;999H\033[6n\0338'
+        IFS='[;R' read -r _ rows cols _ || true
+        stty $previous
+        stty cols $cols rows $rows
+    }
 
 # Simple calculator
 if (( $+commands[qalc] )); then
@@ -395,35 +395,35 @@ fi
 
 # Allow to prefix commands with `$` to help copy/paste operations.
 function \$() {
-  "$@"
+    "$@"
 }
 
 # Get my own external IP
 function myip() {
-  local -a get
-  (( $+commands[wget] )) && get=(wget -q -O - -T 1)
-  (( $+commands[curl] )) && get=(curl -s --max-time 1)
-  for v in 4 6 ; do
-    echo IPv$v \
-         $($get -$v https://vincent.bernat.ch/ip || echo "unknown")
-  done 2> /dev/null
+    local -a get
+    (( $+commands[wget] )) && get=(wget -q -O - -T 1)
+    (( $+commands[curl] )) && get=(curl -s --max-time 1)
+    for v in 4 6 ; do
+        echo IPv$v \
+            $($get -$v https://vincent.bernat.ch/ip || echo "unknown")
+    done 2> /dev/null
 }
 
 # Send a line to Android device using adb. This is a bit broken as we
 # should escape "%s", but it is not escapable. "%%s" would just output
 # "% ".
 (( $+commands[adb] )) && function adbtype() {
-    case $# in
-        0)
-            while read -r line; do
-                adb shell input text ${(q)line}
-            done
-            ;;
-        *)
-            adb shell input text ${(q)${(j: :)@}}
-            ;;
-    esac
-}
+        case $# in
+            0)
+                while read -r line; do
+                    adb shell input text ${(q)line}
+                done
+                ;;
+            *)
+                adb shell input text ${(q)${(j: :)@}}
+                ;;
+        esac
+    }
 
 # Cleanup various things on a system
 function clean() {
@@ -489,15 +489,15 @@ colortest() {
     local bg
     printf "%4s" ""
     for fg in "" {40..47}; do
-	printf "%7sm" ${fg}
+	    printf "%7sm" ${fg}
     done
     printf "\n"
     for fg in 0 1 $(for i in {30..37}; do echo $i 1\;$i; done); do
-	printf " %5s \e[%s  %s  " ${fg} ${fg}m ${T}
-	for bg in {40..47}m; do
-	    printf " \e[%s\e[%s  %s  \e[0m" ${fg}m ${bg} ${T}
-	done
-	printf "\n"
+	    printf " %5s \e[%s  %s  " ${fg} ${fg}m ${T}
+	    for bg in {40..47}m; do
+	        printf " \e[%s\e[%s  %s  \e[0m" ${fg}m ${bg} ${T}
+	    done
+	    printf "\n"
     done
     printf "\n"
 
@@ -518,7 +518,7 @@ colortest() {
 
     printf "Grayscale ramp:\n"
     for bg in {232..255}; do
-      printf "\e[48;5;%dm  " bg
+        printf "\e[48;5;%dm  " bg
     done
     printf "\e[0m\n"
 
@@ -573,7 +573,7 @@ colortest() {
         local -a opts
 
         if [[ -z $arch ]] || [[ $arch == $(dpkg-architecture -q DEB_BUILD_ARCH) ]]; then
-                opts=(--debootstrap debootstrap)
+            opts=(--debootstrap debootstrap)
         else
             case $arch,$(dpkg-architecture -q DEB_BUILD_ARCH) in
                 i386,amd64)
@@ -593,23 +593,23 @@ colortest() {
         debians=(/usr/share/debootstrap/scripts/*(e,'[ ${REPLY}(:A) = /usr/share/debootstrap/scripts/sid ]',))
         debians=(${debians##*/})
         if [[ ${debians[(r)${distrib%%-*}]} == ${distrib%%-*} ]]; then
-                opts=($opts --mirror http://deb.debian.org/debian)
-                opts=($opts
-                    --debootstrapopts --keyring
-                    --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg)
+            opts=($opts --mirror http://deb.debian.org/debian)
+            opts=($opts
+                  --debootstrapopts --keyring
+                  --debootstrapopts /usr/share/keyrings/debian-archive-keyring.gpg)
         elif [[ ${ubuntus[(r)${distrib%%-*}]} == ${distrib%%-*} ]]; then
-                local mirror=http://archive.ubuntu.com/ubuntu
-                opts=($opts --mirror $mirror)
-                opts=($opts
-                    --debootstrapopts --keyring
-                    --debootstrapopts /usr/share/keyrings/ubuntu-archive-keyring.gpg)
-                opts=($opts --components 'main universe')
-                opts=($opts --othermirror "deb ${mirror} ${distrib%%-*}-updates main universe")
-                case ${distrib%%-*} in
-                    precise|trusty|xenial)
-                        opts=($opts --extrapackages pkg-create-dbgsym)
-                        ;;
-                esac
+            local mirror=http://archive.ubuntu.com/ubuntu
+            opts=($opts --mirror $mirror)
+            opts=($opts
+                  --debootstrapopts --keyring
+                  --debootstrapopts /usr/share/keyrings/ubuntu-archive-keyring.gpg)
+            opts=($opts --components 'main universe')
+            opts=($opts --othermirror "deb ${mirror} ${distrib%%-*}-updates main universe")
+            case ${distrib%%-*} in
+                precise|trusty|xenial)
+                    opts=($opts --extrapackages pkg-create-dbgsym)
+                    ;;
+            esac
         fi
 
         # Flavor
@@ -631,10 +631,10 @@ colortest() {
         fi
 
         sudo --preserve-env=DEB_BUILD_OPTIONS env DEBIAN_BUILDARCH="$arch" cowbuilder $1 \
-             --distribution ${distrib%%-*}  \
-             --basepath /var/cache/pbuilder/base-${target}.cow \
-             --buildresult $PWD \
-             $opts $*[2,$#]
+            --distribution ${distrib%%-*}  \
+            --basepath /var/cache/pbuilder/base-${target}.cow \
+            --buildresult $PWD \
+            $opts $*[2,$#]
     }
 }
 
@@ -670,7 +670,7 @@ _virtualenv () {
 
 EOF
     } always {
-	popd > /dev/null || return
+	    popd > /dev/null || return
     }
     workon $venv
     (( delete_on_exit )) && \
