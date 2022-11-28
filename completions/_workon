@@ -4,21 +4,21 @@ _environments() {
     local -a virtualenvs images containers
     local expl
 
-    (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && {
+    (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && \
         containers=(${(f)"$(docker container list 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"})
-        _describe -t containers-active "running containers" containers
-    }
+    (( $+commands[podman] )) && \
+        containers=(${(f)"$(podman container list 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"})
+    (( $#containers )) && _describe -t containers-active "running containers" containers
 
     virtualenvs=( ${WORKON_HOME}/*/bin/activate(.N:h:h:t) )
     _wanted environments expl 'virtualenv environment' compadd \
         -a virtualenvs
 
-    (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && {
+    (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && \
         images=(${(f)"$(docker image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"})
-        _wanted images expl 'docker images' compadd \
-            -a images
-    }
-
+    (( $+commands[podman] )) && \
+        images=(${(f)"$(podman image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"})
+    (( $#images )) && _wanted images expl 'docker images' compadd -a images
 }
 
 _arguments \

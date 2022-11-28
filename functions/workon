@@ -18,6 +18,10 @@ venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
     dimages=( $(docker image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
     dcontainers=( $(docker container list | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
 }
+(( $+commands[podman] )) && {
+    pimages=( $(podman image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
+    pcontainers=( $(podman container list | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
+}
 
 # No parameters, list available environment
 [[ -n $env ]] || {
@@ -30,6 +34,12 @@ venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
     done
     for container in $dcontainers; do
         print " - [docker    ] $container"
+    done
+    for image in $pimages; do
+        print " - [podman    ] $image"
+    done
+    for container in $pcontainers; do
+        print " - [podman    ] $container"
     done
     return 0
 }
@@ -64,7 +74,10 @@ exec env SHELL=\$SHELL \$SHELL
 [[ $env == "." ]] && env=${PWD:t}
 
 # Docker images
-[[ ${dimages[(r)$env]} == $env ]] && {
+local runtime
+[[ ${dimages[(r)$env]} == $env ]] && runtime=docker
+[[ ${pimages[(r)$env]} == $env ]] && runtime=podman
+[[ $runtime != "" ]] && {
     local image=${env}
     local tmp=$(mktemp -d)
     _vbe_compile_sudo
@@ -86,7 +99,7 @@ chown $(id -u):$(id -g) $HOME
 exec env HOME=$HOME TERM=$TERM DOCKER_CHROOT_NAME=$env SHELL=\$SHELL SHLVL= \
      /usr/bin/sudo -u $(id -u) -g $(id -g) -c '$PWD' \$SHELL -i -l
 EOF
-    docker container run -t -i \
+    $runtime container run -t -i \
            $([[ -d /usr/share/zsh ]] && print -- -v /usr/share/zsh:/usr/share/zsh-static:ro) \
            $([[ -x ${SHELL}-static ]] && print -- -v ${SHELL}-static:${SHELL}-static:ro) \
            -v ${ZDOTDIR:-$HOME}/.zshrc:$HOME/.zshrc:ro \
@@ -109,8 +122,11 @@ EOF
 }
 
 # Docker containers
-[[ ${dcontainers[(r)$env]} == $env ]] && {
-    local id=$(docker container inspect --format '{{.State.Pid}}' $env)
+runtime=
+[[ ${dcontainers[(r)$env]} == $env ]] && runtime=docker
+[[ ${dcontainers[(r)$env]} == $env ]] && runtime=podman
+[[ $runtime != "" ]] && {
+    local id=$($runtime container inspect --format '{{.State.Pid}}' $env)
 
     # We need to mount $HOME inside the container, that's quite
     # hacky: we get the device we need to mount, we mount it
@@ -161,7 +177,7 @@ EOF
     local rootdev=$(readlink -f ${${(f)"$(df --output=source /)"}[-1]})
     local enter=$(mktemp --tmpdir nsenter-XXXXXXXXX)
     local -a environ
-    environ=(${(@f)"$(docker container inspect --format "{{range .Config.Env}}{{.}}"$'\n'"{{end}}" $env)"})
+    environ=(${(@f)"$($runtime container inspect --format "{{range .Config.Env}}{{.}}"$'\n'"{{end}}" $env)"})
     for ((i = 1; i <= $#environ; i++)) {
             if [[ ${environ[$i]%%=*} =~ ^[a-zA-Z_]+[a-zA-Z0-9_]*$ ]]; then
                 environ[$i]="export ${environ[$i]%%=*}=${(q-)${environ[$i]#*=}}"

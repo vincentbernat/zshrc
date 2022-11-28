@@ -449,6 +449,8 @@ function clean() {
         sudo rm -rf --one-file-system /var/cache/pbuilder/build/cow*
     (( $+commands[docker] )) && prompt "Docker related stuff" && \
         sudo docker system prune -f
+    (( $+commands[podman] )) && prompt "Podman related stuff" && \
+        podman system prune -f
     [[ -d /nix ]] && prompt "nix store" && \
         nix-collect-garbage --delete-older-than 7d
     [[ -d /var/log/journal ]] && prompt "journal logs" && \
