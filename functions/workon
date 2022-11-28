@@ -12,9 +12,16 @@ emulate -L zsh
 setopt nomonitor
 
 local env=$1
-local -a venv dimages dcontainers
+local -a venv dimages dcontainers docker runetime
 venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
-(( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && {
+(( $+commands[docker] )) && {
+    if [[ -w /var/run/docker.sock ]]; then
+        docker=(docker)
+    elif [[ -f /var/run/docker.sock ]]; then
+        docker=(sudo docker)
+    fi
+}
+(( $#docker )) && {
     dimages=( $(docker image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
     dcontainers=( $(docker container list | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
 }
@@ -51,8 +58,8 @@ function _vbe_compile_sudo() {
     if [[ ! -f $sudo ]] || (( $(zstat +mtime $ZSH/misc/sudo.c) > $(zstat +mtime $sudo) )); then
         if (( $+commands[gcc] )); then
             gcc -Wall -static $ZSH/misc/sudo.c -o $sudo
-        elif (( $+commands[docker] )); then
-            docker run --user=$UID:$GID --interactive --rm --volume=${sudo:h}:${sudo:h} gcc \
+        elif (( $#docker )); then
+            $docker run --user=$UID:$GID --interactive --rm --volume=${sudo:h}:${sudo:h} gcc \
                    gcc -Wall -static -x c - -o $sudo < $ZSH/misc/sudo.c
         fi
     fi
@@ -74,10 +81,9 @@ exec env SHELL=\$SHELL \$SHELL
 [[ $env == "." ]] && env=${PWD:t}
 
 # Docker images
-local runtime
-[[ ${dimages[(r)$env]} == $env ]] && runtime=docker
-[[ ${pimages[(r)$env]} == $env ]] && runtime=podman
-[[ $runtime != "" ]] && {
+[[ ${dimages[(r)$env]} == $env ]] && runtime=$docker
+[[ ${pimages[(r)$env]} == $env ]] && runtime=(podman)
+(( $#runtime )) && {
     local image=${env}
     local tmp=$(mktemp -d)
     _vbe_compile_sudo
@@ -122,10 +128,10 @@ EOF
 }
 
 # Docker containers
-runtime=
-[[ ${dcontainers[(r)$env]} == $env ]] && runtime=docker
-[[ ${dcontainers[(r)$env]} == $env ]] && runtime=podman
-[[ $runtime != "" ]] && {
+runtime=()
+[[ ${dcontainers[(r)$env]} == $env ]] && runtime=$docker
+[[ ${dcontainers[(r)$env]} == $env ]] && runtime=(podman)
+(( $#runtime )) && {
     local id=$($runtime container inspect --format '{{.State.Pid}}' $env)
 
     # We need to mount $HOME inside the container, that's quite

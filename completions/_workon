@@ -1,11 +1,19 @@
 #compdef workon
 
 _environments() {
-    local -a virtualenvs images containers
+    local -a virtualenvs images containers docker
     local expl
 
-    (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && \
-        containers=(${(f)"$(docker container list 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"})
+    (( $+commands[docker] )) && {
+        if [[ -w /var/run/docker.sock ]]; then
+            docker=(docker)
+        elif [[ -f /var/run/docker.sock ]]; then
+            docker=(sudo -n docker)
+        fi
+    }
+
+    (( $#docker )) && \
+        containers=(${(f)"$($docker container list 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"})
     (( $+commands[podman] )) && \
         containers=(${(f)"$(podman container list 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"})
     (( $#containers )) && _describe -t containers-active "running containers" containers
@@ -14,8 +22,8 @@ _environments() {
     _wanted environments expl 'virtualenv environment' compadd \
         -a virtualenvs
 
-    (( $+commands[docker] )) && [[ -w /var/run/docker.sock ]] && \
-        images=(${(f)"$(docker image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"})
+    (( $#docker )) && \
+        images=(${(f)"$($docker image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"})
     (( $+commands[podman] )) && \
         images=(${(f)"$(podman image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"})
     (( $#images )) && _wanted images expl 'docker images' compadd -a images
