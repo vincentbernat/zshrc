@@ -157,11 +157,17 @@ main(int argc, char * const argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	if (setregid(gid, gid) == -1 ||
-	    setgroups(1, gidset) == -1 ||
-	    setreuid(uid, uid) == -1) {
-		fprintf(stderr, "unable to change UID %d/GID %d: %m\n",
-		    uid, gid);
+	if (setregid(gid, gid) == -1) {
+		fprintf(stderr, "unable change GID %d: %m\n", gid);
+		exit(EXIT_FAILURE);
+	}
+	if (setgroups(1, gidset) == -1) {
+		fprintf(stderr, "unable change GID set %d: %m\n", gid);
+		exit(EXIT_FAILURE);
+	}
+	if (setreuid(uid, uid) == -1) {
+		fprintf(stderr, "unable to change UID %d: %m\n",
+		    uid);
 		exit(EXIT_FAILURE);
 	}
 
