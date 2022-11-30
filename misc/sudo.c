@@ -162,8 +162,7 @@ main(int argc, char * const argv[])
 		exit(EXIT_FAILURE);
 	}
 	if (setgroups(1, gidset) == -1) {
-		fprintf(stderr, "unable change GID set %d: %m\n", gid);
-		exit(EXIT_FAILURE);
+		// Do nothing
 	}
 	if (setreuid(uid, uid) == -1) {
 		fprintf(stderr, "unable to change UID %d: %m\n",
