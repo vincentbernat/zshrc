@@ -40,6 +40,7 @@ alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
 # Fix typos
 (( $+commands[git] )) && abbrev-alias gti=git
 (( $+commands[sudo] )) && abbrev-alias suod=sudo
+(( $+commands[ssh] )) && abbrev-alias shs=ssh
 
 # ls
 abbrev-alias ll='ls -ltrhA'
