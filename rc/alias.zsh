@@ -430,11 +430,11 @@ function myip() {
 function clean() {
     local prompt() {
         local what=$1
-        local prompt="${(%):-%F{green}Clean $what?${(%):-%F{default}"
+        local prompt="${(%):-%B}Clean $what?${(%):-%b}"
         read -sq "?$prompt "
         case $? in
             0)
-                print -P "%F{cyan}yes%F{default}"
+                print -P "%F{green}yes%F{default}"
                 return 0
                 ;;
         esac
