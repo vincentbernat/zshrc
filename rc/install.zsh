@@ -3,6 +3,8 @@
 # Install or update ZSH on a remote host.
 install-zsh() {
     # Generate termcap/terminfo
+    unset TERMINFO_DIRS
+    unset TERMCAP
     (( $+commands[tic] )) && (( $+commands[infocmp] )) && {
         infocmp $TERM | tic -o $ZSH/run/terminfo -
         infocmp -C $TERM > $ZSH/run/$TERM.termcap
