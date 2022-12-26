@@ -22,6 +22,8 @@ autoload -Uz zsh/terminfo zsh/termcap
            xterm-256color              # Well-known TERM
            xterm)                      # Even more well-known TERM
     for term in $terms; do
+        unset TERMCAP
+        [[ -f $ZSH/run/$term.termcap ]] && TERMCAP=$ZSH/run/$term.termcap
         TERM=$term 2> /dev/null
         if (( ${terminfo[colors]:-0} >= 8 )) || \
             (zmodload zsh/termcap 2> /dev/null) && \
@@ -31,6 +33,7 @@ autoload -Uz zsh/terminfo zsh/termcap
     done
     unset LC__ORIGINALTERM
     export TERM
+    [[ -n $TERMCAP ]] && export TERMCAP
 }
 
 () {
@@ -114,5 +117,3 @@ autoload -Uz zsh/terminfo zsh/termcap
 
 # Freeze the terminal
 ttyctl -f
-
-[[ -f $ZSH/run/$TERM.termcap ]] && export TERMCAP=$ZSH/run/$TERM.termcap
