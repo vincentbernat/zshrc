@@ -41,7 +41,7 @@ function _vbe-sudo-command-line() {
         LBUFFER="sudoedit${LBUFFER#e}"
         ;;
     *)
-        LBUFFER="sudo $LBUFFER"
+        LBUFFER="sudo =${LBUFFER## *}"
   esac
   zle _vbe-reset-autosuggest
 }
