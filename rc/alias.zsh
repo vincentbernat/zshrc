@@ -42,6 +42,12 @@ alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
 (( $+commands[sudo] )) && abbrev-alias suod=sudo
 (( $+commands[ssh] )) && abbrev-alias shs=ssh
 
+# Automatic sudo
+(( $+commands[docker] )) && [[ -S /run/docker.sock ]] && [[ ! -w /run/docker.sock ]] && {
+    abbrev-alias docker="sudo =docker"
+    (( $+commands[docker-compose] )) && abbrev-alias docker-compose="sudo =docker-compose"
+}
+
 # ls
 abbrev-alias ll='ls -ltrhA'
 if ls --color=auto --g -d . &>/dev/null; then
