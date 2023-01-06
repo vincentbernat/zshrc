@@ -207,6 +207,12 @@ suzsh() {
         ${ZSH_NAME} -i -l
 }
 
+(( $+commands[nix] )) && nixpkgs() {
+    cmd=$1
+    shift
+    nix run nixpkgs\#${cmd} -- "$@"
+}
+
 # Newline Delimited JSON pretty-printing.
 #
 # Many programs have a flag to enable unbuffered output. For example,
