@@ -15,15 +15,15 @@ local env=$1
 local -a venv dimages dcontainers docker runetime
 venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
 (( $+commands[docker] )) && {
-    if [[ -w /var/run/docker.sock ]]; then
+    if [[ -w /run/docker.sock ]]; then
         docker=(docker)
-    elif [[ -f /var/run/docker.sock ]]; then
+    elif [[ -S /run/docker.sock ]]; then
         docker=(sudo docker)
     fi
 }
 (( $#docker )) && {
-    dimages=( $(docker image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
-    dcontainers=( $(docker container list | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
+    dimages=( $($docker image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
+    dcontainers=( $($docker container list | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
 }
 (( $+commands[podman] )) && {
     pimages=( $(podman image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
@@ -81,7 +81,7 @@ exec env SHELL=\$SHELL \$SHELL
 [[ $env == "." ]] && env=${PWD:t}
 
 # Docker images
-[[ ${dimages[(r)$env]} == $env ]] && runtime=$docker
+[[ ${dimages[(r)$env]} == $env ]] && runtime=($docker)
 [[ ${pimages[(r)$env]} == $env ]] && runtime=(podman)
 (( $#runtime )) && {
     local image=${env}
