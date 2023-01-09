@@ -129,8 +129,8 @@ EOF
 
 # Docker containers
 runtime=()
-[[ ${dcontainers[(r)$env]} == $env ]] && runtime=$docker
-[[ ${dcontainers[(r)$env]} == $env ]] && runtime=(podman)
+[[ ${dcontainers[(r)$env]} == $env ]] && runtime=($docker)
+[[ ${pcontainers[(r)$env]} == $env ]] && runtime=(podman)
 (( $#runtime )) && {
     local id=$($runtime container inspect --format '{{.State.Pid}}' $env)
 
