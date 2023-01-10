@@ -30,6 +30,8 @@ bindkey "^x^e" edit-command-line
 # Meta-S will toggle sudo
 function _vbe-sudo-command-line() {
   [[ -z $BUFFER ]] && zle up-history
+  # We need to also make it work if cursor is inside the program name. In this
+  # case, we manipulate BUFFER instead of LBUFFER.
   case $BUFFER in
     sudoedit\ *)
       case $LBUFFER in
@@ -50,7 +52,15 @@ function _vbe-sudo-command-line() {
       esac
       ;;
     *)
-      LBUFFER="sudo =${LBUFFER## *}"
+      local prog nprog remaining
+      prog=${${(Az)BUFFER}[1]}
+      nprog=${${aliases[$prog]:-${commands[$prog]}}:-${prog}}
+      if [[ $prog == ${${(Az)LBUFFER}[1]} ]]; then
+        LBUFFER="sudo ${LBUFFER/$prog/$nprog}"
+      else
+        BUFFER="sudo ${BUFFER/$prog/$nprog}"
+      fi
+      ;;
   esac
   zle _vbe-reset-autosuggest
 }
