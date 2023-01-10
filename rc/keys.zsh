@@ -36,29 +36,30 @@ function _vbe-sudo-command-line() {
     sudoedit\ *)
       case $LBUFFER in
         sudoedit*) LBUFFER=e${LBUFFER#sudoedit} ;;
-        *) BUFFER=e${BUFFER#sudoedit} ;;
+        *) BUFFER=e${BUFFER#sudoedit}; CURSOR=$(( CURSOR - ${#${:-sudoedit}} + 1 )) ;;
       esac
       ;;
     sudo\ *)
       case $LBUFFER in
         sudo*) LBUFFER=${LBUFFER#sudo } ;;
-        *) BUFFER=${BUFFER#sudo } ;;
+        *) BUFFER=${BUFFER#sudo }; CURSOR=$(( CURSOR - ${#${:-sudo}} - 1 )) ;;
       esac
       ;;
     e\ *)
       case $LBUFFER in
         e*) LBUFFER="sudoedit ${LBUFFER#e }" ;;
-        *) BUFFER="sudoedit ${BUFFER#e }" ;;
+        *) BUFFER="sudoedit ${BUFFER#e }"; CURSOR=$(( CURSOR + ${#${:-sudoedit}} - 1 )) ;;
       esac
       ;;
     *)
-      local prog nprog remaining
+      local prog nprog
       prog=${${(Az)BUFFER}[1]}
       nprog=${${aliases[$prog]:-${commands[$prog]}}:-${prog}}
       if [[ $prog == ${${(Az)LBUFFER}[1]} ]]; then
         LBUFFER="sudo ${LBUFFER/$prog/$nprog}"
       else
         BUFFER="sudo ${BUFFER/$prog/$nprog}"
+        CURSOR=$(( CURSOR + ${#${:-sudo}} + 1 ))
       fi
       ;;
   esac
