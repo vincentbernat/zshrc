@@ -32,16 +32,25 @@ function _vbe-sudo-command-line() {
   [[ -z $BUFFER ]] && zle up-history
   case $BUFFER in
     sudoedit\ *)
-        LBUFFER="e${LBUFFER#sudoedit}"
-        ;;
+      case $LBUFFER in
+        sudoedit*) LBUFFER=e${LBUFFER#sudoedit} ;;
+        *) BUFFER=e${BUFFER#sudoedit} ;;
+      esac
+      ;;
     sudo\ *)
-        LBUFFER="${LBUFFER#sudo }"
-        ;;
-    e\ *|e)
-        LBUFFER="sudoedit${LBUFFER#e}"
-        ;;
+      case $LBUFFER in
+        sudo*) LBUFFER=${LBUFFER#sudo } ;;
+        *) BUFFER=${BUFFER#sudo } ;;
+      esac
+      ;;
+    e\ *)
+      case $LBUFFER in
+        e*) LBUFFER="sudoedit ${LBUFFER#e }" ;;
+        *) BUFFER="sudoedit ${BUFFER#e }" ;;
+      esac
+      ;;
     *)
-        LBUFFER="sudo =${LBUFFER## *}"
+      LBUFFER="sudo =${LBUFFER## *}"
   esac
   zle _vbe-reset-autosuggest
 }
