@@ -28,6 +28,7 @@ fi
         ~/.local/bin
         ~/.nix-profile/bin
         # Locally-installed software
+        /nix/var/nix/profiles/default/bin
         /usr/lib/ccache
         /usr/local/sbin
         /usr/local/bin
