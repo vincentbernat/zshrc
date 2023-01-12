@@ -26,7 +26,7 @@
         fi
         [[ ! -f $zcdc || $zcd -nt $zcdc ]] && rm -f $zcdc && {
                 # On 9p, this fails because O_CREAT|O_WRONLY, 0444 fails
-                if [[ $(findmnt -no FSTYPE $(stat -c %m $zcd) 2> /dev/null) != "9p" ]]; then
+                if [[ $(findmnt -no FSTYPE $(stat -c %m $zcd 2> /dev/null) 2> /dev/null) != "9p" ]]; then
                     zcompile $zcd &!
                 fi
             }

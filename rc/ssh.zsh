@@ -39,7 +39,7 @@ _vbe_ssh_command() {
     case "$TERM" in
 	*-*) cmd=(LC__ORIGINALTERM=$TERM TERM=${TERM%%-*} $cmd) ;;
     esac
-    cmd=(env LANG=C LC_MESSAGES=C ssh "$@")
+    cmd=(env LANG=C LC_MESSAGES=C LC_CTYPE=C LC_TIME=C LC_NUMERIC=C ssh "$@")
 
     # Return array in reply
     : ${(A)reply::="${cmd[@]}"}
@@ -98,6 +98,7 @@ EOF
 # shadows the "zssh" command which enables interactive transfers over
 # ssh with zmodem.
 zssh() {
+    local -x LANG=C LC_MESSAGES=C LC_CTYPE=C LC_TIME=C LC_NUMERIC=C
     local -A state
     local -a common_ssh_args probe_ssh_args
     local current=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
