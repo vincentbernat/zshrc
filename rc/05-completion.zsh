@@ -2,6 +2,7 @@
 
 () {
     emulate -L zsh
+    [[ -o interactive ]] || return
     setopt extendedglob
     autoload -Uz compinit complist
     local zcd=$1                # compdump
