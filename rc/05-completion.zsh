@@ -16,10 +16,9 @@
         if [[ ! -e $zcda || -n $zcda(#qN.mh+24) ]]; then
             print -nu2 "Building completion cache..."
             # No compdump or too old
+            \rm -f $ZSHRUN/zcompdump*(N.mM+6)
             compinit -u -d $zcd
             : > $zcda
-            # Remove old ones
-            \rm -f $ZSHRUN/zcompdump*(N.mM+6)
             print -nu2 '\r'
         else
             # Reuse existing one
