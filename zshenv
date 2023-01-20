@@ -22,9 +22,12 @@ fi
     [[ $IN_NIX_SHELL == pure ]] && return
     local -a wanted savedpath
     local p
+    [[ -f /etc/os-release ]] && wanted=(
+        ~/.local/bin/${${(M@f)$(</etc/os-release):#ID=*}#ID=}
+    )
     wanted=(
+        $wanted
         # User-local directories
-        ~/.local/bin/${${(M@f)$([[ -f /etc/os-release ]] && </etc/os-release):#ID=*}#ID=}
         ~/.local/bin
         ~/.nix-profile/bin
         # Locally-installed software
