@@ -29,7 +29,7 @@ EOF
     done
     [[ -z $EDITOR ]] || {
         alias e=$EDITOR
-        (( $+commands[sudo] == 1 && $+commands[sudoedit] == 0 )) && \
+        (( $+commands[sudo] && ! $+commands[sudoedit] )) && \
             alias sudoedit='sudo $EDITOR'
         # Maybe use emacsclient?
         [[ $editor == emacs* ]] && (( $+commands[emacsclient] )) && {
