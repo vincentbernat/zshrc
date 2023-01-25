@@ -12,7 +12,7 @@ emulate -L zsh
 setopt nomonitor
 
 local env=$1
-local -a venv dimages dcontainers docker runetime
+local -a venv dimages dcontainers docker runtime
 venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
 (( $+commands[docker] )) && {
     if [[ -w /run/docker.sock ]]; then
@@ -81,6 +81,7 @@ exec env SHELL=\$SHELL \$SHELL
 [[ $env == "." ]] && env=${PWD:t}
 
 # Docker images
+runtime=()
 [[ ${dimages[(r)$env]} == $env ]] && runtime=($docker)
 [[ ${pimages[(r)$env]} == $env ]] && runtime=(podman)
 (( $#runtime )) && {
