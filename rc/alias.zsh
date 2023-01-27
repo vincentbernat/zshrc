@@ -330,8 +330,6 @@ v() {
                 gzip -cdfq -- $f | bat --file-name ${f%.gz}
             done
         fi
-    elif (( $+commands[zless] )); then
-        zless -FX "$@"
     elif (( $+commands[less] )); then
         gzip -cdfq -- "$@" | less -FX
     elif (( $+commands[zmore] )); then
