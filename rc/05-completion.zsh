@@ -63,10 +63,8 @@ zstyle ':completion:*:*:-command-:*:*' ignored-patterns 'cowbuilder-*'
 zstyle ':completion:*:processes' command "ps -eo pid,user,comm,cmd -w -w"
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:kill:*' force-list always
-zstyle ':completion:*:*:docker:*' option-stacking yes
-zstyle ':completion:*:*:docker-*:*' option-stacking yes
-zstyle ':completion:*:docker/*' gain-privileges yes
-zstyle ':completion:*:docker-*/*' gain-privileges yes
+zstyle ':completion:*:*:docker(|-*):*' option-stacking yes
+zstyle ':completion:*:docker(|-*)/*' gain-privileges yes
 zstyle ':completion:*:*:git-fetch:argument-rest:' tag-order '!remote-repositories'
 zstyle ':completion:*:*:git-pull:argument-1:' tag-order '!remote-repositories'
 zstyle ':completion:*:(ssh|scp|sftp|rsync):*:users' users root "$USERNAME" vincent
