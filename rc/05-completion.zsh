@@ -69,7 +69,7 @@ zstyle ':completion:*:docker/*' gain-privileges yes
 zstyle ':completion:*:docker-*/*' gain-privileges yes
 zstyle ':completion:*:*:git-fetch:argument-rest:' tag-order '!remote-repositories'
 zstyle ':completion:*:*:git-pull:argument-1:' tag-order '!remote-repositories'
-zstyle ':completion:*:(ssh|scp|sftp|rsync):*:users' users root "$USERNAME" vincent blade cumulus
+zstyle ':completion:*:(ssh|scp|sftp|rsync):*:users' users root "$USERNAME" vincent
 
 # Host completion
 _vbe_custom_hosts() {
