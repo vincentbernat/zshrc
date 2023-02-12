@@ -203,15 +203,13 @@ alias smv='rsync -P --remove-source-files'
 
 # Like sudo -sE but it preserves ZDOTDIR, see:
 #  <https://sources.debian.org/src/sudo/1.9.1-1/plugins/sudoers/env.c/?hl=187#L187>
-suzsh() {
-    command sudo -H -u ${1:-root} \
-        env ZDOTDIR=${ZDOTDIR:-$HOME} \
-        ZSH=$ZSH \
-        ${DISPLAY+DISPLAY=$DISPLAY} \
-        ${SSH_TTY+SSH_TTY=$SSH_TTY} \
-        ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
-        ${ZSH_NAME} -i -l
-}
+suzsh() command sudo -H -u ${1:-root} \
+    env ZDOTDIR=${ZDOTDIR:-$HOME} \
+    ZSH=$ZSH \
+    ${DISPLAY+DISPLAY=$DISPLAY} \
+    ${SSH_TTY+SSH_TTY=$SSH_TTY} \
+    ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
+    ${ZSH_NAME} -i -l
 
 (( $+commands[nix] )) && nixpkgs() {
     cmd=$1
