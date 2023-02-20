@@ -12,7 +12,7 @@ _vbe_title_preexec () {
             \=*)
                 cmd=(${cmd[1]#=} $cmd[2,-1])
                 ;;
-            *=*|exec|sudo|noglob|\()
+            *=*|exec|sudo|env|noglob|\()
                 shift cmd
                 ;;
             fg)
