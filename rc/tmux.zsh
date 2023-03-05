@@ -57,3 +57,31 @@
         tmux set -g history-limit ${current_limit}
     }
 }
+
+# Start a command inside ttyd
+(( $+commands[tmux] )) && (( $+commands[ttyd] )) && {
+    # Check what this gives access to with `tmux list-keys -T root`.
+    function tmux-ttyd() {
+        local -a args
+        args=($@)
+        ttyd \
+            --browser \
+            -t fontSize=18 \
+            -t fontFamily='Iosevka Term SS18' \
+            -o -p0 \
+            tmux new-session "
+              source $ZSH/zshrc ;
+              tmux set-option -s prefix None ;
+              tmux set-option -w remain-on-exit on ;
+              ${args}"
+    }
+    (( $+functions[compdef] )) && \
+        compdef '_arguments -s -S "1: :_command_names" "*:: :_normal"' tmux-ttyd
+
+    # To record a remote pane:
+    #  tmux pipe-pane -o -t%53 "zsh -c 'source $ZSH/zshrc && _vbe_tmux-record-pane #D'"
+    # To respawn a remote window:
+    #  tmux respawnw -t%53
+    # To start another window:
+    #  tmux new-window -t \$10 "source $ZSH/zshrc ; tmux set-option -w remain-on-exit on ; ..."
+}
