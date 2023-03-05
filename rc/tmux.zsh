@@ -73,6 +73,7 @@
               source $ZSH/zshrc ;
               tmux set-option -s prefix None ;
               tmux set-option -w remain-on-exit on ;
+              tmux set-hook window-linked 'set-option -w remain-on-exit on' ;
               ${args}"
     }
     (( $+functions[compdef] )) && \
@@ -83,5 +84,5 @@
     # To respawn a remote window:
     #  tmux respawnw -t%53
     # To start another window:
-    #  tmux new-window -t \$10 "source $ZSH/zshrc ; tmux set-option -w remain-on-exit on ; ..."
+    #  tmux new-window -t \$10 "source $ZSH/zshrc ; ..."
 }
