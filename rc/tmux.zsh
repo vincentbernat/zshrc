@@ -80,9 +80,9 @@
         compdef '_arguments -s -S "1: :_command_names" "*:: :_normal"' tmux-ttyd
 
     # To record a remote pane:
-    #  tmux pipe-pane -o -t%53 "zsh -c 'source $ZSH/zshrc && _vbe_tmux-record-pane #D'"
+    #  tmux pipe-pane -o -t%53 "zsh -c 'source $ZSH/zshrc ; _vbe_tmux-record-pane #D'"
     # To respawn a remote window:
-    #  tmux respawnw -t%53
+    #  tmux respawn-window -t%53
     # To start another window:
     #  tmux new-window -t \$10 "source $ZSH/zshrc ; ..."
 }
