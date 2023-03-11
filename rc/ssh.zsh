@@ -1,7 +1,7 @@
 # -*- sh -*-
 
 _vbe_ssh_command() {
-    # We assume we have an OpenSSH client with this patch:
+    # This works better with OpenSSH 9.2+. See:
     #  https://bugzilla.mindrot.org/attachment.cgi?id=3547
     local remote=${${=${(M)${:-"${(@f)$(command ssh -G "$@" 2>/dev/null)}"}:#(host|hostname) *}[1]}[-1]}
     [[ -n $remote ]] &&
