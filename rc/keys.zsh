@@ -54,7 +54,7 @@ function _vbe-sudo-command-line() {
     *)
       local prog nprog
       prog=${${(Az)BUFFER}[1]}
-      nprog=${${${aliases[$prog]:-${prog}}#sudo }#=}
+      nprog=${${${${aliases[$prog]:-${prog}}#sudo }#command }#=}
       if [[ $prog == ${${(Az)LBUFFER}[1]} ]]; then
         LBUFFER="sudo =${LBUFFER/$prog/$nprog}"
       else
