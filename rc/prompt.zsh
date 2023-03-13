@@ -190,7 +190,7 @@ _vbe_setprompt () {
 # Collect additional information from functions matching _vbe_add_prompt_*
 _vbe_add_prompt () {
     local f
-    for f in ${(M)${(k)functions}:#_vbe_add_prompt_*}; do
+    for f in ${(oM)${(k)functions}:#_vbe_add_prompt_*}; do
         $f
     done
 }
@@ -267,7 +267,9 @@ fi
 # In virtualenv (can happen when shell is sourced)
 typeset -g VIRTUAL_ENV_DISABLE_PROMPT=1
 _vbe_add_prompt_virtualenv () {
-    _vbe_prompt_env $PRCH[python] '${${VIRTUAL_ENV%/.venv}##*/}'
+    if [[ $DIRENV_STATUS != "allowed" ]]; then
+        _vbe_prompt_env $PRCH[python] '${${VIRTUAL_ENV%/.venv}##*/}'
+    fi
 }
 
 _vbe_setprompt
