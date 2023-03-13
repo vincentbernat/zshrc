@@ -116,7 +116,7 @@
     add-zsh-hook chpwd _vbe_vcs_chpwd
 
     # Add VCS information to the prompt
-    _vbe_add_prompt_vcs () {
-	_vbe_prompt_segment cyan default ${vcs_info_msg_0_}
+    _vbe_add_prompt_0vcs () {
+        _vbe_prompt_segment cyan default ${vcs_info_msg_0_}
     }
 }

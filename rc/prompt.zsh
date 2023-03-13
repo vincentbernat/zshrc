@@ -191,7 +191,7 @@ _vbe_setprompt () {
 _vbe_add_prompt () {
     local f
     for f in ${(M)${(k)functions}:#_vbe_add_prompt_*}; do
-	$f
+        $f
     done
 }
 
