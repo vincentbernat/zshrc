@@ -1,0 +1,16 @@
+#compdef bip
+
+local word
+local -a completions
+word="${words[2]}"
+
+if [ "${#words}" -eq 2 ]; then
+  completions=($(bip commands))
+  _describe -t bip-commands "bip command" completions
+else
+  completions=($(bip completions "${word}"))
+  _describe -t bip-arguments "bip argument" completions
+  (( $#completions != 0 )) || _files
+fi
+
+return 0
