@@ -14,24 +14,28 @@ setopt nomonitor
 local env=$1
 local -a venv dimages dcontainers docker runtime
 venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
-(( $+commands[docker] )) && {
-    if [[ -w /run/docker.sock ]]; then
-        docker=(docker)
-    elif [[ -S /run/docker.sock ]]; then
-        docker=(sudo docker)
-    fi
-}
-(( $#docker )) && {
-    dimages=( $($docker image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
-    dcontainers=( $($docker container list | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
-}
-(( $+commands[podman] )) && {
-    pimages=( $(podman image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
-    pcontainers=( $(podman container list | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
+
+function _vbe_populate_docker() {
+    (( $+commands[docker] )) && {
+        if [[ -w /run/docker.sock ]]; then
+            docker=(docker)
+        elif [[ -S /run/docker.sock ]]; then
+            docker=(sudo docker)
+        fi
+    }
+    (( $#docker )) && {
+        dimages=( $($docker image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
+        dcontainers=( $($docker container list | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
+    }
+    (( $+commands[podman] )) && {
+        pimages=( $(podman image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
+        pcontainers=( $(podman container list | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
+    }
 }
 
 # No parameters, list available environment
 [[ -n $env ]] || {
+    _vbe_populate_docker
     print -u2 "List of available environments:"
     for env in $venv; do
         print " - [virtualenv] $env"
@@ -79,6 +83,50 @@ exec env SHELL=\$SHELL \$SHELL
 
 # Otherwise, use current directory name
 [[ $env == "." ]] && env=${PWD:t}
+
+# Virtualenv
+[[ ${venv[(r)$env]} == $env ]] && {(
+    local activate="$WORKON_HOME/$env/bin/activate"
+    local VIRTUAL_ENV_DISABLE_PROMPT=1
+    local NODE_VIRTUAL_ENV_DISABLE_PROMPT=1
+    source $activate # nowadays, it really just push virtualenv's bin in PATH
+
+    append_path() {
+        mkdir -p $1
+        path=( $1 $path )
+    }
+
+    # Gems.
+    # GEM_HOME is where gems will be installed.
+    # GEM_PATH is where gems are searched
+    export GEM_HOME=$VIRTUAL_ENV/gems
+    export GEM_PATH=$GEM_HOME
+    append_path $GEM_HOME/bin
+
+    # Go
+    export GOPATH=$VIRTUAL_ENV/go
+    append_path $GOPATH/bin
+
+    # C (install with ./configure --prefix=$VIRTUAL_ENV)
+    export LD_LIBRARY_PATH=$VIRTUAL_ENV/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+    export PKG_CONFIG_PATH=$VIRTUAL_ENV/lib/pkgconfig
+    append_path $VIRTUAL_ENV/sbin
+
+    # OCaml (through OPAM)
+    (( $+commands[opam] )) && {
+        export OPAMROOT=$VIRTUAL_ENV/opam
+        [[ -d $OPAMROOT ]] && \
+            eval $(opam config env)
+    }
+
+    # node.js workaround
+    [[ -z $NPM_CONFIG_PREFIX ]] || export npm_config_prefix=$NPM_CONFIG_PREFIX
+
+    export PATH
+    exec $SHELL -i
+); return }
+
+_vbe_populate_docker
 
 # Docker images
 runtime=()
@@ -246,48 +294,6 @@ exec env ZSH=$ZSH ${ZDOTDIR+ZDOTDIR=$ZDOTDIR} HOME=$HOME TERM=$TERM DOCKER_CHROO
 "
     return
 }
-
-# Virtualenv
-[[ ${venv[(r)$env]} == $env ]] && {(
-    local activate="$WORKON_HOME/$env/bin/activate"
-    local VIRTUAL_ENV_DISABLE_PROMPT=1
-    local NODE_VIRTUAL_ENV_DISABLE_PROMPT=1
-    source $activate # nowadays, it really just push virtualenv's bin in PATH
-
-    append_path() {
-        mkdir -p $1
-        path=( $1 $path )
-    }
-
-    # Gems.
-    # GEM_HOME is where gems will be installed.
-    # GEM_PATH is where gems are searched
-    export GEM_HOME=$VIRTUAL_ENV/gems
-    export GEM_PATH=$GEM_HOME
-    append_path $GEM_HOME/bin
-
-    # Go
-    export GOPATH=$VIRTUAL_ENV/go
-    append_path $GOPATH/bin
-
-    # C (install with ./configure --prefix=$VIRTUAL_ENV)
-    export LD_LIBRARY_PATH=$VIRTUAL_ENV/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-    export PKG_CONFIG_PATH=$VIRTUAL_ENV/lib/pkgconfig
-    append_path $VIRTUAL_ENV/sbin
-
-    # OCaml (through OPAM)
-    (( $+commands[opam] )) && {
-        export OPAMROOT=$VIRTUAL_ENV/opam
-        [[ -d $OPAMROOT ]] && \
-            eval $(opam config env)
-    }
-
-    # node.js workaround
-    [[ -z $NPM_CONFIG_PREFIX ]] || export npm_config_prefix=$NPM_CONFIG_PREFIX
-
-    export PATH
-    exec $SHELL -i
-); return }
 
 print "ERROR: environment $env does not exist"
 return 2
