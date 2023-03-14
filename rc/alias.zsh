@@ -653,7 +653,9 @@ colortest() {
 # Virtualenv related functions
 # Simplified version of virtualenvwrapper.
 typeset -g WORKON_HOME=${WORKON_HOME:-~/.virtualenvs}
-_virtualenv () {
+_virtualenv () {(
+    emulate -L zsh
+    setopt errexit
     local interpreter
     local venv
     local -i delete_on_exit=0
@@ -674,8 +676,8 @@ _virtualenv () {
         *) venv=$1 ;;
     esac
     {
-        ! command $interpreter -m virtualenv -p =$interpreter "${@[0,-2]}" $venv || \
-            cat <<EOF >&2
+        command $interpreter -m venv "${@[0,-2]}" $venv
+        cat <<EOF >&2
 # To reuse the environment for Node.JS, use:
 #  \$ pip install nodeenv
 #  \$ nodeenv -p -n system
@@ -687,7 +689,7 @@ EOF
     workon $venv
     (( delete_on_exit )) && \
         rm -rf $WORKON_HOME/$venv
-}
+)}
 
 alias virtualenv2='_virtualenv 2'
 alias virtualenv3='_virtualenv 3'
