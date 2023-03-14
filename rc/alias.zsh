@@ -676,10 +676,10 @@ _virtualenv () {(
         *) venv=$1 ;;
     esac
     {
-        if command $interpreter -c "import venv" 2> /dev/null; then
-            command $interpreter -m venv "${@[0,-2]}" $venv
-        else
+        if command $interpreter -c "import virtualenv" 2> /dev/null; then
             command $interpreter -m virtualenv -p $interpreter "${@[0,-2]}" $venv
+        else
+            command $interpreter -m venv "${@[0,-2]}" $venv
         fi
         cat <<EOF >&2
 # To reuse the environment for Node.JS, use:
