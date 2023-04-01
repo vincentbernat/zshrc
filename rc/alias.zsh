@@ -451,7 +451,7 @@ function clean() {
     ()(($#)) /var/cache/pbuilder/build/cow*(N/) && prompt "pbuilder old build" && \
         sudo rm -rf --one-file-system /var/cache/pbuilder/build/cow*
     (( $+commands[docker] )) && prompt "Docker related stuff" && \
-        sudo docker system prune -f
+        sudo =docker system prune -f
     (( $+commands[podman] )) && prompt "Podman related stuff" && \
         podman system prune -f
     [[ -d /nix ]] && prompt "nix store" && \
