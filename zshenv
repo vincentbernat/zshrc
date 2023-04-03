@@ -73,7 +73,7 @@ fi
     [[ $IN_NIX_SHELL == pure ]] && return
 
     local -aU xdg_data_dirs profiles
-    xdg_data_dirs=(~/.nix-profile/share ${(ps.:.)XDG_DATA_DIRS})
+    xdg_data_dirs=(~/.local/share ~/.nix-profile/share ${(ps.:.)XDG_DATA_DIRS})
     export XDG_DATA_DIRS=${(pj.:.)xdg_data_dirs}
 
     profiles=(
