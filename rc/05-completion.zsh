@@ -73,7 +73,12 @@ _vbe_custom_hosts() {
     # Complete ~/.zsh/local/hosts.*
     local host
     for host in $ZSH/local/hosts.*(N-.); do
-	_wanted hosts expl "remote host name" compadd "$@" ${(M)$(<$host):#${PREFIX}*}
+        case $host in
+            *\~) ;;
+            *)
+                _wanted hosts expl "remote host name" compadd "$@" ${(M)$(<$host):#${PREFIX}*}
+                ;;
+        esac
     done
 }
 zstyle -e ':completion:*' hosts '_vbe_custom_hosts "$@"'
