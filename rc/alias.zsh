@@ -36,6 +36,7 @@ alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
     fi
 }
 (( $+commands[gdb] )) && alias gdb='gdb -q'
+(( $+commands[dragon] )) && alias dragon='dragon -x'
 
 # Fix typos
 (( $+commands[git] )) && abbrev-alias gti=git
