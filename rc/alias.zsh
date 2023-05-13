@@ -37,7 +37,6 @@ alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
 }
 (( $+commands[gdb] )) && alias gdb='gdb -q'
 (( $+commands[dragon] )) && alias dragon='dragon -x'
-(( $+commands[mpv] )) && alias mpv720="mpv '--ytdl-format=bestvideo[height<=?720]+bestaudio/best'"
 
 # Fix typos
 (( $+commands[git] )) && abbrev-alias gti=git
@@ -48,6 +47,19 @@ alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
 # Automatic sudo
 (( $+commands[docker-compose] )) && [[ -S /run/docker.sock ]] && [[ ! -w /run/docker.sock ]] && {
     abbrev-alias docker-compose="sudo =docker-compose"
+}
+
+(( $+commands[mpv] )) && (( $+commands[nmcli] )) && {
+    # mpv with lower best resolution when on metered connection
+    mpv() {
+        local -a args
+        local dev=$(ip --json -o route get 1.1.1.1 2> /dev/null | jq -r '.[0].dev')
+        [[ -n $dev ]] \
+            && nmcli -t -f GENERAL.METERED dev show $dev | grep -q :yes \
+            && args=($args "--ytdl-format=bestvideo[height<=?720]+bestaudio/best")
+
+        command mpv $args "$@"
+    }
 }
 
 # ls
