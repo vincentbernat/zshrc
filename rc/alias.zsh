@@ -37,6 +37,7 @@ alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
 }
 (( $+commands[gdb] )) && alias gdb='gdb -q'
 (( $+commands[dragon] )) && alias dragon='dragon -x'
+(( $+commands[mpv] )) && alias mpv720="mpv '--ytdl-format=bestvideo[height<=?720]+bestaudio/best'"
 
 # Fix typos
 (( $+commands[git] )) && abbrev-alias gti=git
