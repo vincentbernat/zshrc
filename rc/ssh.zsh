@@ -108,7 +108,7 @@ zssh() {
     command ssh -G "$@" | command grep -Fxq 'controlpersist no' && \
         prepare_ssh_args=($prepare_ssh_args -o ControlPersist=10s)
 
-    # Probe to run on remote host to check the situation.
+    # Probe to run on remote host to check the situation (POSIX shell)
     local __() {
         echo "state[has-zsh]"=$(if PATH=$PATH:$HOME/.local/bin command -v zsh > /dev/null ||
                                         command -v nix-build > /dev/null; then
@@ -124,7 +124,7 @@ zssh() {
     }
     local probezsh="sh -c '$(which __); __ $USER'"
 
-    # Execution of Zsh on remote host.
+    # Execution of Zsh on remote host (POSIX shell)
     local __() {
         set -e
         export PATH=$PATH:$HOME/.local/bin
@@ -142,6 +142,7 @@ zssh() {
 
     (( $#@ )) || return 1
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
+    # Eval remote state: grep call is important to make it safe
     eval $(command ssh \
                    -o PermitLocalCommand=yes \
                    -o LocalCommand="/bin/echo 'state[hostname]=%n'" \
