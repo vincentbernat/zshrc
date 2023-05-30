@@ -4,31 +4,27 @@ _environments() {
     local -a virtualenvs images containers docker
     local expl
 
-    (( $+commands[docker] )) && {
-        if [[ -w /run/docker.sock ]]; then
-            docker=(docker)
-        elif [[ -S /run/docker.sock ]]; then
-            docker=(sudo -n docker)
-        fi
-    }
-
-    (( $#docker )) && \
-        containers=(${(f)"$($docker container list 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"})
-    (( $#containers )) && _describe -t containers-active "running Docker containers" containers
-    (( $+commands[podman] )) && \
-        containers=(${(f)"$(podman container list 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"})
-    (( $#containers )) && _describe -t containers-active "running Podman containers" containers
+    (( $+commands[docker] )) \
+        && containers=(${(f)"$(docker container list 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"}) \
+        && (( $#containers )) \
+        && _describe -t containers-active "running Docker containers" containers
+    (( $+commands[podman] )) \
+        && containers=(${(f)"$(podman container list 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"}) \
+        && (( $#containers )) \
+        && _describe -t containers-active "running Podman containers" containers
 
     virtualenvs=( ${WORKON_HOME}/*/bin/activate(.N:h:h:t) )
     _wanted environments expl 'virtualenv environment' compadd \
         -a virtualenvs
 
-    (( $#docker )) && \
-        images=(${(f)"$($docker image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"})
-    (( $#images )) && _wanted images expl 'docker images' compadd -a images
-    (( $+commands[podman] )) && \
-        images=(${(f)"$(podman image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"})
-    (( $#images )) && _wanted images expl 'podman images' compadd -a images
+    (( $+commands[docker] )) \
+        && images=(${(f)"$($docker image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"}) \
+        && (( $#images )) \
+        && _wanted images expl 'docker images' compadd -a images
+    (( $+commands[podman] )) \
+        && images=(${(f)"$(podman image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"}) \
+        && (( $#images )) \
+        && _wanted images expl 'podman images' compadd -a images
 }
 
 _arguments \
