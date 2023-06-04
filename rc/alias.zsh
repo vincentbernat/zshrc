@@ -502,7 +502,7 @@ update() {
     (( $+commands[nix] )) && nix registry pin nixpkgs
     (( $+commands[nix] )) && [[ -f ~/.config/nixpkgs/flake.nix ]] && nix flake update ~/.config/nixpkgs
     (( $+commands[home-manager] )) && nice home-manager switch
-    (( $+commands[doom] )) && [[ -d ~/.config/doom ]] && doom sync -u
+    # (( $+commands[doom] )) && [[ -d ~/.config/doom ]] && doom sync -u
     (( $+commands[fwupdmgr] )) && fwupdmgr update
     [[ -f /run/reboot-required ]] && print -P "%F{red}*** %BReboot required%b ***%F{default}"
 }
