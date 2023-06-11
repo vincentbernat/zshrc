@@ -6,8 +6,8 @@ setopt hist_ignore_all_dups	# ignores duplicates
 setopt hist_ignore_space		# don't store commands starting with a space
 
 HISTFILE=$ZSHRUN/history
-HISTSIZE=30000
-SAVEHIST=30000
+HISTSIZE=50000
+SAVEHIST=50000
 
 # Ctrl-r search in the history with patterns
 (( $+widgets[history-incremental-pattern-search-backward] )) &&	\
