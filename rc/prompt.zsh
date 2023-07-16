@@ -250,17 +250,17 @@ _vbe_prompt_env () {
         ;;
 esac
 
-if [[ $DIRENV_STATUS == "allowed" ]]; then
-    :
-elif [[ -n $IN_NIX_SHELL ]]; then
+if [[ -n $IN_NIX_SHELL ]]; then
     # In nix-shell
     _vbe_add_prompt_nixshell() {
-        _vbe_prompt_env $PRCH[nix] ${${name#shell}:-${${IN_WHICH_NIX_SHELL:-${(j:+:)${${=${:-${buildInputs} ${nativeBuildInputs}}}#*-}:#glibc*}}:-${PRCH[ellipsis]}}}
+        [[ $DIRENV_STATUS == "allowed" ]] || \
+            _vbe_prompt_env $PRCH[nix] ${${name#shell}:-${${IN_WHICH_NIX_SHELL:-${(j:+:)${${=${:-${buildInputs} ${nativeBuildInputs}}}#*-}:#glibc*}}:-${PRCH[ellipsis]}}}
     }
 elif [[ -n ${(M)path:#/nix/store*} ]]; then
     # In nix shell
     _vbe_add_prompt_nixshell() {
-        _vbe_prompt_env $PRCH[nix] ${(j:+:)${${${(M)path:#/nix/store*}#/nix/store/*-}%%/*}}
+        [[ $DIRENV_STATUS == "allowed" ]] || \
+            _vbe_prompt_env $PRCH[nix] ${(j:+:)${${${(M)path:#/nix/store*}#/nix/store/*-}%%/*}}
     }
 fi
 
