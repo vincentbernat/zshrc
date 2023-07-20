@@ -16,3 +16,6 @@
 [submodule "zsh-async"]
 	path = third-party/zsh-async
 	url = git@github.com:mafredri/zsh-async.git
+[submodule "third-party/fzf-tab"]
+	path = third-party/fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab

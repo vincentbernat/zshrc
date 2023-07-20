@@ -51,7 +51,6 @@ zstyle ':completion:*' list-prompt ''
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' insert-unambiguous
 zstyle ':completion:*' menu select
-zstyle ':completion:*:descriptions' format ${PRCH[completion]}' %B%d%b'
 zstyle ':completion:*:functions' ignored-patterns '_*'
 zstyle ':completion:*:match:*' original only
 zstyle ':completion::complete:*' use-cache 1
@@ -90,6 +89,15 @@ zstyle ":completion:*:hosts" known-hosts-files ''
 zmodload -i zsh/complist
 bindkey -M menuselect "+" accept-and-menu-complete
 
-# TODO: try fzf
-# https://github.com/Aloxaf/fzf-tab
-# https://github.com/lincheney/fzf-tab-completion
+# Use fzf when available
+if (( $+commands[fzf] )) && [[ -f $ZSH/third-party/fzf-tab/fzf-tab.plugin.zsh ]]; then
+    source $ZSH/third-party/fzf-tab/fzf-tab.plugin.zsh
+    zstyle ':fzf-tab:*' fzf-bindings 'space:accept'
+    zstyle ':fzf-tab:*' accept-line enter
+    zstyle ':completion:*:descriptions' format ${PRCH[completion]}' %d'
+
+    # Preview
+    # zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
+else
+    zstyle ':completion:*:descriptions' format ${PRCH[completion]}' %B%d%b'
+fi
