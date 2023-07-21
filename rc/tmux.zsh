@@ -58,6 +58,17 @@
     }
 }
 
+# Helper for pass
+(( $+commands[tmux] )) && function _vbe_tmux-pass() {
+    cd ${PASSWORD_STORE_DIR:-~/.password-store} 2> /dev/null || return
+    local entry=$(print -l **/*.gpg | sed 's,\.gpg$,,' | fzf)
+    [[ -n $entry ]] || return
+    local pass=$(pass show $entry | head -1)
+    [[ -n $pass ]] || return
+    tmux send-keys -l $pass
+    tmux send-keys enter
+}
+
 # Start a command inside ttyd
 (( $+commands[tmux] )) && (( $+commands[ttyd] )) && {
     # Check what this gives access to with `tmux list-keys -T root`.
