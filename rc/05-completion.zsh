@@ -92,8 +92,9 @@ bindkey -M menuselect "+" accept-and-menu-complete
 # Use fzf when available
 if (( $+commands[fzf] )) && [[ -f $ZSH/third-party/fzf-tab/fzf-tab.plugin.zsh ]]; then
     source $ZSH/third-party/fzf-tab/fzf-tab.plugin.zsh
-    zstyle ':fzf-tab:*' fzf-bindings 'space:accept'
+    zstyle ':fzf-tab:*' fzf-bindings 'space:accept' '+:toggle'
     zstyle ':fzf-tab:*' accept-line enter
+    zstyle ':fzf-tab:*' switch-group alt-left alt-right
     zstyle ':completion:*:descriptions' format ${PRCH[completion]}' %d'
 
     # Preview
