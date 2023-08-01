@@ -152,6 +152,7 @@ fi
 (( $+commands[pass] )) && alias pass='PASSWORD_STORE_ENABLE_EXTENSIONS=true pass'
 (( $+commands[dig] )) && alias dig='dig +noall +answer'
 (( $+commands[fdfind] )) && alias fd=fdfind
+(( $+commands[nsxiv] )) && alias sxiv=nsxiv
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 
 mkcd() {
