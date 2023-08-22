@@ -120,8 +120,8 @@ fi
 
 # ip aliases
 (( $+commands[ip] )) && [[ $(zstat +link -- $commands[ip]) != */busybox ]] && {
-    (( ${terminfo[colors]:-0} >= 8 )) && ip -color -human rule &> /dev/null && \
-        alias ip='ip -color -human'
+    (( ${terminfo[colors]:-0} >= 8 )) && ip -color=auto -human rule &> /dev/null && \
+        alias ip='ip -color=auto -human'
     abbrev-alias ip6='ip -6'
     abbrev-alias ipr='ip -resolve'
     abbrev-alias ip6r='ip -6 -resolve'
