@@ -65,8 +65,8 @@
     [[ -n $entry ]] || return
     local pass=$(pass show $entry | head -1)
     [[ -n $pass ]] || return
-    tmux send-keys -l $pass
-    tmux send-keys enter
+    tmux send-keys -t $1 -l $pass
+    tmux send-keys -t $1 enter
 }
 
 # Start a command inside ttyd
