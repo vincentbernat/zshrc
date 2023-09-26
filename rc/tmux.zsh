@@ -39,7 +39,7 @@
 # Helper for pipe-pane to record a session
 (( $+commands[tmux] )) && function _vbe_tmux-record-pane() {
     umask 077
-    local out=~/tmp/tmux-$HOST-$(date -I)-${1#%}.rawlog
+    local out=$(mktemp ~/tmp/tmux-$HOST-$(date -I)-${1#%}-XXXX.rawlog)
 
     # Capture the current scrollback
     tmux capture-pane -t $1 -JepS - > $out
@@ -52,6 +52,7 @@
     local current_limit=$(tmux show-options -gv history-limit)
     tmux set -g history-limit 2147483647
     {
+        touch ${out%.rawlog}.log.gz
         tmux new-window -d "cat $out ; tmux capture-pane -t \$TMUX_PANE -JpS - | gzip -c > ${out%.rawlog}.log.gz"
     } always {
         tmux set -g history-limit ${current_limit}
