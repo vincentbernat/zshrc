@@ -1,11 +1,33 @@
 # -*- sh -*-
 
-_vbe_ssh_command() {
-    # This works better with OpenSSH 9.2+. See:
+ssh() {
+    local -a cmd
+
+    # Get login@host. This needs OpenSSH 9.2+. See:
     #  https://bugzilla.mindrot.org/attachment.cgi?id=3547
-    local remote=${${=${(M)${:-"${(@f)$(command ssh -G "$@" 2>/dev/null)}"}:#(host|hostname) *}[1]}[-1]}
+    local -A details
+    details=(${=${(M)${:-"${(@f)$(command ssh -G "$@" 2>/dev/null)}"}:#(host|hostname|user) *}})
+    local remote=${details[host]:-details[hostname]}
+    local login=${details[user]}@${remote}
+
+    # Title
     [[ -n $remote ]] &&
         _vbe_title @${remote}
+
+    # Password
+    [[ -f $ZSH/local/ssh-login2pass ]] && {
+        local passname=$(source $ZSH/local/ssh-login2pass $login)
+        [[ -n $passname ]] && {
+            local helper=$(mktemp)
+            trap "command rm $helper" EXIT
+            cat <<EOF > $helper
+#!$SHELL
+pass show $passname | head -1
+EOF
+            chmod u+x $helper
+            cmd=(SSH_ASKPASS=$helper SSH_ASKPASS_REQUIRE=prefer $cmd)
+        }
+    }
 
     # TERM is one of the variables that is usually allowed to be
     # transmitted to the remote session. The remote host should have
@@ -35,61 +57,26 @@ _vbe_ssh_command() {
     # Also, when the same Zsh configuration is used on the remote
     # host, the locale is reset with the help of
     # `$ZSH/rc/01-locale.zsh`.
-    local -a cmd
     case "$TERM" in
 	*-*) cmd=(LC__ORIGINALTERM=$TERM TERM=${TERM%%-*} $cmd) ;;
     esac
-    cmd=(env LANG=C LC_MESSAGES=C LC_CTYPE=C LC_TIME=C LC_NUMERIC=C ssh "$@")
+    cmd=(LANG=C LC_MESSAGES=C LC_CTYPE=C LC_TIME=C LC_NUMERIC=C $cmd ssh "$@")
 
-    # Return array in reply
-    : ${(A)reply::="${cmd[@]}"}
+    env $cmd
 }
 
-ssh() {
-    _vbe_ssh_command "$@"
-    $reply
-}
-
-(( $+commands[sshpass] )) && [[ -f $ZSH/local/ssh2passname ]] && () {
-    # Connect with a password
-    pssh() {
-        local passname
-        local login
-        local directive
-        for directive in host{name,}; do
-            login=$(command ssh -G "$@" \
-                        | awk '($1 == "user") { user=$2 }
-                               ($1 == "'$directive'") { directive=$2 }
-                               END { print user "@" directive }')
-            passname=$(source $ZSH/local/ssh2passname $login)
-            [[ -z $passname ]] || break
-        done
-        [[ -n $passname ]] || {
-            print -u2 "[!] No password entry found for $login!"
-            return 1
-        }
-        print -u2 "[*] Using password entry $passname for $login"
-        _vbe_ssh_command "$@"
-        sshpass -f<(pass show $passname) $reply
-    }
-    # SCP with a password
-    pscp() {
-        () {
-            local helper=$1
-            shift
-            chmod +x $helper
-            scp -S $helper "$@"
-        } =(<<EOF
+scp() {
+    () {
+        local helper=$1
+        shift
+        chmod +x $helper
+        command scp -S $helper "$@"
+    } =(<<EOF
 #!$SHELL
 source $ZSH/rc/ssh.zsh
-pssh "\$@"
+ssh "\$@"
 EOF
-           ) "$@"
-    }
-    (( $+functions[compdef] )) && {
-        compdef pssh=ssh
-        compdef pscp=scp
-    }
+       ) "$@"
 }
 
 # Invoke this shell on a remote host. All arguments are passed to SSH,
