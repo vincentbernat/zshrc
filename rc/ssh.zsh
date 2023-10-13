@@ -25,10 +25,19 @@ ssh() {
         local passname=$(source $ZSH/local/ssh-login2pass $login)
         [[ -n $passname ]] && {
             local helper=$(mktemp)
-            trap "command rm $helper" EXIT
+            trap "command rm -f $helper $helper.count" EXIT
             cat <<EOF > $helper
 #!$SHELL
-pass show $passname | head -1
+if [ -f $helper.count ]; then
+  stty -echo
+  printf "$login password: " > /dev/tty
+  read password
+  stty echo
+  echo \$password
+else
+  touch $helper.count
+  pass show $passname | head -1
+fi
 EOF
             chmod u+x $helper
             cmd=(SSH_ASKPASS=$helper SSH_ASKPASS_REQUIRE=prefer $cmd)
