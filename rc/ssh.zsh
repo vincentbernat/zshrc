@@ -24,8 +24,9 @@ ssh() {
     [[ -f $ZSH/local/ssh-login2pass ]] && {
         local passname=$(source $ZSH/local/ssh-login2pass $login)
         [[ -n $passname ]] && {
+            set -o localoptions -o localtraps
             local helper=$(mktemp)
-            trap "command rm -f $helper $helper.count" EXIT
+            trap "command rm -f $helper $helper.count" EXIT INT
             cat <<EOF > $helper
 #!$SHELL
 if [ -f $helper.count ]; then
