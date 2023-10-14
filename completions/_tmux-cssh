@@ -1,4 +1,4 @@
-#compdef tmux-cssh tmux-cpssh
+#compdef tmux-cssh
 
 _arguments \
     '*::arguments: _hosts' && return 0
