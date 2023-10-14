@@ -2,6 +2,7 @@
 
 ssh() {
     local -a cmd
+    cmd=(ssh "$@")
 
     # Get login@host. This needs OpenSSH 9.2+. See:
     #  https://bugzilla.mindrot.org/attachment.cgi?id=3547
@@ -15,7 +16,8 @@ ssh() {
         _vbe_title @${remote}
 
     # Password.
-    # ssh-login2pass looks like this:
+    # ssh-login2pass should provide the password name to use for the login
+    # provided as first argument. It looks like this:
     # # -*- sh -*-
     # case $1 in
     # me@*.company.com)       print company/network/password ;;
@@ -27,17 +29,19 @@ ssh() {
             set -o localoptions -o localtraps
             local helper=$(mktemp)
             trap "command rm -f $helper $helper.count" EXIT INT
+            # The helper uses pass on first try, then display a login prompt if
+            # there is a working TTY.
             cat <<EOF > $helper
 #!$SHELL
 if [ -f $helper.count ]; then
-  stty -echo
-  printf "$login password: " > /dev/tty
+  stty -echo || exit 1
+  printf "\r%s password: " "${(q)login}" > /dev/tty
   read password
   stty echo
-  echo \$password
+  printf "%s" "\$password"
 else
-  touch $helper.count
   pass show $passname | head -1
+  touch $helper.count
 fi
 EOF
             chmod u+x $helper
@@ -76,7 +80,7 @@ EOF
     case "$TERM" in
 	*-*) cmd=(LC__ORIGINALTERM=$TERM TERM=${TERM%%-*} $cmd) ;;
     esac
-    cmd=(LANG=C LC_MESSAGES=C LC_CTYPE=C LC_TIME=C LC_NUMERIC=C $cmd ssh "$@")
+    cmd=(LANG=C LC_MESSAGES=C LC_CTYPE=C LC_TIME=C LC_NUMERIC=C $cmd)
 
     env $cmd
 }
