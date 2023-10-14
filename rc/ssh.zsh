@@ -1,6 +1,8 @@
 # -*- sh -*-
 
 ssh() {
+    set -o localoptions -o localtraps
+
     local -a cmd
     cmd=(ssh "$@")
 
@@ -12,8 +14,7 @@ ssh() {
     local login=${details[user]}@${remote}
 
     # Title
-    [[ -n $remote ]] &&
-        _vbe_title @${remote}
+    [[ -n $remote ]] && _vbe_title @${remote}
 
     # Password.
     # ssh-login2pass should provide the password name to use for the login
@@ -26,7 +27,6 @@ ssh() {
     [[ -f $ZSH/local/ssh-login2pass ]] && {
         local passname=$(source $ZSH/local/ssh-login2pass $login)
         [[ -n $passname ]] && {
-            set -o localoptions -o localtraps
             local helper=$(mktemp)
             trap "command rm -f $helper $helper.count" EXIT INT
             # The helper uses pass on first try, then display a login prompt if
@@ -72,14 +72,12 @@ EOF
     # them to C to avoid any problem with hosts not having your
     # locally installed locales. See this post for more details on
     # this:
-    #    http://vincent.bernat.im/en/blog/2011-zsh-zshrc.html
+    #    https://vincent.bernat.ch/en/blog/2011-zsh-zshrc.html
     #
     # Also, when the same Zsh configuration is used on the remote
     # host, the locale is reset with the help of
     # `$ZSH/rc/01-locale.zsh`.
-    case "$TERM" in
-	*-*) cmd=(LC__ORIGINALTERM=$TERM TERM=${TERM%%-*} $cmd) ;;
-    esac
+    [[ $TERM = *-* ]] && cmd=(LC__ORIGINALTERM=$TERM TERM=${TERM%%-*} $cmd)
     cmd=(LANG=C LC_MESSAGES=C LC_CTYPE=C LC_TIME=C LC_NUMERIC=C $cmd)
 
     env $cmd
@@ -93,7 +91,7 @@ scp() {
         command scp -S $helper "$@"
     } =(<<EOF
 #!$SHELL
-source $ZSH/rc/ssh.zsh
+source ${(%):-%x}
 ssh "\$@"
 EOF
        ) "$@"
