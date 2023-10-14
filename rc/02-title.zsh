@@ -1,5 +1,15 @@
 # -*- sh -*-
 
+_vbe_title () {
+    emulate -L zsh
+    [ -t 1 ] || return
+
+    # In tmux.conf:
+    #  set -g  set-titles on
+    #  set -g  set-titles-string "#T"
+    print -n "\e]0;$1\a"
+}
+
 # Current running program as title
 _vbe_title_preexec () {
     emulate -L zsh
