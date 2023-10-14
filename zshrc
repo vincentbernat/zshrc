@@ -22,6 +22,9 @@ autoload -Uz is-at-least
 autoload -Uz add-zsh-hook
 autoload -Uz add-zle-hook-widget
 
+is-at-least 5.0.2 ||
+   echo "[!] Minimal version supported is 5.0.2 (got $ZSH_VERSION)"
+
 [[ $ZSH_NAME == "zsh-static" ]] && is-at-least 5.4.1 && {
     # Don't tell us when modules are not available
     alias zmodload='zmodload -s'
