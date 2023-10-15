@@ -59,11 +59,11 @@ install-zsh() {
         echo "version=$version"
 
         # Hard work is done in __
-        which __ | awk '{print a} (NR > 1) {a=$0}'
+        which __ | sed '1,1d; $d'
 
         # Uncompress the archive
         echo 'cat <<EOA | $BASE64 | gzip -dc | tar -m -C $ZSH -xf -'
-	(
+        (
             cd $ZSH
             (
                 echo run/terminfo
