@@ -34,10 +34,15 @@ ssh() {
             cat <<EOF > $helper
 #!$SHELL
 if [ -f $helper.count ]; then
-  stty -echo 2> /dev/null || exit 1
-  printf "\r%s password: " "${(q)login}" > /dev/tty
-  read password
-  stty echo
+  {
+    oldtty=\$(stty -g 2> /dev/null)
+    [ -n "\$oldtty" ] || exit 1
+    trap 'stty \$oldtty < /dev/tty' EXIT INT TERM HUP
+    stty -echo
+    printf "\r%s password: " "${(q)login}"
+    read password
+    printf "\n"
+  } > /dev/tty < /dev/tty
   printf "%s" "\$password"
 else
   pass show $passname | head -1
