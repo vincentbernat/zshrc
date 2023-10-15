@@ -34,7 +34,7 @@ ssh() {
             cat <<EOF > $helper
 #!$SHELL
 if [ -f $helper.count ]; then
-  stty -echo || exit 1
+  stty -echo 2> /dev/null || exit 1
   printf "\r%s password: " "${(q)login}" > /dev/tty
   read password
   stty echo
