@@ -14,7 +14,7 @@ ssh() {
     local login=${details[user]}@${remote}
 
     # Title
-    [[ -n $remote ]] && _vbe_title @${remote}
+    [[ -n $remote ]] && (( $+functions[_vbe_title] )) && _vbe_title @${remote}
 
     # Password.
     # ssh-login2pass should provide the password name to use for the login
