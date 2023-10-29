@@ -36,7 +36,7 @@ ssh() {
 if [ -f $helper.count ]; then
   {
     oldtty=\$(stty -g)
-    trap 'stty \$oldtty < /dev/tty' EXIT INT TERM HUP
+    trap 'stty \$oldtty < /dev/tty 2> /dev/null' EXIT INT TERM HUP
     stty -echo
     printf "\r%s password: " "${(q)login}"
     read password
