@@ -31,7 +31,7 @@ ssh() {
             trap "command rm -f $helper $helper.count" EXIT INT
             # The helper uses pass on first try, then display a login prompt if
             # there is a working TTY.
-            cat <<EOF > $helper
+            <<EOF > $helper
 #!$SHELL
 if [ -f $helper.count ]; then
   {
