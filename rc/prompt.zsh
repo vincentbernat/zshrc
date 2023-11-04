@@ -250,19 +250,17 @@ _vbe_prompt_env () {
         ;;
 esac
 
-if [[ -n $IN_NIX_SHELL ]]; then
-    # In nix-shell
-    _vbe_add_prompt_nixshell() {
+_vbe_add_prompt_nixshell() {
+    if [[ -n $IN_NIX_SHELL ]]; then
+        # In nix-shell
         [[ $DIRENV_STATUS == "allowed" ]] || \
             _vbe_prompt_env $PRCH[nix] ${${name#shell}:-${${IN_WHICH_NIX_SHELL:-${(j:+:)${${=${:-${buildInputs} ${nativeBuildInputs}}}#*-}:#glibc*}}:-${PRCH[ellipsis]}}}
-    }
-elif [[ -n ${(M)path:#/nix/store*} ]]; then
-    # In nix shell
-    _vbe_add_prompt_nixshell() {
+    elif [[ -n ${(M)path:#/nix/store*} ]]; then
+        # In nix shell
         [[ $DIRENV_STATUS == "allowed" ]] || \
             _vbe_prompt_env $PRCH[nix] ${(j:+:)${${${(M)path:#/nix/store*}#/nix/store/*-}%%/*}}
-    }
-fi
+    fi
+}
 
 # In virtualenv (can happen when shell is sourced)
 typeset -g VIRTUAL_ENV_DISABLE_PROMPT=1
