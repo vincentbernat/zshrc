@@ -21,8 +21,8 @@ ssh() {
     # provided as first argument. It looks like this:
     # # -*- sh -*-
     # case $1 in
-    # me@*.company.com)       print company/network/password ;;
-    # me@*.company2.com)      print company2/network/password ;;
+    # me@*.company.com)  print company/network/password ;;
+    # me@*.company2.com) print company2/network/password ;;
     # esac
     [[ -f $ZSH/local/ssh-login2pass ]] && {
         local passname=$(source $ZSH/local/ssh-login2pass $login)
