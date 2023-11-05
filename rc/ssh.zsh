@@ -28,12 +28,12 @@ ssh() {
         local passname=$(source $ZSH/local/ssh-login2pass $login)
         [[ -n $passname ]] && {
             local helper=$(mktemp)
-            trap "command rm -f $helper $helper.count" EXIT INT
+            trap "command rm -f $helper" EXIT INT
             # The helper uses pass on first try, then display a login prompt if
             # there is a working TTY.
             <<EOF > $helper
 #!$SHELL
-if [ -f $helper.count ]; then
+if [ -k $helper ]; then
   {
     oldtty=\$(stty -g)
     trap 'stty \$oldtty < /dev/tty 2> /dev/null' EXIT INT TERM HUP
@@ -45,7 +45,7 @@ if [ -f $helper.count ]; then
   printf "%s" "\$password"
 else
   pass show $passname | head -1
-  touch $helper.count
+  chmod +t $helper
 fi
 EOF
             chmod u+x $helper
