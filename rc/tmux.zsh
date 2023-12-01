@@ -74,10 +74,10 @@
         local -a args
         args=($@)
         ttyd \
-            --browser \
             -t fontSize=18 \
             -t fontFamily='Iosevka Term SS18' \
             -o -p0 \
+            --writable \
             tmux new-session "
               source $ZSH/zshrc ;
               tmux set-option -s prefix None ;
