@@ -41,16 +41,17 @@
     # Capture the current scrollback
     tmux capture-pane -t $1 -JepS - > $out
     sed -i -e :a -e '/^\n*$/{$d;N;ba' -e '}' $out
+    gzip $out
 
     # Capture the live output
-    >> $out
+    gzip -c >> $out.gz
 
     # Reformat
     local current_limit=$(tmux show-options -gv history-limit)
     tmux set -g history-limit 2147483647
     {
         touch ${out%.rawlog}.log.gz
-        tmux new-window -d "cat $out ; tmux capture-pane -t \$TMUX_PANE -JpS - | gzip -c > ${out%.rawlog}.log.gz"
+        tmux new-window -d "zcat $out.gz ; tmux capture-pane -t \$TMUX_PANE -JpS - | gzip -c > ${out%.rawlog}.log.gz"
     } always {
         tmux set -g history-limit ${current_limit}
     }
