@@ -46,14 +46,18 @@
     >> $out
 
     # Reformat
-    local current_limit=$(tmux show-options -gv history-limit)
-    tmux set -g history-limit 2147483647
-    {
-        touch ${out%.rawlog}.log.gz
-        tmux new-window -d "cat $out ; tmux capture-pane -t \$TMUX_PANE -JpS - | gzip -c > ${out%.rawlog}.log.gz"
-    } always {
-        tmux set -g history-limit ${current_limit}
-    }
+    if (( $+commands[ansifilter] )); then
+        ansifilter -x 256G $out | gzip -c > ${out%.rawlog}.log.gz
+    else
+        local current_limit=$(tmux show-options -gv history-limit)
+        tmux set -g history-limit 2147483647
+        {
+            touch ${out%.rawlog}.log.gz
+            tmux new-window -d "cat $out ; tmux capture-pane -t \$TMUX_PANE -JpS - | gzip -c > ${out%.rawlog}.log.gz"
+        } always {
+            tmux set -g history-limit ${current_limit}
+        }
+    fi
 }
 
 # Helper for pass
