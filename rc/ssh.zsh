@@ -129,8 +129,9 @@ zssh() {
         echo "state[distribution]"=$(sed -n 's/^ID=//p' /etc/os-release /usr/lib/os-release 2> /dev/null | head -1)
         echo "state[variant]"=$(sed -n 's/^VARIANT_ID=//p' /etc/os-release /usr/lib/os-release 2> /dev/null | head -1)
         echo "state[username]"=$(id -un)
-        if [ -f ~/.zsh/run/version ] && [ -f ~/.zsh/run/owner ] && [ "$(cat ~/.zsh/run/owner)" = "$1" ]; then
-            echo "state[location]"=public
+        if [ "$(id -un)" = "$1" ] || ([ -f ~/.zsh/run/version ] &&
+                                      [ "$(cat ~/.zsh/run/owner 2> /dev/null)" = "$1" ]); then
+            echo "state[location]"=home
             echo "state[version]"=$(cat ~/.zsh/run/version 2> /dev/null || echo 0)
         else
             echo "state[location]"=private
@@ -195,13 +196,13 @@ zssh() {
     if (( state[has-zsh] )) \
            && [[ $state[version] != $current ]]; then
             print -u2 "[*] Updating dotfiles (from ${state[version][1,12]} to ${current[1,12]})..."
-            { if [[ state[location] == "private" ]]; then
+            { if [[ $state[location] == "private" ]]; then
                   echo "export ZDOTDIR=\$HOME/.zsh.$USER"
                   echo "export ZSH=\$HOME/.zsh.$USER"
               fi
               cat $ZSH/run/zsh-install.sh } \
                 | command ssh -o ClearAllForwardings=yes $common_ssh_args -C "$@" \
-                          sh -es \
+                          sh -es - $USER \
                 && state[version]=$current
     fi
 
