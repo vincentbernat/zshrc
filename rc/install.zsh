@@ -20,6 +20,10 @@ install-zsh() {
             # Already up-to-date
             return 0
         fi
+        if [ -d "$ZSH/.git" ]; then
+            # Git-controlled version
+            return 0
+        fi
 
         # Find a base64 implementation
         if command -v base64 > /dev/null; then
