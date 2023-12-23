@@ -129,8 +129,7 @@ zssh() {
         echo "state[distribution]"=$(sed -n 's/^ID=//p' /etc/os-release /usr/lib/os-release 2> /dev/null | head -1)
         echo "state[variant]"=$(sed -n 's/^VARIANT_ID=//p' /etc/os-release /usr/lib/os-release 2> /dev/null | head -1)
         echo "state[username]"=$(id -un)
-        if [ "$(id -un)" = "$1" ] || ([ -f ~/.zsh/run/version ] &&
-                                      [ "$(cat ~/.zsh/run/owner 2> /dev/null)" = "$1" ]); then
+        if [ "$(id -un)" = "$1" ]; then
             echo "state[location]"=home
             echo "state[version]"=$(cat ~/.zsh/run/version 2> /dev/null || echo 0)
         else
@@ -202,7 +201,7 @@ zssh() {
               fi
               cat $ZSH/run/zsh-install.sh } \
                 | command ssh -o ClearAllForwardings=yes $common_ssh_args -C "$@" \
-                          sh -es - $USER \
+                          sh -es \
                 && state[version]=$current
     fi
 
