@@ -129,25 +129,15 @@ zssh() {
         echo "state[distribution]"=$(sed -n 's/^ID=//p' /etc/os-release /usr/lib/os-release 2> /dev/null | head -1)
         echo "state[variant]"=$(sed -n 's/^VARIANT_ID=//p' /etc/os-release /usr/lib/os-release 2> /dev/null | head -1)
         echo "state[username]"=$(id -un)
-        echo "state[version]"=$(cat ~/.zsh.$1/run/version 2> /dev/null || echo 0)
+        if [ -f ~/.zsh/run/version ] && [ -f ~/.zsh/run/owner ] && [ "$(cat ~/.zsh/run/owner)" = "$1" ]; then
+            echo "state[location]"=public
+            echo "state[version]"=$(cat ~/.zsh/run/version 2> /dev/null || echo 0)
+        else
+            echo "state[location]"=private
+            echo "state[version]"=$(cat ~/.zsh.$1/run/version 2> /dev/null || echo 0)
+        fi
     }
     local probezsh="sh -c '$(which __); __ $USER'"
-
-    # Execution of Zsh on remote host (POSIX shell)
-    local __() {
-        set -e
-        export PATH=$PATH:$HOME/.local/bin
-        export ZDOTDIR=$HOME/.zsh.$1
-        export ZSH=$HOME/.zsh.$1
-        export SHELL=$(command -v zsh)
-        [ -n "$SHELL" ] || \
-            SHELL=$(nix-build --no-out-link "<nixpkgs>" -A zsh 2> /dev/null ||
-                    nix eval --raw nixpkgs#zsh.out.outPath 2> /dev/null)/bin/zsh
-        uname -a
-        cat /etc/motd 2>/dev/null || true
-        exec $SHELL -i -l -d
-    }
-    local execzsh="sh -c '$(which __); __ $USER'"
 
     (( $#@ )) || return 1
     [[ -f $ZSH/run/zsh-install.sh ]] || install-zsh
@@ -205,13 +195,33 @@ zssh() {
     if (( state[has-zsh] )) \
            && [[ $state[version] != $current ]]; then
             print -u2 "[*] Updating dotfiles (from ${state[version][1,12]} to ${current[1,12]})..."
-            { echo "export ZDOTDIR=\$HOME/.zsh.$USER"
-              echo "export ZSH=\$HOME/.zsh.$USER"
+            { if [[ state[location] == "private" ]]; then
+                  echo "export ZDOTDIR=\$HOME/.zsh.$USER"
+                  echo "export ZSH=\$HOME/.zsh.$USER"
+              fi
               cat $ZSH/run/zsh-install.sh } \
                 | command ssh -o ClearAllForwardings=yes $common_ssh_args -C "$@" \
                           sh -es \
                 && state[version]=$current
     fi
+
+    # Execution of Zsh on remote host (POSIX shell)
+    local __() {
+        set -e
+        export PATH=$PATH:$HOME/.local/bin
+        if [ $2 = "private" ]; then
+            export ZDOTDIR=$HOME/.zsh.$1
+            export ZSH=$HOME/.zsh.$1
+        fi
+        export SHELL=$(command -v zsh)
+        [ -n "$SHELL" ] || \
+            SHELL=$(nix-build --no-out-link "<nixpkgs>" -A zsh 2> /dev/null ||
+                    nix eval --raw nixpkgs#zsh.out.outPath 2> /dev/null)/bin/zsh
+        uname -a
+        cat /etc/motd 2>/dev/null || true
+        exec $SHELL -i -l -d
+    }
+    local execzsh="sh -c '$(which __); __ $USER $state[location]'"
 
     # Execute remote shell
     if (( !state[has-zsh] )); then

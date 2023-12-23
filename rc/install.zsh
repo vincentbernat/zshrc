@@ -36,6 +36,7 @@ install-zsh() {
         fi
 
         echo "$version" > "$ZSH/run/version"
+        echo "$1" > "$ZSH/run/owner"
 
         # Setup zshrc
         for rc in zshrc zshenv; do
@@ -74,7 +75,7 @@ install-zsh() {
         )
         echo 'EOA'
         echo '}'
-        echo 'upgrade'
+        echo 'upgrade $1'
     } > $ZSH/run/zsh-install.sh
 
     # Can use an identity file with -i
@@ -83,7 +84,7 @@ install-zsh() {
     (( $# == 0 )) || for h in $@; do
         print -P "%F{green}>>>%f $h"
         cat $ZSH/run/zsh-install.sh \
-            | ssh -C ${identity[2]+-i ${identity[2]}} $h sh -s
+            | ssh -C ${identity[2]+-i ${identity[2]}} $h sh -s - $USER
     done
 }
 
