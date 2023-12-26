@@ -47,7 +47,7 @@
     gzip -c >> $out.gz
 
     # Reformat
-    local current_limit=$(tmux show-options -gv history-limit)
+    local current_limit=$(tmux show-options -Agv history-limit)
     tmux set -g history-limit 2147483647
     {
         touch ${out%.rawlog}.log.gz
