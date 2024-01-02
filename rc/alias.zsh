@@ -44,12 +44,6 @@ alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
 (( $+commands[sudo] )) && abbrev-alias suod=sudo
 (( $+commands[ssh] )) && abbrev-alias shs=ssh
 
-# Automatic sudo
-# docker is using its own wrapper
-(( $+commands[docker-compose] )) && [[ -S /run/docker.sock ]] && [[ ! -w /run/docker.sock ]] && {
-    abbrev-alias docker-compose="sudo =docker-compose"
-}
-
 (( $+commands[mpv] )) && (( $+commands[nmcli] )) && {
     # mpv with lower best resolution when on metered connection
     mpv() {
