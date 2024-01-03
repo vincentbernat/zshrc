@@ -57,6 +57,8 @@ alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
     }
 }
 
+(( $+commands[ug] )) && alias ug="ug --no-confirm --view='${(Q)"${$(alias e)#e=}"}'"
+
 # ls
 abbrev-alias ll='ls -ltrhA'
 if ls --color=auto --g -d . &> /dev/null; then
