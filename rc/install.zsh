@@ -70,10 +70,11 @@ install-zsh() {
         (
             cd $ZSH
             (
-                echo run/terminfo
-                echo run/*.termcap(N)
+                print -l run/terminfo
+                print -l run/*.termcap(N)
                 git ls-files | command grep -vFx .gitmodules | \
                     while read f; do [[ -d $f ]] || echo $f ; done
+                print -l third-party/fzf-tab/{*.zsh,lib/*(.),zsh-ls-colors/*.zsh}
             ) | tar --owner=root --group=root --numeric-owner -zhcf - -T - | base64
         )
         echo 'EOA'
