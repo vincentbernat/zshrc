@@ -11,7 +11,7 @@
     local zcdl=$1.lock          # lock file
     local attempts=30
     : >> $zcd
-    while (( attempts-- > 0 )) && ! ln $zcd $zcdl 2> /dev/null; do sleep 0.1; done
+    while (( attempts-- > 0 )) && ! ln -s $zcd $zcdl 2> /dev/null; do sleep 0.1; done
     {
         if [[ ! -e $zcda || -n $zcda(#qN.mh+24) ]]; then
             print -nu2 "Building completion cache..."
