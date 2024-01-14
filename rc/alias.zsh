@@ -27,14 +27,7 @@ alias chown='chown -h'
 alias chgrp='chgrp -h'
 abbrev-alias tailf='tail -F'           # not shipped in util-linux anymore
 alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
-() {
-    local dmesg_version=${${${:-"$(dmesg --version 2> /dev/null)"}##* }:-0.0}
-    if is-at-least 2.23 $dmesg_version; then
-        alias dmesg='dmesg -H -P'
-    elif is-at-least 0.1 $dmesg_version; then
-        alias dmesg='dmesg -T'
-    fi
-}
+
 (( $+commands[gdb] )) && alias gdb='gdb -q'
 (( $+commands[dragon] )) && alias dragon='dragon -x'
 
