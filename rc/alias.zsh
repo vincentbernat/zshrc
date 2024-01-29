@@ -205,6 +205,7 @@ secret() {
         --tmpfs /var/tmp
         --tmpfs $HOME
         --unshare-all
+        --die-with-parent
     )
     [[ $PWD != $HOME ]] && options=($options --bind $PWD $PWD)
     case $1 in
