@@ -188,6 +188,50 @@ secret() {
     done
 }
 
+# Isolate using bwrap
+# - isolate (get a shell with only current directory writable)
+# - isolate --share-net (same but get network access)
+# - isolate ls (run ls in a sandbox)
+# - isolate --share-net -- ping 1.1.1.1 (ping 1.1.1.1)
+(( $+commands[bwrap] )) && isolate() {
+    local -a options
+    options=(
+        $options
+        --ro-bind / /
+        --dev /dev
+        --proc /proc
+        --tmpfs /run
+        --tmpfs /tmp
+        --tmpfs $HOME
+        --unshare-all
+    )
+    [[ $PWD != $HOME ]] && options=($options --bind $PWD $PWD)
+    case $1 in
+        (--*)
+            while [[ $# -gt 0 ]] && [[ $1 != "--" ]]; do
+                options=($options $1)
+                shift
+            done
+            shift
+    esac
+    if [[ $# -eq 0 ]]; then
+        options=(
+            $options
+            --ro-bind $HOME/.zsh $HOME/.zsh
+            --ro-bind $HOME/.zshrc $HOME/.zshrc
+            --ro-bind $HOME/.zshenv $HOME/.zshenv
+            --tmpfs $ZSHRUN
+            --setenv SHELL_ISOLATED true
+            --
+            zsh -i
+        )
+    else
+        options=($options -- "$@")
+    fi
+    bwrap $options
+}
+
+# Magit
 (( $+commands[emacsclient] * $+commands[git] )) && magit() {
         local root=$(git rev-parse --show-toplevel)
         emacsclient -e "(progn

@@ -216,6 +216,12 @@ _vbe_prompt_env () {
     }
 }
 
+[[ -z $SHELL_ISOLATED ]] || {
+    _vbe_add_prompt_shell_isolated () {
+        _vbe_prompt_env "" "#"
+    }
+}
+
 # Include schroot name in prompt if available
 [[ ! -f /etc/debian_chroot ]] || [[ -n $LXC_CHROOT_NAME ]] || \
     SCHROOT_CHROOT_NAME=$(</etc/debian_chroot)
