@@ -216,7 +216,7 @@ _vbe_prompt_env () {
     }
 }
 
-[[ -z $SHELL_ISOLATED ]] || {
+[[ -z $VBE_SHELL_ISOLATED ]] || {
     _vbe_add_prompt_shell_isolated () {
         _vbe_prompt_env "" "#"
     }

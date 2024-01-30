@@ -223,7 +223,7 @@ secret() {
             --ro-bind $HOME/.zshrc $HOME/.zshrc
             --ro-bind $HOME/.zshenv $HOME/.zshenv
             --tmpfs $ZSHRUN
-            --setenv SHELL_ISOLATED true
+            --setenv VBE_SHELL_ISOLATED true
             --
             zsh -i
         )
