@@ -214,7 +214,7 @@ secret() {
                 options=($options $1)
                 shift
             done
-            shift
+            [[ $1 == "--" ]] && shift
     esac
     if [[ $# -eq 0 ]]; then
         options=(
