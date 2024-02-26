@@ -50,21 +50,19 @@ fi
     path=()
     # First, put paths from savedpaths not in the wanted list
     for p in $savedpath; do
-	(( 0 )) \
+        (( 0 )) \
             || (( ${${wanted[(r)$p]}:+1} )) \
             || (( ${${wanted[(r)${p:A}]}:+1} )) \
             || (( ${${path[(r)${p}]}:+1} )) \
             || (( ${${path[(r)${p:A}]}:+1} )) \
-            || {
-	    [[ -d ${p:A} ]] && path=($path $p)
-	}
+            || path=($path $p)
     done
     # Then, put paths in the wanted list
     for p in $wanted; do
-	(( ${${path[(r)${p:A}]}:+1} )) || {
-	    [[ -d ${p:A} ]] && path=($path $p)
-	}
+        (( ${${path[(r)${p:A}]}:+1} )) || path=($path $p)
     done
+    # Remove non-existing directories
+    path=(${^path}(N-/))
 
     export PATH
 }
