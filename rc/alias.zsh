@@ -510,8 +510,10 @@ function clean() {
         nix-collect-garbage --delete-older-than 7d
     [[ -d /var/log/journal ]] && prompt "journal logs" && \
         sudo journalctl --vacuum-time='2 months'
-    [[ -n ${GOMODCACHE:-$GOPATH} ]] && [[ -d ${GOMODCACHE:-$GOPATH} ]] && prompt "Go module cache" && \
-        go clean -modcache
+    [[ -n ${GOMODCACHE:-$GOPATH} ]] && [[ -d ${GOMODCACHE:-$GOPATH} ]] && {
+        prompt "Go module cache" && go clean -modcache
+        touch ${GOMODCACHE:-$GOPATH}
+    }
     local d
     for d in tmp src download; do
         [[ -d ~/$d ]] && prompt "user $d directory" && \
