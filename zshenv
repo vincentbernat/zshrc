@@ -91,7 +91,7 @@ fi
 [[ -n $IN_NIX_SHELL ]] && [[ $IN_NIX_SHELL != pure ]] && \
     export FONTCONFIG_FILE=$(nix eval --raw nixpkgs'#'fontconfig.out.outPath)/etc/fonts/fonts.conf
 
-[[ -d $HOME/src ]] && export GOPATH=$HOME/src/gocode
+export GOPATH=$HOME/.cache/go
 export GOPROXY=direct
 
 unset TERM_PROGRAM TERM_PROGRAM_VERSION
