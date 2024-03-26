@@ -111,10 +111,10 @@ zssh() {
     local -A state
     local -a common_ssh_args probe_ssh_args
     local current=$(sed -n 's/^version=//p' $ZSH/run/zsh-install.sh)
-    ! command ssh -G "$@" | command grep -q '^controlpath ' && \
+    ! command ssh -G "$@" 2> /dev/null | command grep -q '^controlpath ' && \
         common_ssh_args=(-o ControlPath="$ZSH/run/%r@%h:%p")
     prepare_ssh_args=(-n -o ClearAllForwardings=yes -o ControlMaster=auto)
-    command ssh -G "$@" | command grep -Fxq 'controlpersist no' && \
+    command ssh -G "$@" 2> /dev/null | command grep -Fxq 'controlpersist no' && \
         prepare_ssh_args=($prepare_ssh_args -o ControlPersist=10s)
 
     # Probe to run on remote host to check the situation (POSIX shell)
