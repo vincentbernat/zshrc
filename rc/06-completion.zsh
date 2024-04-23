@@ -1,5 +1,40 @@
 # -*- sh -*-
 
+() {
+    emulate -L zsh
+    [[ -o interactive ]] || return
+    setopt extendedglob
+    autoload -Uz compinit complist
+    local zcd=$1                # compdump
+    local zcdc=$1.zwc           # compiled compdump
+    local zcda=$1.last          # last compilation
+    local zcdl=$1.lock          # lock file
+    local attempts=30
+    : >> $zcd
+    while (( attempts-- > 0 )) && ! ln -s $zcd $zcdl 2> /dev/null; do sleep 0.1; done
+    {
+        if [[ ! -e $zcda || -n $zcda(#qN.mh+24) ]]; then
+            print -nu2 "Building completion cache..."
+            # No compdump or too old
+            \rm -f $ZSHRUN/zcompdump*(N.mM+6)
+            compinit -u -d $zcd
+            : > $zcda
+            print -nu2 '\r'
+        else
+            # Reuse existing one
+            compinit -C -d $zcd
+        fi
+        [[ ! -f $zcdc || $zcd -nt $zcdc ]] && rm -f $zcdc && {
+                # On 9p, this fails because O_CREAT|O_WRONLY, 0444 fails
+                if [[ $(findmnt -no FSTYPE $(stat -c %m $zcd 2> /dev/null) 2> /dev/null) != "9p" ]]; then
+                    zcompile $zcd &!
+                fi
+            }
+    } always {
+        \rm -f $zcdl
+    }
+} $ZSHRUN/zcompdump-${ZSH_VERSION}-${#:-"$fpath"}
+
 setopt auto_menu
 setopt auto_remove_slash
 setopt complete_in_word
@@ -54,56 +89,16 @@ zstyle ":completion:*:hosts" known-hosts-files ''
 zmodload -i zsh/complist
 bindkey -M menuselect "+" accept-and-menu-complete
 
-# Lazy compinit on first tab
-_vbe_lazy-expand-or-complete() {
-    emulate -L zsh
-    [[ -o interactive ]] || return
-    setopt extendedglob
-    autoload -Uz compinit complist
-    set -- $ZSHRUN/zcompdump-${ZSH_VERSION}-${#:-"$fpath"}
-    local zcd=$1                # compdump
-    local zcdc=$1.zwc           # compiled compdump
-    local zcda=$1.last          # last compilation
-    local zcdl=$1.lock          # lock file
-    local attempts=30
-    : >> $zcd
-    while (( attempts-- > 0 )) && ! ln -s $zcd $zcdl 2> /dev/null; do sleep 0.1; done
-    {
-        if [[ ! -e $zcda || -n $zcda(#qN.mh+24) ]]; then
-            # No compdump or too old
-            \rm -f $ZSHRUN/zcompdump*(N.mM+6)
-            compinit -u -d $zcd
-            : > $zcda
-        else
-            # Reuse existing one
-            compinit -C -d $zcd
-        fi
-        [[ ! -f $zcdc || $zcd -nt $zcdc ]] && rm -f $zcdc && {
-                # On 9p, this fails because O_CREAT|O_WRONLY, 0444 fails
-                if [[ $(findmnt -no FSTYPE $(stat -c %m $zcd 2> /dev/null) 2> /dev/null) != "9p" ]]; then
-                    zcompile $zcd &!
-                fi
-            }
-    } always {
-        \rm -f $zcdl
-        # Restore original tab
-        bindkey "^I" expand-or-complete
-        # Use fzf when available
-        if (( $+commands[fzf] )) && [[ -f $ZSH/third-party/fzf-tab/fzf-tab.plugin.zsh ]]; then
-            source $ZSH/third-party/fzf-tab/fzf-tab.plugin.zsh
-            zstyle ':fzf-tab:*' fzf-bindings '+:toggle+down'
-            zstyle ':fzf-tab:*' fzf-flags '-i'
-            zstyle ':fzf-tab:*' switch-group alt-left alt-right
-            zstyle ':completion:*:descriptions' format ${PRCH[completion]}' %d'
+# Use fzf when available
+if (( $+commands[fzf] )) && [[ -f $ZSH/third-party/fzf-tab/fzf-tab.plugin.zsh ]]; then
+    source $ZSH/third-party/fzf-tab/fzf-tab.plugin.zsh
+    zstyle ':fzf-tab:*' fzf-bindings '+:toggle+down'
+    zstyle ':fzf-tab:*' fzf-flags '-i'
+    zstyle ':fzf-tab:*' switch-group alt-left alt-right
+    zstyle ':completion:*:descriptions' format ${PRCH[completion]}' %d'
 
-            # Preview
-            # zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
-            zle fzf-tab-complete
-        else
-            zstyle ':completion:*:descriptions' format ${PRCH[completion]}' %B%d%b'
-            zle expand-or-complete
-        fi
-    }
-}
-zle -N _vbe_lazy-expand-or-complete
-bindkey "^I" _vbe_lazy-expand-or-complete
+    # Preview
+    # zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
+else
+    zstyle ':completion:*:descriptions' format ${PRCH[completion]}' %B%d%b'
+fi
