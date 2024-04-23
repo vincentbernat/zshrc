@@ -26,7 +26,7 @@ WORDCHARS=${${WORDCHARS:s#/#}:s,#,}
 
 if (( ${termcap[Co]:-0} > 8)); then
     # Enable and configure autosuggest
-    source $ZSH/third-party/zsh-autosuggestions.zsh
+    zsh-defer source $ZSH/third-party/zsh-autosuggestions.zsh
     typeset -g ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
     ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(
         insert-last-word
