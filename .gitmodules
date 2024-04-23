@@ -19,6 +19,3 @@
 [submodule "third-party/fzf-tab"]
 	path = third-party/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab
-[submodule "third-party/zsh-defer"]
-	path = third-party/zsh-defer
-	url = git@github.com:romkatv/zsh-defer.git

@@ -32,9 +32,6 @@ is-at-least 5.0.2 ||
 
 zmodload -F zsh/stat b:zstat
 zmodload zsh/datetime           # EPOCHSECONDS
-source $ZSH/third-party/zsh-defer.zsh
-source $ZSH/third-party/async.zsh
-async_init
 
 () {
     local config_file
