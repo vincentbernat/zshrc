@@ -36,6 +36,8 @@ if (( ${termcap[Co]:-0} > 8)); then
         zle autosuggest-clear
         zle autosuggest-fetch
     }
+    # Interfers with kill ring handling
+    unset ZSH_AUTOSUGGEST_USE_ASYNC
 else
     function _vbe-reset-autosuggest() {}
 fi
