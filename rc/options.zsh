@@ -30,6 +30,7 @@ if (( ${termcap[Co]:-0} > 8)); then
     typeset -g ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
     ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(
         insert-last-word
+        _vbe_lazy-expand-or-complete
     )
     function _vbe-reset-autosuggest() {
         zle autosuggest-clear
