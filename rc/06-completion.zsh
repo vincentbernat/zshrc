@@ -96,9 +96,11 @@ if (( $+commands[fzf] )) && [[ -f $ZSH/third-party/fzf-tab/fzf-tab.plugin.zsh ]]
     zstyle ':fzf-tab:*' fzf-flags '-i'
     zstyle ':fzf-tab:*' switch-group alt-left alt-right
     zstyle ':completion:*:descriptions' format ${PRCH[completion]}' %d'
+    zstyle ':completion:*:git-checkout:*' sort false
+    zstyle ':completion:*' menu no
 
     # Preview
-    # zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
+    zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
 else
     zstyle ':completion:*:descriptions' format ${PRCH[completion]}' %B%d%b'
 fi
