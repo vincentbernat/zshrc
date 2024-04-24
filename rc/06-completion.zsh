@@ -95,6 +95,7 @@ if (( $+commands[fzf] )) && [[ -f $ZSH/third-party/fzf-tab/fzf-tab.plugin.zsh ]]
     zstyle ':fzf-tab:*' fzf-bindings '+:toggle+down'
     zstyle ':fzf-tab:*' fzf-flags '-i'
     zstyle ':fzf-tab:*' switch-group alt-left alt-right
+    [[ -z $TMUX ]] || zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
     zstyle ':completion:*:descriptions' format ${PRCH[completion]}' %d'
     zstyle ':completion:*:git-checkout:*' sort false
     zstyle ':completion:*' menu no
