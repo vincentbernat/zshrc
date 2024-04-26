@@ -236,6 +236,7 @@ secret() {
 # Magit
 (( $+commands[emacsclient] * $+commands[git] )) && magit() {
         local root=$(git rev-parse --show-toplevel)
+        [[ -n $root ]] || return
         emacsclient -e "(progn
                     (select-frame-set-input-focus
                       (window-frame
