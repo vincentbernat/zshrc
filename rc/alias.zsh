@@ -469,10 +469,11 @@ function myip() {
 # should escape "%s", but it is not escapable. "%%s" would just output
 # "% ".
 (( $+commands[adb] )) && function adbtype() {
+        local line
         case $# in
             0)
-                while read -r line; do
-                    adb shell input text ${(q)line}
+                while read -r line || [[ -n $line ]]; do
+                    echo adb shell input text ${(q)line}
                 done
                 ;;
             *)
