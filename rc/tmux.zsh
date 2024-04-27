@@ -26,8 +26,9 @@
     # Slow pasting. First argument is tmux pane (X:Y.0)
     function tmux-slow-paste() {
         local target="$1"
+        local line
         shift
-        cat "$@" | pv -W -q -L 500 | while IFS='' read -r line; do
+        cat "$@" | pv -W -q -L 500 | while IFS= read -r line || [[ -n $line ]]; do
             tmux send-keys -t "$target" -l "${line}"$'\n';
         done
     }
