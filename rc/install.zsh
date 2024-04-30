@@ -101,35 +101,3 @@ install-zsh() {
 #   export ZSH=~/.zsh.me
 #   export ZDOTDIR=~/.zsh.me
 #   . zsh-install && exec zsh -d
-#
-# Upload using:
-#  s3cmd put -P $ZSH/run/zsh-install.sh s3://vincentbernat-zshrc
-#
-# Policy is the following:
-#  {
-#     "Version": "2012-10-17",
-#     "Statement": [
-#         {
-#             "Sid": "Stmt1424709181000",
-#             "Effect": "Allow",
-#             "Action": [
-#                 "s3:PutObject",
-#                 "s3:PutObjectAcl",
-#                 "s3:DeleteObject"
-#             ],
-#             "Resource": [
-#                 "arn:aws:s3:::vincentbernat-zshrc/zsh-install.sh"
-#             ]
-#         },
-#         {
-#             "Sid": "Stmt1424709181001",
-#             "Effect": "Allow",
-#             "Action": [
-#                 "s3:GetBucketLocation"
-#             ],
-#             "Resource": [
-#                 "arn:aws:s3:::vincentbernat-zshrc"
-#             ]
-#         }
-#     ]
-#  }
