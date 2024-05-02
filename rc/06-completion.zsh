@@ -5,7 +5,9 @@
     [[ -o interactive ]] || return
     setopt extendedglob
     autoload -Uz compinit complist
-    local zcd=$1                # compdump
+    local -a fpp
+    fpp=($^fpath/**/*(N.))
+    local zcd=$ZSHRUN/zcompdump-${ZSH_VERSION}-${#fpp}
     local zcdc=$1.zwc           # compiled compdump
     local zcda=$1.last          # last compilation
     local zcdl=$1.lock          # lock file
@@ -33,7 +35,7 @@
     } always {
         \rm -f $zcdl
     }
-} $ZSHRUN/zcompdump-${ZSH_VERSION}-${#:-"$fpath"}
+}
 
 setopt auto_menu
 setopt auto_remove_slash
