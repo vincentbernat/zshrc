@@ -8,9 +8,9 @@
     local -a fpp
     fpp=($^fpath/**/*(N.))
     local zcd=$ZSHRUN/zcompdump-${ZSH_VERSION}-${#fpp}
-    local zcdc=$1.zwc           # compiled compdump
-    local zcda=$1.last          # last compilation
-    local zcdl=$1.lock          # lock file
+    local zcdc=$zcd.zwc           # compiled compdump
+    local zcda=$zcd.last          # last compilation
+    local zcdl=$zcd.lock          # lock file
     local attempts=30
     : >> $zcd
     while (( attempts-- > 0 )) && ! ln -s $zcd $zcdl 2> /dev/null; do sleep 0.1; done
