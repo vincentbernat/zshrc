@@ -94,6 +94,8 @@ fi
 export GOPATH=$HOME/.cache/go
 export GOPROXY=direct
 
+[[ -d $XDG_RUNTIME_DIR ]] && export TMUX_TMPDIR=$XDG_RUNTIME_DIR
+
 unset TERM_PROGRAM TERM_PROGRAM_VERSION
 unset MAILCHECK
 
