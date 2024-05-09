@@ -11,12 +11,11 @@
                -z $TMUX ]] && \
       exec tmux
 
-[[ -o interactive ]] && \
-   case $SHELL in
-      */zsh) ;;
-      */zsh-static) ;;
-      *) SHELL=${${0#-}:c:A}
-   esac
+case $SHELL in
+   */zsh) ;;
+   */zsh-static) ;;
+   *) SHELL=${${0#-}:c:A}
+esac
 
 autoload -Uz is-at-least
 autoload -Uz add-zsh-hook
