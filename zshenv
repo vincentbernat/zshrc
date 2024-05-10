@@ -92,7 +92,6 @@ fi
     export FONTCONFIG_FILE=$(nix eval --raw nixpkgs'#'fontconfig.out.outPath)/etc/fonts/fonts.conf
 
 export GOPATH=$HOME/.cache/go
-export GOPROXY=direct
 
 [[ -d $XDG_RUNTIME_DIR ]] && export TMUX_TMPDIR=$XDG_RUNTIME_DIR
 
