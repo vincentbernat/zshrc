@@ -261,6 +261,7 @@ if [[ -n $IN_NIX_SHELL ]]; then
     NIX_SHELL_NAME=${${name#shell}:-${${IN_WHICH_NIX_SHELL:-${(j:+:)${${=${:-${buildInputs} ${nativeBuildInputs}}}#*-}:#glibc*}}:-${PRCH[ellipsis]}}}
     _vbe_add_prompt_nixshell() {
         [[ $DIRENV_STATUS == "allowed" ]] || \
+            [[ -z $IN_NIX_SHELL ]] || \
             _vbe_prompt_env $PRCH[nix] $NIX_SHELL_NAME
     }
 else
