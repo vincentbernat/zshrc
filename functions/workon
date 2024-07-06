@@ -193,7 +193,7 @@ runtime=()
     #
     # So, this needs nsenter which needs a recent util-linux.
     #
-    # Using a mount namespace, we try to render our changes invisible
+    # Using a mount namespace, we try to keep our changes invisible
     # to the underlying container. However, some directories and files
     # are created: tmp, home directory, /usr/bin/sudo, /bin/zsh-static, /etc/passwd,
     # /etc/shadow.
