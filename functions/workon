@@ -56,8 +56,10 @@ function _vbe_compile_sudo() {
         if (( $+commands[gcc] )); then
             gcc -Wall -static $ZSH/misc/sudo.c -o $sudo
         elif (( $+commands[docker] )); then
-            docker run --user=$UID:$GID --interactive --rm --volume=${sudo:h}:${sudo:h} gcc \
-                   gcc -Wall -static -x c - -o $sudo < $ZSH/misc/sudo.c
+            docker run --interactive --rm --volume=${sudo:h}:${sudo:h} alpine:latest \
+                   sh -c "apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing tcc tcc-libs-static musl-dev \
+                       && tcc -Wall -static -x c - -o $sudo && chown $UID:$GID $sudo" \
+                   < $ZSH/misc/sudo.c
         fi
     fi
 }
