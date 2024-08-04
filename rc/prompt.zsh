@@ -165,6 +165,11 @@ _vbe_prompt () {
                             "${PRCH[elapsed]}$(_vbe_human_time $_vbe_cmd_elapsed)"
     fi
 
+    # SHLVL
+    if (( $SHLVL > 1 )); then
+        _vbe_prompt_segment blue black ${SHLVL}
+    fi
+
     # Error code
     if (( $retval )); then
         _vbe_prompt_segment red default ${PRCH[retb]}$retval${PRCH[reta]}
