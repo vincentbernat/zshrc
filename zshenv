@@ -5,7 +5,7 @@ if [ -z "$ZSH_VERSION" ]; then
     eval export $(zsh -c \
                   "typeset PATH
                    typeset NIX_PROFILES NIX_SSL_CERT_FILE LOCALE_ARCHIVE
-                   typeset FONTCONFIG_FILE GOPATH XDG_DATA_DIRS
+                   typeset FONTCONFIG_FILE GOPATH XDG_DATA_DIRS TMUX_TMPDIR
                    typeset LC_ALL $(locale 2> /dev/null | sed 's/=.*//' | tr '\n' ' ')
                   ")
     return
