@@ -179,6 +179,7 @@ _vbe_prompt () {
 
     _vbe_prompt_end
 }
+
 _vbe_setprompt () {
     setopt prompt_subst
     typeset -g PS1='$(_vbe_prompt) '
@@ -288,3 +289,7 @@ _vbe_add_prompt_virtualenv () {
 }
 
 _vbe_setprompt
+
+# Prompt contains two extra lines
+# See: https://github.com/gwsw/less/commit/1d36fbd0ab607ea7f09ceef8fa6a2da618876b29
+export LESS_ONESCREEN_OFFSET=2
