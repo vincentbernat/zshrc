@@ -290,6 +290,6 @@ _vbe_add_prompt_virtualenv () {
 
 _vbe_setprompt
 
-# Prompt contains two extra lines
-# See: https://github.com/gwsw/less/commit/1d36fbd0ab607ea7f09ceef8fa6a2da618876b29
-export LESS_ONESCREEN_OFFSET=2
+# Prompt contains 3 lines
+# See: https://github.com/gwsw/less/commit/994786e4148efbadc89a15138b1dfcf3881166ea
+export LESS_SHELL_LINES=3
