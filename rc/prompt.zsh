@@ -160,18 +160,19 @@ _vbe_prompt () {
     _vbe_add_prompt
 
     # Time elapsed
-    if (( $_vbe_cmd_elapsed >= 5 )); then
+    if (( _vbe_cmd_elapsed >= 5 )); then
         _vbe_prompt_segment white black \
                             "${PRCH[elapsed]}$(_vbe_human_time $_vbe_cmd_elapsed)"
     fi
 
     # SHLVL
-    if (( $SHLVL > 1 )); then
-        _vbe_prompt_segment blue black ${SHLVL}
+    if (( SHLVL > 1 )); then
+        _vbe_prompt_segment blue black \
+            "%(3L.$(( SHLVL - 1))${PRCH[nested]}.%(2L.${PRCH[nested]}.))"
     fi
 
     # Error code
-    if (( $retval )); then
+    if (( retval )); then
         _vbe_prompt_segment red default ${PRCH[retb]}$retval${PRCH[reta]}
     else
         _vbe_prompt_segment green cyan ${PRCH[ok]}
