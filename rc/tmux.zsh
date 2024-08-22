@@ -61,7 +61,7 @@
 # Helper for pass
 (( $+commands[tmux] )) && function _vbe_tmux-pass() {
     cd ${PASSWORD_STORE_DIR:-~/.password-store} 2> /dev/null || return
-    local entry=$(print -l **/*.gpg | sed 's,\.gpg$,,' | fzf)
+    local entry=$(print -l ***/*.gpg | sed 's,\.gpg$,,' | fzf)
     [[ -n $entry ]] || return
     local pass=$(pass show $entry | head -1)
     [[ -n $pass ]] || return
