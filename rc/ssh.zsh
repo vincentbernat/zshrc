@@ -219,6 +219,7 @@ zssh() {
                     nix eval --raw nixpkgs#zsh.out.outPath 2> /dev/null)/bin/zsh
         uname -a
         cat /etc/motd 2>/dev/null || true
+        unset SHLVL
         exec $SHELL -i -l -d
     }
     local execzsh="sh -c '$(which __); __ $USER $state[location]'"
