@@ -462,7 +462,7 @@ function myip() {
         case $# in
             0)
                 while IFS= read -r line || [[ -n $line ]]; do
-                    echo adb shell input text ${(q)line}
+                    adb shell input text ${(q)line}
                 done
                 ;;
             *)
