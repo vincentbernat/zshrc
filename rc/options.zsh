@@ -24,7 +24,7 @@ autoload -Uz run-help
 # Remove / and # from WORDCHARS
 WORDCHARS=${${WORDCHARS:s#/#}:s,#,}
 
-if (( ${termcap[Co]:-0} > 8)); then
+if (( ${termcap[Co]:-0} > 8 )) && [[ -f $ZSH/third-party/zsh-autosuggestions.zsh ]]; then
     # Enable and configure autosuggest
     source $ZSH/third-party/zsh-autosuggestions.zsh
     typeset -g ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
