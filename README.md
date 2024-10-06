@@ -29,6 +29,40 @@ execution, you can do:
 
     curl -sL https://github.com/vincentbernat/zshrc/releases/download/latest/zsh-install.sh | sh
 
+There is also a Home Manager module:
+
+```nix
+{
+  description = "NixOS configuration";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  outputs = inputs@{ nixpkgs, home-manager, ... }: {
+    nixosConfigurations = {
+      hostname = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            users.users.joe.shell = pkgs.zsh;
+            programs.zsh.enable = true;
+            home-manager.users.joe = { ... }: {
+              imports = [ zshrc.homeManagerModules.default ];
+              home.stateVersion = "24.05";
+            };
+          }
+        ];
+      };
+    };
+  };
+}
+```
+
 License
 -------
 
