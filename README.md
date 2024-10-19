@@ -6,11 +6,6 @@ understand. Steal anything. My opinion is that you can't have an
 universal `.zshrc`. If you don't agree, take a look at
 [Prezto](https://github.com/sorin-ionescu/prezto).
 
-You need to create your own `.zshrc`. First solution is to symlink
-`~/.zsh/zshrc`. The other solution is to source `~/.zsh/zshrc` from
-your own `~/.zshrc`. The later case allows you to set the plugin you
-want to enable.
-
 You can copy your installation to a remote host with `install-zsh`
 function.
 
