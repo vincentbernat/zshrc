@@ -528,7 +528,7 @@ update() {
     (( $+commands[nix-channel] )) && [[ -s ~/.nix-channels ]] && nix-channel --update
     (( $+commands[nix] )) && nix registry pin nixpkgs
     (( $+commands[nix] )) && [[ -f ~/.config/nixpkgs/flake.nix ]] \
-        && nix flake update ~/.config/nixpkgs
+        && nix flake update --flake ~/.config/nixpkgs
     (( $+commands[home-manager] )) && nice home-manager switch
     # (( $+commands[doom] )) && [[ -d ~/.config/doom ]] && doom sync -u
     (( $+commands[fwupdmgr] )) && fwupdmgr update
