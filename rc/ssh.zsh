@@ -10,7 +10,7 @@ ssh() {
     #  https://bugzilla.mindrot.org/attachment.cgi?id=3547
     local -A details
     details=(${=${(M)${:-"${(@f)$(command ssh -G "$@" 2>/dev/null)}"}:#(host|hostname|user) *}})
-    local remote=${details[host]:-details[hostname]}
+    local remote=${details[host]:-$details[hostname]}
     local login=${details[user]}@${remote}
 
     # Title
