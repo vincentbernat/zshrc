@@ -493,6 +493,8 @@ function clean() {
         sudo find /var/cache/pbuilder/aptcache -type f -delete
     ()(($#)) /var/cache/pbuilder/build/cow*(N/) && prompt "pbuilder old build" && \
         sudo rm -rf --one-file-system /var/cache/pbuilder/build/cow*
+    ()(($#)) ~/.cache/sbuild/*.tar(Nm+30) && prompt "old sbuild chroot" && \
+        rm -f ~/.cache/sbuild/*.tar(Nm+30)
     (( $+commands[docker] )) && prompt "Docker related stuff" && \
         sudo =docker system prune -f
     (( $+commands[podman] )) && prompt "Podman related stuff" && \
