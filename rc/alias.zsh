@@ -180,6 +180,7 @@ secret() {
 # Isolate using bwrap
 # - isolate (get a shell with only current directory writable)
 # - isolate --share-net (same but get network access)
+# - isolate --bind /tmp/.X11-unix{,} --bind /dev/dri{,} (insecure X11 access)
 # - isolate ls (run ls in a sandbox)
 # - isolate --share-net -- ping 1.1.1.1 (ping 1.1.1.1)
 (( $+commands[bwrap] )) && isolate() {
