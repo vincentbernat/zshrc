@@ -198,6 +198,7 @@ secret() {
     )
     [[ $PWD != $HOME ]] && options=($options --bind $PWD $PWD)
     [[ -n $XDG_RUNTIME_DIR ]] && options=($options --tmpfs $XDG_RUNTIME_DIR)
+    [[ -L /etc/resolv.conf ]] && options=($options --ro-bind ${${:-/etc/resolv.conf}:A}{,})
     case $1 in
         (--*)
             while [[ $# -gt 0 ]] && [[ $1 != "--" ]]; do
