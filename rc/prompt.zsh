@@ -17,6 +17,7 @@ _vbe_prompt_precmd () {
 }
 _vbe_prompt_preexec () {
     typeset -g _vbe_cmd_timestamp=${_vbe_cmd_timestamp:-$EPOCHSECONDS}
+    print -n $'\e]133;C\a'  # begin output
 }
 add-zsh-hook precmd _vbe_prompt_precmd
 add-zsh-hook preexec _vbe_prompt_preexec
@@ -101,6 +102,7 @@ _vbe_prompt () {
 
     # When old command, just time + prompt sign
     if (( $_vbe_prompt_compact )); then
+        print -n $'%{\e]133;A\a%}'
         _vbe_prompt_segment cyan default "%D{%H:%M${SSH_TTY+ %Z}}"
         [[ -n $SSH_TTY ]] && \
             _vbe_prompt_segment black magenta "%B%M%b"
@@ -114,6 +116,7 @@ _vbe_prompt () {
     fi
 
     print
+    print -n $'%{\e]133;A\a%}'
     # user:
     #  - when root, red
     #  - when sudo in action, white
@@ -183,8 +186,11 @@ _vbe_prompt () {
 
 _vbe_setprompt () {
     setopt prompt_subst
-    typeset -g PS1='$(_vbe_prompt) '
-    typeset -g PS2="$(_vbe_prompt_segment cyan default " "; _vbe_prompt_end) "
+    local b=$'%{\e]133;A\a%}'  # start prompt
+    local e=$'%{\e]133;B\a%}'  # end prompt
+
+    typeset -g PS1='$(_vbe_prompt) '$e
+    typeset -g PS2=$b"$(_vbe_prompt_segment cyan default " "; _vbe_prompt_end) "$e
     typeset -g PS3="$(_vbe_prompt_segment cyan default "?"; _vbe_prompt_end) "
     typeset -g PS4="$(_vbe_prompt_segment white black "%N"; _vbe_prompt_segment blue default "%i"; _vbe_prompt_end) "
     typeset -g PROMPT_EOL_MARK="%B${PRCH[eol]}%b"
