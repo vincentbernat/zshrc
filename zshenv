@@ -5,7 +5,7 @@ if [ -z "$ZSH_VERSION" ]; then
     eval export $(zsh -c \
                   "typeset PATH
                    typeset NIX_PROFILES NIX_SSL_CERT_FILE LOCALE_ARCHIVE
-                   typeset FONTCONFIG_FILE GOPATH XDG_DATA_DIRS TMUX_TMPDIR
+                   typeset GOPATH XDG_DATA_DIRS TMUX_TMPDIR
                    typeset LC_ALL $(locale 2> /dev/null | sed 's/=.*//' | tr '\n' ' ')
                   ")
     return
@@ -87,9 +87,6 @@ fi
     [ -f $NIX_SSL_CERT_FILE ] || unset NIX_SSL_CERT_FILE
     export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
 }
-
-[[ -n $IN_NIX_SHELL ]] && [[ $IN_NIX_SHELL != pure ]] && \
-    export FONTCONFIG_FILE=$(nix eval --raw nixpkgs'#'fontconfig.out.outPath)/etc/fonts/fonts.conf
 
 export GOPATH=$HOME/.cache/go
 
