@@ -701,7 +701,10 @@ colortest() {
 
 # Python-related aliases
 (( $+commands[python3] )) && ! (( $+commands[python] )) && alias python=python3
-(( $+commands[ipython3] )) && alias ipython='ipython3 --no-confirm-exit'
+(( $+commands[ipython3] )) && \
+    alias ipython=ipython3 && \
+    alias ipython3='command ipython3 --no-confirm-exit'
+
 (( $+commands[pip] )) && alias pip='PIP_REQUIRE_VIRTUALENV=true python -m pip --disable-pip-version-check'
 
 # Virtualenv related functions
