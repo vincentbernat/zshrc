@@ -47,7 +47,7 @@
     # Capture the live output
     gzip -c >> $out.gz
 
-    # Reformat
+    # Reformat (alternative: use ansifilter)
     local current_limit=$(tmux show-options -Agv history-limit)
     tmux set -g history-limit 2147483647
     {
