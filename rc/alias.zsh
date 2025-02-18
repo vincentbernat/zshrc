@@ -226,7 +226,7 @@ secret() {
 }
 
 # git
-(( $+commands[git] )) && alias gls="git ls-files"
+(( $+commands[git] )) && abbrev-alias gls="git ls-files"
 (( $+commands[emacsclient] * $+commands[git] )) && magit() {
         local root=$(git rev-parse --show-toplevel)
         [[ -n $root ]] || return
