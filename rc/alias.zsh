@@ -1,14 +1,14 @@
 # -*- sh -*-
 
 # Autoexpand some aliases
-typeset -ga _vbe_ealiases
+typeset -ga _vbe_abbrevations
 abbrev-alias() {
     alias $1
-    _vbe_ealiases+=(${1%%\=*})
+    _vbe_abbrevations+=(${1%%\=*})
 }
 _vbe_zle-autoexpand() {
     local -a words; words=(${(z)LBUFFER})
-    if (( ${#_vbe_ealiases[(r)${words[-1]}]} )); then
+    if (( ${#_vbe_abbrevations[(r)${words[-1]}]} )); then
         zle _expand_alias
     fi
     zle magic-space
