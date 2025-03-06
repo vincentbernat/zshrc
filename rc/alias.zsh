@@ -389,8 +389,8 @@ v() {
 #
 # It uses lossless compression. This can be compressed again with:
 #   ffmpeg -i out.mkv -c:v libx264 -qp 0 -preset veryslow out-smaller.mkv
-# Remove "-qp 0" for non-lossless compression.
-#
+# For non lossless compression:
+#   ffmpeg -i out.mkv -c:v libx264 -crf 18 -preset veryslow -tune stillimage out-smaller.mkv
 screenrecord() {
     local x y width height border
     eval $(slop -b 5 -l -c 0.3,0.4,0.6,0.4 -f 'x=%x y=%y width=%w height=%h window=%i')
