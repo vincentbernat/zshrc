@@ -29,7 +29,7 @@ abbrev-alias tailf='tail -F'           # not shipped in util-linux anymore
 alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
 
 (( $+commands[gdb] )) && alias gdb='gdb -q'
-(( $+commands[dragon] )) && alias dragon='dragon -x'
+(( $+commands[dragon-drop] )) && alias dragon-drop='dragon-drop -x'
 
 # Fix typos
 (( $+commands[git] )) && abbrev-alias gti=git
