@@ -18,7 +18,7 @@ _environments() {
         -a virtualenvs
 
     (( $+commands[docker] )) \
-        && images=(${(f)"$($docker image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"}) \
+        && images=(${(f)"$(docker image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"}) \
         && (( $#images )) \
         && _wanted images expl 'docker images' compadd -a images
     (( $+commands[podman] )) \
