@@ -21,7 +21,7 @@ bindkey -M isearch " " magic-space
 # Some generic aliases
 alias df='df -h'
 alias du='du -h'
-alias rm='rm -i'
+alias rm='rm -i' # -I would be interesting, but it's not available on all implementations
 alias mv='mv -i'
 alias chown='chown -h'
 alias chgrp='chgrp -h'
