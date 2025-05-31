@@ -251,12 +251,6 @@ suzsh() command sudo -H -u ${1:-root} \
     ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
     ${ZSH_NAME} -i -l
 
-(( $+commands[nix] )) && nixpkgs() {
-    cmd=$1
-    shift
-    nix run nixpkgs\#${cmd} -- "$@"
-}
-
 # Newline Delimited JSON pretty-printing.
 #
 # Many programs have a flag to enable unbuffered output. For example,
