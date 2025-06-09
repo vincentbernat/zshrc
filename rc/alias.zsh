@@ -194,6 +194,7 @@ secret() {
         --tmpfs /tmp
         --tmpfs /var/tmp
         --tmpfs $HOME
+        --ro-bind $HOME/.nix-profile $HOME/.nix-profile
         --unshare-all
         --die-with-parent
     )
