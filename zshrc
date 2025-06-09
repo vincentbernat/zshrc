@@ -10,6 +10,7 @@
                $TERM != screen* && \
                -z $TMUX ]] && \
       exec tmux
+[[ -n "$TMUX" && -S "${TMUX%,*,*}" ]] || unset TMUX
 
 case $SHELL in
    */zsh) ;;
