@@ -40,12 +40,17 @@
     local out=$(mktemp ~/tmp/tmux-$HOST-$(date -I)-${1#%}-XXXX.rawlog)
 
     # Capture the current scrollback
-    tmux capture-pane -t $1 -JepS - > $out
-    sed -i -e :a -e '/^\n*$/{$d;N;ba' -e '}' $out
-    gzip $out
+    tmux set -p @recording on
+    {
+        tmux capture-pane -t $1 -JepS - > $out
+        sed -i -e :a -e '/^\n*$/{$d;N;ba' -e '}' $out
+        gzip $out
 
-    # Capture the live output
-    gzip -c >> $out.gz
+        # Capture the live output
+        gzip -c >> $out.gz
+    } always {
+        tmux set -pu @recording
+    }
 
     # Reformat (alternative: use ansifilter)
     local current_limit=$(tmux show-options -Agv history-limit)
