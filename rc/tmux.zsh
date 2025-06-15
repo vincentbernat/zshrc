@@ -57,7 +57,7 @@
     tmux set -g history-limit 2147483647
     {
         touch ${out%.rawlog}.log.gz
-        tmux new-window -d "zcat $out.gz ; tmux capture-pane -t \$TMUX_PANE -JpS - | gzip -c > ${out%.rawlog}.log.gz"
+        tmux new-window -d "zcat $out.gz ; tmux capture-pane -t \$TMUX_PANE -JpS -  | sed -e 's/.*/❱/' -e 's/^ *//' | gzip -c > ${out%.rawlog}.log.gz"
     } always {
         tmux set -g history-limit ${current_limit}
     }
