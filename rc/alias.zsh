@@ -53,27 +53,33 @@ alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
 (( $+commands[ug] )) && alias ug="ug --no-confirm --view='${(Q)"${$(alias e)#e=}"}'"
 
 # ls
-alias ll='ls -ltrhA'
-if ls --color=auto --g -d . &> /dev/null; then
-    # GNU ls
-    if (( ${terminfo[colors]:-0} >= 8 )); then
-        export LS_COLORS='ex=00:su=00:sg=00:ca=00:'
-        alias ls='ls --color=auto --group-directories'
+if (( $+commands[eza] )); then
+    alias ls=eza
+    alias lt='eza --tree'
+    alias ll='ls -lrA --sort=modified --group-directories-first'
+else
+    alias ll='ls -ltrhA'
+    if ls --color=auto --g -d . &> /dev/null; then
+        # GNU ls
+        if (( ${terminfo[colors]:-0} >= 8 )); then
+            export LS_COLORS='ex=00:su=00:sg=00:ca=00:'
+            alias ls='ls --color=auto --group-directories'
+        else
+            unset LS_COLORS
+            alias ls='ls --group-directories -p' # -p = indicator for directories
+        fi
+    elif ls -G -d . &> /dev/null; then
+        # FreeBSD ls
+        if (( ${terminfo[colors]:-0} >= 8 )); then
+            export LSCOLORS="Gxfxcxdxbxegedabagacad"
+            alias ls='ls -G'
+        else
+            unset LSCOLORS
+            alias ls='ls -p'
+        fi
     else
-        unset LS_COLORS
-        alias ls='ls --group-directories -p' # -p = indicator for directories
-    fi
-elif ls -G -d . &> /dev/null; then
-    # FreeBSD ls
-    if (( ${terminfo[colors]:-0} >= 8 )); then
-        export LSCOLORS="Gxfxcxdxbxegedabagacad"
-        alias ls='ls -G'
-    else
-        unset LSCOLORS
         alias ls='ls -p'
     fi
-else
-    alias ls='ls -p'
 fi
 
 # System init-related aliases
