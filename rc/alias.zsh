@@ -27,6 +27,7 @@ alias chown='chown -h'
 alias chgrp='chgrp -h'
 abbrev-alias tailf='tail -F'           # not shipped in util-linux anymore
 alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
+alias q="exit"
 
 (( $+commands[gdb] )) && alias gdb='gdb -q'
 (( $+commands[dragon-drop] )) && alias dragon-drop='dragon-drop -x'
