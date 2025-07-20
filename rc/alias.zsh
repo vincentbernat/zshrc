@@ -147,6 +147,9 @@ fi
     alias claude='isolate --share-net --bind ~/.config/claude-code{,} -- \
       env SHELL=/bin/bash CLAUDE_CONFIG_DIR=$HOME/.config/claude-code \
       =claude'
+(( $+commands[gemini] )) && \
+    alias gemini='isolate --share-net --bind ~/.gemini{,} -- \
+      =gemini'
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 
 mkcd() {
