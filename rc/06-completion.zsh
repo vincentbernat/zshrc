@@ -102,8 +102,9 @@ if (( $+commands[fzf] )) && [[ -f $ZSH/third-party/fzf-tab/fzf-tab.plugin.zsh ]]
     zstyle ':completion:*:git-checkout:*' sort false
     zstyle ':completion:*' menu no
 
-    # Preview
+    # Preview (issue with the width)
     zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
+    zstyle ':fzf-tab:complete:systemctl-*:*' popup-pad 50 0
 else
     zstyle ':completion:*:descriptions' format ${PRCH[completion]}' %B%d%b'
 fi
