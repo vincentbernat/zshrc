@@ -143,6 +143,9 @@ fi
 (( $+commands[dig] )) && alias dig='dig +noall +answer'
 (( $+commands[fdfind] )) && alias fd=fdfind
 (( $+commands[nsxiv] )) && alias sxiv=nsxiv
+alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
+
+# Isolated commands
 (( $+commands[claude] )) && \
     alias claude='isolate --share-net --bind ~/.config/claude-code{,} -- \
       env SHELL=/bin/bash CLAUDE_CONFIG_DIR=$HOME/.config/claude-code \
@@ -150,7 +153,6 @@ fi
 (( $+commands[gemini] )) && \
     alias gemini='isolate --share-net --bind ~/.gemini{,} -- \
       =gemini'
-alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 
 mkcd() {
     command mkdir -p -- $@ && cd -- ${@:$#}
