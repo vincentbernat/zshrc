@@ -145,15 +145,6 @@ fi
 (( $+commands[nsxiv] )) && alias sxiv=nsxiv
 alias clear='clear && [[ -n $TMUX ]] && tmux clear-history || true'
 
-# Isolated commands
-(( $+commands[claude] )) && \
-    alias claude='isolate --share-net --bind ~/.config/claude-code{,} -- \
-      env SHELL=/bin/bash CLAUDE_CONFIG_DIR=$HOME/.config/claude-code \
-      =claude'
-(( $+commands[gemini] )) && \
-    alias gemini='isolate --share-net --bind ~/.gemini{,} -- \
-      =gemini'
-
 mkcd() {
     command mkdir -p -- $@ && cd -- ${@:$#}
 }
@@ -239,6 +230,17 @@ secret() {
     fi
     bwrap $options
 }
+
+# Isolated commands
+(( $+commands[claude] )) && \
+    alias claude='isolate --share-net --bind ~/.config/claude-code{,} \
+      --bind-try ~/.config/agents.md/${${PWD#$HOME/}//\//-}.md CLAUDE.md \
+      -- env SHELL=/bin/bash CLAUDE_CONFIG_DIR=$HOME/.config/claude-code \
+      =claude'
+(( $+commands[gemini] )) && \
+    alias gemini='isolate --share-net --bind ~/.gemini{,} \
+      --bind-try ~/.config/agents.md/${${PWD#$HOME/}//\//-}.md GEMINI.md \
+      -- =gemini'
 
 # git
 (( $+commands[git] )) && abbrev-alias gls="git ls-files"
