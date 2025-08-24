@@ -194,17 +194,16 @@ secret() {
 # - isolate ls (run ls in a sandbox)
 # - isolate --share-net -- ping 1.1.1.1 (ping 1.1.1.1)
 (( $+commands[bwrap] )) && isolate() {
-    local -a options nocwd
+    local -a options moreoptions nocwd
     options=(
-        $options
-        --ro-bind / /
+        --ro-bind /{,}
         --dev /dev
         --proc /proc
         --tmpfs /run
         --tmpfs /tmp
         --tmpfs /var/tmp
         --tmpfs $HOME
-        --ro-bind $HOME/.nix-profile $HOME/.nix-profile
+        --ro-bind $HOME/.nix-profile{,}
         --unshare-all
         --die-with-parent
     )
@@ -215,20 +214,21 @@ secret() {
             while [[ $# -gt 0 ]] && [[ $1 != "--" ]]; do
                 case $1 in
                     (--no-cwd) nocwd=1 ;;
-                    (*) options=($options $1) ;;
+                    (*) moreoptions=($moreoptions $1) ;;
                 esac
                 shift
             done
             [[ $1 == "--" ]] && shift
             ;;
     esac
-    [[ -z $nocwd ]] && [[ $PWD != $HOME ]] && options=($options --bind $PWD $PWD)
+    [[ -z $nocwd ]] && [[ $PWD != $HOME ]] && options=($options --bind $PWD{,})
+    options=($options $moreoptions)
     if [[ $# -eq 0 ]]; then
         options=(
             $options
-            --ro-bind $HOME/.zsh $HOME/.zsh
-            --ro-bind $HOME/.zshrc $HOME/.zshrc
-            --ro-bind $HOME/.zshenv $HOME/.zshenv
+            --ro-bind $HOME/.zsh{,}
+            --ro-bind $HOME/.zshrc{,}
+            --ro-bind $HOME/.zshenv{,}
             --tmpfs $ZSHRUN
             --setenv VBE_SHELL_ISOLATED true
             --
