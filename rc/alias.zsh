@@ -234,12 +234,12 @@ secret() {
 # Isolated commands
 (( $+commands[claude] )) && \
     alias claude='isolate --share-net --bind ~/.config/claude-code{,} \
-      --bind-try ~/.config/agents.md/${${PWD#$HOME/}//\//-}.md CLAUDE.md \
+      --bind-try ~/.config/agents.md/${${PWD#$HOME/}//\//-}.md $PWD/CLAUDE.md \
       -- env SHELL=/bin/bash CLAUDE_CONFIG_DIR=$HOME/.config/claude-code \
       =claude'
 (( $+commands[gemini] )) && \
     alias gemini='isolate --share-net --bind ~/.gemini{,} \
-      --bind-try ~/.config/agents.md/${${PWD#$HOME/}//\//-}.md GEMINI.md \
+      --bind-try ~/.config/agents.md/${${PWD#$HOME/}//\//-}.md $PWD/GEMINI.md \
       -- =gemini'
 
 # git
