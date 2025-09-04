@@ -235,11 +235,13 @@ secret() {
 (( $+commands[claude] )) && \
     alias claude='isolate --share-net --bind ~/.config/claude-code{,} \
       --bind-try ~/.config/agents.md/${${PWD#$HOME/}//\//-}.md $PWD/CLAUDE.md \
+      --overlay-src $GOPATH --tmp-overlay $GOPATH \
       -- env SHELL=/bin/bash CLAUDE_CONFIG_DIR=$HOME/.config/claude-code \
       =claude'
 (( $+commands[gemini] )) && \
     alias gemini='isolate --share-net --bind ~/.gemini{,} \
       --bind-try ~/.config/agents.md/${${PWD#$HOME/}//\//-}.md $PWD/GEMINI.md \
+      --overlay-src $GOPATH --tmp-overlay $GOPATH \
       -- =gemini'
 
 # git
