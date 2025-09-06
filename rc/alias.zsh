@@ -233,34 +233,11 @@ secret() {
 
 # Isolated commands
 (( $+commands[claude] )) && \
-    claude() {
-        local -a args
-        args=(
-            --share-net
-            --bind ~/.config/claude-code{,}
-            --overlay-src $GOPATH --tmp-overlay $GOPATH
-        )
-        local agentmd=~/.config/agents.md/${${PWD#$HOME/}//\//-}.md
-        [[ -f $agentmd ]] && {
-            mkdir $HOME/tmp/overlaywd-$$
-            args=(
-                $args
-                --no-cwd
-                --bind $HOME{,}
-                --bind $agentmd /tmp/o1/CLAUDE.md
-                --
-                bwrap --overlay-src /tmp/o1 --overlay $PWD $HOME/tmp/overlaywd-$$ $PWD
-                --
-                bwrap --tmpfs $HOME --bind $PWD{,}
-            )
-        }
-        args=(
-            $args
-            --
-            env SHELL=/bin/bash CLAUDE_CONFIG_DIR=$HOME/.config/claude-code
-        )
-        isolate $args bash "$@"
-    }
+    alias claude='isolate --share-net --bind ~/.config/claude-code{,} \
+      --bind-try ~/.config/agents.md/${${PWD#$HOME/}//\//-}.md $PWD/CLAUDE.md \
+      --overlay-src $GOPATH --tmp-overlay $GOPATH \
+      -- env SHELL=/bin/bash CLAUDE_CONFIG_DIR=$HOME/.config/claude-code \
+      =claude'
 (( $+commands[gemini] )) && \
     alias gemini='isolate --share-net --bind ~/.gemini{,} \
       --bind-try ~/.config/agents.md/${${PWD#$HOME/}//\//-}.md $PWD/GEMINI.md \
