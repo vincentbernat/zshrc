@@ -518,9 +518,13 @@ function clean() {
         nix-collect-garbage --delete-older-than 7d
     [[ -d /var/log/journal ]] && prompt "journal logs" && \
         sudo journalctl --vacuum-time='2 months'
-    [[ -n ${GOMODCACHE:-$GOPATH} ]] && [[ -d ${GOMODCACHE:-$GOPATH} ]] && {
-        prompt "Go module cache" && go clean -modcache
-        touch ${GOMODCACHE:-$GOPATH}
+    (( $+commands[go] )) && {
+        # The module cache has no maximum size, and the go command does not
+        # remove its contents automatically.
+        [[ -d $(go env GOMODCACHE) ]] && prompt "Go module cache" && go clean -modcache
+        # The go command periodically deletes cached data that has not been used
+        # recently. Running 'go clean -cache' deletes all cached data.
+        [[ -d $(go env GOCACHE) ]] && prompt "Go build cache" && go clean -cache
     }
     local d
     for d in tmp src download; do
