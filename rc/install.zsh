@@ -66,7 +66,7 @@ install-zsh() {
         which __ | sed '1,1d; $d'
 
         # Uncompress the archive
-        echo 'cat <<EOA | $BASE64 | gzip -dc | tar -m -C $ZSH -xf -'
+        echo 'cat <<EOA | $BASE64 | gzip -dc | tar --no-same-owner -m -C $ZSH -xf -'
         (
             cd $ZSH
             (
