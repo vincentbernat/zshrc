@@ -196,6 +196,7 @@ secret() {
         --tmpfs $HOME
         --ro-bind $HOME/.nix-profile{,}
         --unshare-all
+        --new-session
         --die-with-parent
     )
     [[ -n $XDG_RUNTIME_DIR ]] && options=($options --tmpfs $XDG_RUNTIME_DIR)
