@@ -5,11 +5,11 @@ _environments() {
     local expl
 
     (( $+commands[docker] )) \
-        && containers=(${(f)"$(docker container list 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"}) \
+        && containers=(${(f)"$(docker container list --format '{{ .Names }}' | tr ',' '\n' 2> /dev/null)"}) \
         && (( $#containers )) \
         && _describe -t containers-active "running Docker containers" containers
     (( $+commands[podman] )) \
-        && containers=(${(f)"$(podman container list 2> /dev/null | awk '(NR > 1) { split($NF,names,/,/); for (i in names) printf("%s:%7s\n",names[i],$2)}')"}) \
+        && containers=(${(f)"$(podman container list --format '{{ .Names }}' | tr ',' '\n' 2> /dev/null)"}) \
         && (( $#containers )) \
         && _describe -t containers-active "running Podman containers" containers
 
@@ -18,11 +18,11 @@ _environments() {
         -a virtualenvs
 
     (( $+commands[docker] )) \
-        && images=(${(f)"$(docker image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"}) \
+        && images=(${(f)"$(docker image list --format '{{ .Repository }}:{{ .Tag }}' 2> /dev/null)"}) \
         && (( $#images )) \
         && _wanted images expl 'docker images' compadd -a images
     (( $+commands[podman] )) \
-        && images=(${(f)"$(podman image list 2> /dev/null | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}')"}) \
+        && images=(${(f)"$(podman image list --format '{{ .Repository }}:{{ .Tag }}' 2> /dev/null)"}) \
         && (( $#images )) \
         && _wanted images expl 'podman images' compadd -a images
 }

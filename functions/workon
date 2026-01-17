@@ -17,12 +17,12 @@ venv=($WORKON_HOME/*/bin/activate(.N:h:h:ft))
 
 function _vbe_populate_docker() {
     (( $+commands[docker] )) && {
-        dimages=( $(docker image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
-        dcontainers=( $(docker container list | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
+        dimages=( $(docker image list --format '{{ .Repository }}:{{ .Tag }}') )
+        dcontainers=( $(docker container list --format '{{ .Names }}' | tr ',' '\n') )
     }
     (( $+commands[podman] )) && {
-        pimages=( $(podman image list | awk '(NR > 1 && $1 !~ /^</){printf("%s:%s\n", $1,$2)}') )
-        pcontainers=( $(podman container list | awk '(NR > 1){split($NF,names,/,/); for (i in names) printf("%s\n",names[i])}') )
+        pimages=( $(podman image list --format '{{ .Repository }}:{{ .Tag }}') )
+        pcontainers=( $(podman container list --format '{{ .Names }}' | tr ',' '\n') )
     }
 }
 
@@ -34,16 +34,16 @@ function _vbe_populate_docker() {
         print " - [virtualenv] $env"
     done
     for image in $dimages; do
-        print " - [docker    ] $image"
+        print " - [docker img] $image"
     done
     for container in $dcontainers; do
-        print " - [docker    ] $container"
+        print " - [docker ctr] $container"
     done
     for image in $pimages; do
-        print " - [podman    ] $image"
+        print " - [podman img] $image"
     done
     for container in $pcontainers; do
-        print " - [podman    ] $container"
+        print " - [podman ctr] $container"
     done
     return 0
 }
