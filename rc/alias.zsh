@@ -269,14 +269,6 @@ suzsh() command sudo -H -u ${1:-root} \
     ${SSH_AUTH_SOCK+SSH_AUTH_SOCK=$SSH_AUTH_SOCK} \
     ${ZSH_NAME} -i -l
 
-# Like sudo, but only affect capabilities
-(( $+commands[capsh] )) && \
-    withcap() {
-        local caps=$1
-        shift
-        sudo -E capsh --keep=1 --user=$USER --caps=${(j:,:)${${(s:,:)caps}/%/+eip}} --addamb=${caps} "--" -c "$*"
-    }
-
 # Newline Delimited JSON pretty-printing.
 #
 # Many programs have a flag to enable unbuffered output. For example,
