@@ -452,7 +452,6 @@ else
     }
     aliases[=]='noglob _vbe_calc'
 fi
-(( $+commands[units] )) && alias units='noglob units --verbose'
 
 # Allow to prefix commands with `$` to help copy/paste operations.
 function \$() {
