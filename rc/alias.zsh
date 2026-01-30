@@ -443,23 +443,34 @@ screenrecord() {
     }
 
 # Simple calculator
+_vbe_calc_accept_line() {
+    # If command is "=", quote the arguments to remove any further evaluation,
+    # but undo quoting in case we call from history. Ideally, we should be able
+    # to execute the command directly and reset the prompt, but it interfers
+    # with our short prompt.
+    local expr
+    case $BUFFER in
+        "= "*) expr="${BUFFER#= }" ;;
+        =0|=1|=2|=3|=4|=5|=6|=7|=8|=9*) expr="${BUFFER#=}" ;;
+    esac
+    case $expr in
+        "") ;;
+        \'*) BUFFER="= ${(q-)${(Q)expr}}" ;;
+        *) BUFFER="= ${(q-)expr}"
+    esac
+    zle .accept-line
+}
+zle -N accept-line _vbe_calc_accept_line
 if (( $+commands[numbat] )); then
-    function numbat() {
-        if (( $# )); then
-            command numbat --pretty-print always -e "$*"
-        else
-            command numbat
-        fi
-    }
-    aliases[=]='noglob numbat'
+    aliases[=]='numbat --pretty-print always -e'
 elif (( $+commands[qalc] )); then
-    aliases[=]='noglob qalc'
+    aliases[=]='qalc'
 else
     function _vbe_calc() {
         autoload -Uz zcalc
         echo $(($@))
     }
-    aliases[=]='noglob _vbe_calc'
+    aliases[=]='_vbe_calc'
 fi
 
 # Allow to prefix commands with `$` to help copy/paste operations.
