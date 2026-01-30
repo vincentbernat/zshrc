@@ -443,7 +443,16 @@ screenrecord() {
     }
 
 # Simple calculator
-if (( $+commands[qalc] )); then
+if (( $+commands[numbat] )); then
+    function numbat() {
+        if (( $# )); then
+            command numbat --pretty-print always -e "$*"
+        else
+            command numbat
+        fi
+    }
+    aliases[=]='noglob numbat'
+elif (( $+commands[qalc] )); then
     aliases[=]='noglob qalc'
 else
     function _vbe_calc() {
