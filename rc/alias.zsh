@@ -450,8 +450,7 @@ _vbe_calc_accept_line() {
     # with our short prompt.
     local expr
     case $BUFFER in
-        "= "*) expr="${BUFFER#= }" ;;
-        \=0*|\=1*|\=2*|\=3*|\=4*|\=5*|\=6*|\=7*|\=8*|\=9*) expr="${BUFFER#=}" ;;
+        "= "*) expr=${BUFFER#= } ;;
     esac
     case $expr in
         "") ;;
