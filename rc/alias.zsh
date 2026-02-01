@@ -448,29 +448,32 @@ _vbe_calc_accept_line() {
     # but undo quoting in case we call from history. Ideally, we should be able
     # to execute the command directly and reset the prompt, but it interfers
     # with our short prompt.
-    local expr
-    case $BUFFER in
-        "= "*) expr=${BUFFER#= } ;;
-    esac
-    case $expr in
-        "") ;;
-        \'*) BUFFER="= ${(q-)${(Q)expr}}" ;;
-        *) BUFFER="= ${(q-)expr}"
-    esac
-    zle .accept-line
+    if [[ $BUFFER =~ "= *" ]]; then
+        local expr=${BUFFER#= }
+        # Display compact prompt
+        _vbe_prompt_compact=1
+        zle .reset-prompt
+        # Display calc result
+        zle -I
+        if (( $+commands[numbat] )); then
+            command numbat -e "$expr"
+        elif (( $+commands[qalc] )); then
+            command qalc $expr
+        else
+            autoload -Uz zcalc
+            echo $((expr))
+        fi
+        print
+        # Save buffer in history, discard it and redraw prompt
+        print -s $BUFFER
+        BUFFER=""
+        unset _vbe_prompt_compact
+        zle .reset-prompt
+    else
+        zle .accept-line
+    fi
 }
 zle -N accept-line _vbe_calc_accept_line
-if (( $+commands[numbat] )); then
-    aliases[=]='numbat --pretty-print always -e'
-elif (( $+commands[qalc] )); then
-    aliases[=]='qalc'
-else
-    function _vbe_calc() {
-        autoload -Uz zcalc
-        echo $(($@))
-    }
-    aliases[=]='_vbe_calc'
-fi
 
 # Allow to prefix commands with `$` to help copy/paste operations.
 function \$() {
