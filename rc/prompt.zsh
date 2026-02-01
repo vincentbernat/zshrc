@@ -34,18 +34,16 @@ _vbe-zle-line-init() {
     local -i ret=$?
     (( $+zle_bracketed_paste )) && print -r -n - $zle_bracketed_paste[2]
 
-    # Received EOT, should exit the shell
-    if [[ $ret == 0 && $KEYS == $'\4' ]]; then
-        _vbe_prompt_compact=1
-        zle .reset-prompt
-        exit
-    fi
-
     # Edition of command-line is over, we need to draw a new prompt.
     # Shorten the current one.
     _vbe_prompt_compact=1
     zle .reset-prompt
     unset _vbe_prompt_compact
+
+    # Received EOT, should exit the shell
+    if [[ $ret == 0 && $KEYS == $'\4' ]]; then
+        exit
+    fi
 
     if (( ret )); then
         # Ctrl-C
