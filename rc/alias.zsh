@@ -461,7 +461,7 @@ _vbe_calc_accept_line() {
 }
 zle -N accept-line _vbe_calc_accept_line
 if (( $+commands[numbat] )); then
-    aliases[=]='numbat --pretty-print always -e'
+    aliases[=]='numbat -e'
 elif (( $+commands[qalc] )); then
     aliases[=]='qalc'
 else
