@@ -31,6 +31,7 @@ alias q="exit"
 
 (( $+commands[gdb] )) && alias gdb='gdb -q'
 (( $+commands[dragon-drop] )) && alias dragon-drop='dragon-drop -x'
+(( $+commands[pv] )) && alias pv='pv --bar-style shaded'
 
 # Fix typos
 (( $+commands[git] )) && abbrev-alias gti=git
