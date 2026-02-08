@@ -443,24 +443,31 @@ screenrecord() {
         stty cols $cols rows $rows
     }
 
-# Simple calculator
-_vbe_calc_accept_line() {
-    # If command is "=", quote the arguments to remove any further evaluation,
-    # but undo quoting in case we call from history. Ideally, we should be able
-    # to execute the command directly and reset the prompt, but it interfers
-    # with our short prompt.
+# Simple calculator. When using "=", quote the expression before executing it.
+# See https://www.zsh.org/mla/users/2026/msg00021.html
+_vbe_calc_accept() {
     local expr
     case $BUFFER in
-        "= "*) expr=${BUFFER#= } ;;
-    esac
-    case $expr in
-        "") ;;
-        \'*) BUFFER="= ${(q-)${(Q)expr}}" ;;
-        *) BUFFER="= ${(q-)expr}"
+        "= "*)
+            typeset -g _vbe_calc_active="$BUFFER"
+            expr=${(Q)${BUFFER#= }}
+            BUFFER="= ${(q-)expr}"
+            ;;
     esac
     zle .accept-line
 }
-zle -N accept-line _vbe_calc_accept_line
+# Ensure the original, unquoted, expression is put in history.
+_vbe_calc_history() {
+    return ${+_vbe_calc_active}
+}
+_vbe_calc_preexec() {
+    (( ${+_vbe_calc_active} )) && print -s "$_vbe_calc_active"
+    unset _vbe_calc_active
+    return 0
+}
+zle -N accept-line _vbe_calc_accept
+add-zsh-hook preexec _vbe_calc_preexec
+add-zsh-hook zshaddhistory _vbe_calc_history
 if (( $+commands[numbat] )); then
     aliases[=]='numbat -e'
 elif (( $+commands[qalc] )); then
