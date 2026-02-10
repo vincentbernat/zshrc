@@ -237,7 +237,8 @@ secret() {
 (( $+commands[claude] )) && \
     alias claude='isolate --share-net --bind ~/.config/claude-code{,} \
       --overlay-src $GOPATH --tmp-overlay $GOPATH \
-      -- env SHELL=/bin/bash CLAUDE_CONFIG_DIR=$HOME/.config/claude-code \
+      -- env SHELL=/bin/bash \
+      CLAUDE_CODE_DISABLE_AUTO_MEMORY=0 CLAUDE_CONFIG_DIR=$HOME/.config/claude-code \
       =claude'
 (( $+commands[gemini] )) && \
     alias gemini='isolate --share-net --bind ~/.gemini{,} \
