@@ -197,9 +197,9 @@ secret() {
         --tmpfs $HOME
         --ro-bind $HOME/.nix-profile{,}
         --unshare-all
-        --new-session
         --die-with-parent
     )
+    [[ $(sysctl -en dev.tty.legacy_tiocsti) == 0 ]] || options=($options --new-session) # CVE-2017-5226
     [[ -n $XDG_RUNTIME_DIR ]] && options=($options --tmpfs $XDG_RUNTIME_DIR)
     [[ -L /etc/resolv.conf ]] && options=($options --ro-bind ${${:-/etc/resolv.conf}:A}{,})
     case $1 in
