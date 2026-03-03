@@ -429,7 +429,7 @@ screenrecord() {
         -qp 0 \
         -preset ultrafast \
         \\\\$'\n' \
-        $@
+        $1 '&&' ffmpeg -i $1 -c:v libx264 -qp 0 -preset veryslow ${1%.*}-smaller.${1##*.}
 }
 
 # Reimplementation of an xterm tool
