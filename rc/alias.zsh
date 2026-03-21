@@ -455,7 +455,7 @@ _vbe_calc_accept() {
     case $BUFFER in
         "= "*)
             typeset -g _vbe_calc_active="$BUFFER"
-            expr=${(Q)${BUFFER#= }}
+            expr=${BUFFER#= }
             BUFFER="= ${(q-)expr}"
             ;;
     esac
