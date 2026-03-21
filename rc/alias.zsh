@@ -451,23 +451,21 @@ screenrecord() {
 # Simple calculator. When using "=", quote the expression before executing it.
 # See https://www.zsh.org/mla/users/2026/msg00021.html
 _vbe_calc_accept() {
-    local expr
     case $BUFFER in
         "= "*)
-            typeset -g _vbe_calc_expression="$BUFFER"
-            expr=${BUFFER#= }
-            BUFFER="= ${(q-)expr}"
+            typeset -g _vbe_calc_expr=$BUFFER
+            BUFFER="= ${(q-)${BUFFER#= }}"
             ;;
     esac
     zle .accept-line
 }
 # Ensure the original, unquoted, expression is put in history.
 _vbe_calc_history() {
-    return ${+_vbe_calc_expression}
+    return ${+_vbe_calc_expr}
 }
 _vbe_calc_preexec() {
-    (( ${+_vbe_calc_expression} )) && print -s "$_vbe_calc_expression"
-    unset _vbe_calc_expression
+    (( ${+_vbe_calc_expr} )) && print -s $_vbe_calc_expr
+    unset _vbe_calc_expr
     return 0
 }
 zle -N accept-line _vbe_calc_accept
