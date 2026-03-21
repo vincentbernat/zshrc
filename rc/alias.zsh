@@ -454,7 +454,7 @@ _vbe_calc_accept() {
     local expr
     case $BUFFER in
         "= "*)
-            typeset -g _vbe_calc_active="$BUFFER"
+            typeset -g _vbe_calc_expression="$BUFFER"
             expr=${BUFFER#= }
             BUFFER="= ${(q-)expr}"
             ;;
@@ -463,11 +463,11 @@ _vbe_calc_accept() {
 }
 # Ensure the original, unquoted, expression is put in history.
 _vbe_calc_history() {
-    return ${+_vbe_calc_active}
+    return ${+_vbe_calc_expression}
 }
 _vbe_calc_preexec() {
-    (( ${+_vbe_calc_active} )) && print -s "$_vbe_calc_active"
-    unset _vbe_calc_active
+    (( ${+_vbe_calc_expression} )) && print -s "$_vbe_calc_expression"
+    unset _vbe_calc_expression
     return 0
 }
 zle -N accept-line _vbe_calc_accept
