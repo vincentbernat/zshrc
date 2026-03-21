@@ -45,6 +45,7 @@ _vbe_title_preexec () {
                 ;;
             *)
                 title=$cmd[1]:t
+                [[ -z $title ]] && title=$cmd[1]
                 ;;
         esac
     done
