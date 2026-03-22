@@ -39,7 +39,13 @@ function _vbe-sudo-command-line() {
         *) BUFFER=e${BUFFER#sudoedit}; CURSOR=$(( CURSOR - ${#${:-sudoedit}} + 1 )) ;;
       esac
       ;;
-    sudo\ *)
+    "sudo ="*)
+      case $LBUFFER in
+        "sudo ="*) LBUFFER=${LBUFFER#sudo =} ;;
+        *) BUFFER=${BUFFER#sudo =}; CURSOR=$(( CURSOR - ${#${:-sudo}} - 2 )) ;;
+      esac
+      ;;
+    "sudo "*)
       case $LBUFFER in
         sudo*) LBUFFER=${LBUFFER#sudo } ;;
         *) BUFFER=${BUFFER#sudo }; CURSOR=$(( CURSOR - ${#${:-sudo}} - 1 )) ;;
@@ -55,11 +61,13 @@ function _vbe-sudo-command-line() {
       local prog nprog
       prog=${${(Az)BUFFER}[1]}
       nprog=${${${${aliases[$prog]:-${prog}}#sudo }#command }#=}
+      # If alias is already expanded in buffer, skip re-expansion
+      [[ $BUFFER == ${nprog}* ]] && nprog=$prog
       if [[ $prog == ${${(Az)LBUFFER}[1]} ]]; then
         LBUFFER="sudo =${LBUFFER/$prog/$nprog}"
       else
         BUFFER="sudo =${BUFFER/$prog/$nprog}"
-        CURSOR=$(( CURSOR + ${#${:-sudo}} + 1 ))
+        CURSOR=$(( CURSOR + ${#${:-sudo}} + 2 ))
       fi
       ;;
   esac
