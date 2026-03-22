@@ -452,9 +452,9 @@ screenrecord() {
 # See https://www.zsh.org/mla/users/2026/msg00021.html
 _vbe_calc_accept() {
     case $BUFFER in
-        "= "*)
+        "="*)
             typeset -g _vbe_calc_expr=$BUFFER
-            BUFFER="= ${(q-)${BUFFER#= }}"
+            BUFFER="= ${(q-)${${BUFFER#=}# }}"
             ;;
     esac
     zle .accept-line
