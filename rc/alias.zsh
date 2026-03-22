@@ -476,11 +476,8 @@ if (( $+commands[numbat] )); then
 elif (( $+commands[qalc] )); then
     aliases[=]='qalc'
 else
-    function _vbe_calc() {
-        autoload -Uz zcalc
-        echo $(($@))
-    }
-    aliases[=]='_vbe_calc'
+    autoload -Uz zcalc
+    aliases[=]='zcalc -e'
 fi
 
 # Allow to prefix commands with `$` to help copy/paste operations.
