@@ -477,7 +477,7 @@ elif (( $+commands[qalc] )); then
     aliases[=]='qalc'
 else
     autoload -Uz zcalc
-    aliases[=]='zcalc -e'
+    aliases[=]='zcalc -f -e'
 fi
 
 # Allow to prefix commands with `$` to help copy/paste operations.
