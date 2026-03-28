@@ -450,14 +450,13 @@ screenrecord() {
 
 # Simple calculator. When using "=", quote the expression before executing it.
 # See https://www.zsh.org/mla/users/2026/msg00021.html
-_vbe_calc_accept() {
+_vbe_calc_quote() {
     case $BUFFER in
         "="*)
             typeset -g _vbe_calc_expr=$BUFFER
             BUFFER="= ${(q-)${${BUFFER#=}# }}"
             ;;
     esac
-    zle .accept-line
 }
 # Ensure the original, unquoted, expression is put in history.
 _vbe_calc_history() {
@@ -468,7 +467,7 @@ _vbe_calc_preexec() {
     unset _vbe_calc_expr
     return 0
 }
-zle -N accept-line _vbe_calc_accept
+add-zle-hook-widget line-finish _vbe_calc_quote
 add-zsh-hook preexec _vbe_calc_preexec
 add-zsh-hook zshaddhistory _vbe_calc_history
 if (( $+commands[numbat] )); then
