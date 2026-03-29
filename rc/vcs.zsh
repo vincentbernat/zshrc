@@ -1,6 +1,7 @@
 # -*- sh -*-
 
-# Incorporate git information into prompt
+# Incorporate git information into prompt. See
+# https://vincent.bernat.ch/en/blog/2019-zsh-async-vcs-info.
 
 [[ $USERNAME != "root" ]] && [[ $ZSH_NAME != "zsh-static" ]] && {
 

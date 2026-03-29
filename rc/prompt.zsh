@@ -22,8 +22,8 @@ _vbe_prompt_preexec () {
 add-zsh-hook precmd _vbe_prompt_precmd
 add-zsh-hook preexec _vbe_prompt_preexec
 
-# Transient prompt
-# See: https://github.com/romkatv/powerlevel10k/issues/888
+# Transient prompt See: https://github.com/romkatv/powerlevel10k/issues/888 and
+# https://vincent.bernat.ch/en/blog/2021-zsh-transient-prompt.
 _vbe-zle-line-init() {
     [[ $CONTEXT == start ]] || return 0
 

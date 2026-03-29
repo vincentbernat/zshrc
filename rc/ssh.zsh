@@ -24,6 +24,7 @@ ssh() {
     # me@*.company.com)  print company/network/password ;;
     # me@*.company2.com) print company2/network/password ;;
     # esac
+    # See https://vincent.bernat.ch/en/blog/2023-sshpass-without-sshpass.
     [[ -f $ZSH/local/ssh-login2pass ]] && {
         local passname=$(source $ZSH/local/ssh-login2pass $login)
         [[ -n $passname ]] && {

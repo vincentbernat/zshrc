@@ -8,6 +8,8 @@
 # With autocd, you can just type `~-bookmark`. Since this can be
 # cumbersome to type, you can also type `@@` and this will be turned
 # into `~-` by ZLE.
+#
+# See https://vincent.bernat.ch/en/blog/2015-zsh-directory-bookmarks
 
 () {
     typeset -g MARKPATH=$ZSH/run/marks

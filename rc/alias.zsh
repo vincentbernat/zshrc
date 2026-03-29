@@ -1,6 +1,7 @@
 # -*- sh -*-
 
-# Autoexpand some aliases
+# Autoexpand some aliases. See
+# https://vincent.bernat.ch/en/blog/2025-zsh-autoexpand-aliases.
 typeset -ga _vbe_abbrevations
 abbrev-alias() {
     alias $1
@@ -449,7 +450,8 @@ screenrecord() {
     }
 
 # Simple calculator. When using "=", quote the expression before executing it.
-# See https://www.zsh.org/mla/users/2026/msg00021.html
+# See https://www.zsh.org/mla/users/2026/msg00021.html and
+# https://vincent.bernat.ch/en/blog/2026-zsh-calculator.
 _vbe_calc_quote() {
     case $BUFFER in
         "="*)
