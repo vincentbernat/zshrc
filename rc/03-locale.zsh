@@ -1,5 +1,6 @@
 # -*- sh -*-
 
+# See https://vincent.bernat.ch/en/blog/2011-ssh-and-locales
 (( $+commands[locale] )) && () {
   local -a available
   local -A locales
