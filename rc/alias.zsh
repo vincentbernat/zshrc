@@ -217,6 +217,7 @@ secret() {
     esac
     [[ -z $nocwd ]] && [[ $PWD != $HOME ]] && options=($options --bind $PWD{,})
     options=($options $moreoptions)
+
     if [[ $# -eq 0 ]]; then
         options=(
             $options
@@ -226,10 +227,10 @@ secret() {
             --tmpfs $ZSHRUN
             --setenv VBE_SHELL_ISOLATED true
             --
-            zsh -i
+            $ZSH/misc/isolate-landlock zsh -i
         )
     else
-        options=($options -- "$@")
+        options=($options -- $ZSH/misc/isolate-landlock "$@")
     fi
     bwrap $options
 }
