@@ -227,12 +227,12 @@ secret() {
             --tmpfs $ZSHRUN
             --setenv VBE_SHELL_ISOLATED true
             --
-            $ZSH/misc/isolate-landlock zsh -i
+            zsh -i
         )
     else
-        options=($options -- $ZSH/misc/isolate-landlock "$@")
+        options=($options -- "$@")
     fi
-    bwrap $options
+    $ZSH/misc/isolate-landlock bwrap $options
 }
 
 # Isolated commands
