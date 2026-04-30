@@ -89,6 +89,16 @@ zle -N _vbe-expand-dot-to-parent-directory-path
 bindkey "." _vbe-expand-dot-to-parent-directory-path
 bindkey -M isearch "." self-insert
 
+# Replace ~? by ~/ (common mistake for me)
+function _vbe-replace-tilde-question() {
+  case $LBUFFER in
+    (*~) LBUFFER=${LBUFFER}/ ;;
+    (*)  LBUFFER=${LBUFFER}\? ;;
+  esac
+}
+zle -N _vbe-replace-tilde-question
+bindkey '?' _vbe-replace-tilde-question
+
 # Don't do history completion on empty words
 function _vbe-history-complete-older() {
   [[ ${LBUFFER[-1]} == ' ' || ${LBUFFER} == '' ]] && return 1
