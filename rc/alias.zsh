@@ -543,7 +543,20 @@ function clean() {
         sudo =docker system prune -f
     (( $+commands[podman] )) && prompt "Podman related stuff" && \
         podman system prune -f
-    [[ -d /nix ]] && prompt "nix store" && \
+    [[ -d /nix ]] && prompt "nix store old gcroots" && {
+        # Clear auto gcroots older than 6 months
+        for h in /nix/var/nix/gcroots/auto/*(@mM+6N); do
+            case $(readlink $h) in
+                /nix/var/nix/profiles/*) ;;
+                */.local/state/nix/profiles/*) ;;
+                *)
+                    rm -f $(readlink $h)
+                    ;;
+            esac
+        done
+        nix-collect-garbage
+    }
+    [[ -d /nix ]] && prompt "nix store old profiles" && \
         nix-collect-garbage --delete-older-than 7d
     [[ -d /var/log/journal ]] && prompt "journal logs" && \
         sudo journalctl --vacuum-time='2 months'
