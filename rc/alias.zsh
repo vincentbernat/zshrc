@@ -199,6 +199,12 @@ secret() {
         --ro-bind $HOME/.nix-profile{,}
         --unshare-all
         --die-with-parent
+        ${=${HTTP_PROXY+--setenv  HTTP_PROXY  $HTTP_PROXY}}
+        ${=${http_proxy+--setenv  http_proxy  $http_proxy}}
+        ${=${HTTPS_PROXY+--setenv HTTPS_PROXY $HTTPS_PROXY}}
+        ${=${https_proxy+--setenv https_proxy $https_proxy}}
+        ${=${NO_PROXY+--setenv    NO_PROXY    $NO_PROXY}}
+        ${=${no_proxy+--setenv    no_proxy    $no_proxy}}
     )
     [[ $(sysctl -en dev.tty.legacy_tiocsti) == 0 ]] || options=($options --new-session) # CVE-2017-5226
     [[ -n $XDG_RUNTIME_DIR ]] && options=($options --tmpfs $XDG_RUNTIME_DIR)
