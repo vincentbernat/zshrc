@@ -444,8 +444,6 @@ screenrecord() {
         \\\\$'\n' \
         $1 ';' \
         \\\\$'\n' \
-        [[ $1 -nt ${1%.*}-smaller.${1##*.} ]] '&&' \
-        \\\\$'\n' \
         ffmpeg -i $1 -c:v libx264 -qp 0 -preset veryslow ${1%.*}-smaller.${1##*.}
 }
 
