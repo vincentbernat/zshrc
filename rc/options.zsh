@@ -10,6 +10,7 @@ setopt longlistjobs             # Display PID when using jobs
 setopt nobeep                   # Never beep
 setopt nocorrect nocorrectall   # Disable autocorrect
 setopt noflowcontrol            # Disable flow control for Zsh
+setopt nobanghist               # Disable bang history
 
 # meta-h will invoke man for the current command
 (( ${+aliases[run-help]} )) && unalias run-help
