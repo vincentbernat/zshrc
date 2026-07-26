@@ -31,7 +31,7 @@ alias reexec="exec ${ZSH_ARGZERO+-a $ZSH_ARGZERO} $SHELL"
 alias q="exit"
 
 (( $+commands[gdb] )) && alias gdb='gdb -q'
-(( $+commands[dragon-drop] )) && alias dragon-drop='dragon-drop -x'
+(( $+commands[dragon-drop] )) && alias dragon-drop='dragon-drop -x -a -T'
 (( $+commands[pv] )) && alias pv='pv --bar-style shaded'
 
 # Fix typos
