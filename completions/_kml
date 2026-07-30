@@ -1,4 +1,7 @@
 #compdef kml
+compdef _kml kml
+
+# zsh completion for kml                                  -*- shell-script -*-
 
 __kml_debug()
 {
@@ -203,4 +206,7 @@ _kml()
     fi
 }
 
-_kml "$@"
+# don't run the completion function when being source-ed or eval-ed
+if [ "$funcstack[1]" = "_kml" ]; then
+    _kml
+fi
