@@ -444,7 +444,7 @@ screenrecord() {
         \\\\$'\n' \
         $1 ';' \
         \\\\$'\n' \
-        ffmpeg -i $1 -c:v libx264 -qp 0 -preset veryslow ${1%.*}-smaller.${1##*.}
+        ffmpeg -i $1 -c:v libx264 -crf 18 -profile:v high -level:v 4.0 -preset veryslow ${1%.*}-smaller.${1##*.}
 }
 
 # Reimplementation of an xterm tool
