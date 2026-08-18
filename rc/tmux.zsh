@@ -13,7 +13,10 @@
         local window
         for host in "$@"; do
             if [[ -z $window ]]; then
-                window=$(tmux new-window -d -P -F '#{session_name}:#{window_index}' "$SHELL --interactive -c '${SSH_COMMAND:-ssh} $host'")
+                window=$(tmux new-window -d -P -F '#{session_name}:#{window_index}' \
+                    "$SHELL --interactive -c '${SSH_COMMAND:-ssh} $host'")
+                tmux setw -t "$window" pane-border-status top
+                tmux setw -t "$window" pane-border-format " [ #T ]"
             else
                 tmux split-window -t $window "$SHELL --interactive -c 'ssh $host'"
                 tmux select-layout -t $window tiled
