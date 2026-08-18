@@ -38,7 +38,7 @@ alias q="exit"
 (( $+commands[git] )) && abbrev-alias gti=git
 (( $+commands[grep] )) && abbrev-alias grpe=grep
 (( $+commands[sudo] )) && abbrev-alias suod=sudo
-(( $+commands[ssh] )) && abbrev-alias shs=ssh
+(( $+commands[ssh] )) && abbrev-alias shs=ssh && abbrev-alias ssg=ssh
 
 (( $+commands[mpv] )) && (( $+commands[nmcli] )) && {
     # mpv with lower best resolution when on metered connection
