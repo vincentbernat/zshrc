@@ -183,11 +183,12 @@ secret() {
 # Isolate using bwrap
 # - isolate (get a shell with only current directory writable)
 # - isolate --share-net (same but get network access)
+# - isolate --no-git-ro (keep git writable)
 # - isolate --bind /tmp/.X11-unix{,} --ro-bind ~/.Xauthority{,} --bind /dev/dri{,} (insecure X11 access)
 # - isolate ls (run ls in a sandbox)
 # - isolate --share-net -- ping 1.1.1.1 (ping 1.1.1.1)
 (( $+commands[bwrap] )) && isolate() {
-    local -a options moreoptions nocwd
+    local -a options moreoptions nocwd gitok
     options=(
         --ro-bind /{,}
         --dev /dev
@@ -214,6 +215,7 @@ secret() {
             while [[ $# -gt 0 ]] && [[ $1 != "--" ]]; do
                 case $1 in
                     (--no-cwd) nocwd=1 ;;
+                    (--no-git-ro) gitok=1 ;;
                     (*) moreoptions=($moreoptions $1) ;;
                 esac
                 shift
@@ -222,6 +224,7 @@ secret() {
             ;;
     esac
     [[ -z $nocwd ]] && [[ $PWD != $HOME ]] && options=($options --bind $PWD{,})
+    [[ -z $gitok ]] && [[ -d .git ]] && options=($options --ro-bind $PWD/.git{,})
     options=($options $moreoptions)
 
     if [[ $# -eq 0 ]]; then
