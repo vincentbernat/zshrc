@@ -224,7 +224,11 @@ secret() {
             ;;
     esac
     [[ -z $nocwd ]] && [[ $PWD != $HOME ]] && options=($options --bind $PWD{,})
-    [[ -z $gitok ]] && [[ -d .git ]] && options=($options --ro-bind $PWD/.git{,})
+    [[ -z $gitok ]] && {
+        for d in **/.git(ND/); do
+            options=($options --ro-bind $PWD/$d{,})
+        done
+    }
     options=($options $moreoptions)
 
     if [[ $# -eq 0 ]]; then
