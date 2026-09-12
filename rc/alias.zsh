@@ -228,7 +228,7 @@ secret() {
     esac
     local d
     for d in $inside; do
-        d=${d:a}
+        d=${d:A}
         options=($options --bind $d{,})
         [[ -z $gitok ]] && {
             for d in $d/**/.git(ND/); do
@@ -261,7 +261,6 @@ secret() {
       --overlay-src $GOPATH --tmp-overlay $GOPATH \
       -- env --unset=TMUX SHELL=/bin/bash \
       CLAUDE_CONFIG_DIR=$HOME/.config/claude-code \
-      CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1 \
       =claude'
 (( $+commands[gemini] )) && \
     alias gemini='isolate --share-net --bind ~/.gemini{,} \
