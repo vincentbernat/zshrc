@@ -187,8 +187,12 @@ secret() {
 # - isolate --bind /tmp/.X11-unix{,} --ro-bind ~/.Xauthority{,} --bind /dev/dri{,} (insecure X11 access)
 # - isolate ls (run ls in a sandbox)
 # - isolate --share-net -- ping 1.1.1.1 (ping 1.1.1.1)
+# - inside=() isolate (nothing exposed)
+# - inside=(. ../go) isolate (both current directory and ../go are exposed)
 (( $+commands[bwrap] )) && isolate() {
-    local -a options moreoptions nocwd gitok
+    local -a options moreoptions
+    local -a inside=("${(@)${(@)inside-$PWD}:#$HOME}")
+    local gitok=0
     options=(
         --ro-bind /{,}
         --dev /dev
@@ -214,7 +218,6 @@ secret() {
         (--*)
             while [[ $# -gt 0 ]] && [[ $1 != "--" ]]; do
                 case $1 in
-                    (--no-cwd) nocwd=1 ;;
                     (--no-git-ro) gitok=1 ;;
                     (*) moreoptions=($moreoptions $1) ;;
                 esac
@@ -223,12 +226,16 @@ secret() {
             [[ $1 == "--" ]] && shift
             ;;
     esac
-    [[ -z $nocwd ]] && [[ $PWD != $HOME ]] && options=($options --bind $PWD{,})
-    [[ -z $gitok ]] && {
-        for d in **/.git(ND/); do
-            options=($options --ro-bind $PWD/$d{,})
-        done
-    }
+    local d
+    for d in $inside; do
+        d=${d:a}
+        options=($options --bind $d{,})
+        [[ -z $gitok ]] && {
+            for d in $d/**/.git(ND/); do
+                options=($options --ro-bind $PWD/$d{,})
+            done
+        }
+    done
     options=($options $moreoptions)
 
     if [[ $# -eq 0 ]]; then
