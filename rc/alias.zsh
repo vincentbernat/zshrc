@@ -226,13 +226,13 @@ secret() {
             [[ $1 == "--" ]] && shift
             ;;
     esac
-    local d
+    local d g
     for d in $inside; do
         d=${d:A}
         options=($options --bind $d{,})
-        [[ -z $gitok ]] && {
-            for d in $d/**/.git(ND/); do
-                options=($options --ro-bind $PWD/$d{,})
+        (( gitok )) || {
+            for g in $d/**/.git(ND/); do
+                options=($options --ro-bind $g{,})
             done
         }
     done
