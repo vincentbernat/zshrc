@@ -261,6 +261,7 @@ secret() {
       --overlay-src $GOPATH --tmp-overlay $GOPATH \
       -- env --unset=TMUX SHELL=/bin/bash \
       CLAUDE_CONFIG_DIR=$HOME/.config/claude-code \
+      CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1 \
       =claude'
 
 # git
