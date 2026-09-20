@@ -262,10 +262,6 @@ secret() {
       -- env --unset=TMUX SHELL=/bin/bash \
       CLAUDE_CONFIG_DIR=$HOME/.config/claude-code \
       =claude'
-(( $+commands[gemini] )) && \
-    alias gemini='isolate --share-net --bind ~/.gemini{,} \
-      --overlay-src $GOPATH --tmp-overlay $GOPATH \
-      -- =gemini'
 
 # git
 (( $+commands[git] )) && abbrev-alias gls="git ls-files"
