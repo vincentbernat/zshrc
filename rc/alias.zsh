@@ -194,12 +194,19 @@ secret() {
     local -a inside=("${(@)${(@)inside-$PWD}:#$HOME}")
     local gitok=0
     options=(
-        --ro-bind /{,}
+        --ro-bind /usr{,}
+        --ro-bind-try /nix/store{,}
+        --ro-bind-try /nix/var/nix/profiles/per-user/$USER{,}
+        --symlink usr/bin /bin
+        --symlink usr/lib /lib
+        --symlink usr/lib64 /lib64
+        --ro-bind /etc/ssl{,}
+        --ro-bind /etc/resolv.conf{,}
+        --ro-bind-try /etc/alternatives{,}
         --dev /dev
         --proc /proc
         --tmpfs /run
         --tmpfs /tmp
-        --tmpfs /var/tmp
         --tmpfs $HOME
         --ro-bind $HOME/.nix-profile{,}
         --unshare-all
