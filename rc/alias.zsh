@@ -259,7 +259,12 @@ secret() {
     else
         options=($options -- "$@")
     fi
-    $ZSH/misc/isolate-landlock bwrap $options
+    $ZSH/misc/isolate-landlock bwrap \
+        --ro-bind-data 3 /etc/passwd \
+        --ro-bind-data 4 /etc/group \
+        $options \
+        3<<<"$(getent passwd 0 $UID 65534)" \
+        4<<<"$(getent group 0 $GID 65534)"
 }
 
 # Isolated commands
