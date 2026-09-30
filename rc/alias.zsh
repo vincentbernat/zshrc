@@ -262,9 +262,11 @@ secret() {
     $ZSH/misc/isolate-landlock bwrap \
         --ro-bind-data 3 /etc/passwd \
         --ro-bind-data 4 /etc/group \
+        --ro-bind-data 5 /etc/hosts \
         $options \
         3<<<"$(getent passwd 0 $UID 65534)" \
-        4<<<"$(getent group 0 $GID 65534)"
+        4<<<"$(getent group 0 $GID 65534)" \
+        5<<<"$(getent hosts $(uname -n) 127.0.0.1 ::1)"
 }
 
 # Isolated commands
