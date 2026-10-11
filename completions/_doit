@@ -1,0 +1,236 @@
+#compdef doit
+
+_doit() {
+    local -a commands tasks
+    # format is 'completion:description'
+    commands=(
+        'auto: automatically execute tasks when a dependency changes'
+        'clean: clean action / remove targets'
+        'dumpdb: dump dependency DB'
+        'forget: clear successful run status from internal DB'
+        'help: show help'
+        'ignore: ignore task (skip) on subsequent runs'
+        'info: show info about a task'
+        'list: list tasks from dodo file'
+        'reset-dep: recompute and save the state of file dependencies without executing actions'
+        'run: run tasks'
+        'strace: use strace to list file_deps and targets'
+        'tabcompletion: generate script for tab-completion'
+    )
+
+    # split output by lines to create an array
+    tasks=("${(f)$(doit list --template '{name}: {doc}')}")
+
+    # complete command or task name
+    if (( CURRENT == 2 )); then
+        _arguments -A : '::cmd:(($commands))' '::task:(($tasks))'
+        return
+    fi
+
+    # revome program name from $words and decrement CURRENT
+    local curcontext context state state_desc line
+    _arguments -C '*:: :->'
+
+    # complete sub-command or task options
+    local -a _command_args
+    case "$words[1]" in
+        
+      (auto)
+          _command_args=(
+            '--db-file[file used to save successful runs [default: %(default)s\]]' \
+            '--backend[Select dependency file backend. [default: %(default)s\]]' \
+            '--check_file_uptodate[Choose how to check if files have been modified. Available options [default: %(default)s\]:   'md5': use the md5sum   'timestamp': use the timestamp ]' \
+            '(-f|--file)'{-f,--file}'[load task from dodo FILE [default: %(default)s\]]' \
+            '(-d|--dir)'{-d,--dir}'[set path to be used as cwd directory (file paths on dodo file are relative to dodo.py location).]' \
+            '(-k|--seek-file)'{-k,--seek-file}'[seek dodo file on parent folders [default: %(default)s\]]' \
+            '(-v|--verbosity)'{-v,--verbosity}'[0 capture (do not print) stdout/stderr from task. 1 capture stdout only. 2 do not capture anything (print everything immediately). [default: 1\]]' \
+            
+            '*::task:(($tasks))'
+            ''
+        )
+      ;;
+
+
+      (clean)
+          _command_args=(
+            '--db-file[file used to save successful runs [default: %(default)s\]]' \
+            '--backend[Select dependency file backend. [default: %(default)s\]]' \
+            '--check_file_uptodate[Choose how to check if files have been modified. Available options [default: %(default)s\]:   'md5': use the md5sum   'timestamp': use the timestamp ]' \
+            '(-f|--file)'{-f,--file}'[load task from dodo FILE [default: %(default)s\]]' \
+            '(-d|--dir)'{-d,--dir}'[set path to be used as cwd directory (file paths on dodo file are relative to dodo.py location).]' \
+            '(-k|--seek-file)'{-k,--seek-file}'[seek dodo file on parent folders [default: %(default)s\]]' \
+            '(-c|--clean-dep)'{-c,--clean-dep}'[clean task dependencies too]' \
+            '(-a|--clean-all)'{-a,--clean-all}'[clean all task]' \
+            '(-n|--dry-run)'{-n,--dry-run}'[print actions without really executing them]' \
+            '*::task:(($tasks))'
+            ''
+        )
+      ;;
+
+
+      (dumpdb)
+          _command_args=(
+            '--db-file[file used to save successful runs [default: %(default)s\]]' \
+            ''
+        )
+      ;;
+
+
+      (forget)
+          _command_args=(
+            '--db-file[file used to save successful runs [default: %(default)s\]]' \
+            '--backend[Select dependency file backend. [default: %(default)s\]]' \
+            '--check_file_uptodate[Choose how to check if files have been modified. Available options [default: %(default)s\]:   'md5': use the md5sum   'timestamp': use the timestamp ]' \
+            '(-f|--file)'{-f,--file}'[load task from dodo FILE [default: %(default)s\]]' \
+            '(-d|--dir)'{-d,--dir}'[set path to be used as cwd directory (file paths on dodo file are relative to dodo.py location).]' \
+            '(-k|--seek-file)'{-k,--seek-file}'[seek dodo file on parent folders [default: %(default)s\]]' \
+            '(-s|--follow-sub)'{-s,--follow-sub}'[forget task dependencies too]' \
+            '*::task:(($tasks))'
+            ''
+        )
+      ;;
+
+
+      (help)
+          _command_args=(
+            '--db-file[file used to save successful runs [default: %(default)s\]]' \
+            '--backend[Select dependency file backend. [default: %(default)s\]]' \
+            '--check_file_uptodate[Choose how to check if files have been modified. Available options [default: %(default)s\]:   'md5': use the md5sum   'timestamp': use the timestamp ]' \
+            '(-f|--file)'{-f,--file}'[load task from dodo FILE [default: %(default)s\]]' \
+            '(-d|--dir)'{-d,--dir}'[set path to be used as cwd directory (file paths on dodo file are relative to dodo.py location).]' \
+            '(-k|--seek-file)'{-k,--seek-file}'[seek dodo file on parent folders [default: %(default)s\]]' \
+            '*::task:(($tasks))'
+            '::cmd:(($commands))'
+            ''
+        )
+      ;;
+
+
+      (ignore)
+          _command_args=(
+            '--db-file[file used to save successful runs [default: %(default)s\]]' \
+            '--backend[Select dependency file backend. [default: %(default)s\]]' \
+            '--check_file_uptodate[Choose how to check if files have been modified. Available options [default: %(default)s\]:   'md5': use the md5sum   'timestamp': use the timestamp ]' \
+            '(-f|--file)'{-f,--file}'[load task from dodo FILE [default: %(default)s\]]' \
+            '(-d|--dir)'{-d,--dir}'[set path to be used as cwd directory (file paths on dodo file are relative to dodo.py location).]' \
+            '(-k|--seek-file)'{-k,--seek-file}'[seek dodo file on parent folders [default: %(default)s\]]' \
+            '*::task:(($tasks))'
+            ''
+        )
+      ;;
+
+
+      (info)
+          _command_args=(
+            '--db-file[file used to save successful runs [default: %(default)s\]]' \
+            '--backend[Select dependency file backend. [default: %(default)s\]]' \
+            '--check_file_uptodate[Choose how to check if files have been modified. Available options [default: %(default)s\]:   'md5': use the md5sum   'timestamp': use the timestamp ]' \
+            '(-f|--file)'{-f,--file}'[load task from dodo FILE [default: %(default)s\]]' \
+            '(-d|--dir)'{-d,--dir}'[set path to be used as cwd directory (file paths on dodo file are relative to dodo.py location).]' \
+            '(-k|--seek-file)'{-k,--seek-file}'[seek dodo file on parent folders [default: %(default)s\]]' \
+            '*::task:(($tasks))'
+            ''
+        )
+      ;;
+
+
+      (list)
+          _command_args=(
+            '--db-file[file used to save successful runs [default: %(default)s\]]' \
+            '--backend[Select dependency file backend. [default: %(default)s\]]' \
+            '--check_file_uptodate[Choose how to check if files have been modified. Available options [default: %(default)s\]:   'md5': use the md5sum   'timestamp': use the timestamp ]' \
+            '(-f|--file)'{-f,--file}'[load task from dodo FILE [default: %(default)s\]]' \
+            '(-d|--dir)'{-d,--dir}'[set path to be used as cwd directory (file paths on dodo file are relative to dodo.py location).]' \
+            '(-k|--seek-file)'{-k,--seek-file}'[seek dodo file on parent folders [default: %(default)s\]]' \
+            '--all[list include all sub-tasks from dodo file]' \
+            '(-q|--quiet)'{-q,--quiet}'[print just task name (less verbose than default)]' \
+            '(-s|--status)'{-s,--status}'[print task status (R)un, (U)p-to-date, (I)gnored]' \
+            '(-p|--private)'{-p,--private}'[print private tasks (start with '_')]' \
+            '--deps[print list of dependencies (file dependencies only)]' \
+            '--template[display entries with template]' \
+            '*::task:(($tasks))'
+            ''
+        )
+      ;;
+
+
+      (reset-dep)
+          _command_args=(
+            '--db-file[file used to save successful runs [default: %(default)s\]]' \
+            '--backend[Select dependency file backend. [default: %(default)s\]]' \
+            '--check_file_uptodate[Choose how to check if files have been modified. Available options [default: %(default)s\]:   'md5': use the md5sum   'timestamp': use the timestamp ]' \
+            '(-f|--file)'{-f,--file}'[load task from dodo FILE [default: %(default)s\]]' \
+            '(-d|--dir)'{-d,--dir}'[set path to be used as cwd directory (file paths on dodo file are relative to dodo.py location).]' \
+            '(-k|--seek-file)'{-k,--seek-file}'[seek dodo file on parent folders [default: %(default)s\]]' \
+            '*::task:(($tasks))'
+            ''
+        )
+      ;;
+
+
+      (run)
+          _command_args=(
+            '--db-file[file used to save successful runs [default: %(default)s\]]' \
+            '--backend[Select dependency file backend. [default: %(default)s\]]' \
+            '--check_file_uptodate[Choose how to check if files have been modified. Available options [default: %(default)s\]:   'md5': use the md5sum   'timestamp': use the timestamp ]' \
+            '(-f|--file)'{-f,--file}'[load task from dodo FILE [default: %(default)s\]]' \
+            '(-d|--dir)'{-d,--dir}'[set path to be used as cwd directory (file paths on dodo file are relative to dodo.py location).]' \
+            '(-k|--seek-file)'{-k,--seek-file}'[seek dodo file on parent folders [default: %(default)s\]]' \
+            '(-a|--always-execute)'{-a,--always-execute}'[always execute tasks even if up-to-date [default: %(default)s\]]' \
+            '(-c|--continue)'{-c,--continue}'[continue executing tasks even after a failure [default: %(default)s\]]' \
+            '(-v|--verbosity)'{-v,--verbosity}'[0 capture (do not print) stdout/stderr from task. 1 capture stdout only. 2 do not capture anything (print everything immediately). [default: 1\]]' \
+            '(-r|--reporter)'{-r,--reporter}'[Choose output reporter. [default: %(default)s\]]' \
+            '(-o|--output-file)'{-o,--output-file}'[write output into file [default: stdout\]]' \
+            '(-n|--process)'{-n,--process}'[number of subprocesses [default: %(default)s\]]' \
+            '(-P|--parallel-type)'{-P,--parallel-type}'[Tasks can be executed in parallel in different ways: 'process': uses python multiprocessing module 'thread': uses threads [default: %(default)s\] ]' \
+            '--pdb[get into PDB (python debugger) post-mortem in case of unhandled exception]' \
+            '(-s|--single)'{-s,--single}'[Execute only specified tasks ignoring their task_dep [default: %(default)s\]]' \
+            '*::task:(($tasks))'
+            ''
+        )
+      ;;
+
+
+      (strace)
+          _command_args=(
+            '--db-file[file used to save successful runs [default: %(default)s\]]' \
+            '--backend[Select dependency file backend. [default: %(default)s\]]' \
+            '--check_file_uptodate[Choose how to check if files have been modified. Available options [default: %(default)s\]:   'md5': use the md5sum   'timestamp': use the timestamp ]' \
+            '(-f|--file)'{-f,--file}'[load task from dodo FILE [default: %(default)s\]]' \
+            '(-d|--dir)'{-d,--dir}'[set path to be used as cwd directory (file paths on dodo file are relative to dodo.py location).]' \
+            '(-k|--seek-file)'{-k,--seek-file}'[seek dodo file on parent folders [default: %(default)s\]]' \
+            '(-a|--all)'{-a,--all}'[display all files (not only from within CWD path)]' \
+            '--keep[save strace command output into strace.txt]' \
+            '*::task:(($tasks))'
+            ''
+        )
+      ;;
+
+
+      (tabcompletion)
+          _command_args=(
+            '--db-file[file used to save successful runs [default: %(default)s\]]' \
+            '--backend[Select dependency file backend. [default: %(default)s\]]' \
+            '--check_file_uptodate[Choose how to check if files have been modified. Available options [default: %(default)s\]:   'md5': use the md5sum   'timestamp': use the timestamp ]' \
+            '(-f|--file)'{-f,--file}'[load task from dodo FILE [default: %(default)s\]]' \
+            '(-d|--dir)'{-d,--dir}'[set path to be used as cwd directory (file paths on dodo file are relative to dodo.py location).]' \
+            '(-k|--seek-file)'{-k,--seek-file}'[seek dodo file on parent folders [default: %(default)s\]]' \
+            '(-s|--shell)'{-s,--shell}'[Completion code for SHELL. [default: %(default)s\]]' \
+            '--hardcode-tasks[Hardcode tasks from current task list.]' \
+            ''
+        )
+      ;;
+
+
+        # default completes task names
+        (*)
+           _command_args='*::task:(($tasks))'
+        ;;
+    esac
+
+    # -A no options will be completed after the first non-option argument
+    _arguments -A : $_command_args
+    return 0
+}
+
+_doit
