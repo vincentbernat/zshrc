@@ -76,6 +76,7 @@ _vbe_custom_hosts() {
     for host in $ZSH/local/hosts.*(N-.); do
         case $host in
             *\~) ;;
+            *.old) ;;
             *)
                 _wanted hosts expl "remote host name" compadd "$@" ${(M)$(<$host):#${PREFIX}*}
                 ;;
