@@ -527,7 +527,7 @@ function myip() {
     (( $+commands[curl] )) && get=(curl -s --max-time 1)
     for v in 4 6 ; do
         echo IPv$v \
-            $($get -$v https://vincent.bernat.ch/ip || echo "unknown")
+            $($get -$v https://vincent.bernat.ch/api/v0/ip || echo "unknown")
     done 2> /dev/null
 }
 
