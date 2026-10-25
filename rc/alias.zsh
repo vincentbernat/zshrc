@@ -57,7 +57,7 @@ alias q="exit"
 
 # ls
 alias ll='ls -ltrhA'
-if ls --color=auto --g -d . &> /dev/null; then
+if ls --color=auto --hyperlink=auto --g -d . &> /dev/null; then
     # GNU ls
     if (( ${terminfo[colors]:-0} >= 8 )); then
         export LS_COLORS='ex=00:su=00:sg=00:ca=00:'
