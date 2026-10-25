@@ -61,10 +61,10 @@ if ls --color=auto --g -d . &> /dev/null; then
     # GNU ls
     if (( ${terminfo[colors]:-0} >= 8 )); then
         export LS_COLORS='ex=00:su=00:sg=00:ca=00:'
-        alias ls='ls --color=auto --group-directories'
+        alias ls='ls --color=auto --hyperlink=auto --group-directories'
     else
         unset LS_COLORS
-        alias ls='ls --group-directories -p' # -p = indicator for directories
+        alias ls='ls --hyperlink=auto --group-directories -p' # -p = indicator for directories
     fi
 elif ls -G -d . &> /dev/null; then
     # FreeBSD ls
