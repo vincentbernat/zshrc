@@ -629,7 +629,11 @@ update() {
     (( $+commands[home-manager] )) && nice home-manager switch
     # (( $+commands[doom] )) && [[ -d ~/.config/doom ]] && doom sync -u
     (( $+commands[fwupdmgr] )) && fwupdmgr update
-    [[ -f /run/reboot-required ]] && print -P "%F{red}*** %BReboot required%b ***%F{default}"
+    if [[ -x /usr/sbin/needrestart ]]; then
+        sudo /usr/sbin/needrestart -r i
+    else
+        [[ -f /run/reboot-required ]] && print -P "%F{red}*** %BReboot required%b ***%F{default}"
+    fi
 }
 
 # Display a color testcard
