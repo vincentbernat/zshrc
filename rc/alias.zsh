@@ -631,6 +631,7 @@ update() {
     (( $+commands[fwupdmgr] )) && fwupdmgr update
     if [[ -x /usr/sbin/needrestart ]]; then
         sudo /usr/sbin/needrestart -r i
+        needrestart -r l        # output may be different
     else
         [[ -f /run/reboot-required ]] && print -P "%F{red}*** %BReboot required%b ***%F{default}"
     fi
