@@ -611,10 +611,12 @@ function clean() {
 
 # Update various things
 update() {
+    local system_updated=0
     (( $+commands[apt] )) \
         && sudo apt update \
         && apt list --upgradable \
         && apt -s upgrade 2> /dev/null | command grep -q '^Inst ' \
+        && system_updated=1 \
         && sudo apt upgrade \
         && sudo apt autoremove
     # Other Debian-related stuff:
@@ -630,7 +632,7 @@ update() {
     # (( $+commands[doom] )) && [[ -d ~/.config/doom ]] && doom sync -u
     (( $+commands[fwupdmgr] )) && fwupdmgr update
     if [[ -x /usr/sbin/needrestart ]]; then
-        sudo /usr/sbin/needrestart -r i
+        (( system_updated )) && sudo /usr/sbin/needrestart -r i
         needrestart -r l        # output may be different
     else
         [[ -f /run/reboot-required ]] && print -P "%F{red}*** %BReboot required%b ***%F{default}"
