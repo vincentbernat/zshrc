@@ -1,0 +1,20 @@
+#compdef ,
+
+_,_apps() {
+    local -a res apps
+    res=(${(f)"$(NIX_GET_COMPLETIONS=2 nix run ".#$PREFIX" 2> /dev/null)"})
+    # First line is the completion type, then ".#name<TAB>description"
+    apps=(${${${res[2,-1]}%%$'\t'*}#.\#})
+    _describe -t apps 'flake app' apps
+}
+
+_arguments \
+    '1:app:_,_apps' \
+    '*:: :_default'
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 4
+# indent-tabs-mode: nil
+# sh-basic-offset: 4
+# End:

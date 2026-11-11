@@ -308,6 +308,12 @@ suzsh() {
         ${ZSH_NAME} -i -l
     }
 
+# Alias for local-run of tools. Currently, "nix run" only.
+,() {
+    local app=$1 && shift
+    nix run .#$app -- "$@"
+}
+
 # Newline Delimited JSON pretty-printing.
 #
 # Many programs have a flag to enable unbuffered output. For example,
